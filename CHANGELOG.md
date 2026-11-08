@@ -16,4 +16,4 @@ All notable changes to this project are written down here. The format follows [K
 - The `Detector` interface for adding detectors, with the optional `@centrst/blind-ner` GLiNER package plugging in there.
 - Ed25519 receipts for proxy mode, using Web Crypto only.
 - The `blind` and `unblind` commands, which keep real values off stdout and stderr on a leak.
-- No runtime dependencies, no network calls, and a core tested locally on Node. Browser and edge compatibility checks are described in `TESTING.md`; the first public CI run is pending.
+- No runtime dependencies, no network calls, and a core tested on Node in public Ubuntu CI. Browser and edge compatibility checks are described in `TESTING.md`.
