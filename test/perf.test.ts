@@ -1,6 +1,23 @@
+import { spawnSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
 import { blind, createUnblinder, unblind } from '../src/index.js';
-import { loadCorpus } from './support/corpus.js';
+import { loadCorpus, ROOT } from './support/corpus.js';
+
+it('C41: a known organization with a long whitespace run finishes within the process deadline', () => {
+  // A subprocess bounds the regression even when a synchronous regex stalls.
+  const script = `
+    import { blind } from './dist/index.js';
+    const value = 'Example' + ' '.repeat(200_000) + 'X';
+    const result = blind(['Unrelated text.'], { known: [{ kind: 'org', value }], seed: 'suffix-perf' });
+    process.stdout.write(JSON.stringify(result.texts));
+  `;
+  const result = spawnSync(process.execPath, ['--input-type=module', '-e', script], {
+    cwd: ROOT, encoding: 'utf8', timeout: 5000,
+  });
+  expect(result.error?.message).toBeUndefined();
+  expect(result.status).toBe(0);
+  expect(result.stdout).toBe('["Unrelated text."]');
+});
 
 /**
  * Time grows about linearly with the text. CPU time, not wall time, so other
