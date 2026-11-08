@@ -1,0 +1,29 @@
+%known person|Rosendo Iglesias
+%known org|Transportes Sotavento
+From: {{person:Macarena Barragán}} <{{email:mbarragan@estudio-dorsal.example}}>
+To: {{person:Rosendo Iglesias}} <{{email:riglesias@transportes-sotavento.example}}>
+Date: Tue, {{date:31 Mar 2026}} 14:00:00 +0100
+Subject: Factura {{id:11189491O}} de {{org:Estudio Dorsal}}
+
+Hi {{person:Rosendo}},
+
+Adjuntamos la factura {{id:11189491O}} por los servicios prestados a {{org:Transportes Sotavento}}.
+
+Servicios, primera parte: {{amount:54,01 EUR}}
+Servicios, segunda parte: {{amount:36,00 €}}
+Subtotal: {{amount:90,01 EUR}}
+IVA (21 %): {{amount:18,90 EUR}}
+Total: {{amount:€ 108,91}}
+
+El pago vence el {{date:15.04.2026}}. Transferencia a {{iban:FR27 8543 4244 1944 7922 2951 115}} indicando {{id:11189491O}}.
+
+--
+Un saludo,
+{{person:Macarena Barragán}}
+Billing department
+{{org:Estudio Dorsal}}
+Tel: {{phone:0034 760 890 532}}
+{{email:mbarragan@estudio-dorsal.example}}
+{{url:www.estudio-dorsal.example}}
+
+Este mensaje es confidencial y está dirigido únicamente a su destinatario.

@@ -1,0 +1,15 @@
+%known person|Nigel Rutherford
+From: {{org:Tramuntana Advisory}} <{{email:news@tramuntana-advisory.example}}>
+To: {{email:nigel_rut@gmail.com}}
+Date: Tue, {{date:15 Jul 2025}} 19:45:00 +0100
+Subject: Cordelia's picks for the season
+
+Hi {{person:Nigel}}, here is what is new this month.
+
+Our best seller is now {{amount:130.40 USD}}, down from {{amount:163.00 USD}}. Offer ends {{date:30th of July 2025}}.
+
+Shop online: {{url:https://www.tramuntana-advisory.example/shop?utm_campaign=6047}}
+
+You receive this because {{email:nigel_rut@gmail.com}} subscribed. Unsubscribe: {{url:https://news.tramuntana-advisory.example/unsubscribe?u=135147504x&e=nigel_rut%40gmail.com}}
+
+{{org:Tramuntana Advisory}}, Customer care {{phone:+49 171 392 0041}}

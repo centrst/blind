@@ -1,0 +1,22 @@
+%known person|Desmond Upshaw
+From: {{person:Desmond Upshaw}} <{{email:desmond-upshaw@gmail.com}}>
+To: {{person:Odette Vanderbilt}} <{{email:odette_vanderbilt@ironbridge-works.example}}>
+Date: Fri, {{date:14 May 2027}} 19:45:00 +0100
+Subject: Fwd: question from {{org:Lumbre Advisory LLC}}
+{{person:Odette}}, forwarding below. Please check the numbers and call them on {{phone:774 55 90 26}}.
+---------- Forwarded message ---------
+From: {{person:Cordelia Jessop}} <{{email:cordeliajessop@lumbre-advisory.example}}>
+Date: {{date:14 May 2027}}
+Subject: Quote for project {{id:45179013Q}}
+
+Hello {{person:Desmond}},
+We at {{org:Lumbre Advisory LLC}} have a budget of {{amount:128.68 USD}} for the work in {{place:Stonebridge}}. Could you confirm the start date?
+--
+Cheers,
+{{person:Cordelia Jessop}}
+Operations manager
+{{org:Lumbre Advisory LLC}}
+Tel: {{phone:774 55 90 26}}
+{{email:cordeliajessop@lumbre-advisory.example}}
+{{url:www.lumbre-advisory.example}}
+Office: {{place:Harlow Cross}}

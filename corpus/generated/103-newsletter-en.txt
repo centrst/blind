@@ -1,0 +1,16 @@
+%order mdy
+%known person|Rosalind Abernathy
+From: {{org:Pennywhistle Labs LLC}} <{{email:news@pennywhistle-labs.example}}>
+To: {{email:r..abernathy@outlook.com}}
+Date: Mon, {{date:11 Nov 2024}} 14:45:00 +0100
+Subject: Spring offers inside
+
+Hi {{person:Rosalind}}, here is what is new this month.
+
+Our best seller is now {{amount:35.28 USD}}, down from {{amount:44.10 USD}}. Offer ends {{date:11/30/2024}}.
+
+Shop online: {{url:https://www.pennywhistle-labs.example/shop?utm_campaign=4638}}
+
+You receive this because {{email:r..abernathy@outlook.com}} subscribed. Unsubscribe: {{url:https://news.pennywhistle-labs.example/unsubscribe?u=333508606x&e=r..abernathy%40outlook.com}}
+
+{{org:Pennywhistle Labs LLC}}, Customer care {{phone:0034 797 934 136}}

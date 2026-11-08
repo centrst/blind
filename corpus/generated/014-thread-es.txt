@@ -1,0 +1,24 @@
+%known person|Rosendo Ocaña
+%known org|Transportes Zafiro S.A.
+From: {{person:Eloy Villalobos Cifuentes}} <{{email:eloy.villalobos@consultores-jaspe.example}}>
+To: {{person:Rosendo Ocaña}} <{{email:ocana.rosendo@transportes-zafiro.example}}>
+Date: Fri, {{date:28 Jun 2024}} 16:30:00 +0100
+Subject: Re: oferta para {{org:Transportes Zafiro S.A.}}
+Podemos aceptar {{amount:711,23 €}} y enviar el contrato a {{email:ocana.rosendo@transportes-zafiro.example}}.
+On {{date:27 de junio del 2024}}, {{person:Rosendo Ocaña}} wrote:
+> Gracias {{person:Eloy}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:€ 653,56}}? La reunión nos va bien, llámame al {{phone:0034 770 371 508}} si cambia.
+>
+> El {{date:2024-06-26}}, {{person:Eloy Villalobos Cifuentes}} escribió:
+> > Hola {{person:Rosendo}}, nuestra oferta para {{org:Transportes Zafiro S.A.}} es de {{amount:768,89 €}}. ¿Quedamos el {{date:28 de junio de 2024}} a las 18:45?
+> > 
+> > --
+> > Un saludo,
+> > {{person:Eloy Villalobos Cifuentes}}
+> > Comercial
+> > {{org:Consultores Jaspe S.L.}}
+> > Tel: {{phone:+49 171 392 0006}}
+> > {{email:eloy.villalobos@consultores-jaspe.example}}
+> > {{url:www.consultores-jaspe.example}}
+> > Oficina de {{place:Puente Nuevo}}
+
+{{person:Eloy}}

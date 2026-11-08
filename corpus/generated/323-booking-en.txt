@@ -1,0 +1,11 @@
+%known person|Harold Ashworth
+From: {{person:Imogen Tennant}} <{{email:imogen@rastro-studio.example}}>
+To: "{{person:Harold Ashworth}}" <{{email:ashworth.harold@tramuntana-holdings.example}}>
+Date: Thu, {{date:11 Apr 2024}} 14:30:00 +0100
+Subject: Booking {{id:EXP-2026-6657}} confirmed
+
+Hello {{person:Harold}},
+
+Your haircut and colour at {{org:Rastro Studio Inc.}} is booked for {{date:April 14 2024}} at 08:30.
+
+The price is {{amount:USD 8.65}}, payable on arrival. A deposit of {{amount:£2.16}} is held on your card.

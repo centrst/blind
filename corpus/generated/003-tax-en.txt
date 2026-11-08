@@ -1,0 +1,18 @@
+%order mdy
+%known person|Odette Rutherford
+From: {{person:Matilda Upshaw}} <{{email:notificaciones.matilda@aldara-consulting.example}}>
+To: "{{person:Odette Rutherford}}" <{{email:o..rutherford@outlook.com}}>
+Date: Fri, {{date:24 Oct 2025}} 19:00:00 +0100
+Subject: Notice {{id:EXP-2025-7567}}: payment pending
+
+Dear {{person:Odette Rutherford}},
+
+Our records show an unpaid balance of {{amount:$4,006.44}} on file {{id:EXP-2025-7567}}.
+
+If it is not paid by {{date:2025-11-03}}, a surcharge of 10% applies: {{amount:400.64 USD}}, for a total of {{amount:$4,407.08}}.
+
+Pay by transfer to {{iban:IT43 7257 7724 6398 6504 1672 682}} and keep the receipt. For help call {{phone:+34 758230224}}.
+
+Social security contributions for {{date:Oct 1st}} are listed in the portal: {{url:https://sede.aldara-consulting.example/cuotas/59818A517}}
+
+This is an automatic notice. Do not reply.

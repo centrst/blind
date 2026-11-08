@@ -1,0 +1,22 @@
+%known person|Fermina Galindo
+%known org|Gestión Nevada
+From: {{person:Aurora Tejada}} <{{email:atejada@reformas-lumbre.example}}>
+To: {{person:Fermina Galindo}} <{{email:fermina@gestion-nevada.example}}>
+Date: Wed, {{date:13 Oct 2027}} 16:30:00 +0100
+Subject: Re: oferta para {{org:Gestión Nevada}}
+Podemos aceptar {{amount:32,47 EUR}} y enviar el contrato a {{email:fermina@gestion-nevada.example}}.
+On {{date:12.10.2027}}, {{person:Fermina Galindo}} wrote:
+> Thanks {{person:Aurora}}. That is high for us. Could you do {{amount:29,84 €}}? The meeting works, call me on {{phone:+1 530 555 0131}} if it moves.
+>
+> On {{date:11/10/2027}}, {{person:Aurora Tejada}} wrote:
+> > Hola {{person:Fermina}}, nuestra oferta para {{org:Gestión Nevada}} es de {{amount:35,10 €}}. ¿Quedamos el {{date:17 de octubre de 2027}} a las 12:15?
+> > 
+> > --
+> > Saludos cordiales,
+> > {{person:Aurora Tejada}}
+> > Comercial
+> > {{org:Reformas Lumbre}}
+> > {{email:atejada@reformas-lumbre.example}}
+> > Office: {{place:Torrebruna}}
+
+{{person:Aurora}}

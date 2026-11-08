@@ -1,0 +1,24 @@
+%known person|Florencio Urrutia
+%known org|Asesores Jaspe S.A.
+From: {{person:Aurora Maldonado}} <{{email:maldonado.aurora@clinica-nevada.example}}>
+To: {{person:Florencio Urrutia}} <{{email:urrutia_florencio@gmail.com}}>
+Date: Wed, {{date:25 Aug 2027}} 13:45:00 +0100
+Subject: Re: oferta para {{org:Asesores Jaspe S.A.}}
+Podemos aceptar {{amount:156,80 €}} y enviar el contrato a {{email:urrutia_florencio@gmail.com}}.
+On {{date:24 de agosto de 2027}}, {{person:Florencio Urrutia}} wrote:
+> Gracias {{person:Aurora}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:144,08 €}}? La reunión nos va bien, llámame al {{phone:+34 798282903}} si cambia.
+>
+> El {{date:23 de agosto del 2027}}, {{person:Aurora Maldonado}} escribió:
+> > Hola {{person:Florencio}}, nuestra oferta para {{org:Asesores Jaspe S.A.}} es de {{amount:€ 169,51}}. ¿Quedamos el {{date:2027-08-28}} a las 17:00?
+> > 
+> > --
+> > Atentamente,
+> > {{person:Aurora Maldonado}}
+> > Sales
+> > {{org:Clínica Nevada S.L.}}
+> > Tel: {{phone:361-555-0183}}
+> > {{email:maldonado.aurora@clinica-nevada.example}}
+> > {{url:www.clinica-nevada.example}}
+> > Oficina de {{place:Valdecañas}}
+
+{{person:Aurora}}

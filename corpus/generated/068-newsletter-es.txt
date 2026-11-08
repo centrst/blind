@@ -1,0 +1,15 @@
+%known person|Isidro Lazcano
+From: {{org:Ingeniería Jaspe SLU}} <{{email:news@ingenieria-jaspe.example}}>
+To: {{person:Isidro Lazcano}} <{{email:lazcano_isidro@gmail.com}}>
+Date: Wed, {{date:10 Feb 2027}} 19:15:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Isidro}}, estas son las novedades del mes.
+
+Te esperamos en la jornada de puertas abiertas en {{place:Torrebruna}} el {{date:21 de febrero de 2027}}. Entrada {{amount:21,32 €}}.
+
+Compra online: {{url:https://www.ingenieria-jaspe.example/tienda?utm_campaign=5723}}
+
+Recibes este correo porque {{email:lazcano_isidro@gmail.com}} se suscribió. Darte de baja: {{url:https://news.ingenieria-jaspe.example/unsubscribe?u=356762352x&e=lazcano_isidro%40gmail.com}}
+
+{{org:Ingeniería Jaspe S.L.U.}}, Atención al cliente {{phone:+34 783 788 798}}

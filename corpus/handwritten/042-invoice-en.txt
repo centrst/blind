@@ -1,0 +1,13 @@
+%known person|Odette Laurent
+%known org|Laurent Atelier
+From: {{person:Cedric Boyle}} <{{email:cedric@boyle-framing.example}}>
+To: {{person:Odette Laurent}} <{{email:odette@laurent-atelier.example}}>
+Subject: Invoice {{id:BF-2026-118}}
+
+Dear {{person:Odette}},
+
+Framing for {{org:Laurent Atelier}}: 6 large frames at {{amount:€ 85,00}} each, {{amount:€ 510,00}} in total, plus 21% VAT {{amount:€ 107,10}}. Amount due: {{amount:€ 617,10}} by {{date:14.11.2026}}.
+Bank: {{iban:FR14 2004 1010 0505 0001 3M02 606}}.
+
+Thanks,
+Cedric

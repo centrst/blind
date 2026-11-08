@@ -1,0 +1,11 @@
+%known person|Fermina Zubiri
+From: Banco Cantábrico Alertas <alertas@banco-cantabrico.example>
+To: {{person:Fermina Zubiri}} <{{email:fermina_zubiri@gmail.com}}>
+Subject: Cargo de {{amount:249,00 €}} en tu tarjeta
+
+Hola {{person:Fermina}},
+
+Hemos detectado un cargo de {{amount:249,00 €}} en tu tarjeta terminada en 7710 el {{date:3 de octubre de 2026}}, comercio "Electrónica del Valle", {{place:Montefrío Chico}}.
+Si no lo reconoces, bloquea la tarjeta en la app o llama al {{phone:750 555 077}}.
+
+Código de operación: {{id:OP-77120433}}. Tu IBAN de referencia empieza por ES66.

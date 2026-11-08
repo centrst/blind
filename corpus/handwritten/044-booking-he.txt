@@ -1,0 +1,13 @@
+%known person|יעלית מרגולן
+%known org|מרפאת שקדיה
+From: {{org:מרפאת שקדיה}} <{{email:torim@shkedia-clinic.example}}>
+To: <{{email:yaelit.m@margolan-home.example}}>
+Subject: אישור תור
+
+שלום,
+
+התור ל{{person:יעלית מרגולן}} נקבע ליום {{date:14/12/2026}} בשעה 10:30 ב{{org:מרפאת שקדיה}}.
+דמי הביקור: {{amount:USD 180.00}}. אם יש שינוי, נשמח שו{{person:יעלית}} תודיע לנו יום לפני.
+
+בברכה,
+צוות הקבלה

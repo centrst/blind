@@ -1,0 +1,27 @@
+%order mdy
+%known person|Jasper Jessop
+%known org|Advisory Kepler LLC
+From: {{person:Rosalind Yardley}} <{{email:rosalind@wicker-works.example}}>
+To: {{person:Jasper Jessop}} <{{email:jessop..jasper@outlook.com}}>
+Date: Sun, {{date:11 Feb 2024}} 17:15:00 +0100
+Subject: Invoice {{id:EXP-2026-7670}}
+
+Hi {{person:Jasper}},
+
+Please find attached invoice {{id:EXP-2026-7670}} for the work done for {{org:Advisory Kepler LLC}}.
+
+Consulting, first half: {{amount:125.08 USD}}
+Consulting, second half: {{amount:$83.39}}
+Subtotal: {{amount:208.47 USD}}
+Tax (20%): {{amount:41.69 USD}}
+Total: {{amount:$250.16}}
+
+Please pay before {{date:March 12th 2024}} to IBAN {{iban:GB98 DPHM 3046 2174 7769 42}}.
+
+--
+Best regards,
+{{person:Rosalind Yardley}}
+Accounts
+{{org:Wicker Works LLC}}
+{{email:rosalind@wicker-works.example}}
+{{url:www.wicker-works.example}}

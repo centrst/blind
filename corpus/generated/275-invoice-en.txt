@@ -1,0 +1,21 @@
+%known person|Tamsin Pritchard
+%known org|Supply Lumbre
+From: {{person:Gareth Crawley}} <{{email:gareth@partners-tramuntana.example}}>
+To: {{person:Tamsin Pritchard}} <{{email:pritchard.tamsin@supply-lumbre.example}}>
+Date: Fri, {{date:14 Feb 2025}} 10:15:00 +0100
+Subject: Invoice {{id:BKF5923IR}} from {{org:Partners Tramuntana}}
+
+Hello {{person:Tamsin}},
+
+Please find attached invoice {{id:BKF5923IR}} for the work done for {{org:Supply Lumbre}}.
+
+Base {{amount:£357.35}} plus 20% tax = {{amount:USD 428.82}}
+
+Payment is due by {{date:March 16, 2025}}. Transfer to {{iban:FR95 2921 4834 0287 9992 5146 567}}, quoting {{id:BKF5923IR}}.
+
+--
+Thanks,
+{{person:Gareth Crawley}}
+Administración
+{{org:Partners Tramuntana}}
+{{email:gareth@partners-tramuntana.example}}

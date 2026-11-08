@@ -1,0 +1,15 @@
+%known person|Nicolás del Río
+From: {{org:Consultores Dorsal}} <{{email:news@consultores-dorsal.example}}>
+To: {{email:nic_del@gmail.com}}
+Date: Sun, {{date:10 May 2026}} 18:30:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Nicolás}}, estas son las novedades del mes.
+
+Te esperamos en la jornada de puertas abiertas en {{place:Cabo Redondo}} el {{date:27 de MAYO de 2026}}. Entrada {{amount:41,93 €}}.
+
+Compra online: {{url:https://www.consultores-dorsal.example/tienda?utm_campaign=1600}}
+
+Recibes este correo porque {{email:nic_del@gmail.com}} se suscribió. Darte de baja: {{url:https://news.consultores-dorsal.example/unsubscribe?u=595364893x&e=nic_del%40gmail.com}}
+
+{{org:Consultores Dorsal}}, Atención al cliente {{phone:+34 771 685 865}}

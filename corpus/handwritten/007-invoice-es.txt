@@ -1,0 +1,20 @@
+%known person|Joaquín Mendizábal
+%known org|Mendizábal Reformas S.L.
+From: {{person:Itziar Berasategui}} <{{email:itziar@gestion-berasategui.example}}>
+To: {{person:Joaquín Mendizábal}} <{{email:joaquin@mendizabal-reformas.example}}>
+Subject: Factura {{id:FAC/2026/0187}} - trimestre 1
+
+Buenas tardes {{person:Joaquín}},
+
+Adjunto la factura {{id:FAC/2026/0187}} correspondiente a la gestión contable del primer trimestre de {{org:Mendizábal Reformas S.L.}}.
+
+Honorarios: {{amount:480,00 €}}
+IVA 21 %: {{amount:100,80 €}}
+Total: {{amount:580,80 €}}
+
+Puedes pagarla por transferencia a {{iban:ES66 2100 0418 4502 0005 1332}} antes del {{date:15 de abril}}.
+Mi teléfono por si hay dudas: {{phone:794 118 902}}.
+
+Un saludo,
+{{person:Itziar Berasategui}}
+{{org:Gestión Berasategui}}

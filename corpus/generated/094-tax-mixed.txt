@@ -1,0 +1,17 @@
+%known person|Percival Oakley
+From: {{person:Frederick Yardley}} <{{email:notificaciones.frederick.yardley@kepler-labs.example}}>
+To: "{{person:Percival Oakley}}" <{{email:oakley_percival@gmail.com}}>
+Date: Wed, {{date:6 Oct 2027}} 13:30:00 +0100
+Subject: Aviso de deuda pendiente
+
+Estimado/a {{person:Percival Oakley}},
+
+La Regional Revenue Office of {{place:Stonebridge}} le comunica que el expediente {{id:EXP-2027-3025}} presenta un saldo de {{amount:USD 5,562.15}} correspondiente al periodo cerrado el {{date:AUGUST 27, 2027}}.
+
+If it is not paid by {{date:26th October 2027}}, a surcharge of 5% applies: {{amount:278.11 USD}}, for a total of {{amount:USD 5,840.26}}.
+
+Pay by transfer to {{iban:ES86 5462 3535 8925 7472 4831}} and keep the receipt. For help call {{phone:+49 171 392 0095}}.
+
+Social security contributions for {{date:OCTOBER 1}} are listed in the portal: {{url:https://sede.kepler-labs.example/cuotas/44927A918}}
+
+Este es un aviso automático. No responda a este correo.

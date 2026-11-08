@@ -1,0 +1,25 @@
+%known person|Ofelia Hidalgo
+%known org|Transportes Isleta S.A.
+From: "{{person:Cayetano Tejada Barragán}}" <{{email:cayetano_tejada@asesores-aldara.example}}>
+To: {{person:Ofelia Hidalgo}} <{{email:ofeliahidalgo@transportes-isleta.example}}>
+Date: Thu, {{date:13 Mar 2025}} 11:00:00 +0100
+Subject: Factura {{id:EXP-2027-2807}}
+
+Estimado/a {{person:Ofelia}},
+
+Te enviamos la factura del último periodo de {{org:Transportes Isleta S.A.}}.
+
+Servicios, primera parte: {{amount:69,30 EUR}}
+Servicios, segunda parte: {{amount:46,20 EUR}}
+Subtotal: {{amount:115,50 €}}
+IVA (10 %): {{amount:11,55 €}}
+Total: {{amount:€ 127,05}}
+
+El pago vence el {{date:28 de marzo de 2025}}. Transferencia a {{iban:FR14 4436 5161 0844 8115 9005 008}} indicando {{id:EXP-2027-2807}}.
+
+--
+Atentamente,
+{{person:Cayetano Tejada Barragán}}
+Accounts
+{{org:Asesores Aldara}}
+{{email:cayetano_tejada@asesores-aldara.example}}

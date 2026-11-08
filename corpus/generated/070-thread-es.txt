@@ -1,0 +1,23 @@
+%known person|Facundo de la Torre
+%known org|Ingeniería Zafiro S.L.
+From: {{person:Aurora Navarrete}} <{{email:auroranavarrete@asesores-dorsal.example}}>
+To: {{person:Facundo de la Torre}} <{{email:de.facundo@ingenieria-zafiro.example}}>
+Date: Fri, {{date:3 Jan 2025}} 08:15:00 +0100
+Subject: Re: oferta para {{org:Ingeniería Zafiro S.L.}}
+Podemos aceptar {{amount:€ 439,81}} y enviar el contrato a {{email:de.facundo@ingenieria-zafiro.example}}.
+On {{date:2 de enero de 2025}}, {{person:Facundo de la Torre}} wrote:
+> Gracias {{person:Aurora}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:404,15 EUR}}? La reunión nos va bien, llámame al {{phone:+44 7700 900218}} si cambia.
+>
+> El {{date:1 de enero de 2025}}, {{person:Aurora Navarrete}} escribió:
+> > Hola {{person:Facundo}}, nuestra oferta para {{org:Ingeniería Zafiro S.L.}} es de {{amount:475,47 €}}. ¿Quedamos el {{date:2025-01-06}} a las 09:15?
+> > 
+> > --
+> > Atentamente,
+> > {{person:Aurora Navarrete}}
+> > Comercial
+> > {{org:Asesores Dorsal}}
+> > Tel: {{phone:0034 753 495 446}}
+> > {{email:auroranavarrete@asesores-dorsal.example}}
+> > Oficina de {{place:Cabo Redondo}}
+
+{{person:Aurora}}

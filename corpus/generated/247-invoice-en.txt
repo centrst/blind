@@ -1,0 +1,24 @@
+%known person|Winston Cartwright
+%known org|Quimera Advisory LLC
+From: {{person:Desmond Nightingale}} <{{email:nightingale.desmond@esquilo-studio.example}}>
+To: {{person:Winston Cartwright}} <{{email:cartwright.winston@quimera-advisory.example}}>
+Date: Fri, {{date:28 May 2027}} 18:30:00 +0100
+Subject: Invoice {{id:FC796324882}}
+
+Hello {{person:Winston}},
+
+Please find attached invoice {{id:FC796324882}} for the work done for {{org:Quimera Advisory LLC}}.
+
+The total is {{amount:£61.74}}, which includes 20% tax on {{amount:USD 51.45}}.
+
+Please pay before {{date:12-07-2027}} to IBAN {{iban:ES2173846796594199137639}}.
+
+--
+Thanks,
+{{person:Desmond Nightingale}}
+Administración
+{{org:Esquilo Studio GmbH}}
+{{email:nightingale.desmond@esquilo-studio.example}}
+{{url:www.esquilo-studio.example}}
+
+This message is confidential and intended only for the addressee.

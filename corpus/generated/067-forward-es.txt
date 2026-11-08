@@ -1,0 +1,21 @@
+%known person|Dolores Ocaña
+From: {{person:Dolores Ocaña}} <{{email:dolores_ocana@gestion-cendal.example}}>
+To: {{person:Fermina Quintana}} <{{email:quintana.fermina@transportes-wicker.example}}>
+Date: Wed, {{date:4 Jun 2025}} 10:45:00 +0100
+Subject: Fwd: consulta de {{org:Asesores Galeón S.A.}}
+Hola {{person:Fermina}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:16/06/25}}.
+---------- Forwarded message ---------
+From: {{person:Candelaria Rebollo}} <{{email:candelariarebollo@asesores-galeon.example}}>
+Date: {{date:4 Jun 2025}}
+Subject: Presupuesto proyecto {{id:28511565}}
+
+Buenos días {{person:Dolores}},
+El consejo aprobó {{amount:437,79 EUR}} para el proyecto {{id:28511565}}. ¿Cuándo podríais empezar?
+--
+Atentamente,
+{{person:Candelaria Rebollo}}
+Purchasing
+{{org:Asesores Galeón S.A.}}
+Tel: {{phone:0034 761 647 507}}
+{{email:candelariarebollo@asesores-galeon.example}}
+{{url:www.asesores-galeon.example}}

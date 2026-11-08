@@ -1,0 +1,25 @@
+%known person|Ulises Villalobos
+%known org|Logística Lumbre S.L.U.
+From: {{person:Ernesto Lazcano Sepúlveda}} <{{email:elazcano@estudio-nevada.example}}>
+To: {{person:Ulises Villalobos}} <{{email:ulisesvillalobos@logistica-lumbre.example}}>
+Date: Tue, {{date:13 May 2025}} 17:30:00 +0100
+Subject: Factura {{id:FAC/2025/7934}}
+
+Hola {{person:Ulises}},
+
+Te enviamos la factura del último periodo de {{org:Logística Lumbre S.L.U.}}.
+
+Servicios, primera parte: {{amount:873,43 €}}
+Servicios, segunda parte: {{amount:582,29 €}}
+Subtotal: {{amount:1.455,72 EUR}}
+IVA (21 %): {{amount:€ 305,70}}
+Total: {{amount:1761,42 EUR}}
+
+El pago vence el {{date:12 de junio del 2025}}. Transferencia a {{iban:DE15 1392 6832 7193 0069 77}} indicando {{id:FAC/2025/7934}}.
+
+--
+Atentamente,
+{{person:Ernesto Lazcano Sepúlveda}}
+Administración
+{{org:Estudio Nevada}}
+Tel: {{phone:+34 756900508}}

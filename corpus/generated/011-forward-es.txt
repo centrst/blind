@@ -1,0 +1,20 @@
+%known person|Facundo Jaramillo Medrano
+From: {{person:Facundo Jaramillo Medrano}} <{{email:facundo_jar@gmail.com}}>
+To: {{person:Macarena de la Torre}} <{{email:macarena_de@transportes-larkspur.example}}>
+Date: Mon, {{date:6 May 2024}} 16:15:00 +0100
+Subject: Fwd: consulta de {{org:Ingeniería Bruma}}
+Hola {{person:Macarena}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:9 de mayo del 2024}}.
+---------- Forwarded message ---------
+From: {{person:Pilar Galindo}} <{{email:pilar@ingenieria-bruma.example}}>
+Date: {{date:6 May 2024}}
+Subject: Presupuesto proyecto {{id:FAC/2023/3737}}
+
+Estimado/a {{person:Facundo}},
+El consejo aprobó {{amount:38,85 EUR}} para el proyecto {{id:FAC/2023/3737}}. ¿Cuándo podríais empezar?
+--
+Atentamente,
+{{person:Pilar Galindo}}
+Purchasing
+{{org:Ingeniería Bruma}}
+Tel: {{phone:797 99 80 45}}
+Oficina de {{place:Cabo Redondo}}

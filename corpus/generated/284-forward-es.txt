@@ -1,0 +1,20 @@
+%known person|Fermina Echeverría
+From: {{person:Fermina Echeverría}} <{{email:fer..echeverria@outlook.com}}>
+To: {{person:Lisandro Sepúlveda}} <{{email:lisandro.sepulveda@transportes-millstone.example}}>
+Date: Wed, {{date:26 May 2027}} 11:15:00 +0100
+Subject: Fwd: consulta de {{org:Reformas Quimera}}
+{{person:Lisandro}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:+1 472 555 0173}}.
+---------- Forwarded message ---------
+From: {{person:Genaro Hidalgo}} <{{email:hidalgo.genaro@reformas-quimera.example}}>
+Date: {{date:26 May 2027}}
+Subject: Presupuesto proyecto {{id:BKG7373GF}}
+
+Hola {{person:Fermina}},
+El consejo aprobó {{amount:55,70 EUR}} para el proyecto {{id:BKG7373GF}}. ¿Cuándo podríais empezar?
+--
+Gracias,
+{{person:Genaro Hidalgo}}
+Operations manager
+{{org:Reformas Quimera}}
+Tel: {{phone:+1 472 555 0173}}
+Oficina de {{place:Almendral del Sur}}

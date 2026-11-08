@@ -1,0 +1,15 @@
+%known person|Honorio Barragán
+From: {{person:Verónica Rebollo}} <{{email:notificaciones.vrebollo@gestion-dorsal.example}}>
+To: "{{person:Honorio Barragán}}" <{{email:hon..barragan@outlook.com}}>
+Date: Sun, {{date:10 Oct 2027}} 11:45:00 +0100
+Subject: Aviso de deuda pendiente
+
+Estimado/a {{person:Honorio Barragán}},
+
+Según nuestros registros, consta una deuda de {{amount:271,25 EUR}} en el expediente {{id:EXP-2027-8710}}.
+
+Si no se abona antes del {{date:20-10-27}}, se aplicará un recargo del 5 %: {{amount:13,56 EUR}}, en total {{amount:284,81 €}}.
+
+Puede pagar por transferencia a {{iban:PT21 5758 4684 5696 2682 5076 6}} y conservar el justificante. Atención telefónica: {{phone:870-555-0125}}.
+
+Este es un aviso automático. No responda a este correo.

@@ -1,0 +1,10 @@
+%known person|Valentine Marsh
+From: Calendly <notifications..team@calendly.com>
+To: {{person:Valentine Marsh}} <{{email:valentine@marsh-coaching.example}}>
+Subject: New event: Intro call with {{person:Ambrose Hillcrest}}
+
+Hi {{person:Valentine}},
+
+{{person:Ambrose Hillcrest}} ({{email:ambrose@hillcrest-labs.example}}) scheduled a 30 minute call for Thursday, {{date:October 15, 2026}} at 3:00 pm.
+Phone: {{phone:+1 646 555 0171}}. Company: {{org:Hillcrest Labs}}.
+Cancel or reschedule: {{url:https://calendly.com/valentine-marsh/intro/9f12a}}

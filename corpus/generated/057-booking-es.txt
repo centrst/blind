@@ -1,0 +1,11 @@
+%known person|Griselda Echeverría
+From: {{person:Jacinta del Río}} <{{email:jdel@clinica-ironbridge.example}}>
+To: {{person:Griselda Echeverría}} <{{email:griselda..gecheverria@outlook.com}}>
+Date: Fri, {{date:12 Jun 2026}} 10:15:00 +0100
+Subject: Confirmación de cita {{id:86807891I}}
+
+Hola {{person:Griselda}},
+
+Hemos reservado sesión de fisioterapia para ti el {{date:20 de junio del 2026}}. Estamos en {{place:Valdecañas}}.
+
+El importe es {{amount:210,49 €}}, a pagar en el local. Hemos retenido una señal de {{amount:52,62 EUR}}.

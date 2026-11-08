@@ -1,0 +1,22 @@
+%known person|Amparo Fontán Iglesias
+%known org|Servicios Farola
+From: {{person:Jacinta Espinosa Cuesta}} <{{email:espinosa.jacinta@gestion-quimera.example}}>
+To: "{{person:Amparo Fontán Iglesias}}" <{{email:a_fontan@gmail.com}}>
+Date: Tue, {{date:21 Dec 2027}} 14:15:00 +0100
+Subject: Re: oferta para {{org:Servicios Farola}}
+Podemos aceptar {{amount:32,53 EUR}} y enviar el contrato a {{email:a_fontan@gmail.com}}.
+On {{date:20 de diciembre de 2027}}, {{person:Amparo Fontán Iglesias}} wrote:
+> Gracias {{person:Jacinta}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:29,89 €}}? La reunión nos va bien, llámame al {{phone:+44 7700 900923}} si cambia.
+>
+> El {{date:2027-12-19}}, {{person:Jacinta Espinosa Cuesta}} escribió:
+> > Hello {{person:Amparo}}, our offer for {{org:Servicios Farola}} is {{amount:€ 35,17}}. Can we meet on {{date:2027-12-29}} at 18:00?
+> > 
+> > --
+> > Thanks,
+> > {{person:Jacinta Espinosa Cuesta}}
+> > Comercial
+> > {{org:Gestión Quimera S.L.}}
+> > Tel: {{phone:773 56 50 36}}
+> > {{email:espinosa.jacinta@gestion-quimera.example}}
+
+{{person:Jacinta}}

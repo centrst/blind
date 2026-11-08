@@ -1,0 +1,13 @@
+%known person|Nicolás Galindo
+From: {{org:Logística Isleta}} <{{email:security@logistica-isleta.example}}>
+To: {{person:Nicolás Galindo}} <{{email:nicolas-galindo@gmail.com}}>
+Date: Thu, {{date:24 Jul 2025}} 10:45:00 +0100
+Subject: Solicitud de cambio de contraseña
+
+Hola {{person:Nicolás}},
+
+Alguien solicitó cambiar la contraseña de {{email:nicolas-galindo@gmail.com}} el {{date:24/07/2025}}. Usa este enlace en la próxima hora: {{url:https://accounts.logistica-isleta.example/reset?token=401439ab172465}}
+
+Si no fuiste tú, llama al {{phone:0034 750 344 010}} o escribe a {{email:security@logistica-isleta.example}}.
+
+El equipo de seguridad de {{org:Logística Isleta}}

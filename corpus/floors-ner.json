@@ -1,0 +1,57 @@
+{
+  "bare": {
+    "recall": {
+      "person": 98,
+      "org": 97,
+      "place": 99,
+      "email": 100,
+      "url": 100,
+      "phone": 100,
+      "iban": 100,
+      "id": 100,
+      "amount": 100,
+      "date": 99
+    },
+    "precision": {
+      "person": 96,
+      "org": 92,
+      "place": 88,
+      "email": 96,
+      "url": 100,
+      "phone": 100,
+      "iban": 100,
+      "id": 100,
+      "amount": 99,
+      "date": 100
+    },
+    "roundTrip": 100
+  },
+  "known": {
+    "recall": {
+      "person": 99,
+      "org": 99,
+      "place": 99,
+      "email": 100,
+      "url": 100,
+      "phone": 100,
+      "iban": 100,
+      "id": 100,
+      "amount": 100,
+      "date": 99
+    },
+    "precision": {
+      "person": 96,
+      "org": 92,
+      "place": 89,
+      "email": 96,
+      "url": 100,
+      "phone": 100,
+      "iban": 100,
+      "id": 100,
+      "amount": 99,
+      "date": 100
+    },
+    "roundTrip": 100
+  },
+  "note": "NER mode: gliner_multi-v2.1, threshold 0.3. Rounded down to a whole percent, only move up."
+}

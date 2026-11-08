@@ -1,0 +1,24 @@
+%order mdy
+%known person|Barnaby Pritchard
+%known org|Supply Rastro Inc.
+From: {{person:Rowena Cartwright}} <{{email:rowena.cartwright@marisma-logistics.example}}>
+To: "{{person:Barnaby Pritchard}}" <{{email:bpritchard@supply-rastro.example}}>
+Date: Mon, {{date:9 Dec 2024}} 18:15:00 +0100
+Subject: Re: oferta para {{org:Supply Rastro Inc.}}
+We can accept {{amount:$38.10}} and send the contract to {{email:bpritchard@supply-rastro.example}}.
+On {{date:December 8, 2024}}, {{person:Barnaby Pritchard}} wrote:
+> Thanks {{person:Rowena}}. That is high for us. Could you do {{amount:$35.01}}? The meeting works, call me on {{phone:+49 171 392 0046}} if it moves.
+>
+> El {{date:12-07-2024}}, {{person:Rowena Cartwright}} escribió:
+> > Hola {{person:Barnaby}}, nuestra oferta para {{org:Supply Rastro Inc.}} es de {{amount:USD 41.19}}. ¿Quedamos el {{date:December 19, 2024}} a las 17:30?
+> > 
+> > --
+> > Atentamente,
+> > {{person:Rowena Cartwright}}
+> > Comercial
+> > {{org:Marisma Logistics}}
+> > Tel: {{phone:750 631 579}}
+> > {{email:rowena.cartwright@marisma-logistics.example}}
+> > {{url:www.marisma-logistics.example}}
+
+{{person:Rowena}}

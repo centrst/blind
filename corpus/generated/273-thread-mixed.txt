@@ -1,0 +1,22 @@
+%known person|Fermina Peñalver
+%known org|Clínica Pinar S.L.
+From: {{person:Jacinta Hidalgo}} <{{email:jacinta@ingenieria-ocaso.example}}>
+To: {{person:Fermina Peñalver}} <{{email:ferminapenalver@clinica-pinar.example}}>
+Date: Mon, {{date:28 Jul 2025}} 19:15:00 +0100
+Subject: Re: oferta para {{org:Clínica Pinar S.L.}}
+Podemos aceptar {{amount:€ 385,04}} y enviar el contrato a {{email:ferminapenalver@clinica-pinar.example}}.
+On {{date:27-7-2025}}, {{person:Fermina Peñalver}} wrote:
+> Thanks {{person:Jacinta}}. That is high for us. Could you do {{amount:353,82 €}}? The meeting works, call me on {{phone:793 102 159}} if it moves.
+>
+> El {{date:26/07/2025}}, {{person:Jacinta Hidalgo}} escribió:
+> > Hola {{person:Fermina}}, nuestra oferta para {{org:Clínica Pinar S.L.}} es de {{amount:416,26 EUR}}. ¿Quedamos el {{date:2025-08-06}} a las 17:45?
+> > 
+> > --
+> > Un saludo,
+> > {{person:Jacinta Hidalgo}}
+> > Comercial
+> > {{org:Ingeniería Ocaso S.L.U.}}
+> > {{email:jacinta@ingenieria-ocaso.example}}
+> > {{url:www.ingenieria-ocaso.example}}
+
+{{person:Jacinta}}

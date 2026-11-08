@@ -1,0 +1,25 @@
+%known person|Belén Iglesias
+%known org|Asesores Zafiro
+From: {{person:Dolores Maldonado}} <{{email:dmaldonado@estudio-nevada.example}}>
+To: {{person:Belén Iglesias}} <{{email:beleniglesias@asesores-zafiro.example}}>
+Date: Mon, {{date:5 Aug 2024}} 14:45:00 +0100
+Subject: Factura {{id:17904721}} de {{org:Estudio Nevada}}
+
+Hello {{person:Belén}},
+
+Attached is our invoice for last month's services to {{org:Asesores Zafiro}}.
+
+Servicios, primera parte: {{amount:817,48 EUR}}
+Servicios, segunda parte: {{amount:544,99 €}}
+Subtotal: {{amount:€ 1.362,47}}
+IVA (21 %): {{amount:286,12 €}}
+Total: {{amount:1.648,59 €}}
+
+Payment is due by {{date:4 de septiembre de 2024}}. Transfer to {{iban:DE95 0464 2409 2434 0423 02}}, quoting {{id:17904721}}.
+
+--
+Best regards,
+{{person:Dolores Maldonado}}
+Billing department
+{{org:Estudio Nevada}}
+Tel: {{phone:+44 7700 900429}}

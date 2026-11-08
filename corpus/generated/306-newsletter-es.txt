@@ -1,0 +1,15 @@
+%known person|Macarena Arroyo Iglesias
+From: {{org:Asesores Ironbridge}} <{{email:news@asesores-ironbridge.example}}>
+To: {{email:macarena_arr@gmail.com}}
+Date: Sat, {{date:13 Nov 2027}} 10:30:00 +0100
+Subject: Novedades de temporada
+
+Hola {{person:Macarena}}, estas son las novedades del mes.
+
+Te esperamos en la jornada de puertas abiertas en {{place:Puente Nuevo}} el {{date:20 de noviembre de 2027}}. Entrada {{amount:€ 7,60}}.
+
+Compra online: {{url:https://www.asesores-ironbridge.example/tienda?utm_campaign=9481}}
+
+Recibes este correo porque {{email:macarena_arr@gmail.com}} se suscribió. Darte de baja: {{url:https://news.asesores-ironbridge.example/unsubscribe?u=960152164x&e=macarena_arr%40gmail.com}}
+
+{{org:Asesores Ironbridge}}, Atención al cliente {{phone:318-555-0140}}

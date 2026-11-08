@@ -1,0 +1,16 @@
+%order mdy
+%known person|Tamsin Pritchard
+From: {{org:Consulting Esquilo}} <{{email:news@consulting-esquilo.example}}>
+To: {{person:Tamsin Pritchard}} <{{email:pritchard_tamsin@gmail.com}}>
+Date: Thu, {{date:11 Jul 2024}} 19:00:00 +0100
+Subject: Spring offers inside
+
+Hi {{person:Tamsin}}, here is what is new this month.
+
+Our best seller is now {{amount:USD 46.71}}, down from {{amount:£58.39}}. Offer ends {{date:18 July, 2024}}.
+
+Shop online: {{url:https://www.consulting-esquilo.example/shop?utm_campaign=3525}}
+
+You receive this because {{email:pritchard_tamsin@gmail.com}} subscribed. Unsubscribe: {{url:https://news.consulting-esquilo.example/unsubscribe?u=689440496x&e=pritchard_tamsin%40gmail.com}}
+
+{{org:Consulting Esquilo}}, Customer care {{phone:753 00 61 82}}

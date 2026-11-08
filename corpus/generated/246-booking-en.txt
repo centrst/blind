@@ -1,0 +1,21 @@
+%known person|Sebastian Mortimer
+From: {{person:Jasper Lambert}} <{{email:jasperlambert@dorsal-holdings.example}}>
+To: {{person:Sebastian Mortimer}} <{{email:smortimer@pinar-advisory.example}}>
+Date: Tue, {{date:25 Aug 2026}} 15:45:00 +0100
+Subject: Your booking is confirmed
+
+Hello {{person:Sebastian}},
+
+We have reserved a haircut and colour for you on {{date:2026-09-08}}. The address is {{org:Dorsal Holdings}}, {{place:Ashford Reach}}.
+
+Total: {{amount:195.40 USD}}. Free cancellation until {{date:August 26}}.
+
+Questions? Call us on {{phone:+1 754 555 0156}} or write to {{email:jasperlambert@dorsal-holdings.example}}.
+
+--
+Thanks,
+{{person:Jasper Lambert}}
+Reception
+{{org:Dorsal Holdings}}
+Tel: {{phone:+1 754 555 0156}}
+{{url:www.dorsal-holdings.example}}

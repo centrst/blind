@@ -1,0 +1,12 @@
+%order mdy
+%known person|Isadora Yardley
+From: {{person:Odette Ashworth}} <{{email:oashworth@partners-foxglove.example}}>
+To: {{person:Isadora Yardley}} <{{email:isadora-yardley@gmail.com}}>
+Date: Sun, {{date:1 Dec 2024}} 16:30:00 +0100
+Subject: Your booking is confirmed
+
+Dear {{person:Isadora}},
+
+Your dental check-up at {{org:Partners Foxglove Inc.}} is booked for {{date:12-13-2024}} at 10:00.
+
+Total: {{amount:$162.67}}. Free cancellation until {{date:2024-12-02}}.

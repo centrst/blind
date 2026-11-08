@@ -1,0 +1,25 @@
+%order mdy
+%known person|Gwendolyn Tennant
+%known org|Pinar Logistics Ltd
+From: {{person:Odette Oakley}} <{{email:odette.oakley@larkspur-systems.example}}>
+To: "{{person:Gwendolyn Tennant}}" <{{email:tennant.gwendolyn@pinar-logistics.example}}>
+Date: Sat, {{date:24 Jan 2026}} 17:30:00 +0100
+Subject: Invoice {{id:EXP-2023-8525}} from {{org:Larkspur Systems Ltd}}
+
+Buenos días {{person:Gwendolyn}},
+
+Attached is our invoice for last month's services to {{org:Pinar Logistics Ltd}}.
+
+El total es {{amount:£12.62}}, con 20% de IVA sobre {{amount:£10.52}}.
+
+Payment is due by {{date:8 February 2026}}. Transfer to {{iban:GB26XZYG06991517513298}}, quoting {{id:EXP-2023-8525}}.
+
+--
+Cheers,
+{{person:Odette Oakley}}
+Accounts
+{{org:Larkspur Systems Ltd}}
+Tel: {{phone:(809) 555-0144}}
+{{email:odette.oakley@larkspur-systems.example}}
+
+This message is confidential and intended only for the addressee.

@@ -1,0 +1,13 @@
+%known person|Rosendo Medrano Echeverría
+From: {{org:Gestión Esquilo}} <{{email:security@gestion-esquilo.example}}>
+To: {{person:Rosendo Medrano Echeverría}} <{{email:rosendo-medrano@gmail.com}}>
+Date: Mon, {{date:16 Dec 2024}} 11:30:00 +0100
+Subject: Solicitud de cambio de contraseña
+
+Hola {{person:Rosendo}},
+
+Alguien solicitó cambiar la contraseña de {{email:rosendo-medrano@gmail.com}} el {{date:16 de diciembre de 2024}}. Usa este enlace en la próxima hora: {{url:https://accounts.gestion-esquilo.example/reset?token=944599ab186324}}
+
+Si no fuiste tú, llama al {{phone:785 15 13 72}} o escribe a {{email:security@gestion-esquilo.example}}.
+
+El equipo de seguridad de {{org:Gestión Esquilo}}

@@ -1,0 +1,16 @@
+%order mdy
+%known person|Georgina Somerset
+From: {{org:Quimera Consulting}} <{{email:news@quimera-consulting.example}}>
+To: {{email:georgina..gsomerset@icloud.com}}
+Date: Sun, {{date:5 May 2024}} 13:15:00 +0100
+Subject: Spring offers inside
+
+Hi {{person:Georgina}}, here is what is new this month.
+
+Join our open day in {{place:Fenwick Bay}} on {{date:2024-05-16}}. Entry {{amount:USD 182.66}}.
+
+Shop online: {{url:https://www.quimera-consulting.example/shop?utm_campaign=1761}}
+
+You receive this because {{email:georgina..gsomerset@icloud.com}} subscribed. Unsubscribe: {{url:https://news.quimera-consulting.example/unsubscribe?u=579051979x&e=georgina..gsomerset%40icloud.com}}
+
+{{org:Quimera Consulting}}, Customer care {{phone:0034 784 504 885}}

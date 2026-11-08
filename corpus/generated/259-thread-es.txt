@@ -1,0 +1,22 @@
+%known person|Ulises Rebollo
+%known org|Reformas Pinar S.A.
+From: {{person:Eloy Echeverría}} <{{email:eecheverria@ingenieria-larkspur.example}}>
+To: {{person:Ulises Rebollo}} <{{email:ulises@reformas-pinar.example}}>
+Date: Sun, {{date:5 May 2024}} 11:15:00 +0100
+Subject: Re: oferta para {{org:Reformas Pinar S.A.}}
+Podemos aceptar {{amount:2.707,51 €}} y enviar el contrato a {{email:ulises@reformas-pinar.example}}.
+On {{date:2024-05-04}}, {{person:Ulises Rebollo}} wrote:
+> Gracias {{person:Eloy}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:2487,98 €}}? La reunión nos va bien, llámame al {{phone:+34 773956673}} si cambia.
+>
+> El {{date:3 de mayo de 2024}}, {{person:Eloy Echeverría}} escribió:
+> > Hola {{person:Ulises}}, nuestra oferta para {{org:Reformas Pinar S.A.}} es de {{amount:2.927,03 €}}. ¿Quedamos el {{date:10 de mayo de 2024}} a las 09:30?
+> > 
+> > --
+> > Saludos cordiales,
+> > {{person:Eloy Echeverría}}
+> > Comercial
+> > {{org:Ingeniería Larkspur S.L.}}
+> > {{email:eecheverria@ingenieria-larkspur.example}}
+> > {{url:www.ingenieria-larkspur.example}}
+
+{{person:Eloy}}

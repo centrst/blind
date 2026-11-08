@@ -1,0 +1,17 @@
+%known person|Isadora Bellamy
+From: {{person:Eleanor Upshaw}} <{{email:notificaciones.eupshaw@supply-bruma.example}}>
+To: {{person:Isadora Bellamy}} <{{email:isa..bellamy@outlook.com}}>
+Date: Fri, {{date:17 Jul 2026}} 14:00:00 +0100
+Subject: Notification of outstanding balance
+
+Dear {{person:Isadora Bellamy}},
+
+Regional Revenue Office of {{place:Fenwick Bay}} informs you that file {{id:EXP-2026-1397}} shows a balance of {{amount:USD 7,997.18}} for the period ending {{date:June 7th 2026}}.
+
+If it is not paid by {{date:16th of Aug 2026}}, a surcharge of 5% applies: {{amount:$399.86}}, for a total of {{amount:£8,397.04}}.
+
+Pay by transfer to {{iban:GB41 DMWZ 4820 9475 1047 57}} and keep the receipt. For help call {{phone:+49 171 392 0079}}.
+
+Social security contributions for {{date:July 1}} are listed in the portal: {{url:https://sede.supply-bruma.example/cuotas/68464A763}}
+
+This is an automatic notice. Do not reply.

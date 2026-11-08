@@ -1,0 +1,13 @@
+%known person|Honorio Duarte Figueroa
+From: {{org:Reformas Millstone}} <{{email:security@reformas-millstone.example}}>
+To: "{{person:Honorio Duarte Figueroa}}" <{{email:honorio_duarte@gmail.com}}>
+Date: Sun, {{date:5 Apr 2026}} 10:45:00 +0100
+Subject: Solicitud de cambio de contraseña
+
+Hola {{person:Honorio}},
+
+Tu código de verificación es {{id:319444}}. Caduca en 10 minutos. No lo compartas.
+
+Si no fuiste tú, llama al {{phone:+1 376 555 0122}} o escribe a {{email:security@reformas-millstone.example}}.
+
+El equipo de seguridad de {{org:Reformas Millstone}}

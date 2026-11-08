@@ -1,0 +1,13 @@
+%known person|Percival Ingram
+From: {{org:Quimera Labs}} <{{email:security@quimera-labs.example}}>
+To: "{{person:Percival Ingram}}" <{{email:percival..ing@outlook.com}}>
+Date: Thu, {{date:28 Jan 2027}} 13:00:00 +0100
+Subject: New sign-in to your account
+
+Hola {{person:Percival}},
+
+Tu código de verificación es {{id:611757}}. Caduca en 10 minutos. No lo compartas.
+
+If this was not you, call {{phone:0034 798 341 066}} or write to {{email:security@quimera-labs.example}}.
+
+The {{org:Quimera Labs}} security team

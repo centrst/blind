@@ -1,0 +1,14 @@
+%known person|Demetrio Salcedo
+%known org|Salcedo Carpintería S.L.
+From: {{person:Demetrio Salcedo}} <{{email:demetrio@salcedo-carpinteria.example}}>
+To: {{person:Honorio Vidal}} <{{email:honorio@vidal-maderas.example}}>
+Subject: Re: Pedido de madera de roble
+
+Honorio, vale, acepto {{amount:2.150,00 €}} con el transporte incluido. Que llegue antes del {{date:19 de mayo}}.
+
+El {{date:11/05/2026}}, {{person:Honorio Vidal}} escribió:
+> Demetrio, el roble ha subido. Te lo dejo en {{amount:2.300,00 €}} más {{amount:184,00 €}} de transporte.
+> Mi teléfono por si prefieres hablar: {{phone:+34 759 887 120}}
+>
+> El {{date:8/05/2026}}, {{person:Demetrio Salcedo}} escribió:
+> > Honorio, necesito 30 tablones de roble para la obra de {{place:Torrebruna}}. ¿Cuánto me cuesta?

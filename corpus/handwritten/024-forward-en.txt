@@ -1,0 +1,11 @@
+%known person|Cordelia Voss
+%known org|Voss Landscaping Inc.
+From: {{person:Cordelia Voss}} <{{email:cordelia@voss-landscaping.example}}>
+To: {{person:Humphrey Lane}} <{{email:humphrey@lane-legal.example}}>
+Subject: FW: contract question
+
+Humphrey, can you read clause 4 before I sign? The monthly fee is {{amount:$3,200.00}} and they want a deposit of {{amount:$9,600.00}}.
+
+On Thu, {{date:Jan 8, 2026}}, {{person:Winifred Oates}} <{{email:winifred@oates-supply.example}}> wrote:
+> Hi Cordelia, attaching the draft for {{org:Voss Landscaping Inc.}}.
+> Call me on {{phone:(503) 555-0187}} if anything looks off.

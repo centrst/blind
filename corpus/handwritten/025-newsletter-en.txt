@@ -1,0 +1,12 @@
+%known person|Nathan Pryce
+From: Hollowbrook Books <hello@hollowbrook-books.example>
+To: {{person:Nathan Pryce}} <{{email:nathan_pryce@gmail.com}}>
+Subject: New arrivals and a reading night
+
+Hi {{person:Nathan}},
+
+Spring arrivals are on the shelves. Paperbacks start at {{amount:$7.99}} and signed editions at {{amount:$24.00}}.
+Join our reading night on {{date:April 18, 2026}} at 7 pm in {{place:Oakmere}}. Free entry.
+
+Browse online: {{url:https://www.hollowbrook-books.example/spring?ref=nl0418}}
+Not for you? Unsubscribe: {{url:https://hollowbrook-books.example/u/7721903/8d11f4a0}}

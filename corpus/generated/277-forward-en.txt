@@ -1,0 +1,21 @@
+%order mdy
+%known person|Gwendolyn Tennant
+From: {{person:Gwendolyn Tennant}} <{{email:gwendolyn_tennant@millstone-systems.example}}>
+To: {{person:Georgina Cartwright}} <{{email:georginacartwright@galeon-holdings.example}}>
+Date: Mon, {{date:4 Mar 2024}} 18:00:00 +0100
+Subject: Fwd: question from {{org:Wicker Advisory}}
+{{person:Georgina}}, forwarding below. Please check the numbers and call them on {{phone:+49 171 392 0033}}.
+---------- Forwarded message ---------
+From: {{person:Jasper Jessop}} <{{email:jasper_jessop@wicker-advisory.example}}>
+Date: {{date:4 Mar 2024}}
+Subject: Quote for project {{id:X3006413B}}
+
+Hi {{person:Gwendolyn}},
+The board approved {{amount:USD 232.10}} for project {{id:X3006413B}}. When can you begin?
+--
+Cheers,
+{{person:Jasper Jessop}}
+Purchasing
+{{org:Wicker Advisory}}
+Tel: {{phone:+49 171 392 0033}}
+{{email:jasper_jessop@wicker-advisory.example}}

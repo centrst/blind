@@ -1,0 +1,25 @@
+%known person|Harold Crawley
+%known org|Bruma Works Ltd
+From: {{person:Gareth Jessop}} <{{email:gareth.jessop@vendaval-consulting.example}}>
+To: {{person:Harold Crawley}} <{{email:crawley..harold@outlook.com}}>
+Date: Sat, {{date:13 Jun 2026}} 10:30:00 +0100
+Subject: Invoice {{id:73097598}} from {{org:Vendaval Consulting GmbH}}
+
+Hola {{person:Harold}},
+
+Please find attached invoice {{id:73097598}} for the work done for {{org:Bruma Works Ltd}}.
+
+The total is {{amount:$28.75}}, which includes 20% tax on {{amount:USD 23.96}}.
+
+El pago vence el {{date:2026-07-13}}. Transferencia a {{iban:FR70 5980 0086 3783 1508 8980 226}} indicando {{id:73097598}}.
+
+Our tax number is {{id:V27066345}}.
+
+--
+Saludos cordiales,
+{{person:Gareth Jessop}}
+Accounts
+{{org:Vendaval Consulting GmbH}}
+Tel: {{phone:+49 171 392 0048}}
+{{email:gareth.jessop@vendaval-consulting.example}}
+Office: {{place:Brindleton}}

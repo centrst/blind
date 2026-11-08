@@ -1,0 +1,24 @@
+%order mdy
+%known person|Sebastian Kingsley
+From: {{person:Odette Goodwin}} <{{email:odette.goodwin@larkspur-supply.example}}>
+To: {{person:Sebastian Kingsley}} <{{email:s_kingsley@gmail.com}}>
+Date: Thu, {{date:29 Apr 2027}} 10:45:00 +0100
+Subject: Your booking is confirmed
+
+Hello {{person:Sebastian}},
+
+Your physio session at {{org:Larkspur Supply}} is booked for {{date:May 17th, 2027}} at 09:15.
+
+The price is {{amount:$359.60}}, payable on arrival. A deposit of {{amount:89.90 USD}} is held on your card.
+
+Questions? Call us on {{phone:0034 785 754 929}} or write to {{email:odette.goodwin@larkspur-supply.example}}.
+
+--
+Un saludo,
+{{person:Odette Goodwin}}
+Reception
+{{org:Larkspur Supply}}
+Tel: {{phone:0034 785 754 929}}
+{{email:odette.goodwin@larkspur-supply.example}}
+{{url:www.larkspur-supply.example}}
+Office: {{place:Fenwick Bay}}

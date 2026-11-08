@@ -1,0 +1,20 @@
+%known person|Eloy Cifuentes Barragán
+From: {{person:Eloy Cifuentes Barragán}} <{{email:eloy@gestion-ironbridge.example}}>
+To: {{person:Fermina Echeverría Quintana}} <{{email:fermina@reformas-foxglove.example}}>
+Date: Mon, {{date:31 Aug 2026}} 08:00:00 +0100
+Subject: Fwd: consulta de {{org:Transportes Farola S.L.}}
+Hola {{person:Fermina}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:11-09-2026}}.
+---------- Forwarded message ---------
+From: {{person:Gloria Duarte}} <{{email:duarte.gloria@transportes-farola.example}}>
+Date: {{date:31 Aug 2026}}
+Subject: Presupuesto proyecto {{id:KH348903485}}
+
+Estimado/a {{person:Eloy}},
+En {{org:Transportes Farola S.L.}} disponemos de {{amount:280,45 EUR}} para la obra en {{place:San Telmo de Abajo}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Gracias,
+{{person:Gloria Duarte}}
+Directora de operaciones
+{{org:Transportes Farola S.L.}}
+Tel: {{phone:797 73 69 95}}
+{{email:duarte.gloria@transportes-farola.example}}

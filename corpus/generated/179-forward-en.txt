@@ -1,0 +1,20 @@
+%order mdy
+%known person|Isadora Oakley
+From: {{person:Isadora Oakley}} <{{email:isadora@isleta-logistics.example}}>
+To: {{person:Delphine Crawley}} <{{email:delphine_crawley@galeon-labs.example}}>
+Date: Tue, {{date:27 Apr 2027}} 10:15:00 +0100
+Subject: Fwd: question from {{org:Larkspur Systems}}
+Hi {{person:Delphine}}, can you take this one? The client wants an answer by {{date:5-9-2027}}.
+---------- Forwarded message ---------
+From: {{person:Percival Vanderbilt}} <{{email:percival@larkspur-systems.example}}>
+Date: {{date:27 Apr 2027}}
+Subject: Quote for project {{id:EXP-2024-2499}}
+
+Hi {{person:Isadora}},
+We at {{org:Larkspur Systems}} have a budget of {{amount:$289.99}} for the work in {{place:Maple Hollow}}. Could you confirm the start date?
+--
+Thanks,
+{{person:Percival Vanderbilt}}
+Purchasing
+{{org:Larkspur Systems}}
+{{email:percival@larkspur-systems.example}}

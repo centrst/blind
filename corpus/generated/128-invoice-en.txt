@@ -1,0 +1,26 @@
+%order mdy
+%known person|Rowena Goodwin
+%known org|Labs Ironbridge
+From: {{person:Isadora Doherty}} <{{email:doherty.isadora@pennywhistle-advisory.example}}>
+To: {{person:Rowena Goodwin}} <{{email:rowena.goodwin@labs-ironbridge.example}}>
+Date: Sat, {{date:14 Feb 2026}} 13:30:00 +0100
+Subject: Invoice {{id:12420642}}
+
+Hello {{person:Rowena}},
+
+Please find attached invoice {{id:12420642}} for the work done for {{org:Labs Ironbridge}}.
+
+The total is {{amount:1,239.86 USD}}, which includes 8% tax on {{amount:$1,148.02}}.
+
+Please pay before {{date:Mar. 1st, 2026}} to IBAN {{iban:GB17PUSL41718532362546}}.
+
+Our tax number is {{id:P14511360}}.
+
+--
+Kind regards,
+{{person:Isadora Doherty}}
+Accounts
+{{org:Pennywhistle Advisory LLC}}
+Tel: {{phone:759 28 55 39}}
+{{email:doherty.isadora@pennywhistle-advisory.example}}
+Office: {{place:Stonebridge}}

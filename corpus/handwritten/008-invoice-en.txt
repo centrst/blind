@@ -1,0 +1,15 @@
+%known person|Delphine Marsh
+From: {{person:Tobias Wren}} <{{email:accounts@wren-print.example}}>
+To: {{person:Delphine Marsh}} <{{email:delphine@marsh-bakery.example}}>
+Subject: Invoice {{id:INV-2026-004871}} overdue
+
+Hello {{person:Delphine}},
+
+Our records show invoice {{id:INV-2026-004871}} for {{amount:$1,240.00}} was due on {{date:May 2, 2026}} and is still open.
+With the 1.5% late fee ({{amount:$18.60}}) the amount now due is {{amount:$1,258.60}}.
+
+Please wire the amount to {{iban:DE89 3704 0044 0532 0130 00}} or call {{phone:(206) 555-0193}} if there is a problem.
+
+Thanks,
+{{person:Tobias Wren}}
+{{org:Wren Print Co.}}

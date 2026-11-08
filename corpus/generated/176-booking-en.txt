@@ -1,0 +1,11 @@
+%known person|Gareth Oakley
+From: {{person:Phoebe Blackwood}} <{{email:phoebe@marisma-partners.example}}>
+To: {{person:Gareth Oakley}} <{{email:oakley..gareth@icloud.com}}>
+Date: Thu, {{date:24 Oct 2024}} 16:15:00 +0100
+Subject: Your booking is confirmed
+
+Hello {{person:Gareth}},
+
+Your table for four at {{org:Marisma Partners Inc.}} is booked for {{date:2024-11-10}} at 09:45.
+
+Total: {{amount:412.08 USD}}. Free cancellation until {{date:Oct. 25}}.

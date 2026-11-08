@@ -1,0 +1,15 @@
+%known person|Cedric Blackwood
+From: {{org:Foxglove Partners}} <{{email:news@foxglove-partners.example}}>
+To: {{email:cedric..blackwood@icloud.com}}
+Date: Sat, {{date:11 Dec 2027}} 17:45:00 +0100
+Subject: Spring offers inside
+
+Hi {{person:Cedric}}, here is what is new this month.
+
+Our best seller is now {{amount:165.69 USD}}, down from {{amount:$207.11}}. Offer ends {{date:December 30 2027}}.
+
+Shop online: {{url:https://www.foxglove-partners.example/shop?utm_campaign=7377}}
+
+Recibes este correo porque {{email:cedric..blackwood@icloud.com}} se suscribió. Darte de baja: {{url:https://news.foxglove-partners.example/unsubscribe?u=889978878x&e=cedric..blackwood%40icloud.com}}
+
+{{org:Foxglove Partners}}, Customer care {{phone:+34 751032091}}

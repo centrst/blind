@@ -1,0 +1,12 @@
+%order mdy
+%known person|Isadora Whitcombe
+From: {{person:Cordelia Somerset}} <{{email:somerset.cordelia@supply-jaspe.example}}>
+To: {{person:Isadora Whitcombe}} <{{email:isadora_whitcombe@quimera-holdings.example}}>
+Date: Wed, {{date:2 Apr 2025}} 16:45:00 +0100
+Subject: Your booking is confirmed
+
+Hi {{person:Isadora}},
+
+Your haircut and colour at {{org:Supply Jaspe}} is booked for {{date:April 20th, 2025}} at 12:30.
+
+Total: {{amount:USD 103.97}}. Free cancellation until {{date:2025-04-03}}.

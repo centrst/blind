@@ -1,0 +1,17 @@
+%known person|Facundo Hidalgo Cuesta
+From: {{person:Griselda Bustamante}} <{{email:notificaciones.griseldabustamante@servicios-vendaval.example}}>
+To: "{{person:Facundo Hidalgo Cuesta}}" <{{email:fac..hidalgo@outlook.com}}>
+Date: Thu, {{date:9 Sep 2027}} 13:45:00 +0100
+Subject: Aviso de deuda pendiente
+
+Estimado/a {{person:Facundo Hidalgo Cuesta}},
+
+Según nuestros registros, consta una deuda de {{amount:176,64 €}} en el expediente {{id:EXP-2027-2853}}.
+
+Si no se abona antes del {{date:19 de septiembre de 2027}}, se aplicará un recargo del 20 %: {{amount:35,33 EUR}}, en total {{amount:211,97 €}}.
+
+Puede pagar por transferencia a {{iban:ES59 4048 3393 0628 9102 2812}} y conservar el justificante. Atención telefónica: {{phone:+34 769384486}}.
+
+Las cuotas de la Seguridad Social del periodo {{date:2027-09-01}} están en la sede: {{url:https://sede.servicios-vendaval.example/cuotas/14881A349}}
+
+Este es un aviso automático. No responda a este correo.

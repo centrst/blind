@@ -1,0 +1,22 @@
+%known person|Gloria Cifuentes Fontán
+%known org|Reformas Ocaso S.L.
+From: {{person:Dolores Lazcano}} <{{email:doloreslazcano@logistica-jaspe.example}}>
+To: {{person:Gloria Cifuentes Fontán}} <{{email:cifuentes..gloria@outlook.com}}>
+Date: Thu, {{date:23 Jul 2026}} 19:15:00 +0100
+Subject: Re: oferta para {{org:Reformas Ocaso S.L.}}
+Podemos aceptar {{amount:€ 771,74}} y enviar el contrato a {{email:cifuentes..gloria@outlook.com}}.
+On {{date:22 de julio del 2026}}, {{person:Gloria Cifuentes Fontán}} wrote:
+> Gracias {{person:Dolores}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:€ 709,16}}? La reunión nos va bien, llámame al {{phone:786 88 79 97}} si cambia.
+>
+> El {{date:21 de julio de 2026}}, {{person:Dolores Lazcano}} escribió:
+> > Hola {{person:Gloria}}, nuestra oferta para {{org:Reformas Ocaso S.L.}} es de {{amount:€ 834,31}}. ¿Quedamos el {{date:25 de julio de 2026}} a las 14:00?
+> > 
+> > --
+> > Atentamente,
+> > {{person:Dolores Lazcano}}
+> > Comercial
+> > {{org:Logística Jaspe S.L.}}
+> > Tel: {{phone:791 59 69 54}}
+> > {{url:www.logistica-jaspe.example}}
+
+{{person:Dolores}}

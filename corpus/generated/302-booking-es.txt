@@ -1,0 +1,24 @@
+%known person|Gloria Rebollo Fontán
+From: Booksy <no..reply@booksy.com>
+To: {{person:Gloria Rebollo Fontán}} <{{email:rebollo..gloria@outlook.com}}>
+Date: Tue, {{date:27 Aug 2024}} 12:15:00 +0100
+Subject: Reserva confirmada
+
+Estimado/a {{person:Gloria}},
+
+Tu mesa para cuatro en {{org:Estudio Lumbre}} queda reservada para el {{date:29/8/2024}} a las 16:30.
+
+El importe es {{amount:€ 69,16}}, a pagar en el local. Hemos retenido una señal de {{amount:17,29 €}}.
+
+¿Dudas? Llámanos al {{phone:+49 171 392 0065}} o escribe a {{email:ide@estudio-lumbre.example}}.
+
+Manage your visit: {{url:https://booksy.com/en-es/162190_estudio-lumbre_5483}}
+
+--
+Saludos cordiales,
+{{person:Itziar de Lara}}
+Front desk
+{{org:Estudio Lumbre}}
+Tel: {{phone:+49 171 392 0065}}
+{{email:ide@estudio-lumbre.example}}
+{{url:www.estudio-lumbre.example}}

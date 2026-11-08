@@ -1,0 +1,15 @@
+%known person|Remedios Galindo Espinosa
+From: {{person:Leonor Lazcano}} <{{email:notificaciones.leonorlazcano@transportes-larkspur.example}}>
+To: {{person:Remedios Galindo Espinosa}} <{{email:remedios..galindo@icloud.com}}>
+Date: Fri, {{date:12 Jun 2026}} 18:30:00 +0100
+Subject: Notificación {{id:EXP-2026-1766}}: pago pendiente
+
+A {{person:Remedios Galindo Espinosa}}, titular del documento {{id:20316968W}}:
+
+La Oficina Tributaria de {{place:Almendral del Sur}} le comunica que el expediente {{id:EXP-2026-1766}} presenta un saldo de {{amount:8,88 €}} correspondiente al periodo cerrado el {{date:3 de mayo de 2026}}.
+
+Si no se abona antes del {{date:2/7/2026}}, se aplicará un recargo del 10 %: {{amount:0,89 EUR}}, en total {{amount:9,77 EUR}}.
+
+Puede pagar por transferencia a {{iban:PT86 6170 6909 7159 6907 7448 8}} y conservar el justificante. Atención telefónica: {{phone:0034 792 096 625}}.
+
+This is an automatic notice. Do not reply.

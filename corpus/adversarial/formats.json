@@ -1,0 +1,158 @@
+[
+  {
+    "id": "F1",
+    "title": "id written as dashed digit groups",
+    "text": "Your taxpayer ID ends in 7741 (full number 552-83-7741).",
+    "secrets": [
+      "552-83-7741"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F2",
+    "title": "card number in groups of four with spaces",
+    "text": "Pagado con la tarjeta 4111 1111 1111 1111, caduca 09/28.",
+    "secrets": [
+      "4111 1111 1111 1111",
+      "4111111111111111"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F3",
+    "title": "card number in dashed groups",
+    "text": "Card on file: 5555-5555-5555-4444.",
+    "secrets": [
+      "5555-5555-5555-4444",
+      "5555555555554444"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F4",
+    "title": "Amex grouping 4-6-5",
+    "text": "Charged to Amex 3782 822463 10005 yesterday.",
+    "secrets": [
+      "3782 822463 10005"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F5",
+    "title": "IPv4 address in a log line",
+    "text": "Login from 81.44.217.9 at 09:14, blocked after three tries.",
+    "secrets": [
+      "81.44.217.9"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F6",
+    "title": "compressed IPv6 address",
+    "text": "Origin 2a02:9130:8f41::7c:1d2e requested the file.",
+    "secrets": [
+      "2a02:9130:8f41::7c:1d2e"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F7",
+    "title": "DNI with dots and a dash",
+    "text": "Titular: DNI 12.345.678-Z, firma al pie.",
+    "secrets": [
+      "12.345.678-Z",
+      "12345678Z"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F8",
+    "title": "NIE with its letter prefix",
+    "text": "NIE X1234567L en vigor hasta 2027.",
+    "secrets": [
+      "X1234567L"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F9",
+    "title": "CIF of a company",
+    "text": "Factura a nombre de la sociedad con CIF B12345674.",
+    "secrets": [
+      "B12345674"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F10",
+    "title": "EU VAT number with country prefix",
+    "text": "VAT number ESB12345674 and the German one DE123456789.",
+    "secrets": [
+      "ESB12345674",
+      "DE123456789"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F11",
+    "title": "name after a title, no address nearby",
+    "text": "The report was signed by Dr. Pablo Mena on Tuesday.",
+    "secrets": [
+      "Pablo Mena"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F12",
+    "title": "id in short groups after a label",
+    "text": "Historia clínica NHC: 4512 337, planta tercera.",
+    "secrets": [
+      "4512 337"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F13",
+    "title": "name in prose with no title and no address",
+    "text": "Patient Ana Ruiz was seen on Tuesday and sent home.",
+    "secrets": [
+      "Ana Ruiz"
+    ],
+    "expect": "silent",
+    "why": "A name in plain prose with no title, address or known list entry has nothing a pattern can hold on to. A NER detector (the optional @centrst/blind-ner package) or a known list finds it.",
+    "seed": "adv"
+  },
+  {
+    "id": "F14",
+    "title": "SSN written with spaces and no label",
+    "text": "Reference 123 45 6789 is on the form.",
+    "secrets": [
+      "123 45 6789"
+    ],
+    "expect": "silent",
+    "why": "Three short digit groups separated by spaces look like many other numbers. Only the dashed form, or the spaced form after a label such as SSN, counts as an SSN.",
+    "seed": "adv"
+  },
+  {
+    "id": "F15",
+    "title": "card number followed by its expiry date",
+    "text": "Pagado con 4111 1111 1111 1111 12/28, gracias.",
+    "secrets": [
+      "4111 1111 1111 1111"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  }
+]

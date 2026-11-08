@@ -1,0 +1,23 @@
+%known person|Eleanor Jessop
+%known org|Umbral Holdings GmbH
+From: {{person:Lionel Rutherford}} <{{email:rutherford.lionel@works-quimera.example}}>
+To: {{person:Eleanor Jessop}} <{{email:eleanor@umbral-holdings.example}}>
+Date: Sat, {{date:17 May 2025}} 10:00:00 +0100
+Subject: Factura {{id:33315524}} de {{org:Works Quimera Ltd}}
+
+Hi {{person:Eleanor}},
+
+Attached is our invoice for last month's services to {{org:Umbral Holdings GmbH}}.
+
+Base {{amount:USD 3,458.62}} plus 20% tax = {{amount:$4,150.34}}
+
+El pago vence el {{date:2025-06-01}}. Transferencia a {{iban:DE57 4985 0959 5053 6594 44}} indicando {{id:33315524}}.
+
+--
+Kind regards,
+{{person:Lionel Rutherford}}
+Billing department
+{{org:Works Quimera Ltd}}
+{{email:rutherford.lionel@works-quimera.example}}
+
+This message is confidential and intended only for the addressee.

@@ -1,0 +1,10 @@
+%known person|Isidro Palacios
+From: {{person:Isidro Palacios}} <{{email:isidro@palacios-abogados.example}}>
+To: {{person:Verónica Sanz}} <{{email:veronica_sanz@gmail.com}}>
+Subject: Re: Herencia, siguiente paso
+
+Verónica, necesitamos tu DNI {{id:27394018H}} y el certificado de defunción. La cita en notaría es el jueves {{date:18 de junio}} a las 10:00.
+
+El {{date:2 de junio de 2026}} {{person:Verónica Sanz}} escribió:
+> Buenos días, Isidro. Mi hermano {{person:Rodolfo Sanz}} y yo queremos repartir la herencia a partes iguales. El piso está valorado en {{amount:184.000,00 €}}.
+> Llámame al {{phone:+34 768 332 090}}.

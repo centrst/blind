@@ -1,0 +1,25 @@
+%known person|Baldomero Peñalver
+%known org|Reformas Wicker
+From: {{person:Macarena Iglesias}} <{{email:miglesias@transportes-ironbridge.example}}>
+To: {{person:Baldomero Peñalver}} <{{email:baldomero_penalver@reformas-wicker.example}}>
+Date: Wed, {{date:10 Nov 2027}} 09:45:00 +0100
+Subject: Factura {{id:EXP-2024-6124}} de {{org:Transportes Ironbridge}}
+
+Estimado/a {{person:Baldomero}},
+
+Te enviamos la factura del último periodo de {{org:Reformas Wicker}}.
+
+El total es {{amount:48,80 €}}, con 21 % de IVA sobre {{amount:40,33 EUR}}.
+
+Agradecemos el pago antes del {{date:10 de diciembre del 2027}} en la cuenta {{iban:PT91706194358439454533970}}.
+
+Nuestro NIF es {{id:B70754607}}.
+
+--
+Un saludo,
+{{person:Macarena Iglesias}}
+Administración
+{{org:Transportes Ironbridge}}
+{{email:miglesias@transportes-ironbridge.example}}
+{{url:www.transportes-ironbridge.example}}
+Oficina de {{place:San Telmo de Abajo}}

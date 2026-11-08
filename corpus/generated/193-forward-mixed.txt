@@ -1,0 +1,20 @@
+%known person|Saturnino Jaramillo
+From: {{person:Saturnino Jaramillo}} <{{email:saturnino@logistica-rastro.example}}>
+To: {{person:Candelaria de la Torre}} <{{email:cde@reformas-umbral.example}}>
+Date: Wed, {{date:18 Jun 2025}} 08:15:00 +0100
+Subject: Fwd: presupuesto {{org:Asesores Pennywhistle S.L.}}
+{{person:Candelaria}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:0034 776 042 096}}.
+---------- Forwarded message ---------
+From: {{person:Aurora Fontán}} <{{email:aurora@asesores-pennywhistle.example}}>
+Date: {{date:18 Jun 2025}}
+Subject: Presupuesto proyecto {{id:VF521221141}}
+
+Dear {{person:Saturnino}},
+The board approved {{amount:€ 25,39}} for project {{id:VF521221141}}. When can you begin?
+--
+Gracias,
+{{person:Aurora Fontán}}
+Purchasing
+{{org:Asesores Pennywhistle S.L.}}
+{{email:aurora@asesores-pennywhistle.example}}
+{{url:www.asesores-pennywhistle.example}}

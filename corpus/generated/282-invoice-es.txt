@@ -1,0 +1,26 @@
+%known person|Lisandro Navarrete
+%known org|Clínica Vendaval S.A.
+From: {{person:Remedios Galindo}} <{{email:remedios@logistica-lumbre.example}}>
+To: "{{person:Lisandro Navarrete}}" <{{email:lnavarrete@clinica-vendaval.example}}>
+Date: Mon, {{date:18 Mar 2024}} 11:15:00 +0100
+Subject: Factura {{id:EXP-2024-8651}} de {{org:Logística Lumbre}}
+
+Buenos días {{person:Lisandro}},
+
+Te enviamos la factura del último periodo de {{org:Clínica Vendaval S.A.}}.
+
+Servicios, primera parte: {{amount:203,23 €}}
+Servicios, segunda parte: {{amount:135,48 EUR}}
+Subtotal: {{amount:338,71 €}}
+IVA (4 %): {{amount:13,55 EUR}}
+Total: {{amount:352,26 EUR}}
+
+El pago vence el {{date:2 de mayo de 2024}}. Transferencia a {{iban:ES7651725879948545755038}} indicando {{id:EXP-2024-8651}}.
+
+--
+Atentamente,
+{{person:Remedios Galindo}}
+Administración
+{{org:Logística Lumbre}}
+Tel: {{phone:791-555-0110}}
+{{email:remedios@logistica-lumbre.example}}

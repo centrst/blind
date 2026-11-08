@@ -1,0 +1,14 @@
+%order mdy
+%known person|Matilda Jessop
+From: {{person:Phoebe Upshaw}} <{{email:upshaw.phoebe@esquilo-systems.example}}>
+To: {{person:Matilda Jessop}} <{{email:mat_jessop@gmail.com}}>
+Date: Fri, {{date:1 Nov 2024}} 11:15:00 +0100
+Subject: Booking {{id:AG935869990}} confirmed
+
+Hello {{person:Matilda}},
+
+We have reserved a haircut and colour for you on {{date:Nov 14, 2024}}. The address is {{org:Esquilo Systems Inc.}}, {{place:Fenwick Bay}}.
+
+Total: {{amount:$215.55}}. Free cancellation until {{date:11/02/2024}}.
+
+Questions? Call us on {{phone:(662) 555-0101}} or write to {{email:upshaw.phoebe@esquilo-systems.example}}.

@@ -1,0 +1,12 @@
+%known person|Estefanía Roldán
+From: Agencia Tributaria Regional <notificaciones@agencia-regional.example>
+To: {{person:Estefanía Roldán}} <{{email:estefania_roldan@gmail.com}}>
+Subject: Requerimiento de documentación {{id:REQ-2026-014432}}
+
+Estimada {{person:Estefanía Roldán}},
+
+Con fecha {{date:3 de septiembre de 2026}} se ha abierto un requerimiento sobre las deducciones declaradas por {{amount:3.120,00 €}} en el ejercicio 2025.
+Dispone de 10 días hábiles, hasta el {{date:17 de septiembre de 2026}}, para aportar los justificantes.
+
+Puede subirlos en {{url:https://sede.agencia-regional.example/aportar/014432}}. NIF: {{id:53318274D}}.
+Oficina de {{place:Villaluenga Alta}}, teléfono {{phone:+34 775 555 031}}.

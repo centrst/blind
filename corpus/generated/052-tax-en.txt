@@ -1,0 +1,15 @@
+%known person|Lionel Jessop
+From: {{person:Odette Vanderbilt}} <{{email:notificaciones.odettevanderbilt@supply-tramuntana.example}}>
+To: {{person:Lionel Jessop}} <{{email:l_jessop@gmail.com}}>
+Date: Thu, {{date:30 Oct 2025}} 15:15:00 +0100
+Subject: Notice {{id:EXP-2025-8255}}: payment pending
+
+To {{person:Lionel Jessop}}, holder of ID {{id:17992891Z}}:
+
+Our records show an unpaid balance of {{amount:$186.13}} on file {{id:EXP-2025-8255}}.
+
+If it is not paid by {{date:November 9 2025}}, a surcharge of 10% applies: {{amount:18.61 USD}}, for a total of {{amount:£204.74}}.
+
+Pay by transfer to {{iban:ES7294521380739474001558}} and keep the receipt. For help call {{phone:+1 858 555 0117}}.
+
+This is an automatic notice. Do not reply.

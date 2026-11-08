@@ -1,0 +1,21 @@
+%known person|Wenceslao Cifuentes
+From: {{person:Wenceslao Cifuentes}} <{{email:wenceslaocifuentes@estudio-galeon.example}}>
+To: {{person:Lisandro Fontán Iglesias}} <{{email:lfontan@reformas-wicker.example}}>
+Date: Sun, {{date:8 Dec 2024}} 19:30:00 +0100
+Subject: Fwd: presupuesto {{org:Gestión Vendaval}}
+Hola {{person:Lisandro}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:21 de diciembre de 2024}}.
+---------- Forwarded message ---------
+From: "{{person:Genaro Peñalver}}" <{{email:genaropenalver@gestion-vendaval.example}}>
+Date: {{date:8 Dec 2024}}
+Subject: Presupuesto proyecto {{id:HJ684241380}}
+
+Estimado/a {{person:Wenceslao}},
+En {{org:Gestión Vendaval}} disponemos de {{amount:€ 293,51}} para la obra en {{place:Valdecañas}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Atentamente,
+{{person:Genaro Peñalver}}
+Directora de operaciones
+{{org:Gestión Vendaval}}
+Tel: {{phone:+44 7700 900888}}
+{{email:genaropenalver@gestion-vendaval.example}}
+Oficina de {{place:Torrebruna}}

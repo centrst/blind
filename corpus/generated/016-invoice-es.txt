@@ -1,0 +1,24 @@
+%known person|Herminia Villalobos Bustamante
+%known org|Logística Foxglove
+From: {{person:Facundo Tejada}} <{{email:ftejada@gestion-galeon.example}}>
+To: "{{person:Herminia Villalobos Bustamante}}" <{{email:hvillalobos@logistica-foxglove.example}}>
+Date: Sun, {{date:21 Feb 2027}} 16:15:00 +0100
+Subject: Factura {{id:81583805}} de {{org:Gestión Galeón}}
+
+Estimado/a {{person:Herminia}},
+
+Adjuntamos la factura {{id:81583805}} por los servicios prestados a {{org:Logística Foxglove}}.
+
+La cuota es {{amount:€ 2.069,33}} más 21 % de IVA, en total {{amount:2.503,89 €}}.
+
+Agradecemos el pago antes del {{date:2027-03-23}} en la cuenta {{iban:NL31 ZQHZ 9802 2359 93}}.
+
+Nuestro NIF es {{id:B36113621}}.
+
+--
+Atentamente,
+{{person:Facundo Tejada}}
+Accounts
+{{org:Gestión Galeón}}
+{{email:ftejada@gestion-galeon.example}}
+Oficina de {{place:Torrebruna}}

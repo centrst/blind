@@ -1,0 +1,20 @@
+%known person|Plácido Galindo
+From: {{person:Plácido Galindo}} <{{email:pgalindo@logistica-bruma.example}}>
+To: {{person:Rosendo Rebollo}} <{{email:rosendo@asesores-ironbridge.example}}>
+Date: Fri, {{date:8 Aug 2025}} 11:45:00 +0100
+Subject: Fwd: consulta de {{org:Estudio Vendaval S.A.}}
+{{person:Rosendo}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:+49 171 392 0088}}.
+---------- Forwarded message ---------
+From: "{{person:Pilar Quintana Fontán}}" <{{email:pilarquintana@estudio-vendaval.example}}>
+Date: {{date:8 Aug 2025}}
+Subject: Presupuesto proyecto {{id:INV-2026-307535}}
+
+Buenos días {{person:Plácido}},
+El consejo aprobó {{amount:430,99 EUR}} para el proyecto {{id:INV-2026-307535}}. ¿Cuándo podríais empezar?
+--
+Un saludo,
+{{person:Pilar Quintana Fontán}}
+Directora de operaciones
+{{org:Estudio Vendaval S.A.}}
+Tel: {{phone:+49 171 392 0088}}
+{{url:www.estudio-vendaval.example}}

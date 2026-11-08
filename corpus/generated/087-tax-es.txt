@@ -1,0 +1,17 @@
+%known person|Saturnino del Río
+From: {{person:Lisandro Hidalgo Maldonado}} <{{email:notificaciones.lisandro.hidalgo@estudio-ocaso.example}}>
+To: {{person:Saturnino del Río}} <{{email:s_del@gmail.com}}>
+Date: Mon, {{date:30 Dec 2024}} 11:45:00 +0100
+Subject: Aviso de deuda pendiente
+
+A {{person:Saturnino del Río}}, titular del documento {{id:X2441772J}}:
+
+Según nuestros registros, consta una deuda de {{amount:4151,75 €}} en el expediente {{id:EXP-2024-1901}}.
+
+Si no se abona antes del {{date:2025-01-09}}, se aplicará un recargo del 5 %: {{amount:207,59 EUR}}, en total {{amount:4359,34 €}}.
+
+Puede pagar por transferencia a {{iban:ES85 8089 1480 9169 2877 0266}} y conservar el justificante. Atención telefónica: {{phone:775 56 29 73}}.
+
+Las cuotas de la Seguridad Social del periodo {{date:1 de diciembre}} están en la sede: {{url:https://sede.estudio-ocaso.example/cuotas/60388A685}}
+
+Este es un aviso automático. No responda a este correo.

@@ -1,0 +1,15 @@
+%known person|Aurora Rebollo
+From: {{org:Ingeniería Wicker SA}} <{{email:news@ingenieria-wicker.example}}>
+To: {{person:Aurora Rebollo}} <{{email:aurora_reb@gmail.com}}>
+Date: Mon, {{date:25 May 2026}} 19:45:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Aurora}}, estas son las novedades del mes.
+
+Nuestro producto estrella baja a {{amount:71,79 EUR}}, antes {{amount:€ 89,74}}. La oferta termina el {{date:4 de junio de 2026}}.
+
+Compra online: {{url:https://www.ingenieria-wicker.example/tienda?utm_campaign=7014}}
+
+Recibes este correo porque {{email:aurora_reb@gmail.com}} se suscribió. Darte de baja: {{url:https://news.ingenieria-wicker.example/unsubscribe?u=223491794x&e=aurora_reb%40gmail.com}}
+
+{{org:Ingeniería Wicker S.A.}}, Atención al cliente {{phone:+34 793415860}}

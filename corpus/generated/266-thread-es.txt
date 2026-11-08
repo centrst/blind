@@ -1,0 +1,22 @@
+%known person|Estefanía Villalobos
+%known org|Asesores Bruma
+From: {{person:Rosendo Tejada Urrutia}} <{{email:rosendotejada@clinica-rastro.example}}>
+To: {{person:Estefanía Villalobos}} <{{email:evillalobos@asesores-bruma.example}}>
+Date: Thu, {{date:2 Jul 2026}} 19:00:00 +0100
+Subject: Re: oferta para {{org:Asesores Bruma}}
+Podemos aceptar {{amount:14,65 €}} y enviar el contrato a {{email:evillalobos@asesores-bruma.example}}.
+On {{date:1 de julio del 2026}}, {{person:Estefanía Villalobos}} wrote:
+> Gracias {{person:Rosendo}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:13,46 €}}? La reunión nos va bien, llámame al {{phone:+44 7700 900103}} si cambia.
+>
+> El {{date:30 de junio del 2026}}, {{person:Rosendo Tejada Urrutia}} escribió:
+> > Hola {{person:Estefanía}}, nuestra oferta para {{org:Asesores Bruma}} es de {{amount:15,84 €}}. ¿Quedamos el {{date:6 de julio de 2026}} a las 11:00?
+> > 
+> > --
+> > Atentamente,
+> > {{person:Rosendo Tejada Urrutia}}
+> > Comercial
+> > {{org:Clínica Rastro S.L.U.}}
+> > Tel: {{phone:(648) 555-0165}}
+> > {{url:www.clinica-rastro.example}}
+
+{{person:Rosendo}}

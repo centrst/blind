@@ -1,0 +1,17 @@
+%known person|Humphrey Quigley
+From: {{person:Priscilla Abernathy}} <{{email:notificaciones.pabernathy@isleta-advisory.example}}>
+To: {{person:Humphrey Quigley}} <{{email:quigley..humphrey@outlook.com}}>
+Date: Tue, {{date:16 Mar 2027}} 19:00:00 +0100
+Subject: Notice {{id:EXP-2027-7112}}: payment pending
+
+Dear {{person:Humphrey Quigley}},
+
+Regional Revenue Office of {{place:Ashford Reach}} informs you that file {{id:EXP-2027-7112}} shows a balance of {{amount:3,153.62 USD}} for the period ending {{date:February 4, 2027}}.
+
+If it is not paid by {{date:26 March 2027}}, a surcharge of 5% applies: {{amount:USD 157.68}}, for a total of {{amount:£3,311.30}}.
+
+Pay by transfer to {{iban:NL71OVOS5246424267}} and keep the receipt. For help call {{phone:+44 7700 900382}}.
+
+Social security contributions for {{date:March 1st}} are listed in the portal: {{url:https://sede.isleta-advisory.example/cuotas/91605A345}}
+
+This is an automatic notice. Do not reply.

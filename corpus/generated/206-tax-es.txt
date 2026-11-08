@@ -1,0 +1,15 @@
+%known person|Florencio Quintana
+From: {{person:Facundo Iglesias}} <{{email:notificaciones.figlesias@gestion-hontanar.example}}>
+To: {{person:Florencio Quintana}} <{{email:florencio..qui@outlook.com}}>
+Date: Sun, {{date:31 Mar 2024}} 16:30:00 +0100
+Subject: Notificación {{id:EXP-2024-6268}}: pago pendiente
+
+A {{person:Florencio Quintana}}, titular del documento {{id:X8585039B}}:
+
+La Oficina Tributaria de {{place:San Telmo de Abajo}} le comunica que el expediente {{id:EXP-2024-6268}} presenta un saldo de {{amount:87,34 €}} correspondiente al periodo cerrado el {{date:20 de febrero de 2024}}.
+
+Si no se abona antes del {{date:2024-04-20}}, se aplicará un recargo del 20 %: {{amount:€ 17,47}}, en total {{amount:104,81 €}}.
+
+Puede pagar por transferencia a {{iban:DE35 0582 4913 7601 3124 97}} y conservar el justificante. Atención telefónica: {{phone:799 07 08 19}}.
+
+Este es un aviso automático. No responda a este correo.

@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "paths": { "@centrst/blind": ["../src/index.ts"] },
+    "rootDir": ".."
+  },
+  "include": ["src/**/*", "test/**/*", "scripts/**/*", "../test/support/**/*"],
+  "exclude": ["node_modules", "dist", "models"]
+}

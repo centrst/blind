@@ -1,0 +1,22 @@
+%known person|Nigel Lambert
+%known org|Advisory Isleta LLC
+From: "{{person:Wilhelmina Abernathy}}" <{{email:wilhelminaabernathy@zafiro-labs.example}}>
+To: {{person:Nigel Lambert}} <{{email:nigel.lambert@advisory-isleta.example}}>
+Date: Mon, {{date:29 Nov 2027}} 09:15:00 +0100
+Subject: Re: offer for {{org:Advisory Isleta LLC}}
+We can accept {{amount:$35.56}} and send the contract to {{email:nigel.lambert@advisory-isleta.example}}.
+On {{date:28/11/2027}}, {{person:Nigel Lambert}} wrote:
+> Thanks {{person:Wilhelmina}}. That is high for us. Could you do {{amount:$32.67}}? The meeting works, call me on {{phone:+1 951 555 0187}} if it moves.
+>
+> On {{date:Nov. 27, 2027}}, {{person:Wilhelmina Abernathy}} wrote:
+> > Hello {{person:Nigel}}, our offer for {{org:Advisory Isleta LLC}} is {{amount:38.44 USD}}. Can we meet on {{date:09-12-2027}} at 08:00?
+> > 
+> > --
+> > Cheers,
+> > {{person:Wilhelmina Abernathy}}
+> > Comercial
+> > {{org:Zafiro Labs}}
+> > Tel: {{phone:402-555-0134}}
+> > {{email:wilhelminaabernathy@zafiro-labs.example}}
+
+{{person:Wilhelmina}}

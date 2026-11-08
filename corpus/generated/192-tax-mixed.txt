@@ -1,0 +1,17 @@
+%known person|Lionel Kingsley
+From: {{person:Cedric Fairchild}} <{{email:notificaciones.cedric_fairchild@vendaval-holdings.example}}>
+To: "{{person:Lionel Kingsley}}" <{{email:kingsley..lionel@icloud.com}}>
+Date: Tue, {{date:6 Jul 2027}} 18:45:00 +0100
+Subject: Notice {{id:EXP-2027-0004}}: payment pending
+
+A {{person:Lionel Kingsley}}, titular del documento {{id:51829010M}}:
+
+Regional Revenue Office of {{place:Ashford Reach}} informs you that file {{id:EXP-2027-0004}} shows a balance of {{amount:$3,011.51}} for the period ending {{date:May 27, 2027}}.
+
+If it is not paid by {{date:16/7/2027}}, a surcharge of 20% applies: {{amount:USD 602.30}}, for a total of {{amount:USD 3,613.81}}.
+
+Pay by transfer to {{iban:IT78 0381 4659 6273 4701 3840 010}} and keep the receipt. For help call {{phone:+1 759 555 0158}}.
+
+Social security contributions for {{date:July 1st}} are listed in the portal: {{url:https://sede.vendaval-holdings.example/cuotas/56088A717}}
+
+This is an automatic notice. Do not reply.

@@ -1,0 +1,17 @@
+%known person|Cayetano Fontán
+From: {{person:Itziar Sepúlveda}} <{{email:notificaciones.itziarsepulveda@gestion-isleta.example}}>
+To: {{person:Cayetano Fontán}} <{{email:cayetano..fontan@icloud.com}}>
+Date: Tue, {{date:31 Mar 2026}} 13:15:00 +0100
+Subject: Aviso de deuda pendiente
+
+A {{person:Cayetano Fontán}}, titular del documento {{id:Y8643560B}}:
+
+La Oficina Tributaria de {{place:Puente Nuevo}} le comunica que el expediente {{id:EXP-2026-4890}} presenta un saldo de {{amount:69,16 €}} correspondiente al periodo cerrado el {{date:2026-02-19}}.
+
+Si no se abona antes del {{date:20 de abril del 2026}}, se aplicará un recargo del 20 %: {{amount:€ 13,83}}, en total {{amount:82,99 EUR}}.
+
+Puede pagar por transferencia a {{iban:PT22 1256 9947 0796 9014 5756 5}} y conservar el justificante. Atención telefónica: {{phone:0034 756 755 143}}.
+
+Las cuotas de la Seguridad Social del periodo {{date:1º de MARZO}} están en la sede: {{url:https://sede.gestion-isleta.example/cuotas/91003A292}}
+
+Este es un aviso automático. No responda a este correo.

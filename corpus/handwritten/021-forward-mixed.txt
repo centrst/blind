@@ -1,0 +1,20 @@
+%known person|Sebastian Quill
+%known org|Quill & Moreno Advisory
+From: {{person:Sebastian Quill}} <{{email:sebastian@quill-moreno.example}}>
+To: {{person:Dolores Peña}} <{{email:dolores@quill-moreno.example}}>
+Subject: Fwd: Propuesta de colaboración
+
+Dolores, take a look at this one when you can. Parece interesante pero el precio es alto.
+
+-----Original Message-----
+From: {{person:Baldomero Ibarra}} <{{email:baldomero@ibarra-eventos.example}}>
+Sent: Tuesday, {{date:3 March 2026}}
+Subject: Propuesta de colaboración
+
+Estimado {{person:Sebastian}}:
+
+Organizamos un congreso en {{place:Almendral del Sur}} el {{date:20 de junio de 2026}}. Ofrecemos un stand por {{amount:2.400,00 €}} más IVA.
+Contact me at {{phone:+34 750 144 205}} or {{email:baldomero@ibarra-eventos.example}}.
+
+{{person:Baldomero Ibarra}} | Director | {{org:Ibarra Eventos}}
+{{url:www.ibarra-eventos.example}}

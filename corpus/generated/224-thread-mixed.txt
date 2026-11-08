@@ -1,0 +1,22 @@
+%known person|Tamsin Quigley
+%known org|Rastro Labs Inc.
+From: {{person:Frederick Whitcombe}} <{{email:fwhitcombe@kepler-consulting.example}}>
+To: {{person:Tamsin Quigley}} <{{email:quigley.tamsin@rastro-labs.example}}>
+Date: Tue, {{date:21 Oct 2025}} 16:30:00 +0100
+Subject: Re: offer for {{org:Rastro Labs Inc.}}
+We can accept {{amount:USD 27.22}} and send the contract to {{email:quigley.tamsin@rastro-labs.example}}.
+On {{date:October 20, 2025}}, {{person:Tamsin Quigley}} wrote:
+> Gracias {{person:Frederick}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:£25.01}}? La reunión nos va bien, llámame al {{phone:+34 768 972 196}} si cambia.
+>
+> On {{date:OCT. 19 2025}}, {{person:Frederick Whitcombe}} wrote:
+> > Hello {{person:Tamsin}}, our offer for {{org:Rastro Labs Inc.}} is {{amount:$29.42}}. Can we meet on {{date:30 October, 2025}} at 14:15?
+> > 
+> > --
+> > Gracias,
+> > {{person:Frederick Whitcombe}}
+> > Sales
+> > {{org:Kepler Consulting}}
+> > {{email:fwhitcombe@kepler-consulting.example}}
+> > {{url:www.kepler-consulting.example}}
+
+{{person:Frederick}}

@@ -1,0 +1,17 @@
+%known person|Rosendo Maldonado
+From: "{{person:Estefanía Villalobos}}" <{{email:notificaciones.villalobos.estefania@ingenieria-ocaso.example}}>
+To: {{person:Rosendo Maldonado}} <{{email:maldonado..rosendo@outlook.com}}>
+Date: Thu, {{date:26 Jun 2025}} 14:15:00 +0100
+Subject: Notificación {{id:EXP-2025-3120}}: pago pendiente
+
+Estimado/a {{person:Rosendo Maldonado}},
+
+Según nuestros registros, consta una deuda de {{amount:297,68 €}} en el expediente {{id:EXP-2025-3120}}.
+
+Si no se abona antes del {{date:16 de julio del 2025}}, se aplicará un recargo del 10 %: {{amount:€ 29,77}}, en total {{amount:327,45 €}}.
+
+Puede pagar por transferencia a {{iban:PT97 3881 6082 6108 5106 3403 8}} y conservar el justificante. Atención telefónica: {{phone:+49 171 392 0028}}.
+
+Las cuotas de la Seguridad Social del periodo {{date:1 de junio}} están en la sede: {{url:https://sede.ingenieria-ocaso.example/cuotas/37793A103}}
+
+Este es un aviso automático. No responda a este correo.

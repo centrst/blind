@@ -1,0 +1,13 @@
+%known person|Desmond Falk
+From: Northpass Security <security@northpass.example>
+To: {{person:Desmond Falk}} <{{email:desmond_falk@gmail.com}}>
+Subject: New sign-in from an unrecognized device
+
+Hi {{person:Desmond}},
+
+We saw a sign-in to your account on {{date:October 2, 2026}} at 22:41 from {{place:Fairmont Heights}}.
+If this was you, no action is needed. If not, reset your password within 24 hours:
+{{url:https://accounts.northpass.example/reset?token=8f31c2a9d044b7e155aa90}}
+
+Your one-time code is {{id:731094}}.
+Need help? Call {{phone:+1 415 555 0170}}.

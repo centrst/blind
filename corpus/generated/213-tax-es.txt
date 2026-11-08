@@ -1,0 +1,15 @@
+%known person|Herminia Galindo Echeverría
+From: "{{person:Honorio Iglesias}}" <{{email:notificaciones.honorio.iglesias@estudio-tramuntana.example}}>
+To: {{person:Herminia Galindo Echeverría}} <{{email:her..galindo@outlook.com}}>
+Date: Fri, {{date:19 Feb 2027}} 16:45:00 +0100
+Subject: Aviso de deuda pendiente
+
+A {{person:Herminia Galindo Echeverría}}, titular del documento {{id:Y4202612R}}:
+
+La Oficina Tributaria de {{place:Cabo Redondo}} le comunica que el expediente {{id:EXP-2027-5651}} presenta un saldo de {{amount:4,06 €}} correspondiente al periodo cerrado el {{date:10 de enero del 2027}}.
+
+Si no se abona antes del {{date:21/3/2027}}, se aplicará un recargo del 5 %: {{amount:€ 0,20}}, en total {{amount:4,26 EUR}}.
+
+Puede pagar por transferencia a {{iban:NL75 AAFY 8424 3539 12}} y conservar el justificante. Atención telefónica: {{phone:+49 171 392 0010}}.
+
+Este es un aviso automático. No responda a este correo.

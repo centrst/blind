@@ -1,0 +1,15 @@
+%known person|Estefanía Lazcano Navarrete
+From: "{{person:Cayetano Medrano}}" <{{email:notificaciones.cayetano.medrano@transportes-nevada.example}}>
+To: "{{person:Estefanía Lazcano Navarrete}}" <{{email:estefania-lazcano@gmail.com}}>
+Date: Sat, {{date:3 Apr 2027}} 19:30:00 +0100
+Subject: Notificación {{id:EXP-2027-6652}}: pago pendiente
+
+Estimado/a {{person:Estefanía Lazcano Navarrete}},
+
+Según nuestros registros, consta una deuda de {{amount:€ 921,20}} en el expediente {{id:EXP-2027-6652}}.
+
+Si no se abona antes del {{date:2027-04-13}}, se aplicará un recargo del 5 %: {{amount:46,06 EUR}}, en total {{amount:€ 967,26}}.
+
+Puede pagar por transferencia a {{iban:DE69740233934113433652}} y conservar el justificante. Atención telefónica: {{phone:637-555-0129}}.
+
+Este es un aviso automático. No responda a este correo.

@@ -1,0 +1,15 @@
+%known person|Ambrose Blackwood
+From: {{org:Esquilo Partners Ltd}} <{{email:news@esquilo-partners.example}}>
+To: {{email:blackwood..ambrose@icloud.com}}
+Date: Mon, {{date:7 Jul 2025}} 08:00:00 +0100
+Subject: Spring offers inside
+
+Hi {{person:Ambrose}}, here is what is new this month.
+
+Our best seller is now {{amount:$177.55}}, down from {{amount:221.94 USD}}. Offer ends {{date:14th July 2025}}.
+
+Compra online: {{url:https://www.esquilo-partners.example/tienda?utm_campaign=8397}}
+
+You receive this because {{email:blackwood..ambrose@icloud.com}} subscribed. Unsubscribe: {{url:https://news.esquilo-partners.example/unsubscribe?u=747732235x&e=blackwood..ambrose%40icloud.com}}
+
+{{org:Esquilo Partners Ltd}}, Customer care {{phone:0034 794 942 884}}

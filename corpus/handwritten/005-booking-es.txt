@@ -1,0 +1,13 @@
+%known person|Belén Ortuño
+From: {{org:Clínica Dental Almenara}} <{{email:recepcion@dental-almenara.example}}>
+To: {{person:Belén Ortuño}} <{{email:belen..ortuno@hotmail.com}}>
+Subject: Revisión anual
+
+Hola {{person:Belén}},
+
+Ya puedes reservar tu revisión anual con {{person:Dra. Amparo Lacalle}}. Tenemos hueco el {{date:27/04/2026}} y el {{date:28/04/2026}} por la mañana.
+La limpieza cuesta {{amount:45 euros}} y la revisión está incluida en tu plan.
+
+Llámanos al {{phone:+34 76 145 22 80}} o reserva en {{url:https://www.dental-almenara.example/citas}}.
+
+{{org:Clínica Dental Almenara}}

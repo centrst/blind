@@ -1,0 +1,20 @@
+%known person|Amparo Zamora
+From: {{person:Amparo Zamora}} <{{email:amp_zamora@gmail.com}}>
+To: {{person:Candelaria Peñalver}} <{{email:candelaria.penalver@consultores-isleta.example}}>
+Date: Wed, {{date:5 May 2027}} 18:45:00 +0100
+Subject: Fwd: presupuesto {{org:Clínica Zafiro S.L.U.}}
+Hola {{person:Candelaria}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:09/05/2027}}.
+---------- Forwarded message ---------
+From: "{{person:Cayetano Quintana Navarrete}}" <{{email:cquintana@clinica-zafiro.example}}>
+Date: {{date:5 May 2027}}
+Subject: Presupuesto proyecto {{id:EXP-2025-3117}}
+
+Buenos días {{person:Amparo}},
+El consejo aprobó {{amount:€ 332,42}} para el proyecto {{id:EXP-2025-3117}}. ¿Cuándo podríais empezar?
+--
+Un saludo,
+{{person:Cayetano Quintana Navarrete}}
+Directora de operaciones
+{{org:Clínica Zafiro S.L.U.}}
+Tel: {{phone:(984) 555-0110}}
+{{email:cquintana@clinica-zafiro.example}}

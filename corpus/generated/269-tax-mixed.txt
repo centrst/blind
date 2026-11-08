@@ -1,0 +1,15 @@
+%known person|Dolores Cifuentes
+From: {{person:Anselmo Maldonado}} <{{email:notificaciones.amaldonado@servicios-tramuntana.example}}>
+To: {{person:Dolores Cifuentes}} <{{email:d..cifuentes@outlook.com}}>
+Date: Thu, {{date:23 Dec 2027}} 11:30:00 +0100
+Subject: Notice {{id:EXP-2027-4823}}: payment pending
+
+Dear {{person:Dolores Cifuentes}},
+
+Oficina Tributaria de {{place:Valdecañas}} informs you that file {{id:EXP-2027-4823}} shows a balance of {{amount:41,41 €}} for the period ending {{date:13-11-2027}}.
+
+Si no se abona antes del {{date:2028-01-02}}, se aplicará un recargo del 10 %: {{amount:€ 4,14}}, en total {{amount:€ 45,55}}.
+
+Puede pagar por transferencia a {{iban:PT55 1618 4786 0815 4625 1980 9}} y conservar el justificante. Atención telefónica: {{phone:(480) 555-0123}}.
+
+Este es un aviso automático. No responda a este correo.

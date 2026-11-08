@@ -1,0 +1,14 @@
+%order mdy
+%known person|Cordelia Doherty
+From: {{org:Cendal Works Ltd}} <{{email:security@cendal-works.example}}>
+To: {{email:c..doherty@icloud.com}}
+Date: Thu, {{date:30 Jan 2025}} 08:00:00 +0100
+Subject: Password change requested
+
+Hi {{person:Cordelia}},
+
+Your verification code is {{id:967589}}. It expires in 10 minutes. Never share it.
+
+If this was not you, call {{phone:+1 391 555 0168}} or write to {{email:security@cendal-works.example}}.
+
+The {{org:Cendal Works Ltd}} security team

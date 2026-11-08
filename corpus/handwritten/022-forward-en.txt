@@ -1,0 +1,15 @@
+%known person|Imogen Radley
+From: {{person:Imogen Radley}} <{{email:imogen@radley-studio.example}}>
+To: {{person:Jasper Cole}} <{{email:jasper@cole-accounting.example}}>
+Subject: Fwd: receipt for the laptop
+
+Jasper, this is for the expenses file. Thanks!
+
+Begin forwarded message:
+
+From: Orders <orders..team@microsoft.com>
+Date: {{date:Feb 3, 2026}}
+Subject: Your order {{id:5120993847}}
+
+Thank you {{person:Imogen Radley}}. Surface Laptop, quantity 1: {{amount:$1,299.00}}. Tax: {{amount:$104.45}}. Total: {{amount:$1,403.45}}.
+Ships to {{place:Maple Hollow}}. Order tracking: {{id:TRK88120934}}.

@@ -1,0 +1,21 @@
+%known person|Dolores Iglesias
+From: {{person:Dolores Iglesias}} <{{email:dolores..igl@outlook.com}}>
+To: {{person:Genaro Navarrete Galindo}} <{{email:genaro.navarrete@ingenieria-yelmo.example}}>
+Date: Tue, {{date:3 Dec 2024}} 09:15:00 +0100
+Subject: Fwd: presupuesto {{org:Consultores Marisma S.L.}}
+Hola {{person:Genaro}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:6 de diciembre del 2024}}.
+---------- Forwarded message ---------
+From: {{person:Honorio Ocaña}} <{{email:hocana@consultores-marisma.example}}>
+Date: {{date:3 Dec 2024}}
+Subject: Presupuesto proyecto {{id:83729428N}}
+
+Hola {{person:Dolores}},
+El consejo aprobó {{amount:€ 22,73}} para el proyecto {{id:83729428N}}. ¿Cuándo podríais empezar?
+--
+Atentamente,
+{{person:Honorio Ocaña}}
+Directora de operaciones
+{{org:Consultores Marisma S.L.}}
+Tel: {{phone:+34 780826624}}
+{{email:hocana@consultores-marisma.example}}
+Oficina de {{place:Cabo Redondo}}

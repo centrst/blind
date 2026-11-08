@@ -1,0 +1,20 @@
+%known person|Fermina Cuesta
+From: {{person:Fermina Cuesta}} <{{email:fermina-cuesta@gmail.com}}>
+To: {{person:Gloria Figueroa}} <{{email:gloria@logistica-kepler.example}}>
+Date: Fri, {{date:10 May 2024}} 11:45:00 +0100
+Subject: Fwd: presupuesto {{org:Ingeniería Yelmo S.L.}}
+{{person:Gloria}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:761 102 875}}.
+---------- Forwarded message ---------
+From: {{person:Pilar Hidalgo}} <{{email:pilar.hidalgo@ingenieria-yelmo.example}}>
+Date: {{date:10 May 2024}}
+Subject: Quote for project {{id:ZJ162248770}}
+
+Buenos días {{person:Fermina}},
+We at {{org:Ingeniería Yelmo S.L.}} have a budget of {{amount:3988,08 EUR}} for the work in {{place:Torrebruna}}. Could you confirm the start date?
+--
+Kind regards,
+{{person:Pilar Hidalgo}}
+Purchasing
+{{org:Ingeniería Yelmo S.L.}}
+Tel: {{phone:761 102 875}}
+{{email:pilar.hidalgo@ingenieria-yelmo.example}}

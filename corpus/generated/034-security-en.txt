@@ -1,0 +1,13 @@
+%known person|Eleanor Mortimer
+From: {{org:Works Ocaso LLC}} <{{email:security@works-ocaso.example}}>
+To: {{person:Eleanor Mortimer}} <{{email:e..mortimer@icloud.com}}>
+Date: Sat, {{date:6 Feb 2027}} 09:15:00 +0100
+Subject: Your verification code
+
+Hi {{person:Eleanor}},
+
+Someone asked to change the password for {{email:e..mortimer@icloud.com}} on {{date:FEBRUARY 6th 2027}}. Use this link within one hour: {{url:https://accounts.works-ocaso.example/reset?token=734570ab527341}}
+
+If this was not you, call {{phone:+1 588 555 0160}} or write to {{email:security@works-ocaso.example}}.
+
+The {{org:Works Ocaso LLC}} security team

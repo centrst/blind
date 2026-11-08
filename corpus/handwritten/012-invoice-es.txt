@@ -1,0 +1,14 @@
+%known person|Genaro Pardo
+%known org|Pardo e Hijos S.A.
+From: {{person:Lisandro Cuevas}} <{{email:lcuevas@asesoria-cuevas.example}}>
+To: {{person:Genaro Pardo}} <{{email:gpardo@pardo-hijos.example}}>
+Subject: Minuta de enero
+
+Estimado {{person:Genaro}}:
+
+Este mes cobramos {{amount:350,00 €}} de cuota fija y {{amount:75,00 €}} por la gestión de nóminas, en total {{amount:425,00 €}}.
+Con el IVA del 21 % ({{amount:89,25 €}}) son {{amount:514,25 €}}. Cargaremos el importe en la cuenta {{iban:ES12 0049 1500 0512 3456 7892}} el {{date:2 de febrero de 2026}}.
+
+Atentamente,
+{{person:Lisandro Cuevas}}
+{{org:Asesoría Cuevas}}

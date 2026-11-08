@@ -1,0 +1,14 @@
+%order mdy
+%known person|Harold Cartwright
+From: {{org:Logistics Marisma}} <{{email:security@logistics-marisma.example}}>
+To: {{person:Harold Cartwright}} <{{email:h_cartwright@gmail.com}}>
+Date: Tue, {{date:12 Nov 2024}} 16:15:00 +0100
+Subject: New sign-in to your account
+
+Hi {{person:Harold}},
+
+Someone asked to change the password for {{email:h_cartwright@gmail.com}} on {{date:November 12, 2024}}. Use this link within one hour: {{url:https://accounts.logistics-marisma.example/reset?token=868125ab516329}}
+
+If this was not you, call {{phone:(756) 555-0142}} or write to {{email:security@logistics-marisma.example}}.
+
+The {{org:Logistics Marisma}} security team

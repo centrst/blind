@@ -1,0 +1,22 @@
+%known person|Griselda Barragán
+From: "{{person:Rosendo Jaramillo Villalobos}}" <{{email:rosendo_jaramillo@servicios-galeon.example}}>
+To: {{person:Griselda Barragán}} <{{email:gri..barragan@icloud.com}}>
+Date: Thu, {{date:1 Feb 2024}} 19:15:00 +0100
+Subject: Reserva confirmada
+
+Buenos días {{person:Griselda}},
+
+Tu mesa para cuatro en {{org:Servicios Galeón S.A.}} queda reservada para el {{date:2024-02-14}} a las 18:15.
+
+Total: {{amount:253,25 EUR}}. Cancelación gratuita hasta el {{date:2024-02-02}}.
+
+¿Dudas? Llámanos al {{phone:+34 750983818}} o escribe a {{email:rosendo_jaramillo@servicios-galeon.example}}.
+
+--
+Atentamente,
+{{person:Rosendo Jaramillo Villalobos}}
+Reception
+{{org:Servicios Galeón S.A.}}
+Tel: {{phone:+34 750983818}}
+{{email:rosendo_jaramillo@servicios-galeon.example}}
+Oficina de {{place:Montefrío Chico}}

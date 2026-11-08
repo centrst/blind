@@ -1,0 +1,15 @@
+%known person|Remedios Echeverría
+From: {{person:Belén Duarte}} <{{email:notificaciones.belenduarte@logistica-tramuntana.example}}>
+To: {{person:Remedios Echeverría}} <{{email:remedios..ech@icloud.com}}>
+Date: Wed, {{date:11 Aug 2027}} 15:00:00 +0100
+Subject: Notificación {{id:EXP-2027-5105}}: pago pendiente
+
+A {{person:Remedios Echeverría}}, titular del documento {{id:X6519789B}}:
+
+Según nuestros registros, consta una deuda de {{amount:€ 8.312,36}} en el expediente {{id:EXP-2027-5105}}.
+
+Si no se abona antes del {{date:10 de septiembre del 2027}}, se aplicará un recargo del 10 %: {{amount:831,24 EUR}}, en total {{amount:9.143,60 €}}.
+
+Puede pagar por transferencia a {{iban:PT74 5331 4757 9127 1657 8428 6}} y conservar el justificante. Atención telefónica: {{phone:+44 7700 900461}}.
+
+Este es un aviso automático. No responda a este correo.

@@ -1,0 +1,29 @@
+%known person|Saturnino Cuesta Galindo
+%known org|Servicios Esquilo
+From: {{person:Lisandro Arroyo}} <{{email:lisandroarroyo@transportes-lumbre.example}}>
+To: {{person:Saturnino Cuesta Galindo}} <{{email:sat_cuesta@gmail.com}}>
+Date: Wed, {{date:20 Oct 2027}} 13:45:00 +0100
+Subject: Factura {{id:HZ800318025}} de {{org:Transportes Lumbre}}
+
+Hola {{person:Saturnino}},
+
+Te enviamos la factura del último periodo de {{org:Servicios Esquilo}}.
+
+Servicios, primera parte: {{amount:2.182,76 €}}
+Servicios, segunda parte: {{amount:1.455,17 EUR}}
+Subtotal: {{amount:3.637,93 EUR}}
+IVA (21 %): {{amount:763,97 €}}
+Total: {{amount:€ 4.401,90}}
+
+Agradecemos el pago antes del {{date:4 de noviembre de 2027}} en la cuenta {{iban:ES42 7484 2286 4120 6133 1167}}.
+
+--
+Atentamente,
+{{person:Lisandro Arroyo}}
+Administración
+{{org:Transportes Lumbre}}
+Tel: {{phone:779 05 00 64}}
+{{email:lisandroarroyo@transportes-lumbre.example}}
+{{url:www.transportes-lumbre.example}}
+
+Este mensaje es confidencial y está dirigido únicamente a su destinatario.

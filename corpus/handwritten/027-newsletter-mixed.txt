@@ -1,0 +1,12 @@
+%known person|Isidro Cantero
+From: Studio Nomad <weekly@studio-nomad.example>
+To: {{person:Isidro Cantero}} <{{email:isidro@cantero-fotografia.example}}>
+Subject: Weekly: tres ideas para tus fotos / three ideas
+
+Hola {{person:Isidro}}, here is the weekly digest.
+
+Workshop in {{place:Fenwick Bay}} on {{date:2026-06-13}}: {{amount:$120.00}} for the day, or {{amount:$200.00}} for the weekend.
+Curso online en español, {{amount:49,00 €}}, empieza el {{date:1 de junio}}.
+
+Read more: {{url:https://studio-nomad.example/blog/weekly-23}}
+You are subscribed as {{email:isidro@cantero-fotografia.example}}.

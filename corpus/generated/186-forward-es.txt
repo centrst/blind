@@ -1,0 +1,20 @@
+%known person|Verónica Bustamante Medrano
+From: {{person:Verónica Bustamante Medrano}} <{{email:veronica_bus@gmail.com}}>
+To: {{person:Anselmo Peñalver Duarte}} <{{email:penalver.anselmo@estudio-rastro.example}}>
+Date: Wed, {{date:5 Jun 2024}} 11:45:00 +0100
+Subject: Fwd: consulta de {{org:Gestión Galeón}}
+Hola {{person:Anselmo}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:2024-06-14}}.
+---------- Forwarded message ---------
+From: {{person:Aurora Barragán}} <{{email:abarragan@gestion-galeon.example}}>
+Date: {{date:5 Jun 2024}}
+Subject: Presupuesto proyecto {{id:89057317Q}}
+
+Estimado/a {{person:Verónica}},
+El consejo aprobó {{amount:70,46 €}} para el proyecto {{id:89057317Q}}. ¿Cuándo podríais empezar?
+--
+Gracias,
+{{person:Aurora Barragán}}
+Operations manager
+{{org:Gestión Galeón}}
+{{email:abarragan@gestion-galeon.example}}
+{{url:www.gestion-galeon.example}}

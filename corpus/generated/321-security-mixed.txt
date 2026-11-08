@@ -1,0 +1,14 @@
+%order mdy
+%known person|Imogen Ellsworth
+From: {{org:Supply Aldara}} <{{email:security@supply-aldara.example}}>
+To: {{person:Imogen Ellsworth}} <{{email:imogen..iellsworth@outlook.com}}>
+Date: Thu, {{date:2 Dec 2027}} 14:45:00 +0100
+Subject: New sign-in to your account
+
+Hola {{person:Imogen}},
+
+We noticed a sign-in to {{email:imogen..iellsworth@outlook.com}} from {{place:Brindleton}} on {{date:2027-12-02}} at 17:45.
+
+Si no fuiste tú, llama al {{phone:791 28 15 50}} o escribe a {{email:security@supply-aldara.example}}.
+
+The {{org:Supply Aldara}} security team

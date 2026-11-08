@@ -1,0 +1,24 @@
+%known person|Demetrio Tejada
+%known org|Asesores Foxglove
+From: "{{person:Ofelia Fontán Cuesta}}" <{{email:ofelia@transportes-cendal.example}}>
+To: {{person:Demetrio Tejada}} <{{email:demetrio_tejada@asesores-foxglove.example}}>
+Date: Wed, {{date:9 Apr 2025}} 09:45:00 +0100
+Subject: Re: oferta para {{org:Asesores Foxglove}}
+Podemos aceptar {{amount:1242,06 €}} y enviar el contrato a {{email:demetrio_tejada@asesores-foxglove.example}}.
+On {{date:08-04-2025}}, {{person:Demetrio Tejada}} wrote:
+> Thanks {{person:Ofelia}}. That is high for us. Could you do {{amount:1141,35 €}}? The meeting works, call me on {{phone:+34 753 749 247}} if it moves.
+>
+> El {{date:7 de abril de 2025}}, {{person:Ofelia Fontán Cuesta}} escribió:
+> > Hola {{person:Demetrio}}, nuestra oferta para {{org:Asesores Foxglove}} es de {{amount:1.342,77 €}}. ¿Quedamos el {{date:9 de abril del 2025}} a las 14:00?
+> > 
+> > --
+> > Saludos cordiales,
+> > {{person:Ofelia Fontán Cuesta}}
+> > Sales
+> > {{org:Transportes Cendal}}
+> > Tel: {{phone:(443) 555-0110}}
+> > {{email:ofelia@transportes-cendal.example}}
+> > {{url:www.transportes-cendal.example}}
+> > Office: {{place:Valdecañas}}
+
+{{person:Ofelia}}

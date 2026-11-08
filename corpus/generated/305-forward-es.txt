@@ -1,0 +1,20 @@
+%known person|Ulises Espinosa
+From: {{person:Ulises Espinosa}} <{{email:ulisesespinosa@estudio-ironbridge.example}}>
+To: {{person:Pilar Jaramillo}} <{{email:pilar_jaramillo@gestion-sotavento.example}}>
+Date: Wed, {{date:8 Dec 2027}} 11:30:00 +0100
+Subject: Fwd: consulta de {{org:Asesores Dorsal S.L.}}
+{{person:Pilar}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:+44 7700 900651}}.
+---------- Forwarded message ---------
+From: {{person:Itziar Medrano}} <{{email:itziar.medrano@asesores-dorsal.example}}>
+Date: {{date:8 Dec 2027}}
+Subject: Presupuesto proyecto {{id:BKI8188ZZ}}
+
+Hola {{person:Ulises}},
+En {{org:Asesores Dorsal S.L.}} disponemos de {{amount:4.200,66 €}} para la obra en {{place:Torrebruna}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Saludos cordiales,
+{{person:Itziar Medrano}}
+Purchasing
+{{org:Asesores Dorsal S.L.}}
+Tel: {{phone:+44 7700 900651}}
+{{email:itziar.medrano@asesores-dorsal.example}}

@@ -1,0 +1,15 @@
+%known person|Odette Goodwin
+From: {{org:Isleta Advisory LLC}} <{{email:news@isleta-advisory.example}}>
+To: {{email:odette..ogoodwin@icloud.com}}
+Date: Thu, {{date:17 Oct 2024}} 11:30:00 +0100
+Subject: Lavinia's picks for the season
+
+Hi {{person:Odette}}, here is what is new this month.
+
+Our best seller is now {{amount:USD 43.25}}, down from {{amount:£54.06}}. Offer ends {{date:Nov. 11, 2024}}.
+
+Shop online: {{url:https://www.isleta-advisory.example/shop?utm_campaign=5061}}
+
+You receive this because {{email:odette..ogoodwin@icloud.com}} subscribed. Unsubscribe: {{url:https://news.isleta-advisory.example/unsubscribe?u=446922858x&e=odette..ogoodwin%40icloud.com}}
+
+{{org:Isleta Advisory LLC}}, Customer care {{phone:+34 792634194}}

@@ -1,0 +1,23 @@
+%known person|Eloy de Lara
+%known org|Logística Vendaval S.L.
+From: {{person:Remedios Lazcano}} <{{email:remedios.lazcano@consultores-larkspur.example}}>
+To: {{person:Eloy de Lara}} <{{email:eloy.de@logistica-vendaval.example}}>
+Date: Sun, {{date:5 Jan 2025}} 12:30:00 +0100
+Subject: Factura {{id:FAC/2025/9514}} de {{org:Consultores Larkspur S.A.}}
+
+Hola {{person:Eloy}},
+
+Te enviamos la factura del último periodo de {{org:Logística Vendaval S.L.}}.
+
+La cuota es {{amount:106,25 EUR}} más 21 % de IVA, en total {{amount:128,56 €}}.
+
+El pago vence el {{date:20 de enero del 2025}}. Transferencia a {{iban:PT60 4481 4079 5058 6897 2558 4}} indicando {{id:FAC/2025/9514}}.
+
+--
+Atentamente,
+{{person:Remedios Lazcano}}
+Billing department
+{{org:Consultores Larkspur S.A.}}
+Tel: {{phone:+49 171 392 0088}}
+{{url:www.consultores-larkspur.example}}
+Oficina de {{place:Almendral del Sur}}

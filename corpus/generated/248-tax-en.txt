@@ -1,0 +1,15 @@
+%known person|Priscilla Yardley
+From: {{person:Imogen Oakley}} <{{email:notificaciones.imogen_oakley@jaspe-logistics.example}}>
+To: {{person:Priscilla Yardley}} <{{email:priscilla..yardley@outlook.com}}>
+Date: Sat, {{date:28 Aug 2027}} 12:00:00 +0100
+Subject: Notification of outstanding balance
+
+Dear {{person:Priscilla Yardley}},
+
+Our records show an unpaid balance of {{amount:£2,841.61}} on file {{id:EXP-2027-4185}}.
+
+If it is not paid by {{date:17.09.2027}}, a surcharge of 5% applies: {{amount:$142.08}}, for a total of {{amount:$2,983.69}}.
+
+Pay by transfer to {{iban:ES08 4412 0194 5538 1878 3291}} and keep the receipt. For help call {{phone:(319) 555-0110}}.
+
+This is an automatic notice. Do not reply.

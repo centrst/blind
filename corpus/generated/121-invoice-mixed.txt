@@ -1,0 +1,24 @@
+%order mdy
+%known person|Imogen Whitcombe
+%known org|Supply Bruma GmbH
+From: {{person:Lavinia Quigley}} <{{email:lquigley@pinar-partners.example}}>
+To: "{{person:Imogen Whitcombe}}" <{{email:imogen.whitcombe@supply-bruma.example}}>
+Date: Mon, {{date:18 Aug 2025}} 13:45:00 +0100
+Subject: Invoice {{id:83284883}}
+
+Hi {{person:Imogen}},
+
+Please find attached invoice {{id:83284883}} for the work done for {{org:Supply Bruma GmbH}}.
+
+The total is {{amount:2,498.45 USD}}, which includes 8% tax on {{amount:$2,313.38}}.
+
+Payment is due by {{date:2025-09-17}}. Transfer to {{iban:DE08 2342 2116 2520 0689 86}}, quoting {{id:83284883}}.
+
+--
+Kind regards,
+{{person:Lavinia Quigley}}
+Billing department
+{{org:Pinar Partners GmbH}}
+Tel: {{phone:+49 171 392 0074}}
+
+This message is confidential and intended only for the addressee.

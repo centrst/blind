@@ -1,0 +1,20 @@
+%known person|Quentin Whitcombe
+From: {{person:Winston Jessop}} <{{email:winston@esquilo-partners.example}}>
+To: {{person:Quentin Whitcombe}} <{{email:quentin@holdings-wicker.example}}>
+Date: Fri, {{date:19 Dec 2025}} 17:30:00 +0100
+Subject: Reserva confirmada
+
+Hola {{person:Quentin}},
+
+Your table for four at {{org:Esquilo Partners}} is booked for {{date:January 3 2026}} at 13:30.
+
+The price is {{amount:£41.85}}, payable on arrival. A deposit of {{amount:10.46 USD}} is held on your card.
+
+--
+Best regards,
+{{person:Winston Jessop}}
+Recepción
+{{org:Esquilo Partners}}
+Tel: {{phone:0034 754 988 592}}
+{{email:winston@esquilo-partners.example}}
+{{url:www.esquilo-partners.example}}

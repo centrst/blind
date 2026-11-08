@@ -1,0 +1,15 @@
+%known person|Lisandro Medrano
+From: Booksy <no..reply@booksy.com>
+To: "{{person:Lisandro Medrano}}" <{{email:lisandromedrano@consultores-wicker.example}}>
+Date: Sat, {{date:29 Nov 2025}} 13:45:00 +0100
+Subject: Reserva confirmada
+
+Estimado/a {{person:Lisandro}},
+
+Tu sesión de fisioterapia en {{org:Ingeniería Millstone}} queda reservada para el {{date:14 de diciembre de 2025}} a las 08:00.
+
+El importe es {{amount:400,65 €}}, a pagar en el local. Hemos retenido una señal de {{amount:100,16 €}}.
+
+¿Dudas? Llámanos al {{phone:+34 773702222}} o escribe a {{email:de.florencio@ingenieria-millstone.example}}.
+
+Manage your visit: {{url:https://booksy.com/en-es/317781_ingenieria-millstone_3429}}

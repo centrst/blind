@@ -1,0 +1,18 @@
+%order mdy
+%known person|Cedric Ashworth
+From: {{person:Jasper Abernathy}} <{{email:notificaciones.jasper.abernathy@larkspur-labs.example}}>
+To: "{{person:Cedric Ashworth}}" <{{email:cedric..ash@icloud.com}}>
+Date: Mon, {{date:24 May 2027}} 17:45:00 +0100
+Subject: Notice {{id:EXP-2027-2759}}: payment pending
+
+Dear {{person:Cedric Ashworth}},
+
+Regional Revenue Office of {{place:Harlow Cross}} informs you that file {{id:EXP-2027-2759}} shows a balance of {{amount:£7.97}} for the period ending {{date:April 14, 2027}}.
+
+If it is not paid by {{date:June 3 2027}}, a surcharge of 5% applies: {{amount:£0.40}}, for a total of {{amount:USD 8.37}}.
+
+Pay by transfer to {{iban:ES90 5355 7575 1264 8877 3875}} and keep the receipt. For help call {{phone:+44 7700 900907}}.
+
+Social security contributions for {{date:1st May}} are listed in the portal: {{url:https://sede.larkspur-labs.example/cuotas/12560A974}}
+
+This is an automatic notice. Do not reply.

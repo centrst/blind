@@ -1,0 +1,13 @@
+%known person|Belén Rebollo
+From: {{org:Ingeniería Rastro S.L.U.}} <{{email:security@ingenieria-rastro.example}}>
+To: {{person:Belén Rebollo}} <{{email:b..rebollo@icloud.com}}>
+Date: Fri, {{date:5 Nov 2027}} 09:00:00 +0100
+Subject: New sign-in to your account
+
+Hola {{person:Belén}},
+
+Detectamos un inicio de sesión en {{email:b..rebollo@icloud.com}} desde {{place:Montefrío Chico}} el {{date:5 de noviembre del 2027}} a las 16:30.
+
+Si no fuiste tú, llama al {{phone:361-555-0137}} o escribe a {{email:security@ingenieria-rastro.example}}.
+
+The {{org:Ingeniería Rastro S.L.U.}} security team

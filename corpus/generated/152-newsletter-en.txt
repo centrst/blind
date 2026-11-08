@@ -1,0 +1,16 @@
+%order mdy
+%known person|Barnaby Goodwin
+From: {{org:Supply Zafiro}} <{{email:news@supply-zafiro.example}}>
+To: {{email:barnaby..goo@outlook.com}}
+Date: Fri, {{date:28 Jun 2024}} 09:15:00 +0100
+Subject: Desmond's picks for the season
+
+Hi {{person:Barnaby}}, here is what is new this month.
+
+Join our open day in {{place:Maple Hollow}} on {{date:7.5.2024}}. Entry {{amount:USD 174.04}}.
+
+Shop online: {{url:https://www.supply-zafiro.example/shop?utm_campaign=4358}}
+
+You receive this because {{email:barnaby..goo@outlook.com}} subscribed. Unsubscribe: {{url:https://news.supply-zafiro.example/unsubscribe?u=533266891x&e=barnaby..goo%40outlook.com}}
+
+{{org:Supply Zafiro}}, Customer care {{phone:+34 787 468 573}}

@@ -1,0 +1,22 @@
+%known person|Griselda Galindo
+From: "{{person:Griselda Galindo}}" <{{email:griselda..gal@icloud.com}}>
+To: {{person:Plácido Iglesias Maldonado}} <{{email:placido@reformas-quimera.example}}>
+Date: Sat, {{date:15 Nov 2025}} 11:45:00 +0100
+Subject: Fwd: consulta de {{org:Asesores Ironbridge S.A.}}
+{{person:Plácido}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:799 231 120}}.
+---------- Forwarded message ---------
+From: {{person:Isidro Olmos}} <{{email:isidro.olmos@asesores-ironbridge.example}}>
+Date: {{date:15 Nov 2025}}
+Subject: Presupuesto proyecto {{id:39069001W}}
+
+Hola {{person:Griselda}},
+El consejo aprobó {{amount:190,70 €}} para el proyecto {{id:39069001W}}. ¿Cuándo podríais empezar?
+--
+Un saludo,
+{{person:Isidro Olmos}}
+Purchasing
+{{org:Asesores Ironbridge S.A.}}
+Tel: {{phone:799 231 120}}
+{{email:isidro.olmos@asesores-ironbridge.example}}
+{{url:www.asesores-ironbridge.example}}
+Oficina de {{place:Villaluenga Alta}}

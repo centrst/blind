@@ -1,0 +1,15 @@
+%known person|Gloria Ocaña
+From: {{org:Gestión Ironbridge SA}} <{{email:news@gestion-ironbridge.example}}>
+To: {{email:g_ocana@gmail.com}}
+Date: Tue, {{date:10 Nov 2026}} 16:45:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Gloria}}, estas son las novedades del mes.
+
+Te esperamos en la jornada de puertas abiertas en {{place:Cabo Redondo}} el {{date:2026-11-16}}. Entrada {{amount:€ 16,86}}.
+
+Compra online: {{url:https://www.gestion-ironbridge.example/tienda?utm_campaign=2550}}
+
+Recibes este correo porque {{email:g_ocana@gmail.com}} se suscribió. Darte de baja: {{url:https://news.gestion-ironbridge.example/unsubscribe?u=219798669x&e=g_ocana%40gmail.com}}
+
+{{org:Gestión Ironbridge S.A.}}, Atención al cliente {{phone:755 89 16 31}}

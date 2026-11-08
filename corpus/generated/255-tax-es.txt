@@ -1,0 +1,17 @@
+%known person|Eloy Urrutia
+From: {{person:Wenceslao Maldonado}} <{{email:notificaciones.wenceslaomaldonado@transportes-wicker.example}}>
+To: {{person:Eloy Urrutia}} <{{email:eloy..eurrutia@icloud.com}}>
+Date: Wed, {{date:5 May 2027}} 17:30:00 +0100
+Subject: Aviso de deuda pendiente
+
+Estimado/a {{person:Eloy Urrutia}},
+
+La Oficina Tributaria de {{place:Puente Nuevo}} le comunica que el expediente {{id:EXP-2027-5990}} presenta un saldo de {{amount:243,60 EUR}} correspondiente al periodo cerrado el {{date:26 de marzo de 2027}}.
+
+Si no se abona antes del {{date:25 de mayo del 2027}}, se aplicará un recargo del 20 %: {{amount:48,72 €}}, en total {{amount:292,32 €}}.
+
+Puede pagar por transferencia a {{iban:ES94 9991 3790 3915 3652 5538}} y conservar el justificante. Atención telefónica: {{phone:+34 780 694 082}}.
+
+Las cuotas de la Seguridad Social del periodo {{date:1-5-2027}} están en la sede: {{url:https://sede.transportes-wicker.example/cuotas/56632A829}}
+
+Este es un aviso automático. No responda a este correo.

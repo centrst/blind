@@ -1,0 +1,12 @@
+%known person|Georgina Pike
+From: Ledgerline Alerts <alerts@ledgerline.example>
+To: {{person:Georgina Pike}} <{{email:g..pike@outlook.com}}>
+Subject: A payment of {{amount:$830.00}} was sent
+
+Hi {{person:Georgina}},
+
+A payment of {{amount:$830.00}} was sent from your account ending 5512 to {{person:Marcus Teller}} on {{date:Sept 28, 2026}}.
+Payee email: {{email:marcus.teller@teller-ironworks.example}}, phone {{phone:(718) 555-0129}}.
+Reference {{id:PMT-90431182}}.
+
+If you did not approve this payment, reply STOP or open {{url:https://app.ledgerline.example/disputes/90431182}}.

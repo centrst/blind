@@ -1,0 +1,27 @@
+%known person|Remedios Echeverría
+%known org|Asesores Yelmo
+From: "{{person:Estefanía Cifuentes}}" <{{email:estefania.cifuentes@ingenieria-ocaso.example}}>
+To: "{{person:Remedios Echeverría}}" <{{email:recheverria@asesores-yelmo.example}}>
+Date: Thu, {{date:24 Dec 2026}} 16:30:00 +0100
+Subject: Factura {{id:ZZ552009876}} de {{org:Ingeniería Ocaso}}
+
+Hola {{person:Remedios}},
+
+Adjuntamos la factura {{id:ZZ552009876}} por los servicios prestados a {{org:Asesores Yelmo}}.
+
+Servicios, primera parte: {{amount:153,67 €}}
+Servicios, segunda parte: {{amount:€ 102,44}}
+Subtotal: {{amount:€ 256,11}}
+IVA (21 %): {{amount:€ 53,78}}
+Total: {{amount:309,89 EUR}}
+
+Agradecemos el pago antes del {{date:8 de enero del 2027}} en la cuenta {{iban:PT09 6533 5724 7417 8642 5917 2}}.
+
+--
+Saludos cordiales,
+{{person:Estefanía Cifuentes}}
+Accounts
+{{org:Ingeniería Ocaso}}
+{{email:estefania.cifuentes@ingenieria-ocaso.example}}
+{{url:www.ingenieria-ocaso.example}}
+Oficina de {{place:Torrebruna}}

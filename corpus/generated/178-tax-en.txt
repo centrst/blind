@@ -1,0 +1,18 @@
+%order mdy
+%known person|Georgina Tennant
+From: {{person:Nigel Bellamy}} <{{email:notificaciones.nigel@sotavento-holdings.example}}>
+To: {{person:Georgina Tennant}} <{{email:georgina..ten@outlook.com}}>
+Date: Wed, {{date:9 Jun 2027}} 11:30:00 +0100
+Subject: Notice {{id:EXP-2027-9501}}: payment pending
+
+To {{person:Georgina Tennant}}, holder of ID {{id:Y5726579R}}:
+
+Regional Revenue Office of {{place:Harlow Cross}} informs you that file {{id:EXP-2027-9501}} shows a balance of {{amount:£38.06}} for the period ending {{date:April 30th, 2027}}.
+
+If it is not paid by {{date:06-29-2027}}, a surcharge of 20% applies: {{amount:USD 7.61}}, for a total of {{amount:45.67 USD}}.
+
+Pay by transfer to {{iban:IT98 4702 5765 5237 1909 1607 929}} and keep the receipt. For help call {{phone:793 827 241}}.
+
+Social security contributions for {{date:2027-06-01}} are listed in the portal: {{url:https://sede.sotavento-holdings.example/cuotas/78612A810}}
+
+This is an automatic notice. Do not reply.

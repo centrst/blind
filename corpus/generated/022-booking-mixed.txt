@@ -1,0 +1,11 @@
+%known person|Plácido Quintana
+From: {{person:Jacinta Hidalgo}} <{{email:jacinta_hidalgo@logistica-lumbre.example}}>
+To: {{person:Plácido Quintana}} <{{email:pquintana@gestion-vendaval.example}}>
+Date: Sun, {{date:17 May 2026}} 15:00:00 +0100
+Subject: Reserva confirmada
+
+Dear {{person:Plácido}},
+
+Tu mesa para cuatro en {{org:Logística Lumbre}} queda reservada para el {{date:2026-06-06}} a las 09:45.
+
+El importe es {{amount:10,24 €}}, a pagar en el local. Hemos retenido una señal de {{amount:2,56 €}}.

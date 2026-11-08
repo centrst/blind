@@ -1,0 +1,18 @@
+%known person|Trinidad Aguirre
+From: Taller Hermanos Becerra <{{email:facturas@taller-becerra.example}}>
+To: {{person:Trinidad Aguirre}} <{{email:trinidad_aguirre@gmail.com}}>
+Subject: Presupuesto y factura de la reparación
+
+Hola {{person:Trinidad}},
+
+Te paso el desglose de la reparación del coche:
+- Mano de obra: {{amount:210,00 €}}
+- Piezas: {{amount:164,35 €}}
+- Subtotal: {{amount:374,35 €}}
+- IVA (21 %): {{amount:78,61 €}}
+Total: {{amount:452,96 €}}
+
+Matrícula registrada: {{id:4821KLM}}. Número de orden {{id:20263318}}.
+Se puede recoger a partir del martes {{date:9 de junio}}.
+
+{{org:Taller Hermanos Becerra}}, {{phone:+34 755 700 213}}

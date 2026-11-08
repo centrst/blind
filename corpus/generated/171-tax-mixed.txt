@@ -1,0 +1,15 @@
+%known person|Eloy Sepúlveda
+From: "{{person:Jacinta Cuesta Zamora}}" <{{email:notificaciones.jacinta_cuesta@ingenieria-umbral.example}}>
+To: "{{person:Eloy Sepúlveda}}" <{{email:eloy..sepulveda@icloud.com}}>
+Date: Tue, {{date:12 Jan 2027}} 12:45:00 +0100
+Subject: Aviso de deuda pendiente
+
+To {{person:Eloy Sepúlveda}}, holder of ID {{id:52764440W}}:
+
+Según nuestros registros, consta una deuda de {{amount:5.842,92 €}} en el expediente {{id:EXP-2027-3410}}.
+
+If it is not paid by {{date:22 de enero de 2027}}, a surcharge of 5% applies: {{amount:292,15 EUR}}, for a total of {{amount:€ 6.135,07}}.
+
+Pay by transfer to {{iban:ES54 0530 1057 8357 8322 4066}} and keep the receipt. For help call {{phone:+34 765457497}}.
+
+Este es un aviso automático. No responda a este correo.

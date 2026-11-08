@@ -1,0 +1,28 @@
+%known person|Ernesto Fontán
+%known org|Estudio Marisma
+From: {{person:Griselda Echeverría}} <{{email:gecheverria@clinica-ironbridge.example}}>
+To: {{person:Ernesto Fontán}} <{{email:ernesto.fontan@estudio-marisma.example}}>
+Date: Sun, {{date:20 Sep 2026}} 10:30:00 +0100
+Subject: Factura {{id:XQ430859971}} de {{org:Clínica Ironbridge}}
+
+Hi {{person:Ernesto}},
+
+Adjuntamos la factura {{id:XQ430859971}} por los servicios prestados a {{org:Estudio Marisma}}.
+
+Servicios, primera parte: {{amount:€ 878,54}}
+Servicios, segunda parte: {{amount:585,70 €}}
+Subtotal: {{amount:1.464,24 €}}
+IVA (10 %): {{amount:146,42 EUR}}
+Total: {{amount:€ 1.610,66}}
+
+Agradecemos el pago antes del {{date:4 de noviembre del 2026}} en la cuenta {{iban:ES28 2136 8881 3878 3623 4018}}.
+
+Nuestro NIF es {{id:B28890866}}.
+
+--
+Saludos cordiales,
+{{person:Griselda Echeverría}}
+Administración
+{{org:Clínica Ironbridge}}
+Tel: {{phone:+44 7700 900360}}
+{{email:gecheverria@clinica-ironbridge.example}}

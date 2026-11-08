@@ -1,0 +1,13 @@
+%known person|Ofelia Olmos
+From: {{org:Logística Jaspe}} <{{email:security@logistica-jaspe.example}}>
+To: {{email:o..olmos@outlook.com}}
+Date: Mon, {{date:1 Apr 2024}} 16:45:00 +0100
+Subject: Nuevo inicio de sesión en tu cuenta
+
+Hola {{person:Ofelia}},
+
+Alguien solicitó cambiar la contraseña de {{email:o..olmos@outlook.com}} el {{date:1 de ABRIL del 2024}}. Usa este enlace en la próxima hora: {{url:https://accounts.logistica-jaspe.example/reset?token=806737ab597870}}
+
+Si no fuiste tú, llama al {{phone:+1 493 555 0137}} o escribe a {{email:security@logistica-jaspe.example}}.
+
+El equipo de seguridad de {{org:Logística Jaspe}}

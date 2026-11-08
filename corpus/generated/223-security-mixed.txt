@@ -1,0 +1,13 @@
+%known person|Itziar de Lara
+From: {{org:Estudio Farola}} <{{email:security@estudio-farola.example}}>
+To: {{person:Itziar de Lara}} <{{email:lara_itziar@gmail.com}}>
+Date: Fri, {{date:10 Apr 2026}} 10:30:00 +0100
+Subject: Nuevo inicio de sesión en tu cuenta
+
+Hola {{person:Itziar}},
+
+Your verification code is {{id:674476}}. It expires in 10 minutes. Never share it.
+
+Si no fuiste tú, llama al {{phone:+1 448 555 0149}} o escribe a {{email:security@estudio-farola.example}}.
+
+El equipo de seguridad de {{org:Estudio Farola}}

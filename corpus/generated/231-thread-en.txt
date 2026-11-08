@@ -1,0 +1,24 @@
+%order mdy
+%known person|Nigel Cartwright
+%known org|Pennywhistle Holdings LLC
+From: {{person:Quentin Kingsley}} <{{email:qkingsley@umbral-labs.example}}>
+To: {{person:Nigel Cartwright}} <{{email:nigel_cartwright@gmail.com}}>
+Date: Wed, {{date:26 Jun 2024}} 17:00:00 +0100
+Subject: Re: offer for {{org:Pennywhistle Holdings LLC}}
+We can accept {{amount:USD 164.90}} and send the contract to {{email:nigel_cartwright@gmail.com}}.
+On {{date:2024-06-25}}, {{person:Nigel Cartwright}} wrote:
+> Thanks {{person:Quentin}}. That is high for us. Could you do {{amount:USD 151.53}}? The meeting works, call me on {{phone:+1 451 555 0165}} if it moves.
+>
+> On {{date:June 24th, 2024}}, {{person:Quentin Kingsley}} wrote:
+> > Hello {{person:Nigel}}, our offer for {{org:Pennywhistle Holdings LLC}} is {{amount:USD 178.27}}. Can we meet on {{date:6 Jul 2024}} at 11:45?
+> > 
+> > --
+> > Kind regards,
+> > {{person:Quentin Kingsley}}
+> > Sales
+> > {{org:Umbral Labs LLC}}
+> > Tel: {{phone:(565) 555-0128}}
+> > {{email:qkingsley@umbral-labs.example}}
+> > Office: {{place:Springvale}}
+
+{{person:Quentin}}

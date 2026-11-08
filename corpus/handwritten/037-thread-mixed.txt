@@ -1,0 +1,10 @@
+%known person|Anselmo Duque
+From: {{person:Anselmo Duque}} <{{email:anselmo@duque-viajes.example}}>
+To: {{person:Tamsin Greaves}} <{{email:tamsin@greaves-tours.example}}>
+Subject: Re: Group booking / Reserva de grupo
+
+Hi Tamsin, confirmamos 18 personas para el {{date:12 September 2026}}. El precio por persona es {{amount:€ 64,00}}, total {{amount:€ 1.152,00}}.
+
+> On {{date:2 Sept 2026}}, {{person:Tamsin Greaves}} wrote:
+> Hello {{person:Anselmo}}, our price for {{place:Fenwick Bay}} is {{amount:€ 72,00}} each. We need a deposit of {{amount:€ 300,00}} to {{iban:NL91 ABNA 0417 1643 00}}.
+> Phone: {{phone:+49 171 392 0078}}

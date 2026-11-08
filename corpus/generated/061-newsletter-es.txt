@@ -1,0 +1,15 @@
+%known person|Ernesto Medrano
+From: {{org:Consultores Galeón}} <{{email:news@consultores-galeon.example}}>
+To: {{person:Ernesto Medrano}} <{{email:ernesto_med@gmail.com}}>
+Date: Wed, {{date:10 Jun 2026}} 14:15:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Ernesto}}, estas son las novedades del mes.
+
+Nuestro producto estrella baja a {{amount:224,38 EUR}}, antes {{amount:280,48 EUR}}. La oferta termina el {{date:18-6-26}}.
+
+Compra online: {{url:https://www.consultores-galeon.example/tienda?utm_campaign=2531}}
+
+Recibes este correo porque {{email:ernesto_med@gmail.com}} se suscribió. Darte de baja: {{url:https://news.consultores-galeon.example/unsubscribe?u=991263233x&e=ernesto_med%40gmail.com}}
+
+{{org:Consultores Galeón}}, Atención al cliente {{phone:449-555-0110}}

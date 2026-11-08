@@ -1,0 +1,21 @@
+%known person|Genaro Quintana
+From: {{person:Genaro Quintana}} <{{email:quintana_genaro@gmail.com}}>
+To: "{{person:Ernesto del Río}}" <{{email:del.ernesto@transportes-esquilo.example}}>
+Date: Fri, {{date:30 May 2025}} 16:45:00 +0100
+Subject: Fwd: presupuesto {{org:Consultores Pinar S.A.}}
+Hola {{person:Ernesto}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:2025-06-06}}.
+---------- Forwarded message ---------
+From: {{person:Herminia Echeverría}} <{{email:herminiaecheverria@consultores-pinar.example}}>
+Date: {{date:30 May 2025}}
+Subject: Presupuesto proyecto {{id:BKF0641ND}}
+
+Buenos días {{person:Genaro}},
+En {{org:Consultores Pinar S.A.}} disponemos de {{amount:€ 1.864,77}} para la obra en {{place:San Telmo de Abajo}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Un saludo,
+{{person:Herminia Echeverría}}
+Purchasing
+{{org:Consultores Pinar S.A.}}
+Tel: {{phone:(349) 555-0100}}
+{{email:herminiaecheverria@consultores-pinar.example}}
+{{url:www.consultores-pinar.example}}

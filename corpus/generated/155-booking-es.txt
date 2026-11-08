@@ -1,0 +1,22 @@
+%known person|Pilar Zamora
+From: Booksy <no..reply@booksy.com>
+To: "{{person:Pilar Zamora}}" <{{email:pilar..pzamora@icloud.com}}>
+Date: Thu, {{date:10 Sep 2026}} 10:00:00 +0100
+Subject: Reserva confirmada
+
+Hola {{person:Pilar}},
+
+Hemos reservado mesa para cuatro para ti el {{date:2026-09-26}}. Estamos en {{place:Puente Nuevo}}.
+
+El importe es {{amount:273,43 €}}, a pagar en el local. Hemos retenido una señal de {{amount:68,36 €}}.
+
+Manage your visit: {{url:https://booksy.com/en-es/192040_logistica-marisma_7673}}
+
+--
+Saludos cordiales,
+{{person:Florencio del Río}}
+Recepción
+{{org:Logística Marisma}}
+Tel: {{phone:+1 585 555 0161}}
+{{email:del.florencio@logistica-marisma.example}}
+Oficina de {{place:San Telmo de Abajo}}

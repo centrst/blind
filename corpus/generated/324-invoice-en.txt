@@ -1,0 +1,24 @@
+%known person|Valentine Oakley
+%known org|Aldara Supply Inc.
+From: {{person:Priscilla Crawley}} <{{email:priscillacrawley@galeon-holdings.example}}>
+To: {{person:Valentine Oakley}} <{{email:valentine_oakley@aldara-supply.example}}>
+Date: Thu, {{date:15 Oct 2026}} 09:00:00 +0100
+Subject: Invoice {{id:EXP-2027-0132}}
+
+Dear {{person:Valentine}},
+
+Attached is our invoice for last month's services to {{org:Aldara Supply Inc.}}.
+
+Consulting, first half: {{amount:915.02 USD}}
+Consulting, second half: {{amount:610.02 USD}}
+Subtotal: {{amount:1,525.04 USD}}
+Tax (8%): {{amount:USD 122.00}}
+Total: {{amount:USD 1,647.04}}
+
+Payment is due by {{date:Nov 14 2026}}. Transfer to {{iban:DE97 2315 8178 6666 7285 81}}, quoting {{id:EXP-2027-0132}}.
+
+--
+Cheers,
+{{person:Priscilla Crawley}}
+Accounts
+{{org:Galeón Holdings GmbH}}

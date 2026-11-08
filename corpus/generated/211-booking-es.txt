@@ -1,0 +1,13 @@
+%known person|Lisandro Tejada
+From: Booksy <no..reply@booksy.com>
+To: {{person:Lisandro Tejada}} <{{email:tejada..lisandro@outlook.com}}>
+Date: Fri, {{date:2 May 2025}} 11:30:00 +0100
+Subject: Reserva confirmada
+
+Estimado/a {{person:Lisandro}},
+
+Hemos reservado corte y color para ti el {{date:10 de mayo de 2025}}. Estamos en {{place:Montefrío Chico}}.
+
+El importe es {{amount:230,28 €}}, a pagar en el local. Hemos retenido una señal de {{amount:57,57 EUR}}.
+
+Manage your visit: {{url:https://booksy.com/en-es/709898_clinica-millstone_2022}}

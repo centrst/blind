@@ -1,0 +1,22 @@
+%known person|Honorio Medrano Arroyo
+%known org|Servicios Ocaso
+From: {{person:Estefanía Iglesias}} <{{email:estefania_iglesias@logistica-zafiro.example}}>
+To: {{person:Honorio Medrano Arroyo}} <{{email:hmedrano@servicios-ocaso.example}}>
+Date: Tue, {{date:6 Aug 2024}} 08:30:00 +0100
+Subject: Re: oferta para {{org:Servicios Ocaso}}
+Podemos aceptar {{amount:1.959,92 EUR}} y enviar el contrato a {{email:hmedrano@servicios-ocaso.example}}.
+On {{date:5 de agosto de 2024}}, {{person:Honorio Medrano Arroyo}} wrote:
+> Gracias {{person:Estefanía}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:€ 1.801,01}}? La reunión nos va bien, llámame al {{phone:+1 402 555 0110}} si cambia.
+>
+> El {{date:4 de agosto de 2024}}, {{person:Estefanía Iglesias}} escribió:
+> > Hola {{person:Honorio}}, nuestra oferta para {{org:Servicios Ocaso}} es de {{amount:2.118,83 EUR}}. ¿Quedamos el {{date:11 de agosto del 2024}} a las 18:15?
+> > 
+> > --
+> > Gracias,
+> > {{person:Estefanía Iglesias}}
+> > Sales
+> > {{org:Logística Zafiro S.L.U.}}
+> > {{url:www.logistica-zafiro.example}}
+> > Oficina de {{place:Torrebruna}}
+
+{{person:Estefanía}}

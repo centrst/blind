@@ -1,0 +1,22 @@
+%known person|Valentine Yardley
+%known org|Galeón Holdings Inc.
+From: {{person:Barnaby Oakley}} <{{email:barnaby@rastro-systems.example}}>
+To: {{person:Valentine Yardley}} <{{email:valentine_yardley@galeon-holdings.example}}>
+Date: Tue, {{date:17 Mar 2026}} 14:15:00 +0100
+Subject: Re: offer for {{org:Galeón Holdings Inc.}}
+We can accept {{amount:$1,091.71}} and send the contract to {{email:valentine_yardley@galeon-holdings.example}}.
+On {{date:16-3-2026}}, {{person:Valentine Yardley}} wrote:
+> Thanks {{person:Barnaby}}. That is high for us. Could you do {{amount:£1,003.19}}? The meeting works, call me on {{phone:(585) 555-0143}} if it moves.
+>
+> On {{date:15 March, 2026}}, {{person:Barnaby Oakley}} wrote:
+> > Hola {{person:Valentine}}, nuestra oferta para {{org:Galeón Holdings Inc.}} es de {{amount:£1,180.22}}. ¿Quedamos el {{date:2026-03-27}} a las 10:15?
+> > 
+> > --
+> > Atentamente,
+> > {{person:Barnaby Oakley}}
+> > Sales
+> > {{org:Rastro Systems}}
+> > {{email:barnaby@rastro-systems.example}}
+> > {{url:www.rastro-systems.example}}
+
+{{person:Barnaby}}

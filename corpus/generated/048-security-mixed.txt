@@ -1,0 +1,13 @@
+%known person|Florencio Galindo Cuesta
+From: {{org:Reformas Hontanar}} <{{email:security@reformas-hontanar.example}}>
+To: {{email:florencio_galindo@gmail.com}}
+Date: Sun, {{date:7 Nov 2027}} 10:45:00 +0100
+Subject: Nuevo inicio de sesión en tu cuenta
+
+Hola {{person:Florencio}},
+
+Alguien solicitó cambiar la contraseña de {{email:florencio_galindo@gmail.com}} el {{date:2027-11-07}}. Usa este enlace en la próxima hora: {{url:https://accounts.reformas-hontanar.example/reset?token=738873ab488206}}
+
+If this was not you, call {{phone:+49 171 392 0010}} or write to {{email:security@reformas-hontanar.example}}.
+
+El equipo de seguridad de {{org:Reformas Hontanar}}

@@ -1,0 +1,16 @@
+%known person|Remedios Quiroga
+%known place|Torrebruna
+From: Peluquería Mirasol <{{email:citas@peluqueria-mirasol.example}}>
+To: {{person:Remedios Quiroga}} <{{email:remedios_quiroga@gmail.com}}>
+Subject: Confirmación de tu cita del viernes {{date:12 de junio}}
+
+Hola {{person:Remedios}}:
+
+Te esperamos el {{date:12 de junio de 2026}} a las 17:30 en el local de {{place:Torrebruna}}, calle del Olmo, 14.
+Servicio: tinte y corte. Precio estimado: {{amount:68,00 €}}.
+
+Si necesitas cambiar la hora, responde a este correo o llama al {{phone:+34 761 204 877}}.
+Recuerda que las cancelaciones con menos de 24 horas se cobran al 50 %.
+
+Un abrazo,
+Lola

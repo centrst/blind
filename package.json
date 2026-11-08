@@ -1,0 +1,91 @@
+{
+  "name": "@centrst/blind",
+  "version": "0.1.0",
+  "description": "Rewrite private text into a blind copy with consistent realistic fakes, then map answers back locally",
+  "license": "MIT",
+  "author": "Centrst",
+  "homepage": "https://github.com/centrst/blind#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/centrst/blind.git"
+  },
+  "bugs": {
+    "url": "https://github.com/centrst/blind/issues"
+  },
+  "keywords": [
+    "privacy",
+    "pii",
+    "pseudonymization",
+    "llm",
+    "redaction",
+    "typescript"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "THIRD-PARTY-NOTICES.md"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && node scripts/chmod-bins.mjs",
+    "prepack": "pnpm build",
+    "build:ner": "tsc -p ner/tsconfig.build.json",
+    "test": "vitest run",
+    "test:ner": "vitest run -c ner/vitest.config.ts",
+    "test:deep": "NUM_RUNS=20000 VITEST_NO_JSON=1 vitest run test/properties test/no-network.test.ts",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p ner/tsconfig.json",
+    "lint": "eslint src test scripts examples ner/src ner/test ner/scripts",
+    "corpus": "tsx scripts/corpus.ts",
+    "corpus:generate": "tsx scripts/gen-corpus.ts",
+    "ner:download": "tsx ner/scripts/download-model.ts",
+    "ner:eval": "tsx --tsconfig ner/tsconfig.json ner/scripts/eval.ts --out reports/ner-corpus.json",
+    "ner:train:setup": "python3.12 -m venv .local/train-venv && .local/train-venv/bin/pip install -r ner/train/requirements.txt && .local/train-venv/bin/python -I ner/train/sources.py",
+    "known-misses": "tsx scripts/known-misses.ts",
+    "mutation": "stryker run",
+    "claims": "tsx scripts/claims.ts",
+    "evidence": "tsx scripts/evidence.ts",
+    "verify": "tsx scripts/verify.ts",
+    "receipt:keys": "tsx scripts/receipt-keys.ts",
+    "readme:example": "tsx scripts/readme-example.ts",
+    "bench:presidio:setup": "python3.12 -m venv .local/presidio-venv && .local/presidio-venv/bin/pip install -r scripts/bench/requirements.txt",
+    "bench:presidio": "tsx scripts/bench/export-corpus.ts && .local/presidio-venv/bin/python scripts/bench/presidio.py && tsx --tsconfig ner/tsconfig.json scripts/bench/score.ts",
+    "bench:llmguard:setup": "python3.12 -m venv .local/llmguard-venv && .local/llmguard-venv/bin/pip install -r scripts/bench/requirements-llmguard.txt",
+    "bench:llmguard": "tsx scripts/bench/export-corpus.ts && .local/llmguard-venv/bin/python -I scripts/bench/llm_guard.py && tsx --tsconfig ner/tsconfig.json scripts/bench/score.ts",
+    "bench:gretel:setup": "python3.12 -m venv .local/data-venv && .local/data-venv/bin/pip install -r scripts/bench/requirements-gretel.txt && mkdir -p .local/gretel && curl -fL -o .local/gretel/test.parquet https://huggingface.co/datasets/gretelai/synthetic_pii_finance_multilingual/resolve/7b844d16738527a04264f50214cb426a4cea0897/data/test-00000-of-00001.parquet",
+    "bench:gretel": ".local/data-venv/bin/python -I scripts/bench/gretel_sample.py && .local/presidio-venv/bin/python scripts/bench/presidio.py --input reports/gretel-input.json --out reports/gretel-presidio-raw.json --configs default,with_org && .local/llmguard-venv/bin/python -I scripts/bench/llm_guard.py --input reports/gretel-input.json --out reports/gretel-llmguard-raw.json --configs default,all && tsx --tsconfig ner/tsconfig.json scripts/bench/score-gretel.ts",
+    "secrets": "node scripts/secrets.mjs"
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "^10.1.1",
+    "@stryker-mutator/vitest-runner": "^10.1.1",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.14.0",
+    "fast-check": "^4.10.2",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.1",
+    "vitest": "^5.1.0"
+  },
+  "packageManager": "pnpm@12.6.0",
+  "bin": {
+    "blind": "dist/cli/blind.js",
+    "unblind": "dist/cli/unblind.js"
+  }
+}

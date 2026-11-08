@@ -1,0 +1,13 @@
+%known person|Leonor de Lara
+From: {{person:Verónica Jaramillo}} <{{email:vjaramillo@gestion-ironbridge.example}}>
+To: {{person:Leonor de Lara}} <{{email:leonor_lara@gmail.com}}>
+Date: Fri, {{date:27 Nov 2026}} 14:30:00 +0100
+Subject: Confirmación de cita {{id:48758866G}}
+
+Hola {{person:Leonor}},
+
+Hemos reservado revisión dental para ti el {{date:2 de diciembre del 2026}}. Estamos en {{place:Almendral del Sur}}.
+
+El importe es {{amount:€ 155,87}}, a pagar en el local. Hemos retenido una señal de {{amount:38,97 €}}.
+
+¿Dudas? Llámanos al {{phone:+44 7700 900413}} o escribe a {{email:vjaramillo@gestion-ironbridge.example}}.

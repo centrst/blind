@@ -1,0 +1,13 @@
+%known person|Cordelia Oakley
+From: {{org:Marisma Supply GmbH}} <{{email:security@marisma-supply.example}}>
+To: {{email:oakley..cordelia@icloud.com}}
+Date: Wed, {{date:2 Sep 2026}} 09:15:00 +0100
+Subject: Password change requested
+
+Hi {{person:Cordelia}},
+
+Someone asked to change the password for {{email:oakley..cordelia@icloud.com}} on {{date:2026-09-02}}. Use this link within one hour: {{url:https://accounts.marisma-supply.example/reset?token=541995ab799150}}
+
+If this was not you, call {{phone:+1 738 555 0160}} or write to {{email:security@marisma-supply.example}}.
+
+The {{org:Marisma Supply GmbH}} security team

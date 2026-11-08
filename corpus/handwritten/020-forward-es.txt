@@ -1,0 +1,21 @@
+%known person|Aurora Villanueva
+%known org|Villanueva Logística S.L.
+From: {{person:Aurora Villanueva}} <{{email:aurora@villanueva-logistica.example}}>
+To: {{person:Facundo Barrio}} <{{email:facundo@villanueva-logistica.example}}>
+Subject: Fwd: Retraso en el envío {{id:ENV-8830-2291}}
+
+Facundo, reenvío el mensaje del cliente. Llámale hoy.
+
+---------- Mensaje reenviado ---------
+De: {{person:Ofelia Cardona}} <{{email:ofelia@cardona-ceramicas.example}}>
+Fecha: {{date:8 de octubre de 2026}}
+Asunto: Retraso en el envío {{id:ENV-8830-2291}}
+
+Buenas, {{person:Aurora}}:
+
+El pedido de 40 cajas debía llegar el {{date:5 de octubre}} y todavía no ha llegado. Cada caja vale {{amount:36,50 €}}, o sea {{amount:1.460,00 €}} parados en el camino.
+Mi móvil es {{phone:788 330 417}}.
+
+Saludos,
+{{person:Ofelia Cardona}}
+{{org:Cardona Cerámicas}}

@@ -1,0 +1,15 @@
+%known person|Leonor Navarrete Medrano
+From: {{org:Asesores Tramuntana}} <{{email:news@asesores-tramuntana.example}}>
+To: "{{person:Leonor Navarrete Medrano}}" <{{email:leonor..nav@outlook.com}}>
+Date: Mon, {{date:14 Oct 2024}} 15:15:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Leonor}}, estas son las novedades del mes.
+
+Nuestro producto estrella baja a {{amount:157,86 €}}, antes {{amount:197,33 €}}. La oferta termina el {{date:2024-10-28}}.
+
+Compra online: {{url:https://www.asesores-tramuntana.example/tienda?utm_campaign=2953}}
+
+Recibes este correo porque {{email:leonor..nav@outlook.com}} se suscribió. Darte de baja: {{url:https://news.asesores-tramuntana.example/unsubscribe?u=832106013x&e=leonor..nav%40outlook.com}}
+
+{{org:Asesores Tramuntana}}, Atención al cliente {{phone:+34 755073594}}

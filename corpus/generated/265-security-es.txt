@@ -1,0 +1,13 @@
+%known person|Ofelia Rebollo Jaramillo
+From: {{org:Clínica Aldara}} <{{email:security@clinica-aldara.example}}>
+To: {{email:ofelia..orebollo@icloud.com}}
+Date: Sun, {{date:14 Dec 2025}} 19:30:00 +0100
+Subject: Solicitud de cambio de contraseña
+
+Hola {{person:Ofelia}},
+
+Alguien solicitó cambiar la contraseña de {{email:ofelia..orebollo@icloud.com}} el {{date:14 de diciembre de 2025}}. Usa este enlace en la próxima hora: {{url:https://accounts.clinica-aldara.example/reset?token=206274ab491457}}
+
+Si no fuiste tú, llama al {{phone:887-555-0174}} o escribe a {{email:security@clinica-aldara.example}}.
+
+El equipo de seguridad de {{org:Clínica Aldara}}

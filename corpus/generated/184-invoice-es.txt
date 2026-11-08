@@ -1,0 +1,28 @@
+%known person|Eloy Galindo Villalobos
+%known org|Reformas Nevada S.L.U.
+From: {{person:Nicolás Bustamante}} <{{email:nicolas_bustamante@servicios-isleta.example}}>
+To: {{person:Eloy Galindo Villalobos}} <{{email:eloygalindo@reformas-nevada.example}}>
+Date: Sat, {{date:18 Oct 2025}} 17:00:00 +0100
+Subject: Factura {{id:FAC/2023/6734}} de {{org:Servicios Isleta}}
+
+Buenos días {{person:Eloy}},
+
+Te enviamos la factura del último periodo de {{org:Reformas Nevada S.L.U.}}.
+
+Servicios, primera parte: {{amount:€ 80,45}}
+Servicios, segunda parte: {{amount:53,63 €}}
+Subtotal: {{amount:€ 134,08}}
+IVA (21 %): {{amount:28,16 €}}
+Total: {{amount:162,24 €}}
+
+El pago vence el {{date:2025-12-02}}. Transferencia a {{iban:ES5503622976768396500441}} indicando {{id:FAC/2023/6734}}.
+
+Nuestro NIF es {{id:B18725043}}.
+
+--
+Atentamente,
+{{person:Nicolás Bustamante}}
+Accounts
+{{org:Servicios Isleta}}
+{{email:nicolas_bustamante@servicios-isleta.example}}
+{{url:www.servicios-isleta.example}}

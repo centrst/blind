@@ -1,0 +1,10 @@
+%known person|Wilhelmina Saenz
+From: CloudNest <no-reply@cloudnest.example>
+To: {{person:Wilhelmina Saenz}} <{{email:wsaenz@saenz-consulting.example}}>
+Subject: Código de verificación / verification code
+
+Hola {{person:Wilhelmina}},
+
+Your verification code is {{id:402917}}. Tu código caduca en 10 minutos.
+Solicitud desde {{place:Harlow Cross}} el {{date:2026-10-04}}.
+Si no fuiste tú, escribe a {{email:abuse@cloudnest.example}}.

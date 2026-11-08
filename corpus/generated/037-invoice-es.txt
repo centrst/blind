@@ -1,0 +1,30 @@
+%known person|Florencio Sepúlveda
+%known org|Reformas Hontanar S.L.
+From: "{{person:Itziar Zamora}}" <{{email:itziar_zamora@ingenieria-ironbridge.example}}>
+To: "{{person:Florencio Sepúlveda}}" <{{email:sepulveda.florencio@reformas-hontanar.example}}>
+Date: Thu, {{date:26 Dec 2024}} 16:45:00 +0100
+Subject: Factura {{id:INV-2024-852907}} de {{org:Ingeniería Ironbridge}}
+
+Estimado/a {{person:Florencio}},
+
+Adjuntamos la factura {{id:INV-2024-852907}} por los servicios prestados a {{org:Reformas Hontanar S.L.}}.
+
+Servicios, primera parte: {{amount:€ 125,72}}
+Servicios, segunda parte: {{amount:83,81 €}}
+Subtotal: {{amount:209,53 EUR}}
+IVA (21 %): {{amount:44,00 €}}
+Total: {{amount:253,53 EUR}}
+
+Agradecemos el pago antes del {{date:2025-01-10}} en la cuenta {{iban:PT17061700916663734156030}}.
+
+Nuestro NIF es {{id:B20044962}}.
+
+--
+Gracias,
+{{person:Itziar Zamora}}
+Billing department
+{{org:Ingeniería Ironbridge}}
+Tel: {{phone:+1 864 555 0121}}
+{{url:www.ingenieria-ironbridge.example}}
+
+Este mensaje es confidencial y está dirigido únicamente a su destinatario.

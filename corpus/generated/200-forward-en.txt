@@ -1,0 +1,22 @@
+%order mdy
+%known person|Odette Blackwood
+From: {{person:Odette Blackwood}} <{{email:odette..blackwood@outlook.com}}>
+To: {{person:Rowena Ellsworth}} <{{email:ellsworth.rowena@bruma-studio.example}}>
+Date: Wed, {{date:26 May 2027}} 16:30:00 +0100
+Subject: Fwd: {{org:Dorsal Works}} quote
+{{person:Rowena}}, forwarding below. Please check the numbers and call them on {{phone:0034 796 420 271}}.
+---------- Forwarded message ---------
+From: {{person:Matilda Haverford}} <{{email:matilda@dorsal-works.example}}>
+Date: {{date:26 May 2027}}
+Subject: Quote for project {{id:INV-2024-098829}}
+
+Hi {{person:Odette}},
+The board approved {{amount:USD 413.13}} for project {{id:INV-2024-098829}}. When can you begin?
+--
+Best regards,
+{{person:Matilda Haverford}}
+Purchasing
+{{org:Dorsal Works}}
+Tel: {{phone:0034 796 420 271}}
+{{email:matilda@dorsal-works.example}}
+{{url:www.dorsal-works.example}}

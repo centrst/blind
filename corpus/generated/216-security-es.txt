@@ -1,0 +1,13 @@
+%known person|Florencio Quintana Zamora
+From: {{org:Clínica Ironbridge}} <{{email:security@clinica-ironbridge.example}}>
+To: {{person:Florencio Quintana Zamora}} <{{email:florencio..quintana@icloud.com}}>
+Date: Tue, {{date:5 Jan 2027}} 15:00:00 +0100
+Subject: Tu código de verificación
+
+Hola {{person:Florencio}},
+
+Alguien solicitó cambiar la contraseña de {{email:florencio..quintana@icloud.com}} el {{date:5/1/2027}}. Usa este enlace en la próxima hora: {{url:https://accounts.clinica-ironbridge.example/reset?token=724044ab525240}}
+
+Si no fuiste tú, llama al {{phone:346-555-0188}} o escribe a {{email:security@clinica-ironbridge.example}}.
+
+El equipo de seguridad de {{org:Clínica Ironbridge}}

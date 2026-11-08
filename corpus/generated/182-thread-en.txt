@@ -1,0 +1,21 @@
+%order mdy
+%known person|Percival Mortimer
+%known org|Consulting Zafiro
+From: {{person:Quentin Crawley}} <{{email:quentin@labs-isleta.example}}>
+To: {{person:Percival Mortimer}} <{{email:percivalmortimer@consulting-zafiro.example}}>
+Date: Sat, {{date:6 Jul 2024}} 11:00:00 +0100
+Subject: Re: offer for {{org:Consulting Zafiro}}
+We can accept {{amount:USD 128.43}} and send the contract to {{email:percivalmortimer@consulting-zafiro.example}}.
+On {{date:5th of July 2024}}, {{person:Percival Mortimer}} wrote:
+> Thanks {{person:Quentin}}. That is high for us. Could you do {{amount:USD 118.01}}? The meeting works, call me on {{phone:615-555-0175}} if it moves.
+>
+> On {{date:4 July 2024}}, {{person:Quentin Crawley}} wrote:
+> > Hello {{person:Percival}}, our offer for {{org:Consulting Zafiro}} is {{amount:$138.84}}. Can we meet on {{date:July 7, 2024}} at 16:15?
+> > 
+> > --
+> > Thanks,
+> > {{person:Quentin Crawley}}
+> > Sales
+> > {{org:Labs Isleta}}
+
+{{person:Quentin}}

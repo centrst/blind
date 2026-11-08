@@ -1,0 +1,21 @@
+%known person|Jacinta Cuesta Maldonado
+From: {{person:Jacinta Cuesta Maldonado}} <{{email:cuesta_jacinta@gmail.com}}>
+To: {{person:Ofelia Lazcano}} <{{email:ofelia_lazcano@reformas-dorsal.example}}>
+Date: Mon, {{date:17 Feb 2025}} 09:15:00 +0100
+Subject: Fwd: presupuesto {{org:Ingeniería Vendaval S.A.}}
+{{person:Ofelia}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:786 139 364}}.
+---------- Forwarded message ---------
+From: {{person:Honorio de la Torre}} <{{email:honoriode@ingenieria-vendaval.example}}>
+Date: {{date:17 Feb 2025}}
+Subject: Presupuesto proyecto {{id:16865785}}
+
+Hola {{person:Jacinta}},
+El consejo aprobó {{amount:349,60 EUR}} para el proyecto {{id:16865785}}. ¿Cuándo podríais empezar?
+--
+Thanks,
+{{person:Honorio de la Torre}}
+Purchasing
+{{org:Ingeniería Vendaval S.A.}}
+Tel: {{phone:786 139 364}}
+{{email:honoriode@ingenieria-vendaval.example}}
+{{url:www.ingenieria-vendaval.example}}

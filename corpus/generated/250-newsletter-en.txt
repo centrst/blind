@@ -1,0 +1,15 @@
+%known person|Tamsin Lambert
+From: {{org:Jaspe Labs LLC}} <{{email:news@jaspe-labs.example}}>
+To: "{{person:Tamsin Lambert}}" <{{email:tamsin..lam@outlook.com}}>
+Date: Tue, {{date:4 Mar 2025}} 10:15:00 +0100
+Subject: Rowena's picks for the season
+
+Hi {{person:Tamsin}}, here is what is new this month.
+
+Join our open day in {{place:Oakmere}} on {{date:28/03/2025}}. Entry {{amount:$22.39}}.
+
+Shop online: {{url:https://www.jaspe-labs.example/shop?utm_campaign=1171}}
+
+You receive this because {{email:tamsin..lam@outlook.com}} subscribed. Unsubscribe: {{url:https://news.jaspe-labs.example/unsubscribe?u=902982966x&e=tamsin..lam%40outlook.com}}
+
+{{org:Jaspe Labs LLC}}, Customer care {{phone:+49 171 392 0020}}

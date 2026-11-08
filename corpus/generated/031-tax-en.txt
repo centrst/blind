@@ -1,0 +1,16 @@
+%order mdy
+%known person|Valentine Ingram
+From: {{person:Wilhelmina Ellsworth}} <{{email:notificaciones.wilhelmina.ellsworth@cendal-holdings.example}}>
+To: {{person:Valentine Ingram}} <{{email:valentine..ing@icloud.com}}>
+Date: Thu, {{date:25 Sep 2025}} 17:00:00 +0100
+Subject: Notification of outstanding balance
+
+To {{person:Valentine Ingram}}, holder of ID {{id:Y9053558B}}:
+
+Our records show an unpaid balance of {{amount:£8.35}} on file {{id:EXP-2025-7467}}.
+
+If it is not paid by {{date:10/05/2025}}, a surcharge of 20% applies: {{amount:£1.67}}, for a total of {{amount:USD 10.02}}.
+
+Pay by transfer to {{iban:PT57 5149 4597 5589 7559 9459 1}} and keep the receipt. For help call {{phone:(879) 555-0142}}.
+
+This is an automatic notice. Do not reply.

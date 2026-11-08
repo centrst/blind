@@ -1,0 +1,22 @@
+%order mdy
+%known person|Rowena Oakley
+%known org|Supply Marisma
+From: {{person:Cedric Mortimer}} <{{email:cedric.mortimer@umbral-studio.example}}>
+To: {{person:Rowena Oakley}} <{{email:rowenaoakley@supply-marisma.example}}>
+Date: Fri, {{date:4 Dec 2026}} 14:15:00 +0100
+Subject: Re: offer for {{org:Supply Marisma}}
+We can accept {{amount:£1,837.27}} and send the contract to {{email:rowenaoakley@supply-marisma.example}}.
+On {{date:December 3 2026}}, {{person:Rowena Oakley}} wrote:
+> Thanks {{person:Cedric}}. That is high for us. Could you do {{amount:1,688.30 USD}}? The meeting works, call me on {{phone:(646) 555-0158}} if it moves.
+>
+> On {{date:12.02.2026}}, {{person:Cedric Mortimer}} wrote:
+> > Hello {{person:Rowena}}, our offer for {{org:Supply Marisma}} is {{amount:1,986.24 USD}}. Can we meet on {{date:4 December 2026}} at 09:15?
+> > 
+> > --
+> > Kind regards,
+> > {{person:Cedric Mortimer}}
+> > Comercial
+> > {{org:Umbral Studio}}
+> > Tel: {{phone:986-555-0190}}
+
+{{person:Cedric}}

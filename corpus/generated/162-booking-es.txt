@@ -1,0 +1,13 @@
+%known person|Florencio Fontán Quintana
+From: {{person:Belén Jaramillo}} <{{email:bjaramillo@reformas-ocaso.example}}>
+To: {{person:Florencio Fontán Quintana}} <{{email:florencio..fon@outlook.com}}>
+Date: Sun, {{date:19 Sep 2027}} 10:00:00 +0100
+Subject: Reserva confirmada
+
+Estimado/a {{person:Florencio}},
+
+Hemos reservado revisión dental para ti el {{date:2027-09-25}}. Estamos en {{place:San Telmo de Abajo}}.
+
+Total: {{amount:76,74 EUR}}. Cancelación gratuita hasta el {{date:20 de septiembre}}.
+
+¿Dudas? Llámanos al {{phone:593-555-0183}} o escribe a {{email:bjaramillo@reformas-ocaso.example}}.

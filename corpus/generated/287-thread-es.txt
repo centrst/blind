@@ -1,0 +1,23 @@
+%known person|Rosendo Iglesias
+%known org|Estudio Pinar S.A.
+From: {{person:Isidro Peñalver}} <{{email:ipenalver@reformas-umbral.example}}>
+To: "{{person:Rosendo Iglesias}}" <{{email:rosendoiglesias@estudio-pinar.example}}>
+Date: Sat, {{date:16 Oct 2027}} 13:30:00 +0100
+Subject: Re: oferta para {{org:Estudio Pinar S.A.}}
+Podemos aceptar {{amount:24,22 €}} y enviar el contrato a {{email:rosendoiglesias@estudio-pinar.example}}.
+On {{date:15/10/2027}}, {{person:Rosendo Iglesias}} wrote:
+> Gracias {{person:Isidro}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:22,25 EUR}}? La reunión nos va bien, llámame al {{phone:768 527 159}} si cambia.
+>
+> El {{date:14 de octubre de 2027}}, {{person:Isidro Peñalver}} escribió:
+> > Hola {{person:Rosendo}}, nuestra oferta para {{org:Estudio Pinar S.A.}} es de {{amount:€ 26,18}}. ¿Quedamos el {{date:25.10.2027}} a las 10:45?
+> > 
+> > --
+> > Gracias,
+> > {{person:Isidro Peñalver}}
+> > Comercial
+> > {{org:Reformas Umbral S.L.}}
+> > Tel: {{phone:+44 7700 900417}}
+> > {{email:ipenalver@reformas-umbral.example}}
+> > {{url:www.reformas-umbral.example}}
+
+{{person:Isidro}}

@@ -1,0 +1,23 @@
+%known person|Saturnino de Lara
+%known org|Consultores Foxglove
+From: {{person:Baldomero del Río}} <{{email:del.baldomero@asesores-galeon.example}}>
+To: {{person:Saturnino de Lara}} <{{email:sat..lara@icloud.com}}>
+Date: Thu, {{date:30 Jan 2025}} 16:15:00 +0100
+Subject: Re: oferta para {{org:Consultores Foxglove}}
+Podemos aceptar {{amount:1359,31 €}} y enviar el contrato a {{email:sat..lara@icloud.com}}.
+On {{date:29-01-2025}}, {{person:Saturnino de Lara}} wrote:
+> Gracias {{person:Baldomero}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:1.249,09 €}}? La reunión nos va bien, llámame al {{phone:(928) 555-0176}} si cambia.
+>
+> El {{date:28 de enero del 2025}}, {{person:Baldomero del Río}} escribió:
+> > Hola {{person:Saturnino}}, nuestra oferta para {{org:Consultores Foxglove}} es de {{amount:€ 1.469,52}}. ¿Quedamos el {{date:2025-01-30}} a las 13:30?
+> > 
+> > --
+> > Gracias,
+> > {{person:Baldomero del Río}}
+> > Comercial
+> > {{org:Asesores Galeón S.A.}}
+> > Tel: {{phone:+34 760 668 830}}
+> > {{email:del.baldomero@asesores-galeon.example}}
+> > {{url:www.asesores-galeon.example}}
+
+{{person:Baldomero}}

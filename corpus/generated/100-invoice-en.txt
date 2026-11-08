@@ -1,0 +1,29 @@
+%order mdy
+%known person|Gareth Cartwright
+%known org|Nevada Consulting LLC
+From: {{person:Sebastian Nightingale}} <{{email:sebastian_nightingale@kepler-advisory.example}}>
+To: {{person:Gareth Cartwright}} <{{email:gareth_cartwright@nevada-consulting.example}}>
+Date: Fri, {{date:1 Oct 2027}} 19:00:00 +0100
+Subject: Invoice {{id:OQ857512218}} from {{org:Kepler Advisory Ltd}}
+
+Hi {{person:Gareth}},
+
+Attached is our invoice for last month's services to {{org:Nevada Consulting LLC}}.
+
+Consulting, first half: {{amount:15.62 USD}}
+Consulting, second half: {{amount:USD 10.41}}
+Subtotal: {{amount:26.03 USD}}
+Tax (8%): {{amount:2.08 USD}}
+Total: {{amount:USD 28.11}}
+
+Please pay before {{date:October 31 2027}} to IBAN {{iban:PT18451612352208916418740}}.
+
+Our tax number is {{id:K21387306}}.
+
+--
+Cheers,
+{{person:Sebastian Nightingale}}
+Billing department
+{{org:Kepler Advisory Ltd}}
+Tel: {{phone:780 692 742}}
+{{email:sebastian_nightingale@kepler-advisory.example}}

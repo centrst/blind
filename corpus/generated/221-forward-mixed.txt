@@ -1,0 +1,21 @@
+%known person|Isadora Pritchard
+From: {{person:Isadora Pritchard}} <{{email:isadora..ipritchard@icloud.com}}>
+To: {{person:Phoebe Crawley}} <{{email:phoebe.crawley@hontanar-works.example}}>
+Date: Mon, {{date:17 Aug 2026}} 15:00:00 +0100
+Subject: Fwd: {{org:Farola Supply}} quote
+Hola {{person:Phoebe}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:August 29, 2026}}.
+---------- Forwarded message ---------
+From: "{{person:Gwendolyn Mortimer}}" <{{email:gwendolyn_mortimer@farola-supply.example}}>
+Date: {{date:17 Aug 2026}}
+Subject: Presupuesto proyecto {{id:EXP-2023-1225}}
+
+Hola {{person:Isadora}},
+The board approved {{amount:USD 409.63}} for project {{id:EXP-2023-1225}}. When can you begin?
+--
+Thanks,
+{{person:Gwendolyn Mortimer}}
+Purchasing
+{{org:Farola Supply}}
+Tel: {{phone:0034 794 481 518}}
+{{url:www.farola-supply.example}}
+Office: {{place:Harlow Cross}}

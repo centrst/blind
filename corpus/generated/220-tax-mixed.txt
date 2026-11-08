@@ -1,0 +1,16 @@
+%order mdy
+%known person|Lavinia Bellamy
+From: "{{person:Nigel Mortimer}}" <{{email:notificaciones.nmortimer@works-pennywhistle.example}}>
+To: {{person:Lavinia Bellamy}} <{{email:bellamy..lavinia@icloud.com}}>
+Date: Sun, {{date:7 Jun 2026}} 18:15:00 +0100
+Subject: Notice {{id:EXP-2026-3759}}: payment pending
+
+A {{person:Lavinia Bellamy}}, titular del documento {{id:X6391732R}}:
+
+Our records show an unpaid balance of {{amount:£46.48}} on file {{id:EXP-2026-3759}}.
+
+Si no se abona antes del {{date:Jun 17, 2026}}, se aplicará un recargo del 10 %: {{amount:$4.65}}, en total {{amount:£51.13}}.
+
+Pay by transfer to {{iban:GB44 NRMI 0425 6325 3355 17}} and keep the receipt. For help call {{phone:786 983 719}}.
+
+This is an automatic notice. Do not reply.

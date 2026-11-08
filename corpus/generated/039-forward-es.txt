@@ -1,0 +1,19 @@
+%known person|Candelaria Tejada Ocaña
+From: {{person:Candelaria Tejada Ocaña}} <{{email:candelaria_tejada@gestion-aldara.example}}>
+To: "{{person:Lisandro Rebollo}}" <{{email:lrebollo@estudio-esquilo.example}}>
+Date: Wed, {{date:23 Jul 2025}} 11:30:00 +0100
+Subject: Fwd: consulta de {{org:Asesores Millstone S.L.}}
+Hola {{person:Lisandro}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:6 de agosto de 2025}}.
+---------- Forwarded message ---------
+From: {{person:Aurora Barragán}} <{{email:aurora@asesores-millstone.example}}>
+Date: {{date:23 Jul 2025}}
+Subject: Presupuesto proyecto {{id:88823098D}}
+
+Buenos días {{person:Candelaria}},
+En {{org:Asesores Millstone S.L.}} disponemos de {{amount:1.856,22 €}} para la obra en {{place:Montefrío Chico}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Gracias,
+{{person:Aurora Barragán}}
+Directora de operaciones
+{{org:Asesores Millstone S.L.}}
+{{email:aurora@asesores-millstone.example}}

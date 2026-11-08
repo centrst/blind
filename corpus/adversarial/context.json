@@ -1,0 +1,175 @@
+[
+  {
+    "id": "X1",
+    "title": "name inside a URL path",
+    "text": "Profile: https://linkedin.com/in/ana-ruiz-4f2a9c",
+    "secrets": [
+      "ana_ruiz"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "X2",
+    "title": "name in an email local part",
+    "text": "Escribe a ana_ruiz@gmail.com cuando puedas.",
+    "secrets": [
+      "ana_ruiz"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "X3",
+    "title": "possessive with a straight apostrophe",
+    "text": "Ana's contract and Ruiz's invoice are ready.",
+    "secrets": [
+      "Ana",
+      "Ruiz"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "X4",
+    "title": "possessive with a curly apostrophe",
+    "text": "Ana’s contract is ready.",
+    "secrets": [
+      "Ana"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "X5",
+    "title": "all caps name",
+    "text": "FIRMADO: ANA RUIZ, DIRECTORA",
+    "secrets": [
+      "ANA",
+      "RUIZ"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "X6",
+    "title": "name joined with an underscore",
+    "text": "Usuario: ana_ruiz en la plataforma",
+    "secrets": [
+      "ana_ruiz"
+    ],
+    "expect": "silent",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "why": "An underscore counts as a word character, so the name is not a whole word. The leak check applies the same rule.",
+    "seed": "adv"
+  },
+  {
+    "id": "X7",
+    "title": "name in camel case",
+    "text": "Handle: @AnaRuiz_Design",
+    "secrets": [
+      "AnaRuiz"
+    ],
+    "expect": "silent",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "why": "Camel case glues the two names into one word, which the whole-word rule skips.",
+    "seed": "adv"
+  },
+  {
+    "id": "X8",
+    "title": "name inside a hashtag",
+    "text": "Gracias #anaruiz por todo",
+    "secrets": [
+      "anaruiz"
+    ],
+    "expect": "silent",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "why": "Joined lower-case names are one token, not a known form.",
+    "seed": "adv"
+  },
+  {
+    "id": "X9",
+    "title": "name in an unknown-host URL query",
+    "text": "See https://app.gestor-demo.example/u?name=Ana+Ruiz&id=88421",
+    "secrets": [
+      "Ana+Ruiz",
+      "Ana",
+      "Ruiz"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "X10",
+    "title": "name right before an address in the middle of a sentence",
+    "text": "Pagamos 247,80 € a Ana Ruiz <ana@gestoria.example> el lunes.",
+    "secrets": [
+      "Ana",
+      "Ruiz"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "X11",
+    "title": "name from a header repeated bare in the body",
+    "text": "From: Pilar Gómez <pilar@estudio.example>\n\nHola Pilar, te escribe Gómez desde contabilidad.",
+    "secrets": [
+      "Pilar",
+      "Gómez"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  }
+]

@@ -1,0 +1,13 @@
+%known person|Itziar Duarte
+From: {{person:Facundo Peñalver}} <{{email:facundo.penalver@gestion-isleta.example}}>
+To: {{person:Itziar Duarte}} <{{email:i..duarte@outlook.com}}>
+Date: Mon, {{date:12 Feb 2024}} 08:00:00 +0100
+Subject: Confirmación de cita {{id:NB896016135}}
+
+Estimado/a {{person:Itziar}},
+
+Tu mesa para cuatro en {{org:Gestión Isleta S.A.}} queda reservada para el {{date:28 de febrero de 2024}} a las 13:30.
+
+Total: {{amount:47,98 €}}. Cancelación gratuita hasta el {{date:13 de febrero}}.
+
+¿Dudas? Llámanos al {{phone:+1 899 555 0182}} o escribe a {{email:facundo.penalver@gestion-isleta.example}}.

@@ -1,0 +1,14 @@
+%known person|Harold Pennington
+From: Riverside Physio <{{email:bookings@riverside-physio.example}}>
+To: {{person:Harold Pennington}} <{{email:h..pennington@outlook.com}}>
+Subject: Appointment reminder, {{date:March 4}}
+
+Dear {{person:Mr Pennington}},
+
+This is a reminder of your appointment with {{person:Dr. Imogen Tate}} on Wednesday, {{date:March 4th}} at 9:15 am.
+The session costs {{amount:$85.00}} and your insurer has a reference number {{id:HP-77310-22}} on file.
+
+To reschedule, call us on {{phone:(312) 555-0148}} at least a day before.
+Parking is free behind the clinic in {{place:Oakmere}}.
+
+Riverside Physio

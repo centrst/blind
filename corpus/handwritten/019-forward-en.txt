@@ -1,0 +1,21 @@
+%known person|Percival Dunmore
+%known org|Dunmore Interiors Ltd
+From: {{person:Percival Dunmore}} <{{email:percival@dunmore-interiors.example}}>
+To: {{person:Odette Rivas}} <{{email:odette@dunmore-interiors.example}}>
+Subject: Fwd: Kitchen quote, Stonebridge house
+
+Odette, please handle this. They want a revised number before Friday {{date:22 May}}.
+
+---------- Forwarded message ---------
+From: {{person:Lavinia Harcourt}} <{{email:lavinia.harcourt@harcourt-family.example}}>
+Date: {{date:12 May 2026}}
+Subject: Kitchen quote
+
+Hi Percival,
+
+Thanks for the quote of {{amount:£18,450.00}}. My husband thinks it is too much. Could you do the units for {{amount:£15,900.00}} and I pay the {{amount:£2,550.00}} for fitting separately?
+I am on {{phone:+44 7700 900223}} most evenings.
+
+Best,
+{{person:Lavinia Harcourt}}
+{{place:Stonebridge}}

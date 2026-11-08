@@ -1,0 +1,11 @@
+%known person|Rosalind Hartnell
+From: State Revenue Service <notices@state-revenue.example>
+To: {{person:Rosalind Hartnell}} <{{email:rosalind_hartnell@gmail.com}}>
+Subject: Notice of balance due, case {{id:SR-2026-558214}}
+
+Dear {{person:Rosalind Hartnell}},
+
+After review of your 2025 filing, we found a balance of {{amount:$2,310.45}}. Interest of 3.2% from {{date:April 15, 2026}} adds {{amount:$73.93}}, for a total of {{amount:$2,384.38}}.
+
+Pay by {{date:July 1, 2026}} to avoid a penalty. Your taxpayer ID ends in 7741 (full number {{id:552-83-7741}}).
+Questions: {{phone:1-800-555-0166}}.

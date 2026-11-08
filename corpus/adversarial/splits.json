@@ -1,0 +1,79 @@
+[
+  {
+    "id": "S1",
+    "title": "name across a line break",
+    "text": "Querida Ana\nRuiz, adjunto el contrato.",
+    "secrets": [
+      "Ruiz"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "S2",
+    "title": "IBAN with irregular grouping",
+    "text": "Pagar a ES91 210 0041 8450 2000 5133 2 hoy.",
+    "secrets": [
+      "8450 2000 5133"
+    ],
+    "expect": "silent",
+    "why": "The IBAN pattern wants groups of four. Irregular grouping is not recognised, and the leak check only watches values it already found.",
+    "seed": "adv"
+  },
+  {
+    "id": "S3",
+    "title": "phone across two lines",
+    "text": "Llama al +34 791 123\n456 por la tarde.",
+    "secrets": [
+      "456"
+    ],
+    "expect": "silent",
+    "why": "Separators in a phone number may be spaces, dots or dashes, not newlines. The first digits are replaced and the tail stays.",
+    "seed": "adv"
+  },
+  {
+    "id": "S4",
+    "title": "email broken by a soft wrap",
+    "text": "Escribe a ana@gestoria-\nnorte.example si hay dudas.",
+    "secrets": [
+      "norte.example"
+    ],
+    "expect": "silent",
+    "why": "The address pattern does not cross a line break, so the end of the domain survives the wrap.",
+    "seed": "adv"
+  },
+  {
+    "id": "S5",
+    "title": "IBAN split over two lines",
+    "text": "Cuenta: ES91 2100 0418\n4502 0005 1332 gracias",
+    "secrets": [
+      "ES91 2100 0418"
+    ],
+    "expect": "silent",
+    "why": "Same grouping rule as S2, the newline breaks the run of groups. The tail is caught as a number, the head is not.",
+    "seed": "adv"
+  },
+  {
+    "id": "S6",
+    "title": "surname broken by a hyphen and a line wrap",
+    "text": "Contacto: Ana Ru-\niz de Gestoría",
+    "secrets": [
+      "Ru-\niz"
+    ],
+    "expect": "silent",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "why": "A hyphen and a line break inside a surname split it. The first name is replaced, the surname is not a known form.",
+    "seed": "adv"
+  }
+]

@@ -1,0 +1,15 @@
+%known person|Rosalind Kingsley
+From: {{person:Rowena Oakley}} <{{email:notificaciones.roakley@yelmo-systems.example}}>
+To: {{person:Rosalind Kingsley}} <{{email:r_kingsley@gmail.com}}>
+Date: Sat, {{date:7 Jun 2025}} 18:45:00 +0100
+Subject: Notification of outstanding balance
+
+Dear {{person:Rosalind Kingsley}},
+
+Our records show an unpaid balance of {{amount:USD 29.14}} on file {{id:EXP-2025-3804}}.
+
+If it is not paid by {{date:June 27th 2025}}, a surcharge of 20% applies: {{amount:USD 5.83}}, for a total of {{amount:$34.97}}.
+
+Pay by transfer to {{iban:PT60 1825 9504 7560 0993 9023 7}} and keep the receipt. For help call {{phone:778 020 129}}.
+
+This is an automatic notice. Do not reply.

@@ -1,0 +1,21 @@
+%order mdy
+%known person|Matilda Goodwin
+%known org|Millstone Supply
+From: {{person:Frederick Mortimer}} <{{email:frederick.mortimer@quimera-labs.example}}>
+To: "{{person:Matilda Goodwin}}" <{{email:matilda_goodwin@millstone-supply.example}}>
+Date: Sat, {{date:8 Mar 2025}} 15:30:00 +0100
+Subject: Re: offer for {{org:Millstone Supply}}
+We can accept {{amount:£2,203.37}} and send the contract to {{email:matilda_goodwin@millstone-supply.example}}.
+On {{date:7 March 2025}}, {{person:Matilda Goodwin}} wrote:
+> Thanks {{person:Frederick}}. That is high for us. Could you do {{amount:USD 2,024.72}}? The meeting works, call me on {{phone:(523) 555-0163}} if it moves.
+>
+> On {{date:6 March 2025}}, {{person:Frederick Mortimer}} wrote:
+> > Hello {{person:Matilda}}, our offer for {{org:Millstone Supply}} is {{amount:USD 2,382.02}}. Can we meet on {{date:2025-03-08}} at 14:45?
+> > 
+> > --
+> > Best regards,
+> > {{person:Frederick Mortimer}}
+> > Sales
+> > {{org:Quimera Labs Ltd}}
+
+{{person:Frederick}}

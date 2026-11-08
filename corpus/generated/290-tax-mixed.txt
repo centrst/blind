@@ -1,0 +1,18 @@
+%order mdy
+%known person|Lavinia Goodwin
+From: {{person:Rosalind Jessop}} <{{email:notificaciones.jessop.rosalind@systems-cendal.example}}>
+To: {{person:Lavinia Goodwin}} <{{email:lavinia..goodwin@outlook.com}}>
+Date: Sun, {{date:16 Aug 2026}} 15:00:00 +0100
+Subject: Notification of outstanding balance
+
+A {{person:Lavinia Goodwin}}, titular del documento {{id:99244748W}}:
+
+Our records show an unpaid balance of {{amount:164.86 USD}} on file {{id:EXP-2026-3987}}.
+
+If it is not paid by {{date:15 September, 2026}}, a surcharge of 20% applies: {{amount:32.97 USD}}, for a total of {{amount:USD 197.83}}.
+
+Pay by transfer to {{iban:FR53 7677 6521 4262 3353 1491 358}} and keep the receipt. For help call {{phone:+34 751341165}}.
+
+Social security contributions for {{date:1 August}} are listed in the portal: {{url:https://sede.systems-cendal.example/cuotas/16340A251}}
+
+This is an automatic notice. Do not reply.

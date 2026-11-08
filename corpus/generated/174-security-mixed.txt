@@ -1,0 +1,14 @@
+%order mdy
+%known person|Tamsin Ashworth
+From: {{org:Ocaso Logistics}} <{{email:security@ocaso-logistics.example}}>
+To: {{email:tam..ashworth@icloud.com}}
+Date: Sat, {{date:4 Dec 2027}} 14:30:00 +0100
+Subject: Your verification code
+
+Hola {{person:Tamsin}},
+
+Tu código de verificación es {{id:877377}}. Caduca en 10 minutos. No lo compartas.
+
+If this was not you, call {{phone:+1 265 555 0124}} or write to {{email:security@ocaso-logistics.example}}.
+
+The {{org:Ocaso Logistics}} security team

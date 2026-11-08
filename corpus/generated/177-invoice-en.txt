@@ -1,0 +1,25 @@
+%known person|Eleanor Fairchild
+%known org|Larkspur Supply GmbH
+From: {{person:Percival Lambert}} <{{email:percival_lambert@partners-dorsal.example}}>
+To: {{person:Eleanor Fairchild}} <{{email:fairchild.eleanor@larkspur-supply.example}}>
+Date: Tue, {{date:16 Apr 2024}} 10:45:00 +0100
+Subject: Invoice {{id:EXP-2023-7450}} from {{org:Partners Dorsal LLC}}
+
+Hello {{person:Eleanor}},
+
+Please find attached invoice {{id:EXP-2023-7450}} for the work done for {{org:Larkspur Supply GmbH}}.
+
+Net amount: {{amount:USD 2,456.82}}
+VAT 5%: {{amount:USD 122.84}}
+Total due: {{amount:£2,579.66}}
+
+Payment is due by {{date:31/05/24}}. Transfer to {{iban:ES1451606886724157416665}}, quoting {{id:EXP-2023-7450}}.
+
+Our tax number is {{id:P88382145}}.
+
+--
+Cheers,
+{{person:Percival Lambert}}
+Billing department
+{{org:Partners Dorsal LLC}}
+{{url:www.partners-dorsal.example}}

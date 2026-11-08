@@ -1,0 +1,15 @@
+%known person|Honorio Cuesta
+From: {{org:Estudio Lumbre}} <{{email:news@estudio-lumbre.example}}>
+To: {{person:Honorio Cuesta}} <{{email:honorio..cuesta@outlook.com}}>
+Date: Thu, {{date:30 Jul 2026}} 18:15:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Honorio}}, estas son las novedades del mes.
+
+Nuestro producto estrella baja a {{amount:88,94 €}}, antes {{amount:111,18 €}}. La oferta termina el {{date:27 de agosto del 2026}}.
+
+Compra online: {{url:https://www.estudio-lumbre.example/tienda?utm_campaign=1371}}
+
+Recibes este correo porque {{email:honorio..cuesta@outlook.com}} se suscribió. Darte de baja: {{url:https://news.estudio-lumbre.example/unsubscribe?u=631668208x&e=honorio..cuesta%40outlook.com}}
+
+{{org:Estudio Lumbre}}, Atención al cliente {{phone:+34 776 881 954}}

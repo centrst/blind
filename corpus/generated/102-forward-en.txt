@@ -1,0 +1,21 @@
+%order mdy
+%known person|Isadora Vanderbilt
+From: {{person:Isadora Vanderbilt}} <{{email:isadora@jaspe-holdings.example}}>
+To: {{person:Valentine Kingsley}} <{{email:valentine@tramuntana-works.example}}>
+Date: Tue, {{date:30 Sep 2025}} 14:00:00 +0100
+Subject: Fwd: {{org:Kepler Studio}} quote
+{{person:Valentine}}, forwarding below. Please check the numbers and call them on {{phone:763 64 63 19}}.
+---------- Forwarded message ---------
+From: {{person:Sebastian Crawley}} <{{email:sebastiancrawley@kepler-studio.example}}>
+Date: {{date:30 Sep 2025}}
+Subject: Quote for project {{id:AQ807930636}}
+
+Dear {{person:Isadora}},
+We at {{org:Kepler Studio}} have a budget of {{amount:USD 3,304.21}} for the work in {{place:Fenwick Bay}}. Could you confirm the start date?
+--
+Cheers,
+{{person:Sebastian Crawley}}
+Purchasing
+{{org:Kepler Studio}}
+Tel: {{phone:763 64 63 19}}
+{{url:www.kepler-studio.example}}

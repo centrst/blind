@@ -1,0 +1,20 @@
+%known person|Rosendo Hidalgo Rebollo
+From: {{person:Rosendo Hidalgo Rebollo}} <{{email:rosendo..hidalgo@outlook.com}}>
+To: {{person:Florencio Figueroa}} <{{email:florencio.figueroa@transportes-bruma.example}}>
+Date: Fri, {{date:27 Feb 2026}} 15:00:00 +0100
+Subject: Fwd: consulta de {{org:Asesores Ironbridge}}
+{{person:Florencio}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:816-555-0147}}.
+---------- Forwarded message ---------
+From: {{person:Candelaria Arroyo}} <{{email:candelaria_arroyo@asesores-ironbridge.example}}>
+Date: {{date:27 Feb 2026}}
+Subject: Presupuesto proyecto {{id:EXP-2026-1217}}
+
+Estimado/a {{person:Rosendo}},
+En {{org:Asesores Ironbridge}} disponemos de {{amount:3.612,82 €}} para la obra en {{place:Montefrío Chico}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Gracias,
+{{person:Candelaria Arroyo}}
+Purchasing
+{{org:Asesores Ironbridge}}
+Tel: {{phone:816-555-0147}}
+{{email:candelaria_arroyo@asesores-ironbridge.example}}

@@ -1,0 +1,13 @@
+%known person|Matilda Crawley
+From: {{org:Lumbre Labs}} <{{email:security@lumbre-labs.example}}>
+To: {{person:Matilda Crawley}} <{{email:crawley..matilda@icloud.com}}>
+Date: Sat, {{date:23 May 2026}} 10:45:00 +0100
+Subject: New sign-in to your account
+
+Hi {{person:Matilda}},
+
+We noticed a sign-in to {{email:crawley..matilda@icloud.com}} from {{place:Brindleton}} on {{date:2026-05-23}} at 08:15.
+
+If this was not you, call {{phone:+34 757084820}} or write to {{email:security@lumbre-labs.example}}.
+
+The {{org:Lumbre Labs}} security team

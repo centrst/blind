@@ -1,0 +1,15 @@
+%known person|Humphrey Doherty
+From: {{org:Foxglove Logistics Ltd}} <{{email:news@foxglove-logistics.example}}>
+To: {{email:humphrey..doherty@outlook.com}}
+Date: Thu, {{date:18 Jun 2026}} 17:15:00 +0100
+Subject: Valentine's picks for the season
+
+Hi {{person:Humphrey}}, here is what is new this month.
+
+Join our open day in {{place:Harlow Cross}} on {{date:2026-07-04}}. Entry {{amount:£182.57}}.
+
+Shop online: {{url:https://www.foxglove-logistics.example/shop?utm_campaign=9189}}
+
+You receive this because {{email:humphrey..doherty@outlook.com}} subscribed. Unsubscribe: {{url:https://news.foxglove-logistics.example/unsubscribe?u=330871337x&e=humphrey..doherty%40outlook.com}}
+
+{{org:Foxglove Logistics Ltd}}, Customer care {{phone:+34 761475629}}

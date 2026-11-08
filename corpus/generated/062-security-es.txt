@@ -1,0 +1,13 @@
+%known person|Wenceslao Olmos
+From: {{org:Reformas Foxglove}} <{{email:security@reformas-foxglove.example}}>
+To: {{person:Wenceslao Olmos}} <{{email:olmos..wenceslao@icloud.com}}>
+Date: Fri, {{date:8 Mar 2024}} 18:30:00 +0100
+Subject: Solicitud de cambio de contraseña
+
+Hola {{person:Wenceslao}},
+
+Alguien solicitó cambiar la contraseña de {{email:olmos..wenceslao@icloud.com}} el {{date:8 de marzo de 2024}}. Usa este enlace en la próxima hora: {{url:https://accounts.reformas-foxglove.example/reset?token=124952ab963155}}
+
+Si no fuiste tú, llama al {{phone:0034 763 016 483}} o escribe a {{email:security@reformas-foxglove.example}}.
+
+El equipo de seguridad de {{org:Reformas Foxglove}}

@@ -1,0 +1,11 @@
+%known person|Griselda Lorca
+From: Gimnasio Atlántida <info@gimnasio-atlantida.example>
+To: {{person:Griselda Lorca}} <{{email:griselda..lorca@hotmail.com}}>
+Subject: Tu cuota de septiembre y novedades
+
+Hola {{person:Griselda}},
+
+La cuota mensual sube a {{amount:39,90 €}} desde el {{date:1 de septiembre de 2026}}. Si pagas el año completo son {{amount:399,00 €}}.
+Nuevas clases de pilates los martes a las 19:00. Reserva en {{url:https://app.gimnasio-atlantida.example/clases}}.
+
+Recepción: {{phone:+34 756 555 330}}

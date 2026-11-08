@@ -1,0 +1,15 @@
+%known person|Isadora Lambert
+From: {{org:Sotavento Advisory Inc}} <{{email:news@sotavento-advisory.example}}>
+To: {{email:isadora..lambert@icloud.com}}
+Date: Fri, {{date:13 Sep 2024}} 15:30:00 +0100
+Subject: Spring offers inside
+
+Hi {{person:Isadora}}, here is what is new this month.
+
+Join our open day in {{place:Fenwick Bay}} on {{date:5th Oct, 2024}}. Entry {{amount:£24.19}}.
+
+Shop online: {{url:https://www.sotavento-advisory.example/shop?utm_campaign=3646}}
+
+You receive this because {{email:isadora..lambert@icloud.com}} subscribed. Unsubscribe: {{url:https://news.sotavento-advisory.example/unsubscribe?u=766420392x&e=isadora..lambert%40icloud.com}}
+
+{{org:Sotavento Advisory Inc.}}, Customer care {{phone:+34 788 297 791}}

@@ -1,0 +1,23 @@
+%order mdy
+%known person|Isadora Oakley
+From: {{person:Isadora Oakley}} <{{email:i..oakley@outlook.com}}>
+To: {{person:Gwendolyn Kingsley}} <{{email:kingsley.gwendolyn@aldara-logistics.example}}>
+Date: Wed, {{date:11 Nov 2026}} 17:45:00 +0100
+Subject: Fwd: {{org:Cendal Labs LLC}} quote
+{{person:Gwendolyn}}, forwarding below. Please check the numbers and call them on {{phone:+34 778 952 448}}.
+---------- Forwarded message ---------
+From: {{person:Phoebe Somerset}} <{{email:phoebe_somerset@cendal-labs.example}}>
+Date: {{date:11 Nov 2026}}
+Subject: Quote for project {{id:96044208}}
+
+Dear {{person:Isadora}},
+We at {{org:Cendal Labs LLC}} have a budget of {{amount:£5.97}} for the work in {{place:Maple Hollow}}. Could you confirm the start date?
+--
+Cheers,
+{{person:Phoebe Somerset}}
+Directora de operaciones
+{{org:Cendal Labs LLC}}
+Tel: {{phone:+34 778 952 448}}
+{{email:phoebe_somerset@cendal-labs.example}}
+{{url:www.cendal-labs.example}}
+Office: {{place:Fenwick Bay}}

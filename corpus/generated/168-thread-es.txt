@@ -1,0 +1,23 @@
+%known person|Joaquín Iglesias
+%known org|Reformas Yelmo S.A.
+From: {{person:Aurora Espinosa Jaramillo}} <{{email:espinosa.aurora@asesores-quimera.example}}>
+To: {{person:Joaquín Iglesias}} <{{email:jiglesias@reformas-yelmo.example}}>
+Date: Sat, {{date:28 Sep 2024}} 19:15:00 +0100
+Subject: Re: oferta para {{org:Reformas Yelmo S.A.}}
+Podemos aceptar {{amount:29,71 €}} y enviar el contrato a {{email:jiglesias@reformas-yelmo.example}}.
+On {{date:27-09-2024}}, {{person:Joaquín Iglesias}} wrote:
+> Gracias {{person:Aurora}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:27,30 EUR}}? La reunión nos va bien, llámame al {{phone:490-555-0182}} si cambia.
+>
+> El {{date:26 de septiembre de 2024}}, {{person:Aurora Espinosa Jaramillo}} escribió:
+> > Hola {{person:Joaquín}}, nuestra oferta para {{org:Reformas Yelmo S.A.}} es de {{amount:32,12 €}}. ¿Quedamos el {{date:28 de septiembre del 2024}} a las 09:30?
+> > 
+> > --
+> > Un saludo,
+> > {{person:Aurora Espinosa Jaramillo}}
+> > Sales
+> > {{org:Asesores Quimera S.L.U.}}
+> > Tel: {{phone:751 60 56 48}}
+> > {{email:espinosa.aurora@asesores-quimera.example}}
+> > {{url:www.asesores-quimera.example}}
+
+{{person:Aurora}}

@@ -1,0 +1,15 @@
+%known person|Gloria Barragán
+From: {{person:Lisandro Medrano}} <{{email:notificaciones.lmedrano@logistica-sotavento.example}}>
+To: {{person:Gloria Barragán}} <{{email:glo..barragan@icloud.com}}>
+Date: Sun, {{date:8 Dec 2024}} 10:00:00 +0100
+Subject: Notification of outstanding balance
+
+Estimado/a {{person:Gloria Barragán}},
+
+La Oficina Tributaria de {{place:Montefrío Chico}} le comunica que el expediente {{id:EXP-2024-0472}} presenta un saldo de {{amount:2.642,83 EUR}} correspondiente al periodo cerrado el {{date:2024-10-29}}.
+
+Si no se abona antes del {{date:28 de diciembre del 2024}}, se aplicará un recargo del 20 %: {{amount:528,57 €}}, en total {{amount:3.171,40 €}}.
+
+Pay by transfer to {{iban:ES23 1888 5742 7991 6990 0867}} and keep the receipt. For help call {{phone:784 437 952}}.
+
+This is an automatic notice. Do not reply.

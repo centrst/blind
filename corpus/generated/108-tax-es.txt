@@ -1,0 +1,15 @@
+%known person|Fermina Zamora
+From: {{person:Facundo Lazcano}} <{{email:notificaciones.facundo.lazcano@clinica-farola.example}}>
+To: {{person:Fermina Zamora}} <{{email:zamora..fermina@outlook.com}}>
+Date: Sat, {{date:29 May 2027}} 11:30:00 +0100
+Subject: Notificación {{id:EXP-2027-2687}}: pago pendiente
+
+Estimado/a {{person:Fermina Zamora}},
+
+La Oficina Tributaria de {{place:Cabo Redondo}} le comunica que el expediente {{id:EXP-2027-2687}} presenta un saldo de {{amount:226,94 EUR}} correspondiente al periodo cerrado el {{date:19 de abril del 2027}}.
+
+Si no se abona antes del {{date:18 de junio de 2027}}, se aplicará un recargo del 20 %: {{amount:€ 45,39}}, en total {{amount:272,33 €}}.
+
+Puede pagar por transferencia a {{iban:GB73GXTZ66516016750923}} y conservar el justificante. Atención telefónica: {{phone:+34 799185889}}.
+
+Este es un aviso automático. No responda a este correo.

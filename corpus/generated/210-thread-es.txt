@@ -1,0 +1,22 @@
+%known person|Saturnino Iglesias
+%known org|Clínica Pennywhistle S.L.
+From: {{person:Candelaria Bustamante}} <{{email:bustamante.candelaria@estudio-dorsal.example}}>
+To: {{person:Saturnino Iglesias}} <{{email:saturnino_iglesias@clinica-pennywhistle.example}}>
+Date: Sat, {{date:6 Jan 2024}} 15:30:00 +0100
+Subject: Re: oferta para {{org:Clínica Pennywhistle S.L.}}
+Podemos aceptar {{amount:1.766,68 EUR}} y enviar el contrato a {{email:saturnino_iglesias@clinica-pennywhistle.example}}.
+On {{date:5 de enero de 2024}}, {{person:Saturnino Iglesias}} wrote:
+> Gracias {{person:Candelaria}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:€ 1.623,43}}? La reunión nos va bien, llámame al {{phone:+44 7700 900637}} si cambia.
+>
+> El {{date:4 de enero de 2024}}, {{person:Candelaria Bustamante}} escribió:
+> > Hola {{person:Saturnino}}, nuestra oferta para {{org:Clínica Pennywhistle S.L.}} es de {{amount:1.909,92 €}}. ¿Quedamos el {{date:2024-01-13}} a las 08:15?
+> > 
+> > --
+> > Un saludo,
+> > {{person:Candelaria Bustamante}}
+> > Sales
+> > {{org:Estudio Dorsal}}
+> > Tel: {{phone:+49 171 392 0033}}
+> > {{url:www.estudio-dorsal.example}}
+
+{{person:Candelaria}}

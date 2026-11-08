@@ -1,0 +1,10 @@
+%known person|Candelaria Mena
+From: Correos Digital <aviso@correos-digital.example>
+To: {{person:Candelaria Mena}} <{{email:candelaria_mena@gmail.com}}>
+Subject: Paquete {{id:PK8821990431ES}} no entregado
+
+Hola {{person:Candelaria}},
+
+No hemos podido entregar tu paquete el {{date:7 de octubre}}. Está en la oficina de {{place:Cabo Redondo}} hasta el {{date:21 de octubre}}.
+Puedes recogerlo con tu DNI {{id:30118842M}} o reprogramar la entrega en {{url:https://seguimiento.correos-digital.example/PK8821990431ES}}.
+Si pagaste tasas de aduana fueron {{amount:12,40 €}}.

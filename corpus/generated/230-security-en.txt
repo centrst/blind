@@ -1,0 +1,14 @@
+%order mdy
+%known person|Priscilla Tennant
+From: {{org:Consulting Larkspur Inc.}} <{{email:security@consulting-larkspur.example}}>
+To: {{email:priscilla_tennant@gmail.com}}
+Date: Sat, {{date:20 Apr 2024}} 19:30:00 +0100
+Subject: Password change requested
+
+Hi {{person:Priscilla}},
+
+Someone asked to change the password for {{email:priscilla_tennant@gmail.com}} on {{date:April 20 2024}}. Use this link within one hour: {{url:https://accounts.consulting-larkspur.example/reset?token=800998ab562831}}
+
+If this was not you, call {{phone:988-555-0128}} or write to {{email:security@consulting-larkspur.example}}.
+
+The {{org:Consulting Larkspur Inc.}} security team

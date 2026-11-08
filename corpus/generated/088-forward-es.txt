@@ -1,0 +1,20 @@
+%known person|Ulises Barragán Quintana
+From: "{{person:Ulises Barragán Quintana}}" <{{email:barragan..ulises@icloud.com}}>
+To: {{person:Honorio Cuesta}} <{{email:honorio_cuesta@clinica-foxglove.example}}>
+Date: Wed, {{date:12 Jun 2024}} 10:30:00 +0100
+Subject: Fwd: presupuesto {{org:Ingeniería Aldara S.L.}}
+Hola {{person:Honorio}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:21-06-2024}}.
+---------- Forwarded message ---------
+From: {{person:Isidro Medrano}} <{{email:isidro@ingenieria-aldara.example}}>
+Date: {{date:12 Jun 2024}}
+Subject: Presupuesto proyecto {{id:BKI9132OY}}
+
+Estimado/a {{person:Ulises}},
+En {{org:Ingeniería Aldara S.L.}} disponemos de {{amount:4.217,34 €}} para la obra en {{place:San Telmo de Abajo}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Atentamente,
+{{person:Isidro Medrano}}
+Directora de operaciones
+{{org:Ingeniería Aldara S.L.}}
+Tel: {{phone:(252) 555-0166}}
+{{email:isidro@ingenieria-aldara.example}}

@@ -1,0 +1,25 @@
+%order mdy
+%known person|Lavinia Abernathy
+%known org|Cendal Advisory LLC
+From: "{{person:Wilhelmina Ellsworth}}" <{{email:wilhelmina.ellsworth@logistics-umbral.example}}>
+To: {{person:Lavinia Abernathy}} <{{email:lavinia.abernathy@cendal-advisory.example}}>
+Date: Sat, {{date:21 Sep 2024}} 11:30:00 +0100
+Subject: Re: offer for {{org:Cendal Advisory LLC}}
+We can accept {{amount:USD 1.16}} and send the contract to {{email:lavinia.abernathy@cendal-advisory.example}}.
+On {{date:2024-09-20}}, {{person:Lavinia Abernathy}} wrote:
+> Thanks {{person:Wilhelmina}}. That is high for us. Could you do {{amount:USD 1.06}}? The meeting works, call me on {{phone:+34 776273647}} if it moves.
+>
+> On {{date:09/19/2024}}, {{person:Wilhelmina Ellsworth}} wrote:
+> > Hello {{person:Lavinia}}, our offer for {{org:Cendal Advisory LLC}} is {{amount:1.25 USD}}. Can we meet on {{date:September 30th, 2024}} at 17:00?
+> > 
+> > --
+> > Kind regards,
+> > {{person:Wilhelmina Ellsworth}}
+> > Sales
+> > {{org:Logistics Umbral Ltd}}
+> > Tel: {{phone:0034 786 637 544}}
+> > {{email:wilhelmina.ellsworth@logistics-umbral.example}}
+> > {{url:www.logistics-umbral.example}}
+> > Office: {{place:Springvale}}
+
+{{person:Wilhelmina}}

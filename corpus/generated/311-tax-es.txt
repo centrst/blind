@@ -1,0 +1,15 @@
+%known person|Lisandro Echeverría Lazcano
+From: {{person:Griselda Maldonado Zamora}} <{{email:notificaciones.griselda@estudio-sotavento.example}}>
+To: {{person:Lisandro Echeverría Lazcano}} <{{email:lisandro_ech@gmail.com}}>
+Date: Mon, {{date:5 Feb 2024}} 14:45:00 +0100
+Subject: Notificación {{id:EXP-2024-4006}}: pago pendiente
+
+A {{person:Lisandro Echeverría Lazcano}}, titular del documento {{id:X2465520B}}:
+
+La Oficina Tributaria de {{place:Torrebruna}} le comunica que el expediente {{id:EXP-2024-4006}} presenta un saldo de {{amount:€ 27,08}} correspondiente al periodo cerrado el {{date:27 de DICIEMBRE de 2023}}.
+
+Si no se abona antes del {{date:6 de marzo de 2024}}, se aplicará un recargo del 20 %: {{amount:5,42 EUR}}, en total {{amount:32,50 €}}.
+
+Puede pagar por transferencia a {{iban:DE72675021063806176532}} y conservar el justificante. Atención telefónica: {{phone:0034 784 523 248}}.
+
+Este es un aviso automático. No responda a este correo.

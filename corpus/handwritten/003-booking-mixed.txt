@@ -1,0 +1,12 @@
+%known person|Ernesto Calvo
+From: Booksy <no..reply@booksy.com>
+To: {{person:Ernesto Calvo}} <{{email:e_calvo@gmail.com}}>
+Subject: Your appointment at Barbería Cuatro Vientos
+
+Hi {{person:Ernesto}},
+
+Tu cita con {{person:Rubén Salvatierra}} en {{org:Barbería Cuatro Vientos}} está confirmada para el {{date:5 de noviembre}} a las 11:00.
+Total to pay at the shop: {{amount:22,50 €}}.
+
+Manage your booking: {{url:https://booksy.com/es-es/412877_barberia-cuatro-vientos_barbershop_8802}}
+Contacto del local: {{phone:772 41 09 33}}

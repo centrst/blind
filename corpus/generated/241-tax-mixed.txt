@@ -1,0 +1,15 @@
+%known person|Eloy Peñalver
+From: {{person:Joaquín de Lara}} <{{email:notificaciones.de.joaquin@servicios-nevada.example}}>
+To: {{person:Eloy Peñalver}} <{{email:eloy..pen@icloud.com}}>
+Date: Wed, {{date:1 Sep 2027}} 19:00:00 +0100
+Subject: Aviso de deuda pendiente
+
+Estimado/a {{person:Eloy Peñalver}},
+
+Según nuestros registros, consta una deuda de {{amount:€ 6,74}} en el expediente {{id:EXP-2027-0756}}.
+
+If it is not paid by {{date:11 de septiembre del 2027}}, a surcharge of 5% applies: {{amount:0,34 €}}, for a total of {{amount:7,08 €}}.
+
+Pay by transfer to {{iban:NL39CWOF4590411291}} and keep the receipt. For help call {{phone:(706) 555-0129}}.
+
+Este es un aviso automático. No responda a este correo.

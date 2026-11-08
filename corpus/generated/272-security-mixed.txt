@@ -1,0 +1,13 @@
+%known person|Sebastian Blackwood
+From: {{org:Studio Isleta LLC}} <{{email:security@studio-isleta.example}}>
+To: {{email:sebastian_blackwood@gmail.com}}
+Date: Tue, {{date:26 Jan 2027}} 12:45:00 +0100
+Subject: Password change requested
+
+Hi {{person:Sebastian}},
+
+We noticed a sign-in to {{email:sebastian_blackwood@gmail.com}} from {{place:Maple Hollow}} on {{date:Jan. 26th 2027}} at 15:45.
+
+If this was not you, call {{phone:(662) 555-0123}} or write to {{email:security@studio-isleta.example}}.
+
+The {{org:Studio Isleta LLC}} security team

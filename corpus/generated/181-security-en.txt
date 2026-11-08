@@ -1,0 +1,13 @@
+%known person|Humphrey Quigley
+From: {{org:Holdings Ocaso}} <{{email:security@holdings-ocaso.example}}>
+To: {{email:quigley..humphrey@icloud.com}}
+Date: Sat, {{date:27 Nov 2027}} 16:45:00 +0100
+Subject: New sign-in to your account
+
+Hi {{person:Humphrey}},
+
+We noticed a sign-in to {{email:quigley..humphrey@icloud.com}} from {{place:Fenwick Bay}} on {{date:27.11.2027}} at 08:30.
+
+If this was not you, call {{phone:+44 7700 900555}} or write to {{email:security@holdings-ocaso.example}}.
+
+The {{org:Holdings Ocaso}} security team

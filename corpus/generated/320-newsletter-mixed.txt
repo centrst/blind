@@ -1,0 +1,16 @@
+%order mdy
+%known person|Priscilla Bellamy
+From: {{org:Systems Pennywhistle}} <{{email:news@systems-pennywhistle.example}}>
+To: {{person:Priscilla Bellamy}} <{{email:pri..bellamy@outlook.com}}>
+Date: Sun, {{date:23 Feb 2025}} 18:00:00 +0100
+Subject: Novedades de temporada
+
+Hi {{person:Priscilla}}, here is what is new this month.
+
+Join our open day in {{place:Fenwick Bay}} on {{date:2-28-25}}. Entry {{amount:USD 126.32}}.
+
+Shop online: {{url:https://www.systems-pennywhistle.example/shop?utm_campaign=8515}}
+
+You receive this because {{email:pri..bellamy@outlook.com}} subscribed. Unsubscribe: {{url:https://news.systems-pennywhistle.example/unsubscribe?u=981948903x&e=pri..bellamy%40outlook.com}}
+
+{{org:Systems Pennywhistle}}, Atención al cliente {{phone:+44 7700 900811}}

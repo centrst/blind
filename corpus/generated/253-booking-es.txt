@@ -1,0 +1,13 @@
+%known person|Genaro Fontán
+From: {{person:Fermina Cifuentes}} <{{email:ferminacifuentes@consultores-pinar.example}}>
+To: {{person:Genaro Fontán}} <{{email:genaro..fontan@icloud.com}}>
+Date: Mon, {{date:25 Jan 2027}} 08:15:00 +0100
+Subject: Reserva confirmada
+
+Hola {{person:Genaro}},
+
+Hemos reservado revisión dental para ti el {{date:2027-02-13}}. Estamos en {{place:Montefrío Chico}}.
+
+Total: {{amount:55,93 EUR}}. Cancelación gratuita hasta el {{date:26 de enero}}.
+
+¿Dudas? Llámanos al {{phone:+44 7700 900878}} o escribe a {{email:ferminacifuentes@consultores-pinar.example}}.

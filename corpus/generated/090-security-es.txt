@@ -1,0 +1,13 @@
+%known person|Pilar Olmos
+From: {{org:Clínica Vendaval}} <{{email:security@clinica-vendaval.example}}>
+To: {{person:Pilar Olmos}} <{{email:pilar-olmos@gmail.com}}>
+Date: Tue, {{date:23 Feb 2027}} 18:15:00 +0100
+Subject: Nuevo inicio de sesión en tu cuenta
+
+Hola {{person:Pilar}},
+
+Tu código de verificación es {{id:928862}}. Caduca en 10 minutos. No lo compartas.
+
+Si no fuiste tú, llama al {{phone:+34 772 202 970}} o escribe a {{email:security@clinica-vendaval.example}}.
+
+El equipo de seguridad de {{org:Clínica Vendaval}}

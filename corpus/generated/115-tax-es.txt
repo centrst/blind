@@ -1,0 +1,15 @@
+%known person|Cayetano Quintana
+From: {{person:Anselmo Iglesias}} <{{email:notificaciones.aiglesias@logistica-foxglove.example}}>
+To: {{person:Cayetano Quintana}} <{{email:quintana..cayetano@outlook.com}}>
+Date: Thu, {{date:12 Nov 2026}} 14:15:00 +0100
+Subject: Notificación {{id:EXP-2026-6469}}: pago pendiente
+
+Estimado/a {{person:Cayetano Quintana}},
+
+Según nuestros registros, consta una deuda de {{amount:€ 690,39}} en el expediente {{id:EXP-2026-6469}}.
+
+Si no se abona antes del {{date:22.11.2026}}, se aplicará un recargo del 10 %: {{amount:69,04 €}}, en total {{amount:759,43 €}}.
+
+Puede pagar por transferencia a {{iban:ES6322166094207013309304}} y conservar el justificante. Atención telefónica: {{phone:+1 485 555 0161}}.
+
+Este es un aviso automático. No responda a este correo.

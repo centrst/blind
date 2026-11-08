@@ -1,0 +1,13 @@
+%known person|Saturnino Jaramillo
+From: {{org:Servicios Galeón S.A.}} <{{email:security@servicios-galeon.example}}>
+To: {{person:Saturnino Jaramillo}} <{{email:saturnino_jaramillo@gmail.com}}>
+Date: Fri, {{date:2 Feb 2024}} 14:45:00 +0100
+Subject: Nuevo inicio de sesión en tu cuenta
+
+Hola {{person:Saturnino}},
+
+Alguien solicitó cambiar la contraseña de {{email:saturnino_jaramillo@gmail.com}} el {{date:2024-02-02}}. Usa este enlace en la próxima hora: {{url:https://accounts.servicios-galeon.example/reset?token=747337ab544642}}
+
+Si no fuiste tú, llama al {{phone:+1 476 555 0147}} o escribe a {{email:security@servicios-galeon.example}}.
+
+El equipo de seguridad de {{org:Servicios Galeón S.A.}}

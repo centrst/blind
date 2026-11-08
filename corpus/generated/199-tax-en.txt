@@ -1,0 +1,16 @@
+%order mdy
+%known person|Jasper Whitcombe
+From: {{person:Ambrose Blackwood}} <{{email:notificaciones.blackwood.ambrose@ocaso-systems.example}}>
+To: {{person:Jasper Whitcombe}} <{{email:jasper-whitcombe@gmail.com}}>
+Date: Mon, {{date:6 Sep 2027}} 16:30:00 +0100
+Subject: Notice {{id:EXP-2027-0741}}: payment pending
+
+To {{person:Jasper Whitcombe}}, holder of ID {{id:Y9093966R}}:
+
+Our records show an unpaid balance of {{amount:£7,312.31}} on file {{id:EXP-2027-0741}}.
+
+If it is not paid by {{date:September 16 2027}}, a surcharge of 5% applies: {{amount:£365.62}}, for a total of {{amount:USD 7,677.93}}.
+
+Pay by transfer to {{iban:IT5777684147192900648963630}} and keep the receipt. For help call {{phone:(486) 555-0151}}.
+
+This is an automatic notice. Do not reply.

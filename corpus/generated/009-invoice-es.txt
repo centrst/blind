@@ -1,0 +1,26 @@
+%known person|Belén Maldonado
+%known org|Transportes Yelmo S.L.
+From: {{person:Cayetano Zamora}} <{{email:czamora@ingenieria-pinar.example}}>
+To: "{{person:Belén Maldonado}}" <{{email:b..maldonado@icloud.com}}>
+Date: Fri, {{date:12 Mar 2027}} 16:30:00 +0100
+Subject: Factura {{id:FAC/2027/9297}}
+
+Estimado/a {{person:Belén}},
+
+Adjuntamos la factura {{id:FAC/2027/9297}} por los servicios prestados a {{org:Transportes Yelmo S.L.}}.
+
+Base imponible: {{amount:2.237,57 €}}
+IVA 4 %: {{amount:€ 89,50}}
+Total a pagar: {{amount:2.327,07 €}}
+
+Agradecemos el pago antes del {{date:11 de abril del 2027}} en la cuenta {{iban:ES84 8222 1377 2144 4990 7294}}.
+
+Nuestro NIF es {{id:B81866723}}.
+
+--
+Saludos cordiales,
+{{person:Cayetano Zamora}}
+Accounts
+{{org:Ingeniería Pinar}}
+{{email:czamora@ingenieria-pinar.example}}
+{{url:www.ingenieria-pinar.example}}

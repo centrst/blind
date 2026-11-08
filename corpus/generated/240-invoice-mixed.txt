@@ -1,0 +1,25 @@
+%known person|Eloy Cuesta Iglesias
+%known org|Asesores Millstone
+From: {{person:Itziar Quintana Bustamante}} <{{email:itziar.quintana@estudio-hontanar.example}}>
+To: {{person:Eloy Cuesta Iglesias}} <{{email:eloy@asesores-millstone.example}}>
+Date: Fri, {{date:25 Jul 2025}} 14:15:00 +0100
+Subject: Factura {{id:FAC/2024/1519}} de {{org:Estudio Hontanar}}
+
+Buenos días {{person:Eloy}},
+
+Te enviamos la factura del último periodo de {{org:Asesores Millstone}}.
+
+El total es {{amount:4.144,47 EUR}}, con 21 % de IVA sobre {{amount:3.425,18 EUR}}.
+
+Payment is due by {{date:24 de AGOSTO de 2025}}. Transfer to {{iban:PT10 5210 9037 3062 0539 4292 7}}, quoting {{id:FAC/2024/1519}}.
+
+Nuestro NIF es {{id:B80811184}}.
+
+--
+Saludos cordiales,
+{{person:Itziar Quintana Bustamante}}
+Administración
+{{org:Estudio Hontanar}}
+Tel: {{phone:+34 774 538 433}}
+{{email:itziar.quintana@estudio-hontanar.example}}
+{{url:www.estudio-hontanar.example}}

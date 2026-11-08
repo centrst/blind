@@ -1,0 +1,23 @@
+%known person|Fermina Espinosa
+%known org|Reformas Umbral
+From: {{person:Isidro Barragán}} <{{email:barragan.isidro@ingenieria-ocaso.example}}>
+To: {{person:Fermina Espinosa}} <{{email:espinosa.fermina@reformas-umbral.example}}>
+Date: Mon, {{date:18 Mar 2024}} 09:30:00 +0100
+Subject: Re: oferta para {{org:Reformas Umbral}}
+Podemos aceptar {{amount:338,14 €}} y enviar el contrato a {{email:espinosa.fermina@reformas-umbral.example}}.
+On {{date:2024-03-17}}, {{person:Fermina Espinosa}} wrote:
+> Gracias {{person:Isidro}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:€ 310,72}}? La reunión nos va bien, llámame al {{phone:0034 764 471 878}} si cambia.
+>
+> On {{date:16 de marzo de 2024}}, {{person:Isidro Barragán}} wrote:
+> > Hola {{person:Fermina}}, nuestra oferta para {{org:Reformas Umbral}} es de {{amount:365,55 €}}. ¿Quedamos el {{date:2024-03-27}} a las 17:45?
+> > 
+> > --
+> > Best regards,
+> > {{person:Isidro Barragán}}
+> > Comercial
+> > {{org:Ingeniería Ocaso}}
+> > Tel: {{phone:781 293 996}}
+> > {{email:barragan.isidro@ingenieria-ocaso.example}}
+> > {{url:www.ingenieria-ocaso.example}}
+
+{{person:Isidro}}

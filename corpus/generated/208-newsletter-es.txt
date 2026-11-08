@@ -1,0 +1,15 @@
+%known person|Gloria Figueroa
+From: {{org:Logística Ironbridge}} <{{email:news@logistica-ironbridge.example}}>
+To: {{person:Gloria Figueroa}} <{{email:glo..figueroa@icloud.com}}>
+Date: Tue, {{date:1 Jul 2025}} 10:15:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Gloria}}, estas son las novedades del mes.
+
+Te esperamos en la jornada de puertas abiertas en {{place:San Telmo de Abajo}} el {{date:6/7/2025}}. Entrada {{amount:185,09 €}}.
+
+Compra online: {{url:https://www.logistica-ironbridge.example/tienda?utm_campaign=9750}}
+
+Recibes este correo porque {{email:glo..figueroa@icloud.com}} se suscribió. Darte de baja: {{url:https://news.logistica-ironbridge.example/unsubscribe?u=629628653x&e=glo..figueroa%40icloud.com}}
+
+{{org:Logística Ironbridge}}, Atención al cliente {{phone:759 74 01 18}}

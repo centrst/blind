@@ -1,0 +1,27 @@
+%known person|Rosendo Barragán Medrano
+%known org|Gestión Pinar S.L.
+From: {{person:Genaro Espinosa Ocaña}} <{{email:genaroespinosa@asesores-esquilo.example}}>
+To: {{person:Rosendo Barragán Medrano}} <{{email:barragan..rosendo@outlook.com}}>
+Date: Sun, {{date:21 Dec 2025}} 15:30:00 +0100
+Subject: Factura {{id:59235273C}} de {{org:Asesores Esquilo}}
+
+Estimado/a {{person:Rosendo}},
+
+Attached is our invoice for last month's services to {{org:Gestión Pinar S.L.}}.
+
+Consulting, first half: {{amount:1.072,00 €}}
+Consulting, second half: {{amount:714,67 EUR}}
+Subtotal: {{amount:1.786,67 EUR}}
+Tax (21 %): {{amount:375,20 €}}
+Total: {{amount:2.161,87 €}}
+
+Agradecemos el pago antes del {{date:4 de febrero del 2026}} en la cuenta {{iban:DE76 2894 9307 7036 6620 61}}.
+
+--
+Atentamente,
+{{person:Genaro Espinosa Ocaña}}
+Billing department
+{{org:Asesores Esquilo}}
+{{url:www.asesores-esquilo.example}}
+
+Este mensaje es confidencial y está dirigido únicamente a su destinatario.

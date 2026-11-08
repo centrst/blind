@@ -1,0 +1,16 @@
+%order mdy
+%known person|Humphrey Mortimer
+From: {{org:Aldara Advisory Ltd}} <{{email:news@aldara-advisory.example}}>
+To: {{email:humphrey..mor@icloud.com}}
+Date: Sun, {{date:12 Oct 2025}} 09:00:00 +0100
+Subject: Spring offers inside
+
+Hi {{person:Humphrey}}, here is what is new this month.
+
+Our best seller is now {{amount:$12.30}}, down from {{amount:USD 15.38}}. Offer ends {{date:October 29, 2025}}.
+
+Shop online: {{url:https://www.aldara-advisory.example/shop?utm_campaign=6043}}
+
+Recibes este correo porque {{email:humphrey..mor@icloud.com}} se suscribió. Darte de baja: {{url:https://news.aldara-advisory.example/unsubscribe?u=781576364x&e=humphrey..mor%40icloud.com}}
+
+{{org:Aldara Advisory Ltd}}, Customer care {{phone:790 08 45 47}}

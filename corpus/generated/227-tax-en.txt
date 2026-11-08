@@ -1,0 +1,17 @@
+%known person|Rowena Goodwin
+From: "{{person:Nigel Rutherford}}" <{{email:notificaciones.nigel_rutherford@vendaval-studio.example}}>
+To: {{person:Rowena Goodwin}} <{{email:rowena..rgoodwin@outlook.com}}>
+Date: Sat, {{date:2 May 2026}} 16:30:00 +0100
+Subject: Notice {{id:EXP-2026-9527}}: payment pending
+
+To {{person:Rowena Goodwin}}, holder of ID {{id:Y3517403J}}:
+
+Regional Revenue Office of {{place:Stonebridge}} informs you that file {{id:EXP-2026-9527}} shows a balance of {{amount:1,643.27 USD}} for the period ending {{date:23 Mar 2026}}.
+
+If it is not paid by {{date:May 12, 2026}}, a surcharge of 5% applies: {{amount:USD 82.16}}, for a total of {{amount:$1,725.43}}.
+
+Pay by transfer to {{iban:ES54 7622 5942 3110 4623 1801}} and keep the receipt. For help call {{phone:(705) 555-0117}}.
+
+Social security contributions for {{date:1st of May}} are listed in the portal: {{url:https://sede.vendaval-studio.example/cuotas/31162A200}}
+
+This is an automatic notice. Do not reply.

@@ -1,0 +1,22 @@
+%known person|Amparo Arroyo Hidalgo
+%known org|Transportes Lumbre S.L.
+From: {{person:Eloy Fontán}} <{{email:fontan.eloy@logistica-isleta.example}}>
+To: {{person:Amparo Arroyo Hidalgo}} <{{email:amparo..arroyo@outlook.com}}>
+Date: Fri, {{date:23 Jan 2026}} 15:30:00 +0100
+Subject: Re: oferta para {{org:Transportes Lumbre S.L.}}
+Podemos aceptar {{amount:678,22 EUR}} y enviar el contrato a {{email:amparo..arroyo@outlook.com}}.
+On {{date:22 de enero de 2026}}, {{person:Amparo Arroyo Hidalgo}} wrote:
+> Gracias {{person:Eloy}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:623,23 €}}? La reunión nos va bien, llámame al {{phone:+49 171 392 0059}} si cambia.
+>
+> El {{date:2026-01-21}}, {{person:Eloy Fontán}} escribió:
+> > Hola {{person:Amparo}}, nuestra oferta para {{org:Transportes Lumbre S.L.}} es de {{amount:733,21 €}}. ¿Quedamos el {{date:26 de enero de 2026}} a las 10:30?
+> > 
+> > --
+> > Gracias,
+> > {{person:Eloy Fontán}}
+> > Comercial
+> > {{org:Logística Isleta S.L.U.}}
+> > Tel: {{phone:+1 559 555 0103}}
+> > {{email:fontan.eloy@logistica-isleta.example}}
+
+{{person:Eloy}}

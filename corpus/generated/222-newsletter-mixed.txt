@@ -1,0 +1,15 @@
+%known person|Florencio Rebollo
+From: {{org:Asesores Aldara}} <{{email:news@asesores-aldara.example}}>
+To: {{person:Florencio Rebollo}} <{{email:rebollo_florencio@gmail.com}}>
+Date: Tue, {{date:16 Mar 2027}} 19:45:00 +0100
+Subject: Ofertas de primavera
+
+Hi {{person:Florencio}}, here is what is new this month.
+
+Nuestro producto estrella baja a {{amount:€ 162,75}}, antes {{amount:€ 203,44}}. La oferta termina el {{date:8 de abril del 2027}}.
+
+Compra online: {{url:https://www.asesores-aldara.example/tienda?utm_campaign=1875}}
+
+Recibes este correo porque {{email:rebollo_florencio@gmail.com}} se suscribió. Darte de baja: {{url:https://news.asesores-aldara.example/unsubscribe?u=402517270x&e=rebollo_florencio%40gmail.com}}
+
+{{org:Asesores Aldara}}, Customer care {{phone:764 731 202}}

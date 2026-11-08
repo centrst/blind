@@ -1,0 +1,29 @@
+%known person|Ernesto Ocaña
+%known org|Clínica Rastro
+From: {{person:Joaquín Quintana}} <{{email:joaquinquintana@logistica-sotavento.example}}>
+To: {{person:Ernesto Ocaña}} <{{email:ernesto..eocana@outlook.com}}>
+Date: Tue, {{date:28 Jul 2026}} 11:15:00 +0100
+Subject: Factura {{id:ER507721665}} de {{org:Logística Sotavento}}
+
+Buenos días {{person:Ernesto}},
+
+Adjuntamos la factura {{id:ER507721665}} por los servicios prestados a {{org:Clínica Rastro}}.
+
+Base imponible: {{amount:1.069,44 €}}
+IVA 10 %: {{amount:€ 106,94}}
+Total a pagar: {{amount:€ 1176,38}}
+
+El pago vence el {{date:11/9/2026}}. Transferencia a {{iban:PT71 4676 5810 3965 6221 0232 5}} indicando {{id:ER507721665}}.
+
+Nuestro NIF es {{id:B27786867}}.
+
+--
+Saludos cordiales,
+{{person:Joaquín Quintana}}
+Billing department
+{{org:Logística Sotavento}}
+Tel: {{phone:+44 7700 900113}}
+{{email:joaquinquintana@logistica-sotavento.example}}
+{{url:www.logistica-sotavento.example}}
+
+Este mensaje es confidencial y está dirigido únicamente a su destinatario.

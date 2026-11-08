@@ -1,0 +1,15 @@
+%known person|Phoebe Lindqvist
+From: {{person:Gareth Mills}} <{{email:gareth@mills-tax.example}}>
+To: {{person:Phoebe Lindqvist}} <{{email:phoebe@lindqvist-design.example}}>
+Subject: Your tax estimate
+
+Hi {{person:Phoebe}},
+
+I ran the numbers for {{org:Lindqvist Design}}. Estimated tax for the year is {{amount:£11,480.00}}, payable in two instalments of {{amount:£5,740.00}} on {{date:31 January 2027}} and {{date:31 July 2027}}.
+If revenue stays above {{amount:£95,000.00}} we should talk about VAT registration.
+
+Can you send the October bank statements for {{iban:GB29 NWBK 6016 1331 9268 19}}?
+
+Thanks,
+{{person:Gareth Mills}}
+{{phone:+44 7700 900872}}

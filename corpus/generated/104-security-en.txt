@@ -1,0 +1,13 @@
+%known person|Matilda Tennant
+From: {{org:Wicker Holdings}} <{{email:security@wicker-holdings.example}}>
+To: {{email:tennant..matilda@icloud.com}}
+Date: Fri, {{date:31 Jul 2026}} 15:45:00 +0100
+Subject: Password change requested
+
+Hi {{person:Matilda}},
+
+We noticed a sign-in to {{email:tennant..matilda@icloud.com}} from {{place:Springvale}} on {{date:July 31, 2026}} at 19:30.
+
+If this was not you, call {{phone:+1 252 555 0162}} or write to {{email:security@wicker-holdings.example}}.
+
+The {{org:Wicker Holdings}} security team

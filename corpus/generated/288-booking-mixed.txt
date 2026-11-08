@@ -1,0 +1,16 @@
+%order mdy
+%known person|Rowena Crawley
+From: Booksy <no..reply@booksy.com>
+To: "{{person:Rowena Crawley}}" <{{email:rowena.crawley@isleta-holdings.example}}>
+Date: Thu, {{date:22 Apr 2027}} 13:30:00 +0100
+Subject: Your booking is confirmed
+
+Hi {{person:Rowena}},
+
+Tu sesión de fisioterapia en {{org:Advisory Millstone Inc.}} queda reservada para el {{date:04/27/2027}} a las 08:15.
+
+Total: {{amount:£39.71}}. Free cancellation until {{date:2027-04-23}}.
+
+¿Dudas? Llámanos al {{phone:+1 990 555 0190}} o escribe a {{email:valentineingram@advisory-millstone.example}}.
+
+Manage your visit: {{url:https://booksy.com/en-es/763398_advisory-millstone_8411}}

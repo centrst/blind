@@ -1,0 +1,25 @@
+%known person|Trinidad Arroyo
+From: Booksy <no..reply@booksy.com>
+To: {{person:Trinidad Arroyo}} <{{email:trinidad..arr@icloud.com}}>
+Date: Wed, {{date:5 Jun 2024}} 12:15:00 +0100
+Subject: Booking {{id:15696912}} confirmed
+
+Buenos días {{person:Trinidad}},
+
+Your table for four at {{org:Gestión Kepler}} is booked for {{date:16.06.2024}} at 16:45.
+
+The price is {{amount:€ 199,18}}, payable on arrival. A deposit of {{amount:49,80 €}} is held on your card.
+
+Questions? Call us on {{phone:+44 7700 900551}} or write to {{email:lfontan@gestion-kepler.example}}.
+
+Manage your visit: {{url:https://booksy.com/en-es/362289_gestion-kepler_6276}}
+
+--
+Gracias,
+{{person:Lisandro Fontán}}
+Recepción
+{{org:Gestión Kepler}}
+Tel: {{phone:+44 7700 900551}}
+{{email:lfontan@gestion-kepler.example}}
+{{url:www.gestion-kepler.example}}
+Office: {{place:Montefrío Chico}}

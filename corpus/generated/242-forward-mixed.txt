@@ -1,0 +1,22 @@
+%known person|Priscilla Yardley
+From: "{{person:Priscilla Yardley}}" <{{email:pri_yardley@gmail.com}}>
+To: {{person:Matilda Somerset}} <{{email:matilda@larkspur-studio.example}}>
+Date: Wed, {{date:15 May 2024}} 10:45:00 +0100
+Subject: Fwd: consulta de {{org:Ironbridge Advisory GmbH}}
+{{person:Matilda}}, forwarding below. Please check the numbers and call them on {{phone:+34 763 501 940}}.
+---------- Forwarded message ---------
+From: {{person:Desmond Cartwright}} <{{email:desmondcartwright@ironbridge-advisory.example}}>
+Date: {{date:15 May 2024}}
+Subject: Quote for project {{id:PU344276398}}
+
+Hello {{person:Priscilla}},
+The board approved {{amount:271.15 USD}} for project {{id:PU344276398}}. When can you begin?
+--
+Kind regards,
+{{person:Desmond Cartwright}}
+Directora de operaciones
+{{org:Ironbridge Advisory GmbH}}
+Tel: {{phone:+34 763 501 940}}
+{{email:desmondcartwright@ironbridge-advisory.example}}
+{{url:www.ironbridge-advisory.example}}
+Office: {{place:Brindleton}}

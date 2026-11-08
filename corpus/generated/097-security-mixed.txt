@@ -1,0 +1,13 @@
+%known person|Cordelia Ashworth
+From: {{org:Vendaval Advisory Inc.}} <{{email:security@vendaval-advisory.example}}>
+To: {{email:cordelia-ashworth@gmail.com}}
+Date: Fri, {{date:13 Sep 2024}} 16:00:00 +0100
+Subject: New sign-in to your account
+
+Hi {{person:Cordelia}},
+
+We noticed a sign-in to {{email:cordelia-ashworth@gmail.com}} from {{place:Brindleton}} on {{date:13 September 2024}} at 16:00.
+
+If this was not you, call {{phone:+1 848 555 0181}} or write to {{email:security@vendaval-advisory.example}}.
+
+The {{org:Vendaval Advisory Inc.}} security team

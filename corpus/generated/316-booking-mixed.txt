@@ -1,0 +1,13 @@
+%known person|Eleanor Doherty
+From: {{person:Gareth Haverford}} <{{email:gareth@systems-lumbre.example}}>
+To: {{person:Eleanor Doherty}} <{{email:eleanor_doh@gmail.com}}>
+Date: Fri, {{date:27 Feb 2026}} 11:30:00 +0100
+Subject: Confirmación de cita {{id:FAC/2023/0570}}
+
+Hola {{person:Eleanor}},
+
+Your table for four at {{org:Systems Lumbre Ltd}} is booked for {{date:March 2nd 2026}} at 16:45.
+
+The price is {{amount:USD 124.30}}, payable on arrival. A deposit of {{amount:$31.08}} is held on your card.
+
+Questions? Call us on {{phone:+34 767 318 614}} or write to {{email:gareth@systems-lumbre.example}}.

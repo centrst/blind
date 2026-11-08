@@ -1,0 +1,15 @@
+%known person|Anselmo Navarrete
+From: {{person:Estefanía Maldonado}} <{{email:notificaciones.emaldonado@transportes-vendaval.example}}>
+To: {{person:Anselmo Navarrete}} <{{email:a_navarrete@gmail.com}}>
+Date: Sat, {{date:8 Mar 2025}} 09:45:00 +0100
+Subject: Aviso de deuda pendiente
+
+Estimado/a {{person:Anselmo Navarrete}},
+
+Según nuestros registros, consta una deuda de {{amount:3.312,31 EUR}} en el expediente {{id:EXP-2025-5590}}.
+
+Si no se abona antes del {{date:18/03/2025}}, se aplicará un recargo del 5 %: {{amount:€ 165,62}}, en total {{amount:€ 3.477,93}}.
+
+Puede pagar por transferencia a {{iban:DE04 7877 4191 9469 3564 95}} y conservar el justificante. Atención telefónica: {{phone:438-555-0190}}.
+
+Este es un aviso automático. No responda a este correo.

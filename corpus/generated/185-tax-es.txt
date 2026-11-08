@@ -1,0 +1,15 @@
+%known person|Lisandro de la Torre
+From: {{person:Candelaria Ocaña Echeverría}} <{{email:notificaciones.candelaria.ocana@servicios-pinar.example}}>
+To: {{person:Lisandro de la Torre}} <{{email:lisandro..ltorre@icloud.com}}>
+Date: Fri, {{date:23 Apr 2027}} 08:30:00 +0100
+Subject: Aviso de deuda pendiente
+
+Estimado/a {{person:Lisandro de la Torre}},
+
+La Oficina Tributaria de {{place:San Telmo de Abajo}} le comunica que el expediente {{id:EXP-2027-9258}} presenta un saldo de {{amount:€ 432,08}} correspondiente al periodo cerrado el {{date:14.3.2027}}.
+
+Si no se abona antes del {{date:13 de mayo del 2027}}, se aplicará un recargo del 20 %: {{amount:86,42 EUR}}, en total {{amount:518,50 €}}.
+
+Puede pagar por transferencia a {{iban:ES06 7608 8142 2935 5048 1077}} y conservar el justificante. Atención telefónica: {{phone:772 12 58 25}}.
+
+Este es un aviso automático. No responda a este correo.

@@ -1,0 +1,20 @@
+%known person|Genaro Cifuentes Lazcano
+From: {{person:Ulises Urrutia Tejada}} <{{email:ulises_urrutia@logistica-vendaval.example}}>
+To: {{person:Genaro Cifuentes Lazcano}} <{{email:gen_cifuentes@gmail.com}}>
+Date: Wed, {{date:6 Nov 2024}} 08:45:00 +0100
+Subject: Confirmación de cita {{id:INV-2027-030030}}
+
+Buenos días {{person:Genaro}},
+
+Hemos reservado sesión de fisioterapia para ti el {{date:2024-11-22}}. Estamos en {{place:San Telmo de Abajo}}.
+
+The price is {{amount:227,12 €}}, payable on arrival. A deposit of {{amount:56,78 €}} is held on your card.
+
+¿Dudas? Llámanos al {{phone:+49 171 392 0020}} o escribe a {{email:ulises_urrutia@logistica-vendaval.example}}.
+
+--
+Un saludo,
+{{person:Ulises Urrutia Tejada}}
+Reception
+{{org:Logística Vendaval S.A.}}
+Tel: {{phone:+49 171 392 0020}}

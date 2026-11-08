@@ -1,0 +1,28 @@
+%known person|Baldomero Urrutia Echeverría
+%known org|Servicios Ironbridge S.L.U.
+From: {{person:Leonor Sepúlveda Fontán}} <{{email:leonor.sepulveda@consultores-marisma.example}}>
+To: {{person:Baldomero Urrutia Echeverría}} <{{email:bal..urrutia@icloud.com}}>
+Date: Wed, {{date:7 Feb 2024}} 17:45:00 +0100
+Subject: Factura {{id:FAC/2027/4548}} de {{org:Consultores Marisma S.L.U.}}
+
+Hola {{person:Baldomero}},
+
+Adjuntamos la factura {{id:FAC/2027/4548}} por los servicios prestados a {{org:Servicios Ironbridge S.L.U.}}.
+
+Servicios, primera parte: {{amount:28,29 EUR}}
+Servicios, segunda parte: {{amount:€ 18,86}}
+Subtotal: {{amount:€ 47,15}}
+IVA (21 %): {{amount:9,90 €}}
+Total: {{amount:57,05 €}}
+
+El pago vence el {{date:8 de marzo de 2024}}. Transferencia a {{iban:DE63 4604 5393 7470 1389 84}} indicando {{id:FAC/2027/4548}}.
+
+--
+Atentamente,
+{{person:Leonor Sepúlveda Fontán}}
+Administración
+{{org:Consultores Marisma S.L.U.}}
+Tel: {{phone:+49 171 392 0081}}
+{{email:leonor.sepulveda@consultores-marisma.example}}
+
+Este mensaje es confidencial y está dirigido únicamente a su destinatario.

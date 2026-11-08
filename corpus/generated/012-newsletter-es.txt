@@ -1,0 +1,15 @@
+%known person|Lisandro Duarte
+From: {{org:Estudio Foxglove}} <{{email:news@estudio-foxglove.example}}>
+To: {{email:lisandro_duarte@gmail.com}}
+Date: Tue, {{date:6 Oct 2026}} 19:15:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Lisandro}}, estas son las novedades del mes.
+
+Te esperamos en la jornada de puertas abiertas en {{place:Valdecañas}} el {{date:03/11/2026}}. Entrada {{amount:146,90 EUR}}.
+
+Compra online: {{url:https://www.estudio-foxglove.example/tienda?utm_campaign=7100}}
+
+Recibes este correo porque {{email:lisandro_duarte@gmail.com}} se suscribió. Darte de baja: {{url:https://news.estudio-foxglove.example/unsubscribe?u=914194240x&e=lisandro_duarte%40gmail.com}}
+
+{{org:Estudio Foxglove}}, Atención al cliente {{phone:775 602 840}}

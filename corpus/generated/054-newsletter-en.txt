@@ -1,0 +1,15 @@
+%known person|Barnaby Ashworth
+From: {{org:Vendaval Consulting}} <{{email:news@vendaval-consulting.example}}>
+To: {{email:bar..ashworth@icloud.com}}
+Date: Sun, {{date:12 Jul 2026}} 19:15:00 +0100
+Subject: Spring offers inside
+
+Hi {{person:Barnaby}}, here is what is new this month.
+
+Our best seller is now {{amount:£158.29}}, down from {{amount:$197.86}}. Offer ends {{date:25/7/26}}.
+
+Shop online: {{url:https://www.vendaval-consulting.example/shop?utm_campaign=9638}}
+
+You receive this because {{email:bar..ashworth@icloud.com}} subscribed. Unsubscribe: {{url:https://news.vendaval-consulting.example/unsubscribe?u=539908599x&e=bar..ashworth%40icloud.com}}
+
+{{org:Vendaval Consulting}}, Customer care {{phone:777 07 84 89}}

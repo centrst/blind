@@ -1,0 +1,29 @@
+%known person|Ambrose Vanderbilt
+%known org|Yelmo Advisory Ltd
+From: {{person:Lionel Nightingale}} <{{email:lionel_nightingale@marisma-works.example}}>
+To: {{person:Ambrose Vanderbilt}} <{{email:ambrose_vanderbilt@yelmo-advisory.example}}>
+Date: Wed, {{date:2 Apr 2025}} 11:30:00 +0100
+Subject: Invoice {{id:FAC/2025/6554}} from {{org:Marisma Works LLC}}
+
+Hello {{person:Ambrose}},
+
+Please find attached invoice {{id:FAC/2025/6554}} for the work done for {{org:Yelmo Advisory Ltd}}.
+
+Net amount: {{amount:USD 1,261.17}}
+VAT 5%: {{amount:£63.06}}
+Total due: {{amount:$1,324.23}}
+
+Payment is due by {{date:Apr 17 2025}}. Transfer to {{iban:PT24500460395016145833918}}, quoting {{id:FAC/2025/6554}}.
+
+Our tax number is {{id:M41455296}}.
+
+--
+Thanks,
+{{person:Lionel Nightingale}}
+Accounts
+{{org:Marisma Works LLC}}
+Tel: {{phone:+34 764 775 685}}
+{{email:lionel_nightingale@marisma-works.example}}
+{{url:www.marisma-works.example}}
+
+This message is confidential and intended only for the addressee.

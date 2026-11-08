@@ -1,0 +1,156 @@
+[
+  {
+    "id": "U1",
+    "title": "Cyrillic A in the first name",
+    "text": "Hola \u0410na Ruiz, gracias por tu mensaje.",
+    "secrets": [
+      "Ana",
+      "Ruiz"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "U2",
+    "title": "Cyrillic i in a surname",
+    "text": "Hola Ana Ru\u0456z, gracias.",
+    "secrets": [
+      "Ana",
+      "Ruiz"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "U3",
+    "title": "zero-width space inside a surname",
+    "text": "Hola Ana Ru\u200biz, gracias por todo.",
+    "secrets": [
+      "Ruiz"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "U4",
+    "title": "zero-width space inside the first name",
+    "text": "Hola A\u200bna Ruiz, gracias por todo.",
+    "secrets": [
+      "Ana"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "U5",
+    "title": "full-width digits in an amount",
+    "text": "Total a pagar: \uff12\uff14\uff17,\uff18\uff10 € antes del viernes.",
+    "secrets": [
+      "247,80"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "U6",
+    "title": "full-width digits in a phone number",
+    "text": "Mi móvil es +34 \uff17\uff19\uff11 \uff13\uff14\uff15 \uff16\uff17\uff18.",
+    "secrets": [
+      "791 345 678"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "U7",
+    "title": "decomposed accents in a known name",
+    "text": "Hola Mari\u0301a Garci\u0301a, bienvenida.",
+    "secrets": [
+      "Garcia",
+      "Maria"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "María García"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "U8",
+    "title": "Cyrillic E at the start of an IBAN",
+    "text": "IBAN \u0415S91 2100 0418 4502 0005 1332 for the refund",
+    "secrets": [
+      "2100 0418 4502 0005 1332"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "U9",
+    "title": "right-to-left mark around an email",
+    "text": "Mail \u200fana@gestoria.example\u200f today",
+    "secrets": [
+      "gestoria.example"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "U10",
+    "title": "known Korean name with a particle glued on",
+    "text": "김민수는 내일 회의에 옵니다. 김민수회사에도 연락했어요.",
+    "secrets": [
+      "김민수"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "김민수"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "U11",
+    "title": "known Korean name glued to particles round trips",
+    "text": "김민수는 내일 옵니다. 우리팀김민수님도 왔어요.",
+    "secrets": [],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "김민수"
+      }
+    ],
+    "check": "roundtrip",
+    "seed": "adv"
+  }
+]

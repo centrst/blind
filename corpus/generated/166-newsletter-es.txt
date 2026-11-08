@@ -1,0 +1,15 @@
+%known person|Itziar Villalobos
+From: {{org:Clínica Cendal SA}} <{{email:news@clinica-cendal.example}}>
+To: {{person:Itziar Villalobos}} <{{email:itziar_villalobos@gmail.com}}>
+Date: Tue, {{date:3 Dec 2024}} 16:30:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Itziar}}, estas son las novedades del mes.
+
+Te esperamos en la jornada de puertas abiertas en {{place:Puente Nuevo}} el {{date:21 de diciembre de 2024}}. Entrada {{amount:199,65 €}}.
+
+Compra online: {{url:https://www.clinica-cendal.example/tienda?utm_campaign=9858}}
+
+Recibes este correo porque {{email:itziar_villalobos@gmail.com}} se suscribió. Darte de baja: {{url:https://news.clinica-cendal.example/unsubscribe?u=834042127x&e=itziar_villalobos%40gmail.com}}
+
+{{org:Clínica Cendal S.A.}}, Atención al cliente {{phone:0034 757 552 497}}

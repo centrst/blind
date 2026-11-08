@@ -1,0 +1,15 @@
+%known person|Gloria Zamora Galindo
+From: {{org:Logística Nevada}} <{{email:news@logistica-nevada.example}}>
+To: {{email:zamora_gloria@gmail.com}}
+Date: Sun, {{date:3 Mar 2024}} 15:15:00 +0100
+Subject: Macarena's picks for the season
+
+Hi {{person:Gloria}}, here is what is new this month.
+
+Our best seller is now {{amount:180,92 €}}, down from {{amount:226,15 €}}. Offer ends {{date:11 de marzo de 2024}}.
+
+Shop online: {{url:https://www.logistica-nevada.example/shop?utm_campaign=4751}}
+
+Recibes este correo porque {{email:zamora_gloria@gmail.com}} se suscribió. Darte de baja: {{url:https://news.logistica-nevada.example/unsubscribe?u=462397671x&e=zamora_gloria%40gmail.com}}
+
+{{org:Logística Nevada}}, Customer care {{phone:(892) 555-0111}}

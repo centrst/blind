@@ -1,0 +1,14 @@
+%order mdy
+%known person|Cedric Crawley
+From: {{org:Partners Zafiro}} <{{email:security@partners-zafiro.example}}>
+To: {{email:cedric_cra@gmail.com}}
+Date: Sun, {{date:29 Mar 2026}} 08:45:00 +0100
+Subject: Your verification code
+
+Hi {{person:Cedric}},
+
+Your verification code is {{id:906370}}. It expires in 10 minutes. Never share it.
+
+If this was not you, call {{phone:+49 171 392 0056}} or write to {{email:security@partners-zafiro.example}}.
+
+The {{org:Partners Zafiro}} security team

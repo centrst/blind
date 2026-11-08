@@ -1,0 +1,15 @@
+%known person|Imogen Abernathy
+From: {{org:Pennywhistle Partners GmbH}} <{{email:news@pennywhistle-partners.example}}>
+To: {{person:Imogen Abernathy}} <{{email:imo_abernathy@gmail.com}}>
+Date: Wed, {{date:14 Feb 2024}} 11:30:00 +0100
+Subject: Spring offers inside
+
+Hi {{person:Imogen}}, here is what is new this month.
+
+Join our open day in {{place:Fenwick Bay}} on {{date:24 February 2024}}. Entry {{amount:$1.93}}.
+
+Shop online: {{url:https://www.pennywhistle-partners.example/shop?utm_campaign=2226}}
+
+You receive this because {{email:imo_abernathy@gmail.com}} subscribed. Unsubscribe: {{url:https://news.pennywhistle-partners.example/unsubscribe?u=684446970x&e=imo_abernathy%40gmail.com}}
+
+{{org:Pennywhistle Partners GmbH}}, Customer care {{phone:0034 771 725 971}}

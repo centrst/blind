@@ -1,0 +1,21 @@
+%known person|Leonor Quintana
+From: {{person:Leonor Quintana}} <{{email:quintana..leonor@icloud.com}}>
+To: {{person:Estefanía Espinosa}} <{{email:espinosa.estefania@reformas-ironbridge.example}}>
+Date: Mon, {{date:20 Apr 2026}} 11:30:00 +0100
+Subject: Fwd: consulta de {{org:Logística Lumbre S.L.U.}}
+{{person:Estefanía}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:+44 7700 900598}}.
+---------- Forwarded message ---------
+From: "{{person:Gloria Medrano}}" <{{email:medrano.gloria@logistica-lumbre.example}}>
+Date: {{date:20 Apr 2026}}
+Subject: Presupuesto proyecto {{id:KY677176880}}
+
+Estimado/a {{person:Leonor}},
+En {{org:Logística Lumbre S.L.U.}} disponemos de {{amount:€ 955,83}} para la obra en {{place:Torrebruna}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Saludos cordiales,
+{{person:Gloria Medrano}}
+Directora de operaciones
+{{org:Logística Lumbre S.L.U.}}
+{{email:medrano.gloria@logistica-lumbre.example}}
+{{url:www.logistica-lumbre.example}}
+Oficina de {{place:Montefrío Chico}}

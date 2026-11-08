@@ -1,0 +1,23 @@
+%known person|Cayetano Iglesias Quintana
+%known org|Asesores Kepler S.L.U.
+From: {{person:Rosendo Rebollo}} <{{email:rrebollo@servicios-pinar.example}}>
+To: {{person:Cayetano Iglesias Quintana}} <{{email:iglesias.cayetano@asesores-kepler.example}}>
+Date: Mon, {{date:10 Nov 2025}} 16:30:00 +0100
+Subject: Re: oferta para {{org:Asesores Kepler S.L.U.}}
+Podemos aceptar {{amount:287,32 EUR}} y enviar el contrato a {{email:iglesias.cayetano@asesores-kepler.example}}.
+On {{date:9 de noviembre del 2025}}, {{person:Cayetano Iglesias Quintana}} wrote:
+> Gracias {{person:Rosendo}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:264,02 EUR}}? La reunión nos va bien, llámame al {{phone:0034 770 131 650}} si cambia.
+>
+> El {{date:8 de noviembre de 2025}}, {{person:Rosendo Rebollo}} escribió:
+> > Hola {{person:Cayetano}}, nuestra oferta para {{org:Asesores Kepler S.L.U.}} es de {{amount:310,61 €}}. ¿Quedamos el {{date:12 de noviembre de 2025}} a las 14:30?
+> > 
+> > --
+> > Un saludo,
+> > {{person:Rosendo Rebollo}}
+> > Comercial
+> > {{org:Servicios Pinar}}
+> > Tel: {{phone:779 915 583}}
+> > {{email:rrebollo@servicios-pinar.example}}
+> > {{url:www.servicios-pinar.example}}
+
+{{person:Rosendo}}

@@ -1,0 +1,13 @@
+%known person|Plácido Ocaña
+From: {{person:Baldomero Peñalver}} <{{email:baldomero@asesores-pennywhistle.example}}>
+To: {{person:Plácido Ocaña}} <{{email:placido_ocana@gmail.com}}>
+Date: Mon, {{date:30 Sep 2024}} 08:45:00 +0100
+Subject: Confirmación de cita {{id:BKI7451NX}}
+
+Hola {{person:Plácido}},
+
+Tu sesión de fisioterapia en {{org:Asesores Pennywhistle}} queda reservada para el {{date:17 de octubre del 2024}} a las 11:00.
+
+Total: {{amount:258,04 €}}. Cancelación gratuita hasta el {{date:2024-10-01}}.
+
+¿Dudas? Llámanos al {{phone:+1 841 555 0172}} o escribe a {{email:baldomero@asesores-pennywhistle.example}}.

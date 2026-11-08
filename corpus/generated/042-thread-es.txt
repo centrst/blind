@@ -1,0 +1,23 @@
+%known person|Fermina Jaramillo
+%known org|Reformas Quimera S.L.
+From: "{{person:Lisandro Espinosa}}" <{{email:lespinosa@servicios-pinar.example}}>
+To: {{person:Fermina Jaramillo}} <{{email:jaramillo..fermina@icloud.com}}>
+Date: Thu, {{date:6 Nov 2025}} 18:15:00 +0100
+Subject: Re: oferta para {{org:Reformas Quimera S.L.}}
+Podemos aceptar {{amount:1.445,21 €}} y enviar el contrato a {{email:jaramillo..fermina@icloud.com}}.
+On {{date:5/11/25}}, {{person:Fermina Jaramillo}} wrote:
+> Gracias {{person:Lisandro}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:€ 1.328,03}}? La reunión nos va bien, llámame al {{phone:(806) 555-0144}} si cambia.
+>
+> El {{date:04-11-2025}}, {{person:Lisandro Espinosa}} escribió:
+> > Hola {{person:Fermina}}, nuestra oferta para {{org:Reformas Quimera S.L.}} es de {{amount:1.562,39 €}}. ¿Quedamos el {{date:11 de noviembre del 2025}} a las 09:30?
+> > 
+> > --
+> > Atentamente,
+> > {{person:Lisandro Espinosa}}
+> > Comercial
+> > {{org:Servicios Pinar S.L.U.}}
+> > Tel: {{phone:+49 171 392 0062}}
+> > {{url:www.servicios-pinar.example}}
+> > Oficina de {{place:Cabo Redondo}}
+
+{{person:Lisandro}}

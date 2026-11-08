@@ -1,0 +1,56 @@
+{
+  "bare": {
+    "recall": {
+      "person": 67,
+      "org": 29,
+      "place": 0,
+      "email": 100,
+      "url": 100,
+      "phone": 100,
+      "iban": 100,
+      "id": 100,
+      "amount": 100,
+      "date": 99
+    },
+    "precision": {
+      "person": 95,
+      "org": 97,
+      "place": 100,
+      "email": 96,
+      "url": 100,
+      "phone": 100,
+      "iban": 100,
+      "id": 100,
+      "amount": 99,
+      "date": 100
+    },
+    "roundTrip": 100
+  },
+  "known": {
+    "recall": {
+      "person": 98,
+      "org": 51,
+      "place": 0,
+      "email": 100,
+      "url": 100,
+      "phone": 100,
+      "iban": 100,
+      "id": 100,
+      "amount": 100,
+      "date": 99
+    },
+    "precision": {
+      "person": 96,
+      "org": 98,
+      "place": 100,
+      "email": 96,
+      "url": 100,
+      "phone": 100,
+      "iban": 100,
+      "id": 100,
+      "amount": 99,
+      "date": 100
+    },
+    "roundTrip": 100
+  }
+}

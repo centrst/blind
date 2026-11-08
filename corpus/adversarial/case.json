@@ -1,0 +1,126 @@
+[
+  {
+    "id": "A1",
+    "title": "known org in upper case",
+    "text": "CONTRATO CON GESTORÍA NORTE S.L. FIRMADO",
+    "secrets": [
+      "GESTORÍA NORTE"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "org",
+        "value": "Gestoría Norte S.L."
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "A2",
+    "title": "known org written without accents",
+    "text": "Contrato con Gestoria Norte firmado.",
+    "secrets": [
+      "Gestoria Norte"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "org",
+        "value": "Gestoría Norte S.L."
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "A3",
+    "title": "deny phrase in upper case",
+    "text": "STATUS OF PROJECT FALCON: OPEN",
+    "secrets": [
+      "PROJECT FALCON"
+    ],
+    "expect": "flagged",
+    "deny": [
+      "Project Falcon"
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "A4",
+    "title": "deny domain with a mixed-case address",
+    "text": "Mail Info@MY-DOMAIN.Example today",
+    "secrets": [
+      "MY-DOMAIN"
+    ],
+    "expect": "replaced",
+    "deny": [
+      "*@my-domain.example"
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "A5",
+    "title": "known phone in a different format",
+    "text": "Call 791-345-678 tonight",
+    "secrets": [
+      "791-345-678"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "phone",
+        "value": "+34 791 345 678"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "A6",
+    "title": "known email in upper case",
+    "text": "Contacto: ANA.RUIZ@GESTORIA.EXAMPLE",
+    "secrets": [
+      "GESTORIA.EXAMPLE"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "email",
+        "value": "ana.ruiz@gestoria.example"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "A7",
+    "title": "known person in lower case",
+    "text": "gracias, ana ruiz",
+    "secrets": [
+      "ana",
+      "ruiz"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "A8",
+    "title": "known place with a different accent",
+    "text": "Oficina en Málaga y en Malaga",
+    "secrets": [
+      "Malaga",
+      "Málaga"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "place",
+        "value": "Málaga"
+      }
+    ],
+    "seed": "adv"
+  }
+]

@@ -1,0 +1,13 @@
+%known person|Amparo Tejada Figueroa
+From: {{org:Servicios Cendal S.L.U.}} <{{email:security@servicios-cendal.example}}>
+To: {{person:Amparo Tejada Figueroa}} <{{email:a..tejada@icloud.com}}>
+Date: Sun, {{date:4 Jul 2027}} 19:30:00 +0100
+Subject: Nuevo inicio de sesión en tu cuenta
+
+Hola {{person:Amparo}},
+
+Tu código de verificación es {{id:539315}}. Caduca en 10 minutos. No lo compartas.
+
+Si no fuiste tú, llama al {{phone:+49 171 392 0049}} o escribe a {{email:security@servicios-cendal.example}}.
+
+El equipo de seguridad de {{org:Servicios Cendal S.L.U.}}

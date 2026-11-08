@@ -1,0 +1,23 @@
+%known person|Griselda Zamora
+%known org|Reformas Dorsal S.L.U.
+From: {{person:Pilar Navarrete}} <{{email:navarrete.pilar@estudio-ocaso.example}}>
+To: {{person:Griselda Zamora}} <{{email:griselda_zam@gmail.com}}>
+Date: Sat, {{date:22 Aug 2026}} 18:00:00 +0100
+Subject: Re: oferta para {{org:Reformas Dorsal S.L.U.}}
+Podemos aceptar {{amount:18,78 €}} y enviar el contrato a {{email:griselda_zam@gmail.com}}.
+On {{date:21 de agosto del 2026}}, {{person:Griselda Zamora}} wrote:
+> Gracias {{person:Pilar}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:€ 17,26}}? La reunión nos va bien, llámame al {{phone:+49 171 392 0090}} si cambia.
+>
+> El {{date:20-8-2026}}, {{person:Pilar Navarrete}} escribió:
+> > Hola {{person:Griselda}}, nuestra oferta para {{org:Reformas Dorsal S.L.U.}} es de {{amount:20,30 €}}. ¿Quedamos el {{date:2026-08-26}} a las 08:45?
+> > 
+> > --
+> > Saludos cordiales,
+> > {{person:Pilar Navarrete}}
+> > Sales
+> > {{org:Estudio Ocaso}}
+> > Tel: {{phone:+34 772330183}}
+> > {{email:navarrete.pilar@estudio-ocaso.example}}
+> > {{url:www.estudio-ocaso.example}}
+
+{{person:Pilar}}

@@ -1,0 +1,13 @@
+%known person|Trinidad Iglesias
+From: {{org:Gestión Ironbridge}} <{{email:security@gestion-ironbridge.example}}>
+To: {{email:tri..iglesias@outlook.com}}
+Date: Thu, {{date:6 Nov 2025}} 18:30:00 +0100
+Subject: Tu código de verificación
+
+Hola {{person:Trinidad}},
+
+Detectamos un inicio de sesión en {{email:tri..iglesias@outlook.com}} desde {{place:San Telmo de Abajo}} el {{date:2025-11-06}} a las 14:30.
+
+Si no fuiste tú, llama al {{phone:+34 793688431}} o escribe a {{email:security@gestion-ironbridge.example}}.
+
+El equipo de seguridad de {{org:Gestión Ironbridge}}

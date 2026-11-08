@@ -1,0 +1,20 @@
+%known person|Herminia Rebollo Cuesta
+From: {{person:Herminia Rebollo Cuesta}} <{{email:herminiarebollo@ingenieria-zafiro.example}}>
+To: {{person:Isidro Hidalgo Espinosa}} <{{email:isidro_hidalgo@transportes-aldara.example}}>
+Date: Sun, {{date:27 Dec 2026}} 08:45:00 +0100
+Subject: Fwd: presupuesto {{org:Reformas Wicker}}
+{{person:Isidro}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:787 15 79 20}}.
+---------- Forwarded message ---------
+From: {{person:Honorio Echeverría}} <{{email:honorio_echeverria@reformas-wicker.example}}>
+Date: {{date:27 Dec 2026}}
+Subject: Presupuesto proyecto {{id:INV-2026-514720}}
+
+Hello {{person:Herminia}},
+En {{org:Reformas Wicker}} disponemos de {{amount:256,75 €}} para la obra en {{place:Torrebruna}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Best regards,
+{{person:Honorio Echeverría}}
+Directora de operaciones
+{{org:Reformas Wicker}}
+Tel: {{phone:787 15 79 20}}
+{{email:honorio_echeverria@reformas-wicker.example}}

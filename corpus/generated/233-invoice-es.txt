@@ -1,0 +1,27 @@
+%known person|Leonor Duarte Figueroa
+%known org|Gestión Galeón S.L.U.
+From: {{person:Herminia Tejada}} <{{email:herminia_tejada@clinica-hontanar.example}}>
+To: {{person:Leonor Duarte Figueroa}} <{{email:leonor.duarte@gestion-galeon.example}}>
+Date: Tue, {{date:23 Mar 2027}} 11:45:00 +0100
+Subject: Factura {{id:INV-2024-657872}} de {{org:Clínica Hontanar}}
+
+Buenos días {{person:Leonor}},
+
+Te enviamos la factura del último periodo de {{org:Gestión Galeón S.L.U.}}.
+
+Base imponible: {{amount:43,29 €}}
+IVA 10 %: {{amount:4,33 EUR}}
+Total a pagar: {{amount:47,62 €}}
+
+El pago vence el {{date:22 de abril del 2027}}. Transferencia a {{iban:ES53 7845 1308 8619 7315 6868}} indicando {{id:INV-2024-657872}}.
+
+Nuestro NIF es {{id:B90410965}}.
+
+--
+Un saludo,
+{{person:Herminia Tejada}}
+Accounts
+{{org:Clínica Hontanar}}
+{{email:herminia_tejada@clinica-hontanar.example}}
+
+Este mensaje es confidencial y está dirigido únicamente a su destinatario.

@@ -1,0 +1,15 @@
+%known person|Dolores Olmos Espinosa
+From: {{org:Clínica Esquilo}} <{{email:news@clinica-esquilo.example}}>
+To: {{email:dolores-olmos@gmail.com}}
+Date: Thu, {{date:9 Jan 2025}} 11:30:00 +0100
+Subject: Estefanía's picks for the season
+
+Hola {{person:Dolores}}, estas son las novedades del mes.
+
+Nuestro producto estrella baja a {{amount:€ 11,27}}, antes {{amount:14,09 EUR}}. La oferta termina el {{date:2025-02-06}}.
+
+Compra online: {{url:https://www.clinica-esquilo.example/tienda?utm_campaign=9661}}
+
+Recibes este correo porque {{email:dolores-olmos@gmail.com}} se suscribió. Darte de baja: {{url:https://news.clinica-esquilo.example/unsubscribe?u=443295567x&e=dolores-olmos%40gmail.com}}
+
+{{org:Clínica Esquilo}}, Atención al cliente {{phone:(483) 555-0178}}

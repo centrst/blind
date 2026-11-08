@@ -1,0 +1,28 @@
+%known person|Jacinta Lazcano
+%known org|Consultores Yelmo S.A.
+From: {{person:Remedios Urrutia Medrano}} <{{email:remedios_urrutia@estudio-jaspe.example}}>
+To: {{person:Jacinta Lazcano}} <{{email:jacinta.lazcano@consultores-yelmo.example}}>
+Date: Sat, {{date:23 Mar 2024}} 17:15:00 +0100
+Subject: Factura {{id:HV341671186}}
+
+Hello {{person:Jacinta}},
+
+Adjuntamos la factura {{id:HV341671186}} por los servicios prestados a {{org:Consultores Yelmo S.A.}}.
+
+Servicios, primera parte: {{amount:1.984,68 €}}
+Servicios, segunda parte: {{amount:€ 1.323,12}}
+Subtotal: {{amount:3.307,80 €}}
+IVA (4 %): {{amount:€ 132,31}}
+Total: {{amount:3.440,11 €}}
+
+Agradecemos el pago antes del {{date:7 de abril de 2024}} en la cuenta {{iban:IT4078197851263578033244600}}.
+
+--
+Atentamente,
+{{person:Remedios Urrutia Medrano}}
+Billing department
+{{org:Estudio Jaspe}}
+Tel: {{phone:+34 773 975 149}}
+Oficina de {{place:Puente Nuevo}}
+
+Este mensaje es confidencial y está dirigido únicamente a su destinatario.

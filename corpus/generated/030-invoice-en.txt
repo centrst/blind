@@ -1,0 +1,27 @@
+%order mdy
+%known person|Rosalind Fairchild
+%known org|Advisory Nevada LLC
+From: {{person:Valentine Jessop}} <{{email:valentine.jessop@supply-cendal.example}}>
+To: {{person:Rosalind Fairchild}} <{{email:rosalind-fairchild@gmail.com}}>
+Date: Fri, {{date:5 Jan 2024}} 09:15:00 +0100
+Subject: Invoice {{id:FAC/2025/5935}}
+
+Hi {{person:Rosalind}},
+
+Please find attached invoice {{id:FAC/2025/5935}} for the work done for {{org:Advisory Nevada LLC}}.
+
+The total is {{amount:$24.30}}, which includes 20% tax on {{amount:USD 20.25}}.
+
+Payment is due by {{date:January 20, 2024}}. Transfer to {{iban:PT83658533589079086503493}}, quoting {{id:FAC/2025/5935}}.
+
+Our tax number is {{id:S87469222}}.
+
+--
+Cheers,
+{{person:Valentine Jessop}}
+Billing department
+{{org:Supply Cendal Inc.}}
+Tel: {{phone:0034 785 590 786}}
+{{email:valentine.jessop@supply-cendal.example}}
+{{url:www.supply-cendal.example}}
+Office: {{place:Oakmere}}

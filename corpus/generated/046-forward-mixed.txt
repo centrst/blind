@@ -1,0 +1,20 @@
+%known person|Pilar Zamora Espinosa
+From: {{person:Pilar Zamora Espinosa}} <{{email:pzamora@ingenieria-lumbre.example}}>
+To: {{person:Saturnino Fontán}} <{{email:sfontan@logistica-farola.example}}>
+Date: Sun, {{date:7 Apr 2024}} 17:30:00 +0100
+Subject: Fwd: presupuesto {{org:Estudio Quimera}}
+Hi {{person:Saturnino}}, can you take this one? The client wants an answer by {{date:19 de abril del 2024}}.
+---------- Forwarded message ---------
+From: {{person:Macarena Urrutia Duarte}} <{{email:murrutia@estudio-quimera.example}}>
+Date: {{date:7 Apr 2024}}
+Subject: Presupuesto proyecto {{id:BKG6760YV}}
+
+Hi {{person:Pilar}},
+En {{org:Estudio Quimera}} disponemos de {{amount:496,73 EUR}} para la obra en {{place:Almendral del Sur}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Cheers,
+{{person:Macarena Urrutia Duarte}}
+Purchasing
+{{org:Estudio Quimera}}
+Tel: {{phone:776 89 74 19}}
+Oficina de {{place:Puente Nuevo}}

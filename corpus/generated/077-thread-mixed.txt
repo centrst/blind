@@ -1,0 +1,22 @@
+%known person|Lionel Haverford
+%known org|Holdings Pinar
+From: {{person:Humphrey Jessop}} <{{email:humphrey.jessop@yelmo-advisory.example}}>
+To: {{person:Lionel Haverford}} <{{email:lionelhaverford@holdings-pinar.example}}>
+Date: Sun, {{date:2 Aug 2026}} 14:45:00 +0100
+Subject: Re: offer for {{org:Holdings Pinar}}
+Podemos aceptar {{amount:$166.97}} y enviar el contrato a {{email:lionelhaverford@holdings-pinar.example}}.
+On {{date:01/08/2026}}, {{person:Lionel Haverford}} wrote:
+> Thanks {{person:Humphrey}}. That is high for us. Could you do {{amount:USD 153.43}}? The meeting works, call me on {{phone:+1 306 555 0189}} if it moves.
+>
+> On {{date:JULY 31, 2026}}, {{person:Humphrey Jessop}} wrote:
+> > Hello {{person:Lionel}}, our offer for {{org:Holdings Pinar}} is {{amount:USD 180.51}}. Can we meet on {{date:2026-08-08}} at 13:00?
+> > 
+> > --
+> > Cheers,
+> > {{person:Humphrey Jessop}}
+> > Sales
+> > {{org:Yelmo Advisory GmbH}}
+> > {{email:humphrey.jessop@yelmo-advisory.example}}
+> > {{url:www.yelmo-advisory.example}}
+
+{{person:Humphrey}}

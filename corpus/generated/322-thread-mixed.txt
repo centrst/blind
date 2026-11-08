@@ -1,0 +1,23 @@
+%known person|Itziar de la Torre
+%known org|Asesores Millstone
+From: {{person:Gloria Villalobos}} <{{email:villalobos.gloria@transportes-yelmo.example}}>
+To: {{person:Itziar de la Torre}} <{{email:itziar.de@asesores-millstone.example}}>
+Date: Thu, {{date:27 Mar 2025}} 18:15:00 +0100
+Subject: Re: offer for {{org:Asesores Millstone}}
+Podemos aceptar {{amount:€ 1.600,94}} y enviar el contrato a {{email:itziar.de@asesores-millstone.example}}.
+On {{date:26 de marzo del 2025}}, {{person:Itziar de la Torre}} wrote:
+> Gracias {{person:Gloria}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:1.471,13 EUR}}? La reunión nos va bien, llámame al {{phone:634-555-0133}} si cambia.
+>
+> On {{date:25 de marzo de 2025}}, {{person:Gloria Villalobos}} wrote:
+> > Hola {{person:Itziar}}, nuestra oferta para {{org:Asesores Millstone}} es de {{amount:1.730,74 €}}. ¿Quedamos el {{date:6-4-2025}} a las 11:30?
+> > 
+> > --
+> > Atentamente,
+> > {{person:Gloria Villalobos}}
+> > Comercial
+> > {{org:Transportes Yelmo S.L.U.}}
+> > Tel: {{phone:+34 793 075 210}}
+> > {{email:villalobos.gloria@transportes-yelmo.example}}
+> > {{url:www.transportes-yelmo.example}}
+
+{{person:Gloria}}

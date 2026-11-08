@@ -1,0 +1,23 @@
+%order mdy
+%known person|Matilda Rutherford
+%known org|Bruma Labs
+From: {{person:Valentine Haverford}} <{{email:valentine_haverford@holdings-umbral.example}}>
+To: {{person:Matilda Rutherford}} <{{email:matilda.rutherford@bruma-labs.example}}>
+Date: Mon, {{date:22 Jul 2024}} 17:45:00 +0100
+Subject: Re: offer for {{org:Bruma Labs}}
+We can accept {{amount:$17.88}} and send the contract to {{email:matilda.rutherford@bruma-labs.example}}.
+On {{date:July 21st, 2024}}, {{person:Matilda Rutherford}} wrote:
+> Thanks {{person:Valentine}}. That is high for us. Could you do {{amount:$16.43}}? The meeting works, call me on {{phone:772 94 67 01}} if it moves.
+>
+> On {{date:Jul 20th, 2024}}, {{person:Valentine Haverford}} wrote:
+> > Hello {{person:Matilda}}, our offer for {{org:Bruma Labs}} is {{amount:£19.33}}. Can we meet on {{date:07.29.2024}} at 15:00?
+> > 
+> > --
+> > Thanks,
+> > {{person:Valentine Haverford}}
+> > Comercial
+> > {{org:Holdings Umbral Inc.}}
+> > Tel: {{phone:0034 751 670 705}}
+> > {{url:www.holdings-umbral.example}}
+
+{{person:Valentine}}

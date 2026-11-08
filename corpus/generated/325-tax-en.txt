@@ -1,0 +1,18 @@
+%order mdy
+%known person|Cedric Ellsworth
+From: {{person:Georgina Kingsley}} <{{email:notificaciones.georgina.kingsley@systems-nevada.example}}>
+To: "{{person:Cedric Ellsworth}}" <{{email:cedric..ellsworth@outlook.com}}>
+Date: Sat, {{date:3 Oct 2026}} 12:30:00 +0100
+Subject: Notice {{id:EXP-2026-3434}}: payment pending
+
+To {{person:Cedric Ellsworth}}, holder of ID {{id:77494189M}}:
+
+Our records show an unpaid balance of {{amount:£5,850.04}} on file {{id:EXP-2026-3434}}.
+
+If it is not paid by {{date:13 October, 2026}}, a surcharge of 20% applies: {{amount:$1,170.01}}, for a total of {{amount:$7,020.05}}.
+
+Pay by transfer to {{iban:PT71 2540 8924 5205 1144 2106 7}} and keep the receipt. For help call {{phone:894-555-0102}}.
+
+Social security contributions for {{date:2026-10-01}} are listed in the portal: {{url:https://sede.systems-nevada.example/cuotas/39536A947}}
+
+This is an automatic notice. Do not reply.

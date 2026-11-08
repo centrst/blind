@@ -1,0 +1,20 @@
+%order mdy
+%known person|Isadora Ashworth
+From: {{person:Isadora Ashworth}} <{{email:isadora..iashworth@icloud.com}}>
+To: {{person:Delphine Nightingale}} <{{email:delphinenightingale@advisory-larkspur.example}}>
+Date: Sat, {{date:12 Dec 2026}} 17:15:00 +0100
+Subject: Fwd: question from {{org:Vendaval Systems}}
+{{person:Delphine}}, forwarding below. Please check the numbers and call them on {{phone:+34 750804545}}.
+---------- Forwarded message ---------
+From: {{person:Gwendolyn Ellsworth}} <{{email:gwendolyn_ellsworth@vendaval-systems.example}}>
+Date: {{date:12 Dec 2026}}
+Subject: Quote for project {{id:X6377306Y}}
+
+Dear {{person:Isadora}},
+We at {{org:Vendaval Systems}} have a budget of {{amount:39.09 USD}} for the work in {{place:Fenwick Bay}}. Could you confirm the start date?
+--
+Best regards,
+{{person:Gwendolyn Ellsworth}}
+Directora de operaciones
+{{org:Vendaval Systems}}
+{{email:gwendolyn_ellsworth@vendaval-systems.example}}

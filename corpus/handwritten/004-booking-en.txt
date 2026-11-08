@@ -1,0 +1,18 @@
+%known person|Winston Hale
+From: {{org:The Larkspur Hotel}} <{{email:reservations@larkspur-hotel.example}}>
+To: {{person:Winston Hale}} <{{email:w..hale@icloud.com}}>
+Subject: Reservation {{id:LSP4482911}} confirmed
+
+Dear {{person:Mr Hale}},
+
+We look forward to welcoming you from {{date:14 September 2026}} to {{date:17 September 2026}}.
+Room: Deluxe double, breakfast included.
+Rate per night: {{amount:£142.00}}. Three nights: {{amount:£426.00}}. City tax of 4% is added at check-in.
+
+A deposit of {{amount:£100.00}} was charged to the card ending 4417.
+Questions? {{phone:+44 7700 900451}} or reply to this email.
+
+Warm regards,
+{{person:Gwen Thackeray}}
+Guest Relations, {{org:The Larkspur Hotel}}
+{{url:www.larkspur-hotel.example}}

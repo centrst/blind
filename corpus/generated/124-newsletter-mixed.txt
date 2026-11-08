@@ -1,0 +1,16 @@
+%order mdy
+%known person|Tamsin Haverford
+From: {{org:Pinar Consulting Inc}} <{{email:news@pinar-consulting.example}}>
+To: {{email:tam..haverford@icloud.com}}
+Date: Mon, {{date:9 Sep 2024}} 14:15:00 +0100
+Subject: Ambrose's picks for the season
+
+Hi {{person:Tamsin}}, here is what is new this month.
+
+Te esperamos en la jornada de puertas abiertas en {{place:Springvale}} el {{date:2024-10-08}}. Entrada {{amount:137.08 USD}}.
+
+Shop online: {{url:https://www.pinar-consulting.example/shop?utm_campaign=1568}}
+
+You receive this because {{email:tam..haverford@icloud.com}} subscribed. Unsubscribe: {{url:https://news.pinar-consulting.example/unsubscribe?u=904729327x&e=tam..haverford%40icloud.com}}
+
+{{org:Pinar Consulting Inc.}}, Atención al cliente {{phone:+34 762 783 917}}

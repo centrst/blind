@@ -1,0 +1,25 @@
+%known person|Gloria Sepúlveda Quintana
+%known org|Estudio Sotavento S.A.
+From: "{{person:Anselmo Olmos}}" <{{email:olmos.anselmo@asesores-millstone.example}}>
+To: {{person:Gloria Sepúlveda Quintana}} <{{email:gloriasepulveda@estudio-sotavento.example}}>
+Date: Wed, {{date:18 Feb 2026}} 17:00:00 +0100
+Subject: Factura {{id:LU797629000}}
+
+Estimado/a {{person:Gloria}},
+
+Adjuntamos la factura {{id:LU797629000}} por los servicios prestados a {{org:Estudio Sotavento S.A.}}.
+
+La cuota es {{amount:18,51 €}} más 4 % de IVA, en total {{amount:19,25 €}}.
+
+El pago vence el {{date:20 de marzo del 2026}}. Transferencia a {{iban:GB13 ACBG 9896 0711 1118 12}} indicando {{id:LU797629000}}.
+
+Nuestro NIF es {{id:B10849170}}.
+
+--
+Saludos cordiales,
+{{person:Anselmo Olmos}}
+Administración
+{{org:Asesores Millstone S.L.U.}}
+Tel: {{phone:+1 288 555 0153}}
+{{email:olmos.anselmo@asesores-millstone.example}}
+{{url:www.asesores-millstone.example}}

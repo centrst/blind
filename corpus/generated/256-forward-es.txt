@@ -1,0 +1,21 @@
+%known person|Amparo Quintana Fontán
+From: {{person:Amparo Quintana Fontán}} <{{email:quintana.amparo@asesores-tramuntana.example}}>
+To: "{{person:Ernesto Olmos}}" <{{email:ernesto_olmos@ingenieria-millstone.example}}>
+Date: Tue, {{date:23 Jun 2026}} 12:45:00 +0100
+Subject: Fwd: presupuesto {{org:Reformas Dorsal}}
+Hola {{person:Ernesto}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:2026-06-26}}.
+---------- Forwarded message ---------
+From: "{{person:Belén Navarrete}}" <{{email:belennavarrete@reformas-dorsal.example}}>
+Date: {{date:23 Jun 2026}}
+Subject: Presupuesto proyecto {{id:BKP1181QV}}
+
+Hola {{person:Amparo}},
+El consejo aprobó {{amount:313,52 €}} para el proyecto {{id:BKP1181QV}}. ¿Cuándo podríais empezar?
+--
+Un saludo,
+{{person:Belén Navarrete}}
+Operations manager
+{{org:Reformas Dorsal}}
+Tel: {{phone:0034 756 154 116}}
+{{email:belennavarrete@reformas-dorsal.example}}
+{{url:www.reformas-dorsal.example}}

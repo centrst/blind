@@ -1,0 +1,13 @@
+%known person|Ofelia Cuesta
+From: {{org:Clínica Nevada}} <{{email:security@clinica-nevada.example}}>
+To: {{email:o_cuesta@gmail.com}}
+Date: Wed, {{date:25 Sep 2024}} 15:00:00 +0100
+Subject: Tu código de verificación
+
+Hola {{person:Ofelia}},
+
+Tu código de verificación es {{id:907281}}. Caduca en 10 minutos. No lo compartas.
+
+Si no fuiste tú, llama al {{phone:791 52 71 27}} o escribe a {{email:security@clinica-nevada.example}}.
+
+El equipo de seguridad de {{org:Clínica Nevada}}

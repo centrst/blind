@@ -1,0 +1,20 @@
+%known person|Rosendo Bustamante
+From: {{person:Rosendo Bustamante}} <{{email:bustamante.rosendo@consultores-zafiro.example}}>
+To: "{{person:Belén Espinosa}}" <{{email:espinosa.belen@transportes-ocaso.example}}>
+Date: Mon, {{date:6 May 2024}} 16:15:00 +0100
+Subject: Fwd: presupuesto {{org:Ingeniería Nevada S.A.}}
+{{person:Belén}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:756 572 652}}.
+---------- Forwarded message ---------
+From: {{person:Facundo de la Torre}} <{{email:fde@ingenieria-nevada.example}}>
+Date: {{date:6 May 2024}}
+Subject: Presupuesto proyecto {{id:49666663}}
+
+Buenos días {{person:Rosendo}},
+El consejo aprobó {{amount:8,72 EUR}} para el proyecto {{id:49666663}}. ¿Cuándo podríais empezar?
+--
+Best regards,
+{{person:Facundo de la Torre}}
+Purchasing
+{{org:Ingeniería Nevada S.A.}}
+{{url:www.ingenieria-nevada.example}}
+Oficina de {{place:San Telmo de Abajo}}

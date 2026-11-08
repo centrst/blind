@@ -1,0 +1,11 @@
+%known person|Cecilia Marlow
+From: Pinewood Credit Union <news@pinewood-cu.example>
+To: {{person:Cecilia Marlow}} <{{email:cecilia_marlow@gmail.com}}>
+Subject: Savings rates go up
+
+Dear member,
+
+Starting {{date:June 1, 2026}} our savings account pays 3.9%. Open one with as little as {{amount:$25.00}}.
+Visit the {{place:Brindleton}} branch or call {{phone:(614) 555-0112}}.
+
+Member number ending {{id:44120793}}. To stop these emails: {{url:https://pinewood-cu.example/prefs?m=44120793}}

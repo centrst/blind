@@ -1,0 +1,14 @@
+%order mdy
+%known person|Cedric Fairchild
+From: {{org:Yelmo Supply}} <{{email:security@yelmo-supply.example}}>
+To: "{{person:Cedric Fairchild}}" <{{email:cedric..fairchild@outlook.com}}>
+Date: Sun, {{date:31 Mar 2024}} 15:15:00 +0100
+Subject: New sign-in to your account
+
+Hi {{person:Cedric}},
+
+Your verification code is {{id:626189}}. It expires in 10 minutes. Never share it.
+
+If this was not you, call {{phone:388-555-0164}} or write to {{email:security@yelmo-supply.example}}.
+
+The {{org:Yelmo Supply}} security team

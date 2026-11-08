@@ -1,0 +1,13 @@
+%known person|Nicolás Rebollo
+From: {{org:Reformas Farola}} <{{email:security@reformas-farola.example}}>
+To: {{person:Nicolás Rebollo}} <{{email:nicolas..rebollo@outlook.com}}>
+Date: Sat, {{date:13 Jun 2026}} 12:00:00 +0100
+Subject: Tu código de verificación
+
+Hola {{person:Nicolás}},
+
+Detectamos un inicio de sesión en {{email:nicolas..rebollo@outlook.com}} desde {{place:Montefrío Chico}} el {{date:2026-06-13}} a las 14:45.
+
+Si no fuiste tú, llama al {{phone:754 08 52 14}} o escribe a {{email:security@reformas-farola.example}}.
+
+El equipo de seguridad de {{org:Reformas Farola}}

@@ -1,0 +1,11 @@
+%known person|Isadora Keen
+%known org|Keen Bikes Ltd
+From: {{person:Isadora Keen}} <{{email:isadora@keen-bikes.example}}>
+To: {{person:Nigel Ashdown}} <{{email:nigel@ashdown-couriers.example}}>
+Subject: Re: Missing parcel {{id:TRK55120987}}
+
+Nigel, the parcel still has not arrived. It contains 3 frames worth {{amount:£1,950.00}}. Please open a claim.
+
+On {{date:2 October 2026}}, {{person:Nigel Ashdown}} wrote:
+> Isadora, tracking shows the parcel left {{place:Brindleton}} on {{date:29 September}}. I will check with the depot.
+> Claims desk: {{phone:+44 161 496 0333}}.

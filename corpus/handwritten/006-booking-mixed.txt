@@ -1,0 +1,11 @@
+%known person|Cedric Maddox
+%known org|Maddox Studio Ltd
+From: Ferry Tickets <orders..team@calendly.com>
+To: {{person:Cedric Maddox}} <{{email:cedric@maddox-studio.example}}>
+Subject: Tickets for {{date:2026-08-09}}
+
+Hi {{person:Cedric}},
+
+Billete de ferry para {{person:Cedric Maddox}} y {{person:Paloma Maddox}}: salida el {{date:2026-08-09}} a las 08:40, regreso el {{date:2026-08-16}}.
+Total charged to {{org:Maddox Studio Ltd}}: {{amount:EUR 318.40}}.
+Booking code {{id:FRY6671Q}}. Support line {{phone:+34 771 555 019}}.

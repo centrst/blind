@@ -1,0 +1,23 @@
+%known person|Belén Fontán
+%known org|Consultores Sotavento
+From: {{person:Fermina Espinosa}} <{{email:fermina_espinosa@asesores-foxglove.example}}>
+To: {{person:Belén Fontán}} <{{email:fontan.belen@consultores-sotavento.example}}>
+Date: Sat, {{date:6 Apr 2024}} 11:00:00 +0100
+Subject: Re: oferta para {{org:Consultores Sotavento}}
+Podemos aceptar {{amount:2.298,87 €}} y enviar el contrato a {{email:fontan.belen@consultores-sotavento.example}}.
+On {{date:2024-04-05}}, {{person:Belén Fontán}} wrote:
+> Gracias {{person:Fermina}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:€ 2.112,47}}? La reunión nos va bien, llámame al {{phone:+1 550 555 0179}} si cambia.
+>
+> El {{date:2024-04-04}}, {{person:Fermina Espinosa}} escribió:
+> > Hola {{person:Belén}}, nuestra oferta para {{org:Consultores Sotavento}} es de {{amount:2.485,26 EUR}}. ¿Quedamos el {{date:10 de abril del 2024}} a las 18:15?
+> > 
+> > --
+> > Gracias,
+> > {{person:Fermina Espinosa}}
+> > Sales
+> > {{org:Asesores Foxglove S.L.}}
+> > Tel: {{phone:770 43 81 18}}
+> > {{email:fermina_espinosa@asesores-foxglove.example}}
+> > {{url:www.asesores-foxglove.example}}
+
+{{person:Fermina}}

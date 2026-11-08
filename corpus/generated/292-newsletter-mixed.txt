@@ -1,0 +1,15 @@
+%known person|Wilhelmina Kingsley
+From: {{org:Tramuntana Labs}} <{{email:news@tramuntana-labs.example}}>
+To: {{email:wilhelmina..wkingsley@outlook.com}}
+Date: Sun, {{date:29 Aug 2027}} 17:45:00 +0100
+Subject: Ambrose's picks for the season
+
+Hi {{person:Wilhelmina}}, here is what is new this month.
+
+Our best seller is now {{amount:USD 393.56}}, down from {{amount:£491.95}}. Offer ends {{date:2027-09-07}}.
+
+Compra online: {{url:https://www.tramuntana-labs.example/tienda?utm_campaign=8954}}
+
+You receive this because {{email:wilhelmina..wkingsley@outlook.com}} subscribed. Unsubscribe: {{url:https://news.tramuntana-labs.example/unsubscribe?u=528192585x&e=wilhelmina..wkingsley%40outlook.com}}
+
+{{org:Tramuntana Labs}}, Atención al cliente {{phone:+34 785 867 516}}

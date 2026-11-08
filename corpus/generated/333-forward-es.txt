@@ -1,0 +1,19 @@
+%known person|Nicolás Cifuentes
+From: {{person:Nicolás Cifuentes}} <{{email:nicolascifuentes@clinica-isleta.example}}>
+To: {{person:Remedios Espinosa}} <{{email:respinosa@estudio-lumbre.example}}>
+Date: Sun, {{date:25 Aug 2024}} 18:00:00 +0100
+Subject: Fwd: presupuesto {{org:Transportes Pennywhistle}}
+{{person:Remedios}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:+44 7700 900121}}.
+---------- Forwarded message ---------
+From: {{person:Macarena de Lara}} <{{email:macarena_de@transportes-pennywhistle.example}}>
+Date: {{date:25 Aug 2024}}
+Subject: Presupuesto proyecto {{id:Z7495033N}}
+
+Buenos días {{person:Nicolás}},
+En {{org:Transportes Pennywhistle}} disponemos de {{amount:€ 4262,47}} para la obra en {{place:Villaluenga Alta}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Un saludo,
+{{person:Macarena de Lara}}
+Directora de operaciones
+{{org:Transportes Pennywhistle}}
+Tel: {{phone:+44 7700 900121}}

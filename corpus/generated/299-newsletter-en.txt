@@ -1,0 +1,15 @@
+%known person|Sebastian Lambert
+From: {{org:Advisory Bruma LLC}} <{{email:news@advisory-bruma.example}}>
+To: {{email:lambert..sebastian@outlook.com}}
+Date: Wed, {{date:24 Jan 2024}} 18:15:00 +0100
+Subject: Spring offers inside
+
+Hi {{person:Sebastian}}, here is what is new this month.
+
+Join our open day in {{place:Maple Hollow}} on {{date:FEBRUARY 15 2024}}. Entry {{amount:$47.87}}.
+
+Shop online: {{url:https://www.advisory-bruma.example/shop?utm_campaign=4890}}
+
+You receive this because {{email:lambert..sebastian@outlook.com}} subscribed. Unsubscribe: {{url:https://news.advisory-bruma.example/unsubscribe?u=897089516x&e=lambert..sebastian%40outlook.com}}
+
+{{org:Advisory Bruma LLC}}, Customer care {{phone:+49 171 392 0052}}

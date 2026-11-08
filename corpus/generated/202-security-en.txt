@@ -1,0 +1,14 @@
+%order mdy
+%known person|Tamsin Upshaw
+From: {{org:Supply Rastro}} <{{email:security@supply-rastro.example}}>
+To: {{email:tamsin..upshaw@icloud.com}}
+Date: Mon, {{date:6 Apr 2026}} 12:00:00 +0100
+Subject: Your verification code
+
+Hi {{person:Tamsin}},
+
+Your verification code is {{id:759102}}. It expires in 10 minutes. Never share it.
+
+If this was not you, call {{phone:+1 220 555 0171}} or write to {{email:security@supply-rastro.example}}.
+
+The {{org:Supply Rastro}} security team

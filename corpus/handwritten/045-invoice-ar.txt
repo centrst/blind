@@ -1,0 +1,13 @@
+%known person|رنيم زهرون
+%known org|دار النخلة
+From: {{org:دار النخلة}} <{{email:fawatir@dar-nakhla.example}}>
+To: <{{email:raneem.z@zahroun-mail.example}}>
+Subject: فاتورة شهر نوفمبر
+
+مرحبا،
+
+أرسلنا الفاتورة ل{{person:رنيم زهرون}} بتاريخ {{date:03/11/2026}}. المبلغ المستحق {{amount:USD 240.00}}.
+إذا كان هناك سؤال فل{{person:رنيم}} أن تكتب لنا قبل نهاية الشهر.
+
+مع الشكر،
+فريق الحسابات

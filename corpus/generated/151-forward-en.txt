@@ -1,0 +1,21 @@
+%order mdy
+%known person|Rosalind Lambert
+From: {{person:Rosalind Lambert}} <{{email:rosalind@wicker-works.example}}>
+To: {{person:Percival Kingsley}} <{{email:percival@isleta-labs.example}}>
+Date: Tue, {{date:12 Jan 2027}} 11:00:00 +0100
+Subject: Fwd: {{org:Larkspur Partners Ltd}} quote
+Hi {{person:Percival}}, can you take this one? The client wants an answer by {{date:16 January, 2027}}.
+---------- Forwarded message ---------
+From: {{person:Cedric Crawley}} <{{email:cedriccrawley@larkspur-partners.example}}>
+Date: {{date:12 Jan 2027}}
+Subject: Quote for project {{id:FAC/2025/0227}}
+
+Hi {{person:Rosalind}},
+The board approved {{amount:288.80 USD}} for project {{id:FAC/2025/0227}}. When can you begin?
+--
+Thanks,
+{{person:Cedric Crawley}}
+Purchasing
+{{org:Larkspur Partners Ltd}}
+Tel: {{phone:749-555-0180}}
+{{email:cedriccrawley@larkspur-partners.example}}

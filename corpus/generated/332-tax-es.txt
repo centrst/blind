@@ -1,0 +1,15 @@
+%known person|Joaquín Medrano
+From: {{person:Cayetano Espinosa}} <{{email:notificaciones.espinosa.cayetano@gestion-galeon.example}}>
+To: {{person:Joaquín Medrano}} <{{email:joa..medrano@outlook.com}}>
+Date: Sat, {{date:23 Oct 2027}} 12:30:00 +0100
+Subject: Aviso de deuda pendiente
+
+Estimado/a {{person:Joaquín Medrano}},
+
+Según nuestros registros, consta una deuda de {{amount:29,37 €}} en el expediente {{id:EXP-2027-3650}}.
+
+Si no se abona antes del {{date:22 de noviembre de 2027}}, se aplicará un recargo del 10 %: {{amount:2,94 €}}, en total {{amount:€ 32,31}}.
+
+Puede pagar por transferencia a {{iban:FR7545533216667899444669568}} y conservar el justificante. Atención telefónica: {{phone:756 460 312}}.
+
+Este es un aviso automático. No responda a este correo.

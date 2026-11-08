@@ -1,0 +1,25 @@
+%known person|Eloy del Río
+%known org|Gestión Wicker S.L.
+From: {{person:Anselmo Arroyo}} <{{email:anselmo_arroyo@logistica-quimera.example}}>
+To: {{person:Eloy del Río}} <{{email:eloy..del@icloud.com}}>
+Date: Fri, {{date:23 Apr 2027}} 08:45:00 +0100
+Subject: Factura {{id:EXP-2026-7239}} de {{org:Logística Quimera}}
+
+Hola {{person:Eloy}},
+
+Te enviamos la factura del último periodo de {{org:Gestión Wicker S.L.}}.
+
+El total es {{amount:2.502,53 €}}, con 4 % de IVA sobre {{amount:2406,28 €}}.
+
+Agradecemos el pago antes del {{date:2027-06-07}} en la cuenta {{iban:DE18 4698 4247 9388 6960 57}}.
+
+Nuestro NIF es {{id:B28445009}}.
+
+--
+Un saludo,
+{{person:Anselmo Arroyo}}
+Billing department
+{{org:Logística Quimera}}
+Tel: {{phone:(738) 555-0103}}
+{{email:anselmo_arroyo@logistica-quimera.example}}
+{{url:www.logistica-quimera.example}}

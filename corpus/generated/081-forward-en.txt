@@ -1,0 +1,22 @@
+%order mdy
+%known person|Cordelia Haverford
+From: {{person:Cordelia Haverford}} <{{email:chaverford@pinar-advisory.example}}>
+To: {{person:Eleanor Ellsworth}} <{{email:eleanor.ellsworth@umbral-works.example}}>
+Date: Sat, {{date:4 Jul 2026}} 10:15:00 +0100
+Subject: Fwd: question from {{org:Sotavento Systems GmbH}}
+{{person:Eleanor}}, forwarding below. Please check the numbers and call them on {{phone:+34 752 621 831}}.
+---------- Forwarded message ---------
+From: {{person:Gareth Crawley}} <{{email:gareth_crawley@sotavento-systems.example}}>
+Date: {{date:4 Jul 2026}}
+Subject: Quote for project {{id:FAC/2027/5924}}
+
+Dear {{person:Cordelia}},
+We at {{org:Sotavento Systems GmbH}} have a budget of {{amount:USD 511.21}} for the work in {{place:Oakmere}}. Could you confirm the start date?
+--
+Best regards,
+{{person:Gareth Crawley}}
+Operations manager
+{{org:Sotavento Systems GmbH}}
+Tel: {{phone:+34 752 621 831}}
+{{email:gareth_crawley@sotavento-systems.example}}
+Office: {{place:Harlow Cross}}

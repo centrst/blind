@@ -1,0 +1,12 @@
+%known person|Ulises Montalbán
+%known org|Montalbán Gráficas S.L.
+From: Mutualidad de Trabajadores Autónomos <cuotas@mutualidad-autonomos.example>
+To: {{person:Ulises Montalbán}} <{{email:ulises@montalban-graficas.example}}>
+Subject: Cuota de autónomos / Self-employed contribution
+
+Estimado {{person:Ulises Montalbán}}:
+
+Su cuota de autónomos de octubre de 2026 asciende a {{amount:294,00 €}} y se cargará el {{date:30/10/2026}} en la cuenta terminada en 2345.
+Reference for the contribution: {{id:AUT-2026-9930127}}. Regarding {{org:Montalbán Gráficas S.L.}}, no arrears.
+
+If you want to change your base, call {{phone:+34 76 555 0147}}.

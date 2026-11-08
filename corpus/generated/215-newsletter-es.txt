@@ -1,0 +1,15 @@
+%known person|Herminia Cifuentes
+From: {{org:Reformas Ocaso}} <{{email:news@reformas-ocaso.example}}>
+To: {{person:Herminia Cifuentes}} <{{email:h..cifuentes@outlook.com}}>
+Date: Sat, {{date:16 May 2026}} 12:30:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Herminia}}, estas son las novedades del mes.
+
+Te esperamos en la jornada de puertas abiertas en {{place:Almendral del Sur}} el {{date:11 de junio de 2026}}. Entrada {{amount:70,49 EUR}}.
+
+Compra online: {{url:https://www.reformas-ocaso.example/tienda?utm_campaign=1668}}
+
+Recibes este correo porque {{email:h..cifuentes@outlook.com}} se suscribió. Darte de baja: {{url:https://news.reformas-ocaso.example/unsubscribe?u=354777480x&e=h..cifuentes%40outlook.com}}
+
+{{org:Reformas Ocaso}}, Atención al cliente {{phone:+34 765 335 223}}

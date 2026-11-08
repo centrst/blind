@@ -1,0 +1,21 @@
+%known person|Matilda Yardley
+From: {{person:Matilda Yardley}} <{{email:matilda@marisma-supply.example}}>
+To: {{person:Humphrey Quigley}} <{{email:humphrey_quigley@rastro-logistics.example}}>
+Date: Fri, {{date:13 Feb 2026}} 12:45:00 +0100
+Subject: Fwd: question from {{org:Hontanar Works}}
+{{person:Humphrey}}, forwarding below. Please check the numbers and call them on {{phone:(465) 555-0134}}.
+---------- Forwarded message ---------
+From: {{person:Ambrose Whitcombe}} <{{email:awhitcombe@hontanar-works.example}}>
+Date: {{date:13 Feb 2026}}
+Subject: Quote for project {{id:EXP-2023-0503}}
+
+Hi {{person:Matilda}},
+The board approved {{amount:£235.33}} for project {{id:EXP-2023-0503}}. When can you begin?
+--
+Thanks,
+{{person:Ambrose Whitcombe}}
+Purchasing
+{{org:Hontanar Works}}
+Tel: {{phone:(465) 555-0134}}
+{{email:awhitcombe@hontanar-works.example}}
+Office: {{place:Stonebridge}}

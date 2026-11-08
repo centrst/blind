@@ -1,0 +1,22 @@
+%known person|Facundo Figueroa Ocaña
+%known org|Servicios Umbral
+From: {{person:Jacinta Espinosa Zamora}} <{{email:jacinta@reformas-aldara.example}}>
+To: "{{person:Facundo Figueroa Ocaña}}" <{{email:ffigueroa@servicios-umbral.example}}>
+Date: Thu, {{date:15 May 2025}} 11:45:00 +0100
+Subject: Re: oferta para {{org:Servicios Umbral}}
+Podemos aceptar {{amount:30,56 €}} y enviar el contrato a {{email:ffigueroa@servicios-umbral.example}}.
+On {{date:2025-05-14}}, {{person:Facundo Figueroa Ocaña}} wrote:
+> Gracias {{person:Jacinta}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:28,08 €}}? La reunión nos va bien, llámame al {{phone:498-555-0191}} si cambia.
+>
+> El {{date:13/5/2025}}, {{person:Jacinta Espinosa Zamora}} escribió:
+> > Hola {{person:Facundo}}, nuestra oferta para {{org:Servicios Umbral}} es de {{amount:€ 33,04}}. ¿Quedamos el {{date:16 de MAYO de 2025}} a las 18:45?
+> > 
+> > --
+> > Un saludo,
+> > {{person:Jacinta Espinosa Zamora}}
+> > Sales
+> > {{org:Reformas Aldara S.L.U.}}
+> > Tel: {{phone:(860) 555-0138}}
+> > {{email:jacinta@reformas-aldara.example}}
+
+{{person:Jacinta}}

@@ -1,0 +1,24 @@
+%known person|Rowena Mortimer
+%known org|Tramuntana Works Ltd
+From: {{person:Wilhelmina Oakley}} <{{email:woakley@systems-foxglove.example}}>
+To: {{person:Rowena Mortimer}} <{{email:mortimer.rowena@tramuntana-works.example}}>
+Date: Thu, {{date:10 Apr 2025}} 17:15:00 +0100
+Subject: Re: offer for {{org:Tramuntana Works Ltd}}
+We can accept {{amount:USD 1,570.26}} and send the contract to {{email:mortimer.rowena@tramuntana-works.example}}.
+On {{date:April 9, 2025}}, {{person:Rowena Mortimer}} wrote:
+> Gracias {{person:Wilhelmina}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:1,442.94 USD}}? La reunión nos va bien, llámame al {{phone:+49 171 392 0092}} si cambia.
+>
+> On {{date:8 Apr 2025}}, {{person:Wilhelmina Oakley}} wrote:
+> > Hello {{person:Rowena}}, our offer for {{org:Tramuntana Works Ltd}} is {{amount:1,697.58 USD}}. Can we meet on {{date:19 April 2025}} at 12:45?
+> > 
+> > --
+> > Saludos cordiales,
+> > {{person:Wilhelmina Oakley}}
+> > Sales
+> > {{org:Systems Foxglove}}
+> > Tel: {{phone:766 622 513}}
+> > {{email:woakley@systems-foxglove.example}}
+> > {{url:www.systems-foxglove.example}}
+> > Oficina de {{place:Brindleton}}
+
+{{person:Wilhelmina}}

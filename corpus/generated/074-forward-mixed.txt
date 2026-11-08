@@ -1,0 +1,21 @@
+%known person|Isidro Figueroa
+From: {{person:Isidro Figueroa}} <{{email:isi..figueroa@icloud.com}}>
+To: {{person:Trinidad Quintana}} <{{email:quintana.trinidad@transportes-lumbre.example}}>
+Date: Mon, {{date:21 Dec 2026}} 19:15:00 +0100
+Subject: Fwd: consulta de {{org:Ingeniería Pennywhistle S.L.U.}}
+{{person:Trinidad}}, te reenvío el correo. Revisa las cifras y llámales al {{phone:+49 171 392 0057}}.
+---------- Forwarded message ---------
+From: {{person:Remedios Ocaña}} <{{email:remediosocana@ingenieria-pennywhistle.example}}>
+Date: {{date:21 Dec 2026}}
+Subject: Presupuesto proyecto {{id:82154582}}
+
+Hola {{person:Isidro}},
+En {{org:Ingeniería Pennywhistle S.L.U.}} disponemos de {{amount:3.893,39 EUR}} para la obra en {{place:Valdecañas}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Saludos cordiales,
+{{person:Remedios Ocaña}}
+Directora de operaciones
+{{org:Ingeniería Pennywhistle S.L.U.}}
+{{email:remediosocana@ingenieria-pennywhistle.example}}
+{{url:www.ingenieria-pennywhistle.example}}
+Oficina de {{place:Valdecañas}}

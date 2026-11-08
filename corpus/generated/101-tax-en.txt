@@ -1,0 +1,15 @@
+%known person|Odette Mortimer
+From: {{person:Barnaby Ellsworth}} <{{email:notificaciones.ellsworth.barnaby@millstone-holdings.example}}>
+To: {{person:Odette Mortimer}} <{{email:ode..mortimer@icloud.com}}>
+Date: Sat, {{date:28 Sep 2024}} 14:30:00 +0100
+Subject: Notice {{id:EXP-2024-9340}}: payment pending
+
+To {{person:Odette Mortimer}}, holder of ID {{id:Y9842539J}}:
+
+Regional Revenue Office of {{place:Brindleton}} informs you that file {{id:EXP-2024-9340}} shows a balance of {{amount:£45.82}} for the period ending {{date:2024-08-19}}.
+
+If it is not paid by {{date:08/10/2024}}, a surcharge of 5% applies: {{amount:2.29 USD}}, for a total of {{amount:USD 48.11}}.
+
+Pay by transfer to {{iban:FR69 1478 1920 5481 8638 0298 091}} and keep the receipt. For help call {{phone:+49 171 392 0012}}.
+
+This is an automatic notice. Do not reply.

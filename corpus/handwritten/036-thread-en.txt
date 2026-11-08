@@ -1,0 +1,14 @@
+%known person|Rowena Strand
+%known org|Strand & Partners
+From: {{person:Rowena Strand}} <{{email:rowena@strand-partners.example}}>
+To: {{person:Barnaby Finch}} <{{email:barnaby@finch-media.example}}>
+Subject: Re: Retainer for Q3
+
+Barnaby, deal. {{amount:$4,500.00}} a month, starting {{date:July 1}}.
+
+On {{date:Jun 10}}, {{person:Barnaby Finch}} wrote:
+> Rowena, our budget is {{amount:$4,000.00}} a month. Could we start on {{date:July 1}}?
+> I can sign this week. My cell is {{phone:(917) 555-0144}}.
+>
+> On {{date:Jun 9}}, {{person:Rowena Strand}} wrote:
+> > Barnaby, the retainer for {{org:Strand & Partners}} is {{amount:$5,000.00}} a month.

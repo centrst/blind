@@ -1,0 +1,14 @@
+%order mdy
+%known person|Matilda Somerset
+From: {{org:Logistics Wicker Ltd}} <{{email:security@logistics-wicker.example}}>
+To: {{email:matilda..som@icloud.com}}
+Date: Thu, {{date:4 Apr 2024}} 13:00:00 +0100
+Subject: Solicitud de cambio de contraseña
+
+Hola {{person:Matilda}},
+
+Your verification code is {{id:145690}}. It expires in 10 minutes. Never share it.
+
+Si no fuiste tú, llama al {{phone:+34 784575568}} o escribe a {{email:security@logistics-wicker.example}}.
+
+The {{org:Logistics Wicker Ltd}} security team

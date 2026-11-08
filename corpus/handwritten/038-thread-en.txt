@@ -1,0 +1,10 @@
+%known person|Lionel Garrick
+From: {{person:Lionel Garrick}} <{{email:lionel@garrick-cafe.example}}>
+To: {{person:Eleanor Whitlock}} <{{email:eleanor@whitlock-roasters.example}}>
+Subject: Re: Coffee order
+
+Eleanor, same as last time please: 20 kg of the house blend. Deliver to the {{place:Springvale}} shop.
+
+> Eleanor Whitlock wrote on {{date:21 March 2026}}:
+> The house blend is {{amount:£14.20}} per kg now (was {{amount:£13.50}}). Twenty kilos is {{amount:£284.00}}.
+> Invoice number {{id:WR-2026-0390}} will follow.

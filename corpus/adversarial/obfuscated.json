@@ -1,0 +1,106 @@
+[
+  {
+    "id": "O1",
+    "title": "ana at gestoria dot example",
+    "text": "Write to ana at gestoria dot example before Friday.",
+    "secrets": [
+      "gestoria"
+    ],
+    "expect": "silent",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      },
+      {
+        "kind": "domain",
+        "value": "gestoria.example"
+      }
+    ],
+    "why": "Spelled-out \"at\" and \"dot\" are prose, not an address. The known domain never appears in its dotted form, so neither the detectors nor the leak check see it.",
+    "seed": "adv"
+  },
+  {
+    "id": "O2",
+    "title": "ana(at)gestoria.example",
+    "text": "Write to ana(at)gestoria.example before Friday.",
+    "secrets": [
+      "ana",
+      "gestoria"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      },
+      {
+        "kind": "domain",
+        "value": "gestoria.example"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "O3",
+    "title": "ana@gestoria .example (space before the TLD)",
+    "text": "Write to ana@gestoria .example before Friday.",
+    "secrets": [
+      "gestoria"
+    ],
+    "expect": "silent",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      },
+      {
+        "kind": "domain",
+        "value": "gestoria.example"
+      }
+    ],
+    "why": "A space inside the domain breaks the address pattern and the known domain pattern. The local part is caught through the known name only.",
+    "seed": "adv"
+  },
+  {
+    "id": "O4",
+    "title": "ana [at] gestoria [dot] example",
+    "text": "Contact: ana [at] gestoria [dot] example",
+    "secrets": [
+      "gestoria"
+    ],
+    "expect": "silent",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      },
+      {
+        "kind": "domain",
+        "value": "gestoria.example"
+      }
+    ],
+    "why": "Bracketed \"at\" and \"dot\" words are not an address, and the known domain is not written out.",
+    "seed": "adv"
+  },
+  {
+    "id": "O5",
+    "title": "address with a full-width at sign",
+    "text": "Write to ana\uff20gestoria.example please.",
+    "secrets": [
+      "gestoria"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      },
+      {
+        "kind": "domain",
+        "value": "gestoria.example"
+      }
+    ],
+    "seed": "adv"
+  }
+]

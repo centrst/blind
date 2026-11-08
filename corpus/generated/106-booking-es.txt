@@ -1,0 +1,11 @@
+%known person|Griselda Zamora
+From: {{person:Eloy Fontán Urrutia}} <{{email:eloy@asesores-larkspur.example}}>
+To: {{person:Griselda Zamora}} <{{email:griselda..zamora@icloud.com}}>
+Date: Sat, {{date:17 May 2025}} 14:15:00 +0100
+Subject: Reserva confirmada
+
+Estimado/a {{person:Griselda}},
+
+Hemos reservado revisión dental para ti el {{date:28 de mayo de 2025}}. Estamos en {{place:Almendral del Sur}}.
+
+El importe es {{amount:€ 44,35}}, a pagar en el local. Hemos retenido una señal de {{amount:€ 11,09}}.

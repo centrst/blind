@@ -1,0 +1,15 @@
+%known person|Nicolás Echevarría
+From: Delegación Tributaria Provincial <{{email:avisos@delegacion-tributaria.example}}>
+To: {{person:Nicolás Echevarría}} <{{email:nicolas_echevarria@gmail.com}}>
+Subject: Aviso de vencimiento, modelo 303
+
+Estimado contribuyente:
+
+Se le informa de que el plazo para presentar el modelo 303 del segundo trimestre termina el {{date:20 de julio de 2026}}.
+Su número de identificación fiscal {{id:47281936Q}} figura con una cuota pendiente de {{amount:1.842,17 €}}.
+Si la presentación se realiza fuera de plazo se aplicará un recargo del 5 %, esto es {{amount:92,11 €}}.
+
+Puede domiciliar el pago en la cuenta {{iban:ES80 2310 0001 1800 0001 2345}} o consultar el estado en {{url:https://sede.delegacion-tributaria.example/consulta/2026Q2}}.
+Atención telefónica: {{phone:750 555 012}}
+
+Este mensaje se ha generado automáticamente.

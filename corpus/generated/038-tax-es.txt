@@ -1,0 +1,17 @@
+%known person|Estefanía Quintana Jaramillo
+From: {{person:Florencio Fontán Ocaña}} <{{email:notificaciones.florencio.fontan@consultores-yelmo.example}}>
+To: {{person:Estefanía Quintana Jaramillo}} <{{email:estefania..quintana@icloud.com}}>
+Date: Thu, {{date:24 Sep 2026}} 16:45:00 +0100
+Subject: Notificación {{id:EXP-2026-5885}}: pago pendiente
+
+Estimado/a {{person:Estefanía Quintana Jaramillo}},
+
+Según nuestros registros, consta una deuda de {{amount:€ 26,17}} en el expediente {{id:EXP-2026-5885}}.
+
+Si no se abona antes del {{date:24 de OCTUBRE de 2026}}, se aplicará un recargo del 5 %: {{amount:1,31 €}}, en total {{amount:€ 27,48}}.
+
+Puede pagar por transferencia a {{iban:PT25 3301 0084 1845 4223 9967 1}} y conservar el justificante. Atención telefónica: {{phone:0034 779 789 824}}.
+
+Las cuotas de la Seguridad Social del periodo {{date:1/9/26}} están en la sede: {{url:https://sede.consultores-yelmo.example/cuotas/39702A363}}
+
+Este es un aviso automático. No responda a este correo.

@@ -1,0 +1,15 @@
+%known person|Dolores Iglesias
+From: {{org:Logística Foxglove SL}} <{{email:news@logistica-foxglove.example}}>
+To: {{email:dolores_igl@gmail.com}}
+Date: Mon, {{date:18 Oct 2027}} 08:30:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Dolores}}, estas son las novedades del mes.
+
+Te esperamos en la jornada de puertas abiertas en {{place:Puente Nuevo}} el {{date:23 de octubre del 2027}}. Entrada {{amount:36,12 €}}.
+
+Compra online: {{url:https://www.logistica-foxglove.example/tienda?utm_campaign=4330}}
+
+Recibes este correo porque {{email:dolores_igl@gmail.com}} se suscribió. Darte de baja: {{url:https://news.logistica-foxglove.example/unsubscribe?u=944753144x&e=dolores_igl%40gmail.com}}
+
+{{org:Logística Foxglove S.L.}}, Atención al cliente {{phone:0034 770 131 033}}

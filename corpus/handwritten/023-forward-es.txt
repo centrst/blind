@@ -1,0 +1,13 @@
+%known person|Macarena Fontela
+From: {{person:Macarena Fontela}} <{{email:macarena@fontela-arquitectos.example}}>
+To: {{person:Plácido Garrido}} <{{email:placido@garrido-obras.example}}>
+Subject: RV: Licencia de obra, parcela {{id:PAR-2291-17}}
+
+Plácido, el ayuntamiento nos pide esto. Dime cuánto cuesta y cuándo puedes.
+
+> De: {{person:Wenceslao Tamames}} <{{email:wtamames@ayto-valdecanas.example}}>
+> Enviado el: martes, {{date:14 de abril de 2026}}
+> Asunto: Licencia de obra
+>
+> Buenos días. La tasa de la licencia es de {{amount:1.250,00 €}} y debe abonarse en {{iban:ES21 1465 0100 7220 0123 4567}} antes del {{date:30 de abril}}.
+> Un saludo, {{person:Wenceslao Tamames}}, Ayuntamiento de {{place:Valdecañas}}, {{phone:+34 777 555 088}}

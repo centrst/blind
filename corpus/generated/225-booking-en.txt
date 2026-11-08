@@ -1,0 +1,23 @@
+%order mdy
+%known person|Frederick Quigley
+From: {{person:Isadora Nightingale}} <{{email:isadora@jaspe-advisory.example}}>
+To: {{person:Frederick Quigley}} <{{email:quigley.frederick@pinar-labs.example}}>
+Date: Sun, {{date:22 Dec 2024}} 18:30:00 +0100
+Subject: Booking {{id:EXP-2023-4236}} confirmed
+
+Hi {{person:Frederick}},
+
+Your haircut and colour at {{org:Jaspe Advisory Inc.}} is booked for {{date:24th of Dec 2024}} at 15:00.
+
+The price is {{amount:USD 167.68}}, payable on arrival. A deposit of {{amount:USD 41.92}} is held on your card.
+
+Questions? Call us on {{phone:+1 952 555 0197}} or write to {{email:isadora@jaspe-advisory.example}}.
+
+--
+Best regards,
+{{person:Isadora Nightingale}}
+Recepción
+{{org:Jaspe Advisory Inc.}}
+Tel: {{phone:+1 952 555 0197}}
+{{email:isadora@jaspe-advisory.example}}
+{{url:www.jaspe-advisory.example}}

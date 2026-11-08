@@ -1,0 +1,18 @@
+%known person|Quentin Abbot
+%known org|Abbot Freight GmbH
+From: {{person:Valentina Roca}} <{{email:v.roca@roca-translations.example}}>
+To: {{person:Quentin Abbot}} <{{email:quentin@abbot-freight.example}}>
+Subject: Invoice for the translation work / Factura traducciones
+
+Hi {{person:Quentin}},
+
+Invoice {{id:RT-2026-0042}} for the Spanish and German translations delivered on {{date:11 March 2026}}:
+12,400 words at 0.09 per word comes to {{amount:EUR 1,116.00}}, plus 21% VAT of {{amount:EUR 234.36}}.
+Total a pagar: {{amount:EUR 1,350.36}}.
+
+IBAN: {{iban:ES91 2100 0418 4502 0005 1332}}
+Vencimiento: {{date:10/04/2026}}
+
+Gracias,
+{{person:Valentina Roca}}
+Tel. {{phone:+34 777 301 455}}

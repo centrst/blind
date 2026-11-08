@@ -1,0 +1,20 @@
+%known person|Griselda Medrano
+From: {{person:Griselda Medrano}} <{{email:griselda_med@gmail.com}}>
+To: {{person:Anselmo Sepúlveda}} <{{email:anselmo@ingenieria-tramuntana.example}}>
+Date: Fri, {{date:22 Oct 2027}} 09:00:00 +0100
+Subject: Fwd: question from {{org:Logística Rastro}}
+Hi {{person:Anselmo}}, can you take this one? The client wants an answer by {{date:27 de octubre de 2027}}.
+---------- Forwarded message ---------
+From: {{person:Isidro Rebollo Urrutia}} <{{email:isidro@logistica-rastro.example}}>
+Date: {{date:22 Oct 2027}}
+Subject: Quote for project {{id:IQ121397172}}
+
+Hello {{person:Griselda}},
+We at {{org:Logística Rastro}} have a budget of {{amount:3.287,99 €}} for the work in {{place:Almendral del Sur}}. Could you confirm the start date?
+--
+Kind regards,
+{{person:Isidro Rebollo Urrutia}}
+Directora de operaciones
+{{org:Logística Rastro}}
+Tel: {{phone:+44 7700 900968}}
+{{email:isidro@logistica-rastro.example}}

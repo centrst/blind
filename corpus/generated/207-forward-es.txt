@@ -1,0 +1,20 @@
+%known person|Demetrio Villalobos
+From: {{person:Demetrio Villalobos}} <{{email:demetrio_villalobos@clinica-jaspe.example}}>
+To: {{person:Eloy Navarrete}} <{{email:eloy.navarrete@transportes-wicker.example}}>
+Date: Fri, {{date:22 Mar 2024}} 11:30:00 +0100
+Subject: Fwd: presupuesto {{org:Logística Farola}}
+Hola {{person:Eloy}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:29 de marzo de 2024}}.
+---------- Forwarded message ---------
+From: {{person:Rosendo Iglesias Cifuentes}} <{{email:rosendo.iglesias@logistica-farola.example}}>
+Date: {{date:22 Mar 2024}}
+Subject: Presupuesto proyecto {{id:X7524062N}}
+
+Buenos días {{person:Demetrio}},
+El consejo aprobó {{amount:36,18 EUR}} para el proyecto {{id:X7524062N}}. ¿Cuándo podríais empezar?
+--
+Atentamente,
+{{person:Rosendo Iglesias Cifuentes}}
+Purchasing
+{{org:Logística Farola}}
+{{email:rosendo.iglesias@logistica-farola.example}}
+{{url:www.logistica-farola.example}}

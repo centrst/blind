@@ -1,0 +1,15 @@
+%known person|Honorio Maldonado
+From: {{org:Estudio Larkspur}} <{{email:news@estudio-larkspur.example}}>
+To: {{person:Honorio Maldonado}} <{{email:hon..maldonado@outlook.com}}>
+Date: Sat, {{date:25 Oct 2025}} 13:45:00 +0100
+Subject: Novedades de temporada
+
+Hola {{person:Honorio}}, estas son las novedades del mes.
+
+Nuestro producto estrella baja a {{amount:€ 8,88}}, antes {{amount:11,10 €}}. La oferta termina el {{date:03/11/2025}}.
+
+Compra online: {{url:https://www.estudio-larkspur.example/tienda?utm_campaign=7275}}
+
+Recibes este correo porque {{email:hon..maldonado@outlook.com}} se suscribió. Darte de baja: {{url:https://news.estudio-larkspur.example/unsubscribe?u=875544690x&e=hon..maldonado%40outlook.com}}
+
+{{org:Estudio Larkspur}}, Atención al cliente {{phone:+34 786297951}}

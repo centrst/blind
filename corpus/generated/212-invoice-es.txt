@@ -1,0 +1,23 @@
+%known person|Aurora de la Torre
+%known org|Transportes Tramuntana
+From: {{person:Joaquín Jaramillo}} <{{email:joaquin@gestion-wicker.example}}>
+To: {{person:Aurora de la Torre}} <{{email:aur..torre@icloud.com}}>
+Date: Tue, {{date:8 Oct 2024}} 14:45:00 +0100
+Subject: Factura {{id:FAC/2027/8475}}
+
+Buenos días {{person:Aurora}},
+
+Te enviamos la factura del último periodo de {{org:Transportes Tramuntana}}.
+
+El total es {{amount:3249,45 EUR}}, con 4 % de IVA sobre {{amount:€ 3124,47}}.
+
+Agradecemos el pago antes del {{date:2024-10-23}} en la cuenta {{iban:GB35 JUIT 3930 1408 5857 34}}.
+
+--
+Saludos cordiales,
+{{person:Joaquín Jaramillo}}
+Accounts
+{{org:Gestión Wicker}}
+Tel: {{phone:+34 752705274}}
+{{email:joaquin@gestion-wicker.example}}
+{{url:www.gestion-wicker.example}}

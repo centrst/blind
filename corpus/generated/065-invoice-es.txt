@@ -1,0 +1,26 @@
+%known person|Pilar de Lara
+%known org|Reformas Isleta S.A.
+From: "{{person:Ulises Urrutia Iglesias}}" <{{email:urrutia.ulises@logistica-larkspur.example}}>
+To: {{person:Pilar de Lara}} <{{email:pilar..lara@icloud.com}}>
+Date: Fri, {{date:15 Mar 2024}} 14:45:00 +0100
+Subject: Factura {{id:13075392V}} de {{org:Logística Larkspur S.L.}}
+
+Buenos días {{person:Pilar}},
+
+Te enviamos la factura del último periodo de {{org:Reformas Isleta S.A.}}.
+
+El total es {{amount:€ 922,49}}, con 4 % de IVA sobre {{amount:887,01 €}}.
+
+El pago vence el {{date:14 de abril de 2024}}. Transferencia a {{iban:ES28 8330 0501 8288 3257 3331}} indicando {{id:13075392V}}.
+
+Nuestro NIF es {{id:B16566719}}.
+
+--
+Gracias,
+{{person:Ulises Urrutia Iglesias}}
+Accounts
+{{org:Logística Larkspur S.L.}}
+Tel: {{phone:0034 757 368 055}}
+{{email:urrutia.ulises@logistica-larkspur.example}}
+{{url:www.logistica-larkspur.example}}
+Oficina de {{place:Montefrío Chico}}

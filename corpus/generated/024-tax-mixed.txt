@@ -1,0 +1,17 @@
+%known person|Eleanor Upshaw
+From: {{person:Frederick Cartwright}} <{{email:notificaciones.frederickcartwright@ironbridge-partners.example}}>
+To: {{person:Eleanor Upshaw}} <{{email:upshaw..eleanor@outlook.com}}>
+Date: Sun, {{date:26 Oct 2025}} 17:00:00 +0100
+Subject: Notice {{id:EXP-2025-6295}}: payment pending
+
+To {{person:Eleanor Upshaw}}, holder of ID {{id:11692784M}}:
+
+Our records show an unpaid balance of {{amount:USD 212.07}} on file {{id:EXP-2025-6295}}.
+
+If it is not paid by {{date:November 15, 2025}}, a surcharge of 10% applies: {{amount:$21.21}}, for a total of {{amount:233.28 USD}}.
+
+Pay by transfer to {{iban:DE27 5477 7098 0647 5605 05}} and keep the receipt. For help call {{phone:(523) 555-0180}}.
+
+Social security contributions for {{date:October 1st}} are listed in the portal: {{url:https://sede.ironbridge-partners.example/cuotas/52225A477}}
+
+This is an automatic notice. Do not reply.

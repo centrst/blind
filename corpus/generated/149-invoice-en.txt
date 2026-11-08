@@ -1,0 +1,29 @@
+%known person|Sebastian Cartwright
+%known org|Pinar Partners Ltd
+From: {{person:Wilhelmina Lambert}} <{{email:wilhelmina@pennywhistle-labs.example}}>
+To: {{person:Sebastian Cartwright}} <{{email:sebastian@pinar-partners.example}}>
+Date: Mon, {{date:22 Jan 2024}} 09:00:00 +0100
+Subject: Invoice {{id:INV-2023-899559}}
+
+Hello {{person:Sebastian}},
+
+Attached is our invoice for last month's services to {{org:Pinar Partners Ltd}}.
+
+Consulting, first half: {{amount:$68.00}}
+Consulting, second half: {{amount:USD 45.33}}
+Subtotal: {{amount:113.33 USD}}
+Tax (20%): {{amount:$22.67}}
+Total: {{amount:USD 136.00}}
+
+Payment is due by {{date:March 7, 2024}}. Transfer to {{iban:NL28 AJJG 9734 9702 69}}, quoting {{id:INV-2023-899559}}.
+
+Our tax number is {{id:P84068813}}.
+
+--
+Thanks,
+{{person:Wilhelmina Lambert}}
+Administración
+{{org:Pennywhistle Labs Ltd}}
+Tel: {{phone:+34 768 251 169}}
+{{email:wilhelmina@pennywhistle-labs.example}}
+{{url:www.pennywhistle-labs.example}}

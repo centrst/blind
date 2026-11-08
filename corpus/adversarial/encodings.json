@@ -1,0 +1,102 @@
+[
+  {
+    "id": "E1",
+    "title": "HTML entity for the at sign",
+    "text": "Contact ana&#64;gestoria.example for details.",
+    "secrets": [
+      "ana&#64;gestoria.example",
+      "gestoria"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "E2",
+    "title": "quoted-printable soft break inside a name",
+    "text": "Hola Ana R=\nuiz, adjunto.",
+    "secrets": [
+      "uiz"
+    ],
+    "expect": "silent",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "why": "The soft break splits the surname, so the known name pattern fails on it. The first name is still replaced.",
+    "seed": "adv"
+  },
+  {
+    "id": "E3",
+    "title": "quoted-printable encoded accent",
+    "text": "From: =?UTF-8?Q?Mar=C3=ADa_Garc=C3=ADa?= says hi",
+    "secrets": [
+      "Mar=C3=ADa"
+    ],
+    "expect": "silent",
+    "known": [
+      {
+        "kind": "person",
+        "value": "María García"
+      }
+    ],
+    "why": "The encoded-word form hides the name from every pattern and from the leak check.",
+    "seed": "adv"
+  },
+  {
+    "id": "E4",
+    "title": "base64 part in a pasted MIME body",
+    "text": "Content-Transfer-Encoding: base64\n\nUGFyYSBBbmEgUnVpeg==",
+    "secrets": [
+      "UGFyYSBBbmEgUnVpeg=="
+    ],
+    "expect": "silent",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "why": "Encoded payloads are opaque to text patterns. Decode them first if they carry private text.",
+    "seed": "adv"
+  },
+  {
+    "id": "E5",
+    "title": "percent-encoded email outside a URL",
+    "text": "Reply to ana%40gestoria.example now",
+    "secrets": [
+      "gestoria.example"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "E6",
+    "title": "HTML non-breaking space inside a name",
+    "text": "Hola Ana&nbsp;Ruiz, gracias.",
+    "secrets": [
+      "Ruiz",
+      "Ana"
+    ],
+    "expect": "replaced",
+    "known": [
+      {
+        "kind": "person",
+        "value": "Ana Ruiz"
+      }
+    ],
+    "seed": "adv"
+  },
+  {
+    "id": "E7",
+    "title": "named HTML entity before an amount",
+    "text": "Total: &euro;247,80 con IVA",
+    "secrets": [
+      "247,80"
+    ],
+    "expect": "silent",
+    "why": "The currency entity is not read as a currency sign, so the bare number is not an amount.",
+    "seed": "adv"
+  }
+]

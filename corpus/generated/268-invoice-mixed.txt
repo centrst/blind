@@ -1,0 +1,24 @@
+%order mdy
+%known person|Sebastian Pritchard
+%known org|Isleta Labs
+From: {{person:Tamsin Doherty}} <{{email:tamsindoherty@jaspe-logistics.example}}>
+To: {{person:Sebastian Pritchard}} <{{email:sebastian_pritchard@isleta-labs.example}}>
+Date: Wed, {{date:8 May 2024}} 18:30:00 +0100
+Subject: Invoice {{id:KL228211334}} from {{org:Jaspe Logistics}}
+
+Dear {{person:Sebastian}},
+
+Adjuntamos la factura {{id:KL228211334}} por los servicios prestados a {{org:Isleta Labs}}.
+
+The total is {{amount:$270.55}}, which includes 20% tax on {{amount:225.46 USD}}.
+
+Payment is due by {{date:May 23rd 2024}}. Transfer to {{iban:ES0545402659720763153654}}, quoting {{id:KL228211334}}.
+
+--
+Cheers,
+{{person:Tamsin Doherty}}
+Administración
+{{org:Jaspe Logistics}}
+Tel: {{phone:763 76 04 58}}
+{{email:tamsindoherty@jaspe-logistics.example}}
+{{url:www.jaspe-logistics.example}}

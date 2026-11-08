@@ -1,0 +1,15 @@
+%known person|Leonor Echeverría
+From: {{org:Logística Wicker SL}} <{{email:news@logistica-wicker.example}}>
+To: {{email:leonor..ech@icloud.com}}
+Date: Tue, {{date:24 Dec 2024}} 15:45:00 +0100
+Subject: Novedades de temporada
+
+Hola {{person:Leonor}}, estas son las novedades del mes.
+
+Nuestro producto estrella baja a {{amount:188,92 €}}, antes {{amount:236,15 €}}. La oferta termina el {{date:05/01/2025}}.
+
+Compra online: {{url:https://www.logistica-wicker.example/tienda?utm_campaign=2946}}
+
+Recibes este correo porque {{email:leonor..ech@icloud.com}} se suscribió. Darte de baja: {{url:https://news.logistica-wicker.example/unsubscribe?u=502894801x&e=leonor..ech%40icloud.com}}
+
+{{org:Logística Wicker S.L.}}, Atención al cliente {{phone:+34 772405341}}

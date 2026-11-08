@@ -1,0 +1,24 @@
+%known person|Belén Zamora
+%known org|Ingeniería Hontanar S.L.U.
+From: {{person:Florencio Ocaña Echeverría}} <{{email:florencioocana@gestion-umbral.example}}>
+To: {{person:Belén Zamora}} <{{email:zamora_belen@gmail.com}}>
+Date: Fri, {{date:30 Oct 2026}} 12:45:00 +0100
+Subject: Factura {{id:BKX1990QY}}
+
+Buenos días {{person:Belén}},
+
+Te enviamos la factura del último periodo de {{org:Ingeniería Hontanar S.L.U.}}.
+
+El total es {{amount:3.350,74 EUR}}, con 10 % de IVA sobre {{amount:3.046,13 EUR}}.
+
+Agradecemos el pago antes del {{date:29 de noviembre de 2026}} en la cuenta {{iban:IT9354788048374255361465930}}.
+
+Our tax number is {{id:G46430473}}.
+
+--
+Saludos cordiales,
+{{person:Florencio Ocaña Echeverría}}
+Administración
+{{org:Gestión Umbral S.L.U.}}
+Tel: {{phone:+44 7700 900277}}
+{{url:www.gestion-umbral.example}}

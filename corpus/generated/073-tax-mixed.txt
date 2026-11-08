@@ -1,0 +1,18 @@
+%order mdy
+%known person|Georgina Ellsworth
+From: {{person:Winston Crawley}} <{{email:notificaciones.winstoncrawley@farola-advisory.example}}>
+To: {{person:Georgina Ellsworth}} <{{email:ellsworth_georgina@gmail.com}}>
+Date: Sat, {{date:30 Aug 2025}} 09:45:00 +0100
+Subject: Notificación {{id:EXP-2025-2568}}: pago pendiente
+
+Dear {{person:Georgina Ellsworth}},
+
+Regional Revenue Office of {{place:Ashford Reach}} informs you that file {{id:EXP-2025-2568}} shows a balance of {{amount:235.64 USD}} for the period ending {{date:July 21, 2025}}.
+
+Si no se abona antes del {{date:September 9, 2025}}, se aplicará un recargo del 10 %: {{amount:23.56 USD}}, en total {{amount:$259.20}}.
+
+Pay by transfer to {{iban:ES3028119816954436571755}} and keep the receipt. For help call {{phone:+34 798430680}}.
+
+Las cuotas de la Seguridad Social del periodo {{date:August 1}} están en la sede: {{url:https://sede.farola-advisory.example/cuotas/63407A172}}
+
+This is an automatic notice. Do not reply.

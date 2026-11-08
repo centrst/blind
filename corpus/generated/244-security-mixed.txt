@@ -1,0 +1,13 @@
+%known person|Remedios Cifuentes
+From: {{org:Asesores Ocaso}} <{{email:security@asesores-ocaso.example}}>
+To: {{email:rem_cifuentes@gmail.com}}
+Date: Mon, {{date:30 Dec 2024}} 18:15:00 +0100
+Subject: Solicitud de cambio de contraseña
+
+Hi {{person:Remedios}},
+
+Your verification code is {{id:590095}}. It expires in 10 minutes. Never share it.
+
+Si no fuiste tú, llama al {{phone:+1 476 555 0151}} o escribe a {{email:security@asesores-ocaso.example}}.
+
+El equipo de seguridad de {{org:Asesores Ocaso}}

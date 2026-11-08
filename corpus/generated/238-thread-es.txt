@@ -1,0 +1,21 @@
+%known person|Ulises Urrutia
+%known org|Servicios Nevada S.L.U.
+From: "{{person:Trinidad Cifuentes Barragán}}" <{{email:trinidad.cifuentes@asesores-aldara.example}}>
+To: "{{person:Ulises Urrutia}}" <{{email:ulises..uurrutia@icloud.com}}>
+Date: Fri, {{date:17 Oct 2025}} 13:30:00 +0100
+Subject: Re: oferta para {{org:Servicios Nevada S.L.U.}}
+Podemos aceptar {{amount:€ 34,55}} y enviar el contrato a {{email:ulises..uurrutia@icloud.com}}.
+On {{date:16/10/2025}}, {{person:Ulises Urrutia}} wrote:
+> Gracias {{person:Trinidad}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:31,75 EUR}}? La reunión nos va bien, llámame al {{phone:917-555-0129}} si cambia.
+>
+> El {{date:15 de octubre del 2025}}, {{person:Trinidad Cifuentes Barragán}} escribió:
+> > Hola {{person:Ulises}}, nuestra oferta para {{org:Servicios Nevada S.L.U.}} es de {{amount:37,35 EUR}}. ¿Quedamos el {{date:23 de octubre del 2025}} a las 14:30?
+> > 
+> > --
+> > Saludos cordiales,
+> > {{person:Trinidad Cifuentes Barragán}}
+> > Sales
+> > {{org:Asesores Aldara}}
+> > Tel: {{phone:+1 511 555 0171}}
+
+{{person:Trinidad}}

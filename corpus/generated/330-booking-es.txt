@@ -1,0 +1,20 @@
+%known person|Isidro Navarrete Medrano
+From: {{person:Plácido Arroyo}} <{{email:placido@gestion-nevada.example}}>
+To: {{person:Isidro Navarrete Medrano}} <{{email:inavarrete@consultores-vendaval.example}}>
+Date: Thu, {{date:24 Sep 2026}} 11:15:00 +0100
+Subject: Reserva confirmada
+
+Hola {{person:Isidro}},
+
+Hemos reservado mesa para cuatro para ti el {{date:30 de septiembre de 2026}}. Estamos en {{place:Puente Nuevo}}.
+
+Total: {{amount:€ 24,54}}. Cancelación gratuita hasta el {{date:25/09/2026}}.
+
+--
+Un saludo,
+{{person:Plácido Arroyo}}
+Reception
+{{org:Gestión Nevada S.A.}}
+Tel: {{phone:757 803 807}}
+{{url:www.gestion-nevada.example}}
+Oficina de {{place:Torrebruna}}

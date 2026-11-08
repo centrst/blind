@@ -1,0 +1,20 @@
+%known person|Saturnino Arroyo
+From: {{person:Saturnino Arroyo}} <{{email:s_arroyo@gmail.com}}>
+To: {{person:Florencio Duarte}} <{{email:fduarte@asesores-yelmo.example}}>
+Date: Wed, {{date:3 Dec 2025}} 16:00:00 +0100
+Subject: Fwd: presupuesto {{org:Consultores Farola S.L.}}
+Hola {{person:Florencio}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:15 de diciembre de 2025}}.
+---------- Forwarded message ---------
+From: {{person:Honorio Figueroa Hidalgo}} <{{email:honorio@consultores-farola.example}}>
+Date: {{date:3 Dec 2025}}
+Subject: Presupuesto proyecto {{id:Z0653555V}}
+
+Buenos días {{person:Saturnino}},
+En {{org:Consultores Farola S.L.}} disponemos de {{amount:3.297,43 €}} para la obra en {{place:Montefrío Chico}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Gracias,
+{{person:Honorio Figueroa Hidalgo}}
+Directora de operaciones
+{{org:Consultores Farola S.L.}}
+Tel: {{phone:+44 7700 900883}}
+{{url:www.consultores-farola.example}}

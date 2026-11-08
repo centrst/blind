@@ -1,0 +1,15 @@
+%known person|Joaquín Fontán
+From: {{org:Asesores Wicker SA}} <{{email:news@asesores-wicker.example}}>
+To: {{email:joaquin-fontan@gmail.com}}
+Date: Sun, {{date:17 Jan 2027}} 17:00:00 +0100
+Subject: Novedades de temporada
+
+Hola {{person:Joaquín}}, estas son las novedades del mes.
+
+Nuestro producto estrella baja a {{amount:186,54 EUR}}, antes {{amount:233,18 EUR}}. La oferta termina el {{date:2027-02-01}}.
+
+Compra online: {{url:https://www.asesores-wicker.example/tienda?utm_campaign=9823}}
+
+Recibes este correo porque {{email:joaquin-fontan@gmail.com}} se suscribió. Darte de baja: {{url:https://news.asesores-wicker.example/unsubscribe?u=976058190x&e=joaquin-fontan%40gmail.com}}
+
+{{org:Asesores Wicker S.A.}}, Atención al cliente {{phone:266-555-0137}}

@@ -1,0 +1,21 @@
+%known person|Florencio Hidalgo
+%known org|Asesores Tramuntana S.A.
+From: {{person:Facundo Iglesias Ocaña}} <{{email:facundo@consultores-zafiro.example}}>
+To: {{person:Florencio Hidalgo}} <{{email:hidalgo.florencio@asesores-tramuntana.example}}>
+Date: Sat, {{date:7 Aug 2027}} 08:45:00 +0100
+Subject: Re: oferta para {{org:Asesores Tramuntana S.A.}}
+Podemos aceptar {{amount:39,65 €}} y enviar el contrato a {{email:hidalgo.florencio@asesores-tramuntana.example}}.
+On {{date:6 de agosto de 2027}}, {{person:Florencio Hidalgo}} wrote:
+> Gracias {{person:Facundo}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:€ 36,43}}? La reunión nos va bien, llámame al {{phone:788 82 75 01}} si cambia.
+>
+> El {{date:5/8/2027}}, {{person:Facundo Iglesias Ocaña}} escribió:
+> > Hola {{person:Florencio}}, nuestra oferta para {{org:Asesores Tramuntana S.A.}} es de {{amount:42,86 EUR}}. ¿Quedamos el {{date:9 de agosto de 2027}} a las 09:30?
+> > 
+> > --
+> > Gracias,
+> > {{person:Facundo Iglesias Ocaña}}
+> > Comercial
+> > {{org:Consultores Zafiro}}
+> > Tel: {{phone:(956) 555-0184}}
+
+{{person:Facundo}}

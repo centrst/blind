@@ -1,0 +1,20 @@
+%known person|Tamsin Quigley
+From: {{person:Tamsin Quigley}} <{{email:quigley_tamsin@gmail.com}}>
+To: {{person:Cedric Upshaw}} <{{email:upshaw.cedric@pinar-consulting.example}}>
+Date: Wed, {{date:3 Jan 2024}} 09:30:00 +0100
+Subject: Fwd: {{org:Umbral Studio}} quote
+Hi {{person:Cedric}}, can you take this one? The client wants an answer by {{date:7 January 2024}}.
+---------- Forwarded message ---------
+From: {{person:Sebastian Nightingale}} <{{email:sebastian@umbral-studio.example}}>
+Date: {{date:3 Jan 2024}}
+Subject: Quote for project {{id:Z6644371I}}
+
+Hi {{person:Tamsin}},
+We at {{org:Umbral Studio}} have a budget of {{amount:USD 3,416.70}} for the work in {{place:Maple Hollow}}. Could you confirm the start date?
+--
+Thanks,
+{{person:Sebastian Nightingale}}
+Purchasing
+{{org:Umbral Studio}}
+Tel: {{phone:+1 468 555 0128}}
+{{email:sebastian@umbral-studio.example}}

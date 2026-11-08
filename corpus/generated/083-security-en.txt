@@ -1,0 +1,14 @@
+%order mdy
+%known person|Georgina Ellsworth
+From: {{org:Labs Ocaso}} <{{email:security@labs-ocaso.example}}>
+To: {{person:Georgina Ellsworth}} <{{email:georgina..ell@outlook.com}}>
+Date: Wed, {{date:20 Oct 2027}} 18:30:00 +0100
+Subject: New sign-in to your account
+
+Hi {{person:Georgina}},
+
+Your verification code is {{id:957714}}. It expires in 10 minutes. Never share it.
+
+If this was not you, call {{phone:+34 751119841}} or write to {{email:security@labs-ocaso.example}}.
+
+The {{org:Labs Ocaso}} security team

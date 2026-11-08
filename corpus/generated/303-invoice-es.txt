@@ -1,0 +1,26 @@
+%known person|Plácido de la Torre
+%known org|Logística Larkspur S.A.
+From: {{person:Ofelia Cifuentes}} <{{email:ocifuentes@servicios-pennywhistle.example}}>
+To: {{person:Plácido de la Torre}} <{{email:placido..torre@outlook.com}}>
+Date: Thu, {{date:24 Jun 2027}} 08:15:00 +0100
+Subject: Factura {{id:INV-2024-554813}}
+
+Hola {{person:Plácido}},
+
+Te enviamos la factura del último periodo de {{org:Logística Larkspur S.A.}}.
+
+Base imponible: {{amount:2.048,15 €}}
+IVA 21 %: {{amount:€ 430,11}}
+Total a pagar: {{amount:2478,26 €}}
+
+El pago vence el {{date:24 de julio de 2027}}. Transferencia a {{iban:IT77 2144 7617 2535 8658 8493 807}} indicando {{id:INV-2024-554813}}.
+
+--
+Gracias,
+{{person:Ofelia Cifuentes}}
+Accounts
+{{org:Servicios Pennywhistle S.A.}}
+Tel: {{phone:+34 778045724}}
+{{email:ocifuentes@servicios-pennywhistle.example}}
+
+Este mensaje es confidencial y está dirigido únicamente a su destinatario.

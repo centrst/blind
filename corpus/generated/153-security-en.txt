@@ -1,0 +1,13 @@
+%known person|Eleanor Oakley
+From: {{org:Marisma Advisory Ltd}} <{{email:security@marisma-advisory.example}}>
+To: {{person:Eleanor Oakley}} <{{email:e..oakley@outlook.com}}>
+Date: Sat, {{date:2 Mar 2024}} 09:15:00 +0100
+Subject: Password change requested
+
+Hi {{person:Eleanor}},
+
+We noticed a sign-in to {{email:e..oakley@outlook.com}} from {{place:Ashford Reach}} on {{date:March 2nd 2024}} at 17:30.
+
+If this was not you, call {{phone:+34 770873939}} or write to {{email:security@marisma-advisory.example}}.
+
+The {{org:Marisma Advisory Ltd}} security team

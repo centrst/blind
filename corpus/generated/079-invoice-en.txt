@@ -1,0 +1,22 @@
+%known person|Tamsin Ingram
+%known org|Labs Wicker
+From: "{{person:Nigel Blackwood}}" <{{email:nigel.blackwood@works-ironbridge.example}}>
+To: {{person:Tamsin Ingram}} <{{email:tamsin@labs-wicker.example}}>
+Date: Tue, {{date:31 Mar 2026}} 19:45:00 +0100
+Subject: Invoice {{id:Y6563858W}} from {{org:Works Ironbridge Ltd}}
+
+Dear {{person:Tamsin}},
+
+Please find attached invoice {{id:Y6563858W}} for the work done for {{org:Labs Wicker}}.
+
+Base {{amount:450.06 USD}} plus 20% tax = {{amount:$540.07}}
+
+Payment is due by {{date:2026-04-30}}. Transfer to {{iban:NL69 PDAR 2271 8718 62}}, quoting {{id:Y6563858W}}.
+
+--
+Best regards,
+{{person:Nigel Blackwood}}
+Administración
+{{org:Works Ironbridge Ltd}}
+Tel: {{phone:+49 171 392 0042}}
+{{url:www.works-ironbridge.example}}

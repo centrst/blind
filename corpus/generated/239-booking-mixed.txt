@@ -1,0 +1,14 @@
+%order mdy
+%known person|Desmond Doherty
+From: "{{person:Sebastian Ashworth}}" <{{email:sebastianashworth@isleta-advisory.example}}>
+To: {{person:Desmond Doherty}} <{{email:desmond..ddoherty@outlook.com}}>
+Date: Thu, {{date:17 Sep 2026}} 18:00:00 +0100
+Subject: Your booking is confirmed
+
+Estimado/a {{person:Desmond}},
+
+Tu sesión de fisioterapia en {{org:Isleta Advisory}} queda reservada para el {{date:2026-10-07}} a las 18:30.
+
+Total: {{amount:£234.42}}. Free cancellation until {{date:September 18}}.
+
+Questions? Call us on {{phone:(764) 555-0135}} or write to {{email:sebastianashworth@isleta-advisory.example}}.

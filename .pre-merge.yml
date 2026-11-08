@@ -1,0 +1,19 @@
+version: 1
+type: backend
+
+project:
+  name: blind
+  owner: Centrst
+  summary: "Deterministic blinding engine: consistent fakes, amount scaling, date shifting, leak check."
+
+package_manager: pnpm
+
+preflight:
+  - command: pnpm secrets
+  - command: pnpm install --frozen-lockfile
+
+stages:
+  typecheck: { enabled: true, command: "pnpm typecheck" }
+  lint: { enabled: true, command: "pnpm lint" }
+  unit: { enabled: true, command: "pnpm test" }
+  build: { enabled: true, command: "pnpm build", output_dir: dist }

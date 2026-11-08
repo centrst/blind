@@ -1,0 +1,26 @@
+%known person|Belén Peñalver
+%known org|Asesores Dorsal S.L.
+From: {{person:Rosendo de Lara}} <{{email:de.rosendo@servicios-lumbre.example}}>
+To: {{person:Belén Peñalver}} <{{email:bel..penalver@icloud.com}}>
+Date: Fri, {{date:15 Jan 2027}} 18:45:00 +0100
+Subject: Factura {{id:BKH2722SA}}
+
+Buenos días {{person:Belén}},
+
+Adjuntamos la factura {{id:BKH2722SA}} por los servicios prestados a {{org:Asesores Dorsal S.L.}}.
+
+Base imponible: {{amount:€ 1661,02}}
+IVA 10 %: {{amount:166,10 €}}
+Total a pagar: {{amount:1.827,12 EUR}}
+
+Agradecemos el pago antes del {{date:01/03/2027}} en la cuenta {{iban:PT09 7001 8304 6893 3524 2027 7}}.
+
+--
+Un saludo,
+{{person:Rosendo de Lara}}
+Administración
+{{org:Servicios Lumbre}}
+Tel: {{phone:+44 7700 900912}}
+{{email:de.rosendo@servicios-lumbre.example}}
+
+Este mensaje es confidencial y está dirigido únicamente a su destinatario.

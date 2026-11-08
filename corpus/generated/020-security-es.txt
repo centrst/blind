@@ -1,0 +1,13 @@
+%known person|Verónica Urrutia Zamora
+From: {{org:Asesores Yelmo}} <{{email:security@asesores-yelmo.example}}>
+To: {{email:veronica_urrutia@gmail.com}}
+Date: Tue, {{date:7 Jan 2025}} 11:15:00 +0100
+Subject: Tu código de verificación
+
+Hola {{person:Verónica}},
+
+Detectamos un inicio de sesión en {{email:veronica_urrutia@gmail.com}} desde {{place:San Telmo de Abajo}} el {{date:7 de enero de 2025}} a las 11:45.
+
+Si no fuiste tú, llama al {{phone:(654) 555-0176}} o escribe a {{email:security@asesores-yelmo.example}}.
+
+El equipo de seguridad de {{org:Asesores Yelmo}}

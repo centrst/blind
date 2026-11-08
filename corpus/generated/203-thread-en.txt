@@ -1,0 +1,24 @@
+%known person|Humphrey Somerset
+%known org|Vendaval Works Inc.
+From: {{person:Nigel Upshaw}} <{{email:nupshaw@pennywhistle-supply.example}}>
+To: {{person:Humphrey Somerset}} <{{email:somerset.humphrey@vendaval-works.example}}>
+Date: Fri, {{date:13 Jun 2025}} 09:30:00 +0100
+Subject: Re: offer for {{org:Vendaval Works Inc.}}
+We can accept {{amount:219.23 USD}} and send the contract to {{email:somerset.humphrey@vendaval-works.example}}.
+On {{date:2025-06-12}}, {{person:Humphrey Somerset}} wrote:
+> Thanks {{person:Nigel}}. That is high for us. Could you do {{amount:$201.45}}? The meeting works, call me on {{phone:795 23 01 60}} if it moves.
+>
+> On {{date:11.06.2025}}, {{person:Nigel Upshaw}} wrote:
+> > Hello {{person:Humphrey}}, our offer for {{org:Vendaval Works Inc.}} is {{amount:$237.00}}. Can we meet on {{date:June 15, 2025}} at 15:00?
+> > 
+> > --
+> > Cheers,
+> > {{person:Nigel Upshaw}}
+> > Sales
+> > {{org:Pennywhistle Supply Inc.}}
+> > Tel: {{phone:+49 171 392 0022}}
+> > {{email:nupshaw@pennywhistle-supply.example}}
+> > {{url:www.pennywhistle-supply.example}}
+> > Office: {{place:Oakmere}}
+
+{{person:Nigel}}

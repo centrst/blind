@@ -1,0 +1,20 @@
+%known person|Rosendo Ocaña
+%known org|Transportes Hontanar S.L.U.
+From: {{person:Florencio Quintana}} <{{email:fquintana@consultores-farola.example}}>
+To: {{person:Rosendo Ocaña}} <{{email:rosendo_oca@gmail.com}}>
+Date: Thu, {{date:27 Jun 2024}} 19:00:00 +0100
+Subject: Re: oferta para {{org:Transportes Hontanar S.L.U.}}
+Podemos aceptar {{amount:66,61 €}} y enviar el contrato a {{email:rosendo_oca@gmail.com}}.
+On {{date:26/6/24}}, {{person:Rosendo Ocaña}} wrote:
+> Gracias {{person:Florencio}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:€ 61,21}}? La reunión nos va bien, llámame al {{phone:+34 766 341 255}} si cambia.
+>
+> El {{date:25 de junio del 2024}}, {{person:Florencio Quintana}} escribió:
+> > Hola {{person:Rosendo}}, nuestra oferta para {{org:Transportes Hontanar S.L.U.}} es de {{amount:€ 72,01}}. ¿Quedamos el {{date:28/6/2024}} a las 18:00?
+> > 
+> > --
+> > Un saludo,
+> > {{person:Florencio Quintana}}
+> > Comercial
+> > {{org:Consultores Farola}}
+
+{{person:Florencio}}

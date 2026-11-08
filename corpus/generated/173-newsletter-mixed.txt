@@ -1,0 +1,15 @@
+%known person|Isidro Barragán
+From: {{org:Clínica Yelmo SLU}} <{{email:news@clinica-yelmo.example}}>
+To: {{email:isi_barragan@gmail.com}}
+Date: Mon, {{date:8 Jan 2024}} 16:15:00 +0100
+Subject: Ofertas de primavera
+
+Hi {{person:Isidro}}, here is what is new this month.
+
+Join our open day in {{place:Cabo Redondo}} on {{date:3 de febrero del 2024}}. Entry {{amount:€ 45,75}}.
+
+Compra online: {{url:https://www.clinica-yelmo.example/tienda?utm_campaign=9555}}
+
+Recibes este correo porque {{email:isi_barragan@gmail.com}} se suscribió. Darte de baja: {{url:https://news.clinica-yelmo.example/unsubscribe?u=148864135x&e=isi_barragan%40gmail.com}}
+
+{{org:Clínica Yelmo S.L.U.}}, Customer care {{phone:+49 171 392 0043}}

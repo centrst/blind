@@ -1,0 +1,16 @@
+%order mdy
+%known person|Percival Nightingale
+From: {{org:Partners Larkspur GmbH}} <{{email:news@partners-larkspur.example}}>
+To: {{person:Percival Nightingale}} <{{email:p..nightingale@icloud.com}}>
+Date: Mon, {{date:13 Sep 2027}} 18:45:00 +0100
+Subject: Spring offers inside
+
+Hi {{person:Percival}}, here is what is new this month.
+
+Our best seller is now {{amount:£5.45}}, down from {{amount:USD 6.81}}. Offer ends {{date:26th September 2027}}.
+
+Shop online: {{url:https://www.partners-larkspur.example/shop?utm_campaign=1380}}
+
+You receive this because {{email:p..nightingale@icloud.com}} subscribed. Unsubscribe: {{url:https://news.partners-larkspur.example/unsubscribe?u=435747419x&e=p..nightingale%40icloud.com}}
+
+{{org:Partners Larkspur GmbH}}, Customer care {{phone:+34 754 503 124}}

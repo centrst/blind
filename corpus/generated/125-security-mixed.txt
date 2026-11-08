@@ -1,0 +1,13 @@
+%known person|Nicolás Peñalver Hidalgo
+From: {{org:Asesores Kepler S.A.}} <{{email:security@asesores-kepler.example}}>
+To: {{email:nicolas..penalver@icloud.com}}
+Date: Wed, {{date:19 Nov 2025}} 19:00:00 +0100
+Subject: Nuevo inicio de sesión en tu cuenta
+
+Hola {{person:Nicolás}},
+
+We noticed a sign-in to {{email:nicolas..penalver@icloud.com}} from {{place:Cabo Redondo}} on {{date:19 de noviembre del 2025}} at 19:15.
+
+Si no fuiste tú, llama al {{phone:0034 782 027 474}} o escribe a {{email:security@asesores-kepler.example}}.
+
+El equipo de seguridad de {{org:Asesores Kepler S.A.}}

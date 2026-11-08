@@ -1,0 +1,24 @@
+%order mdy
+%known person|Frederick Oakley
+%known org|Partners Ironbridge
+From: {{person:Phoebe Tennant}} <{{email:phoebe.tennant@systems-nevada.example}}>
+To: {{person:Frederick Oakley}} <{{email:foakley@partners-ironbridge.example}}>
+Date: Thu, {{date:11 Dec 2025}} 18:45:00 +0100
+Subject: Re: offer for {{org:Partners Ironbridge}}
+We can accept {{amount:USD 2,197.78}} and send the contract to {{email:foakley@partners-ironbridge.example}}.
+On {{date:December 10, 2025}}, {{person:Frederick Oakley}} wrote:
+> Thanks {{person:Phoebe}}. That is high for us. Could you do {{amount:$2,019.58}}? The meeting works, call me on {{phone:+49 171 392 0007}} if it moves.
+>
+> On {{date:9 December 2025}}, {{person:Phoebe Tennant}} wrote:
+> > Hello {{person:Frederick}}, our offer for {{org:Partners Ironbridge}} is {{amount:2,375.98 USD}}. Can we meet on {{date:12th of December, 2025}} at 09:30?
+> > 
+> > --
+> > Cheers,
+> > {{person:Phoebe Tennant}}
+> > Comercial
+> > {{org:Systems Nevada}}
+> > Tel: {{phone:+34 788027858}}
+> > {{email:phoebe.tennant@systems-nevada.example}}
+> > Office: {{place:Maple Hollow}}
+
+{{person:Phoebe}}

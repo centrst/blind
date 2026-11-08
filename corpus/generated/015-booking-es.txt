@@ -1,0 +1,21 @@
+%known person|Amparo Cifuentes Arroyo
+From: Booksy <no..reply@booksy.com>
+To: {{person:Amparo Cifuentes Arroyo}} <{{email:amparo..cifuentes@icloud.com}}>
+Date: Thu, {{date:7 Nov 2024}} 15:00:00 +0100
+Subject: Confirmación de cita {{id:49953082F}}
+
+Buenos días {{person:Amparo}},
+
+Tu mesa para cuatro en {{org:Asesores Bruma}} queda reservada para el {{date:10/11/2024}} a las 13:15.
+
+Total: {{amount:11,28 €}}. Cancelación gratuita hasta el {{date:8 de noviembre}}.
+
+Manage your visit: {{url:https://booksy.com/en-es/477245_asesores-bruma_6456}}
+
+--
+Un saludo,
+{{person:Fermina de Lara}}
+Front desk
+{{org:Asesores Bruma}}
+{{url:www.asesores-bruma.example}}
+Oficina de {{place:Torrebruna}}

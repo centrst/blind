@@ -1,0 +1,15 @@
+%known person|Anselmo Iglesias Sepúlveda
+From: {{org:Asesores Rastro SA}} <{{email:news@asesores-rastro.example}}>
+To: {{person:Anselmo Iglesias Sepúlveda}} <{{email:anselmo..iglesias@icloud.com}}>
+Date: Fri, {{date:8 Mar 2024}} 12:15:00 +0100
+Subject: Novedades de temporada
+
+Hi {{person:Anselmo}}, here is what is new this month.
+
+Our best seller is now {{amount:386,87 €}}, down from {{amount:483,59 €}}. Offer ends {{date:03-04-2024}}.
+
+Compra online: {{url:https://www.asesores-rastro.example/tienda?utm_campaign=6053}}
+
+Recibes este correo porque {{email:anselmo..iglesias@icloud.com}} se suscribió. Darte de baja: {{url:https://news.asesores-rastro.example/unsubscribe?u=337012315x&e=anselmo..iglesias%40icloud.com}}
+
+{{org:Asesores Rastro S.A.}}, Customer care {{phone:0034 753 813 301}}

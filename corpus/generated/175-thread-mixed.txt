@@ -1,0 +1,22 @@
+%known person|Gwendolyn Upshaw
+%known org|Dorsal Studio LLC
+From: {{person:Lavinia Kingsley}} <{{email:laviniakingsley@wicker-partners.example}}>
+To: {{person:Gwendolyn Upshaw}} <{{email:gwendolyn@dorsal-studio.example}}>
+Date: Fri, {{date:24 Dec 2027}} 14:15:00 +0100
+Subject: Re: offer for {{org:Dorsal Studio LLC}}
+Podemos aceptar {{amount:233.07 USD}} y enviar el contrato a {{email:gwendolyn@dorsal-studio.example}}.
+On {{date:December 23rd, 2027}}, {{person:Gwendolyn Upshaw}} wrote:
+> Thanks {{person:Lavinia}}. That is high for us. Could you do {{amount:$214.17}}? The meeting works, call me on {{phone:(809) 555-0160}} if it moves.
+>
+> On {{date:Dec. 22, 2027}}, {{person:Lavinia Kingsley}} wrote:
+> > Hello {{person:Gwendolyn}}, our offer for {{org:Dorsal Studio LLC}} is {{amount:251.96 USD}}. Can we meet on {{date:December 28, 2027}} at 15:00?
+> > 
+> > --
+> > Best regards,
+> > {{person:Lavinia Kingsley}}
+> > Comercial
+> > {{org:Wicker Partners}}
+> > Tel: {{phone:984-555-0162}}
+> > {{url:www.wicker-partners.example}}
+
+{{person:Lavinia}}

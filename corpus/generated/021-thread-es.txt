@@ -1,0 +1,22 @@
+%known person|Honorio Maldonado
+%known org|Logística Farola
+From: {{person:Florencio Lazcano Medrano}} <{{email:florencio@asesores-jaspe.example}}>
+To: {{person:Honorio Maldonado}} <{{email:maldonado.honorio@logistica-farola.example}}>
+Date: Sat, {{date:11 Dec 2027}} 17:00:00 +0100
+Subject: Re: oferta para {{org:Logística Farola}}
+Podemos aceptar {{amount:702,75 EUR}} y enviar el contrato a {{email:maldonado.honorio@logistica-farola.example}}.
+On {{date:10 de diciembre de 2027}}, {{person:Honorio Maldonado}} wrote:
+> Gracias {{person:Florencio}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:645,77 EUR}}? La reunión nos va bien, llámame al {{phone:791 821 442}} si cambia.
+>
+> El {{date:9 de diciembre del 2027}}, {{person:Florencio Lazcano Medrano}} escribió:
+> > Hola {{person:Honorio}}, nuestra oferta para {{org:Logística Farola}} es de {{amount:759,73 €}}. ¿Quedamos el {{date:15 de diciembre de 2027}} a las 19:00?
+> > 
+> > --
+> > Un saludo,
+> > {{person:Florencio Lazcano Medrano}}
+> > Sales
+> > {{org:Asesores Jaspe}}
+> > Tel: {{phone:+1 776 555 0119}}
+> > {{email:florencio@asesores-jaspe.example}}
+
+{{person:Florencio}}

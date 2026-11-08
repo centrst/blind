@@ -1,0 +1,13 @@
+%known person|Cayetano de Lara
+From: {{org:Ingeniería Zafiro}} <{{email:security@ingenieria-zafiro.example}}>
+To: "{{person:Cayetano de Lara}}" <{{email:cayetano..lara@icloud.com}}>
+Date: Fri, {{date:8 Aug 2025}} 10:15:00 +0100
+Subject: Solicitud de cambio de contraseña
+
+Hola {{person:Cayetano}},
+
+Tu código de verificación es {{id:412466}}. Caduca en 10 minutos. No lo compartas.
+
+Si no fuiste tú, llama al {{phone:797 07 27 31}} o escribe a {{email:security@ingenieria-zafiro.example}}.
+
+El equipo de seguridad de {{org:Ingeniería Zafiro}}

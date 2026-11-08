@@ -1,0 +1,23 @@
+%order mdy
+%known person|Wilhelmina Jessop
+From: {{person:Phoebe Somerset}} <{{email:phoebe_somerset@yelmo-advisory.example}}>
+To: {{person:Wilhelmina Jessop}} <{{email:w..jessop@outlook.com}}>
+Date: Sat, {{date:27 Jul 2024}} 10:15:00 +0100
+Subject: Your booking is confirmed
+
+Hello {{person:Wilhelmina}},
+
+Your haircut and colour at {{org:Yelmo Advisory}} is booked for {{date:15 August 2024}} at 09:00.
+
+The price is {{amount:16.63 USD}}, payable on arrival. A deposit of {{amount:£4.16}} is held on your card.
+
+Questions? Call us on {{phone:+1 998 555 0197}} or write to {{email:phoebe_somerset@yelmo-advisory.example}}.
+
+--
+Kind regards,
+{{person:Phoebe Somerset}}
+Reception
+{{org:Yelmo Advisory}}
+Tel: {{phone:+1 998 555 0197}}
+{{email:phoebe_somerset@yelmo-advisory.example}}
+Office: {{place:Stonebridge}}

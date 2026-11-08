@@ -1,0 +1,15 @@
+%known person|Herminia del Río
+From: {{org:Transportes Jaspe SA}} <{{email:news@transportes-jaspe.example}}>
+To: {{person:Herminia del Río}} <{{email:herminia..del@outlook.com}}>
+Date: Mon, {{date:19 Jan 2026}} 14:45:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Herminia}}, estas son las novedades del mes.
+
+Nuestro producto estrella baja a {{amount:26,42 EUR}}, antes {{amount:33,03 €}}. La oferta termina el {{date:2026-02-06}}.
+
+Compra online: {{url:https://www.transportes-jaspe.example/tienda?utm_campaign=1061}}
+
+Recibes este correo porque {{email:herminia..del@outlook.com}} se suscribió. Darte de baja: {{url:https://news.transportes-jaspe.example/unsubscribe?u=350346687x&e=herminia..del%40outlook.com}}
+
+{{org:Transportes Jaspe S.A.}}, Atención al cliente {{phone:+49 171 392 0041}}

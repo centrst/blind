@@ -1,0 +1,21 @@
+%known person|Imogen Oakley
+%known org|Jaspe Logistics Inc.
+From: {{person:Sebastian Cartwright}} <{{email:sebastian.cartwright@dorsal-studio.example}}>
+To: "{{person:Imogen Oakley}}" <{{email:oakley.imogen@jaspe-logistics.example}}>
+Date: Sun, {{date:28 Jul 2024}} 09:15:00 +0100
+Subject: Re: offer for {{org:Jaspe Logistics Inc.}}
+We can accept {{amount:$2,357.62}} and send the contract to {{email:oakley.imogen@jaspe-logistics.example}}.
+On {{date:27th July 2024}}, {{person:Imogen Oakley}} wrote:
+> Thanks {{person:Sebastian}}. That is high for us. Could you do {{amount:2,166.46 USD}}? The meeting works, call me on {{phone:+1 783 555 0198}} if it moves.
+>
+> On {{date:26/7/2024}}, {{person:Sebastian Cartwright}} wrote:
+> > Hello {{person:Imogen}}, our offer for {{org:Jaspe Logistics Inc.}} is {{amount:£2,548.78}}. Can we meet on {{date:AUG. 6, 2024}} at 19:15?
+> > 
+> > --
+> > Cheers,
+> > {{person:Sebastian Cartwright}}
+> > Sales
+> > {{org:Dorsal Studio LLC}}
+> > {{email:sebastian.cartwright@dorsal-studio.example}}
+
+{{person:Sebastian}}

@@ -1,0 +1,13 @@
+%known person|Pilar Echeverría Villalobos
+From: {{org:Asesores Tramuntana}} <{{email:security@asesores-tramuntana.example}}>
+To: {{person:Pilar Echeverría Villalobos}} <{{email:pilar..echeverria@icloud.com}}>
+Date: Thu, {{date:29 Feb 2024}} 13:30:00 +0100
+Subject: Solicitud de cambio de contraseña
+
+Hola {{person:Pilar}},
+
+Detectamos un inicio de sesión en {{email:pilar..echeverria@icloud.com}} desde {{place:Torrebruna}} el {{date:29/02/2024}} a las 10:00.
+
+Si no fuiste tú, llama al {{phone:798 371 035}} o escribe a {{email:security@asesores-tramuntana.example}}.
+
+El equipo de seguridad de {{org:Asesores Tramuntana}}

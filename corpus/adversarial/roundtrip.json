@@ -1,0 +1,102 @@
+[
+  {
+    "id": "D1",
+    "title": "the same date written two ways",
+    "text": "Sent 1 Jun 2024, due 1 June 2024.",
+    "secrets": [
+      "1 Jun 2024"
+    ],
+    "expect": "replaced",
+    "check": "roundtrip",
+    "seed": "may-collision"
+  },
+  {
+    "id": "D2",
+    "title": "one fund written in capitals, as a title and in lower case",
+    "text": "FONDO ALCOR VERDE\n\nInforme anual del Fondo Alcor Verde. Las cuentas del fondo alcor verde se cierran en diciembre. El Fondo alcor Verde reparte en enero.",
+    "secrets": [
+      "Alcor"
+    ],
+    "known": [
+      {
+        "kind": "org",
+        "value": "Fondo Alcor Verde"
+      }
+    ],
+    "expect": "replaced",
+    "check": "roundtrip",
+    "seed": "fund-cases"
+  },
+  {
+    "id": "D3",
+    "title": "one name written with and without its accent",
+    "text": "Hola Belén Quiroga,\n\nGracias, Belen. Le paso el contrato a BELÉN QUIROGA hoy.",
+    "secrets": [
+      "Quiroga"
+    ],
+    "known": [
+      {
+        "kind": "person",
+        "value": "Belén Quiroga"
+      }
+    ],
+    "expect": "replaced",
+    "check": "roundtrip",
+    "seed": "accent-twice"
+  },
+  {
+    "id": "D4",
+    "title": "one address written in two letter cases",
+    "text": "Write to TQuiroga@lindera.example, or to tquiroga@lindera.example after hours.",
+    "secrets": [
+      "tquiroga@lindera.example"
+    ],
+    "expect": "replaced",
+    "check": "roundtrip",
+    "seed": "email-cases"
+  },
+  {
+    "id": "D5",
+    "title": "phones with an extension glued on",
+    "text": "Desk: (615)555-0142x77\nAfter hours: 615.555.0199x4021\nFax: +1-615-555-0123x9",
+    "secrets": [
+      "555-0142"
+    ],
+    "expect": "replaced",
+    "check": "roundtrip",
+    "seed": "phone-ext"
+  },
+  {
+    "id": "D6",
+    "title": "price bands one unit apart",
+    "text": "Bands:\n* $1,000 - $4,999\n* $5,000 - $9,999\n* $10,000 - $14,999\n* $15,000 or more",
+    "secrets": [
+      "9,999"
+    ],
+    "expect": "replaced",
+    "check": "roundtrip",
+    "seed": "bands"
+  },
+  {
+    "id": "D7",
+    "title": "a total and an instalment one cent apart",
+    "text": "Plazos: 250,37 € y 249,63 €. Total 500,00 €. Cuota final 499,99 € y comisión 0,01 €.",
+    "secrets": [
+      "499,99"
+    ],
+    "expect": "replaced",
+    "check": "roundtrip",
+    "seed": "one-cent"
+  },
+  {
+    "id": "D8",
+    "title": "a host written with capitals and no path",
+    "text": "Details at www.Lindera-Norte.example and at www.lindera-norte.example/precios.",
+    "secrets": [
+      "lindera-norte"
+    ],
+    "expect": "replaced",
+    "check": "roundtrip",
+    "seed": "host-caps"
+  }
+]

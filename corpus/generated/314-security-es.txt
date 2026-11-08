@@ -1,0 +1,13 @@
+%known person|Gloria Espinosa
+From: {{org:Transportes Ironbridge S.L.U.}} <{{email:security@transportes-ironbridge.example}}>
+To: "{{person:Gloria Espinosa}}" <{{email:gloria..gespinosa@icloud.com}}>
+Date: Tue, {{date:7 Apr 2026}} 13:15:00 +0100
+Subject: Nuevo inicio de sesión en tu cuenta
+
+Hola {{person:Gloria}},
+
+Detectamos un inicio de sesión en {{email:gloria..gespinosa@icloud.com}} desde {{place:Cabo Redondo}} el {{date:7 de abril de 2026}} a las 13:45.
+
+Si no fuiste tú, llama al {{phone:790 43 74 50}} o escribe a {{email:security@transportes-ironbridge.example}}.
+
+El equipo de seguridad de {{org:Transportes Ironbridge S.L.U.}}

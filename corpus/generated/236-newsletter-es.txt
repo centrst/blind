@@ -1,0 +1,15 @@
+%known person|Ofelia Lazcano
+From: {{org:Consultores Ocaso}} <{{email:news@consultores-ocaso.example}}>
+To: {{email:ofelia..olazcano@outlook.com}}
+Date: Wed, {{date:25 Dec 2024}} 09:15:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Ofelia}}, estas son las novedades del mes.
+
+Nuestro producto estrella baja a {{amount:€ 31,92}}, antes {{amount:39,90 EUR}}. La oferta termina el {{date:2025-01-24}}.
+
+Compra online: {{url:https://www.consultores-ocaso.example/tienda?utm_campaign=5285}}
+
+Recibes este correo porque {{email:ofelia..olazcano@outlook.com}} se suscribió. Darte de baja: {{url:https://news.consultores-ocaso.example/unsubscribe?u=629301405x&e=ofelia..olazcano%40outlook.com}}
+
+{{org:Consultores Ocaso}}, Atención al cliente {{phone:+49 171 392 0083}}

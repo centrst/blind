@@ -1,0 +1,23 @@
+%known person|Sebastian Upshaw
+%known org|Bruma Consulting Ltd
+From: {{person:Matilda Goodwin}} <{{email:matilda.goodwin@umbral-labs.example}}>
+To: {{person:Sebastian Upshaw}} <{{email:sebastian_upshaw@bruma-consulting.example}}>
+Date: Sat, {{date:7 Nov 2026}} 12:45:00 +0100
+Subject: Re: offer for {{org:Bruma Consulting Ltd}}
+We can accept {{amount:£28.50}} and send the contract to {{email:sebastian_upshaw@bruma-consulting.example}}.
+On {{date:6 November 2026}}, {{person:Sebastian Upshaw}} wrote:
+> Thanks {{person:Matilda}}. That is high for us. Could you do {{amount:$26.19}}? The meeting works, call me on {{phone:771 822 632}} if it moves.
+>
+> On {{date:November 5, 2026}}, {{person:Matilda Goodwin}} wrote:
+> > Hello {{person:Sebastian}}, our offer for {{org:Bruma Consulting Ltd}} is {{amount:£30.81}}. Can we meet on {{date:November 16, 2026}} at 15:00?
+> > 
+> > --
+> > Kind regards,
+> > {{person:Matilda Goodwin}}
+> > Comercial
+> > {{org:Umbral Labs GmbH}}
+> > Tel: {{phone:+44 7700 900515}}
+> > {{url:www.umbral-labs.example}}
+> > Office: {{place:Maple Hollow}}
+
+{{person:Matilda}}

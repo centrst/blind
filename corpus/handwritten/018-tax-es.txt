@@ -1,0 +1,11 @@
+%known person|Herminia Soria
+From: Seguridad Social Aviso <avisos@seguridad-social-aviso.example>
+To: {{person:Herminia Soria}} <{{email:herminia_soria@gmail.com}}>
+Subject: Aviso: reconocimiento de prestación
+
+Hola {{person:Herminia}},
+
+Su solicitud {{id:PRE-2026-3381920}} ha sido resuelta. La prestación reconocida es de {{amount:1.105,40 €}} mensuales a partir del {{date:1 de noviembre de 2026}}.
+El primer pago se abonará en la cuenta {{iban:ES45 0182 0400 3902 0151 1234}} antes del {{date:10 de noviembre}}.
+
+Consulte los detalles en {{url:https://www.seguridad-social-aviso.example/prestaciones/3381920}}.

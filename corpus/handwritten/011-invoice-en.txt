@@ -1,0 +1,13 @@
+%known person|Matilda Fenn
+From: Brightwater Utilities <billing@brightwater-utilities.example>
+To: {{person:Matilda Fenn}} <{{email:m..fenn@outlook.com}}>
+Subject: Your statement for account {{id:BW-30481772}}
+
+Hello {{person:Matilda Fenn}},
+
+Your statement for the period {{date:1 February 2026}} to {{date:28 February 2026}} is ready.
+Electricity: {{amount:£61.20}}
+Water: {{amount:£23.75}}
+Total due by {{date:20 March 2026}}: {{amount:£84.95}}
+
+Pay online at {{url:https://my.brightwater-utilities.example/pay?acct=30481772}} or call {{phone:+44 20 7946 0321}}.

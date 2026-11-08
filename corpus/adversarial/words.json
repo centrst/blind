@@ -1,0 +1,68 @@
+[
+  {
+    "id": "W1",
+    "title": "amount written out in Spanish",
+    "text": "El importe es doscientos euros más IVA.",
+    "secrets": [
+      "doscientos euros"
+    ],
+    "expect": "silent",
+    "why": "Prose numbers are not detected. This is listed under Limits in the README.",
+    "seed": "adv"
+  },
+  {
+    "id": "W2",
+    "title": "amount written out in English",
+    "text": "The fee is twenty euros per month.",
+    "secrets": [
+      "twenty euros"
+    ],
+    "expect": "silent",
+    "why": "Prose numbers are not detected.",
+    "seed": "adv"
+  },
+  {
+    "id": "W3",
+    "title": "date written out in Spanish",
+    "text": "Nos vemos el tres de marzo en la oficina.",
+    "secrets": [
+      "tres de marzo"
+    ],
+    "expect": "silent",
+    "why": "Dates need digits. A day spelled out as a word is not parsed.",
+    "seed": "adv"
+  },
+  {
+    "id": "W4",
+    "title": "date written out in English",
+    "text": "The deadline is March third.",
+    "secrets": [
+      "March third"
+    ],
+    "expect": "silent",
+    "why": "Ordinal words are not parsed as days.",
+    "seed": "adv"
+  },
+  {
+    "id": "W5",
+    "title": "relative date",
+    "text": "Vence el próximo viernes.",
+    "secrets": [
+      "viernes"
+    ],
+    "expect": "silent",
+    "why": "A relative date carries no number to shift and holds no calendar fact.",
+    "seed": "adv"
+  },
+  {
+    "id": "W6",
+    "title": "phone number in words",
+    "text": "Mi número es seis cero cero uno dos tres cuatro cinco seis.",
+    "secrets": [
+      "seis cero cero"
+    ],
+    "expect": "silent",
+    "why": "Digits spelled as words are not detected.",
+    "seed": "adv"
+  }
+]

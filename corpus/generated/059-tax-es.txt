@@ -1,0 +1,17 @@
+%known person|Facundo del Río
+From: {{person:Isidro Rebollo}} <{{email:notificaciones.isidro.rebollo@gestion-aldara.example}}>
+To: {{person:Facundo del Río}} <{{email:fac_del@gmail.com}}>
+Date: Wed, {{date:3 Dec 2025}} 16:45:00 +0100
+Subject: Aviso de deuda pendiente
+
+A {{person:Facundo del Río}}, titular del documento {{id:91807262W}}:
+
+La Oficina Tributaria de {{place:Cabo Redondo}} le comunica que el expediente {{id:EXP-2025-8285}} presenta un saldo de {{amount:2.392,78 EUR}} correspondiente al periodo cerrado el {{date:24 de octubre de 2025}}.
+
+Si no se abona antes del {{date:13 de diciembre de 2025}}, se aplicará un recargo del 20 %: {{amount:478,56 €}}, en total {{amount:2871,34 EUR}}.
+
+Puede pagar por transferencia a {{iban:IT15 1579 7028 4501 9611 2312 361}} y conservar el justificante. Atención telefónica: {{phone:+44 7700 900743}}.
+
+Las cuotas de la Seguridad Social del periodo {{date:01.12.2025}} están en la sede: {{url:https://sede.gestion-aldara.example/cuotas/79511A304}}
+
+Este es un aviso automático. No responda a este correo.

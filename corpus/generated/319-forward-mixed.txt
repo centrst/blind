@@ -1,0 +1,21 @@
+%known person|Odette Tennant
+From: {{person:Odette Tennant}} <{{email:o_tennant@gmail.com}}>
+To: "{{person:Nigel Upshaw}}" <{{email:nupshaw@rastro-supply.example}}>
+Date: Thu, {{date:13 May 2027}} 16:45:00 +0100
+Subject: Fwd: consulta de {{org:Studio Millstone Inc.}}
+{{person:Nigel}}, forwarding below. Please check the numbers and call them on {{phone:(405) 555-0195}}.
+---------- Forwarded message ---------
+From: {{person:Wilhelmina Haverford}} <{{email:wilhelminahaverford@studio-millstone.example}}>
+Date: {{date:13 May 2027}}
+Subject: Presupuesto proyecto {{id:68880305D}}
+
+Hello {{person:Odette}},
+We at {{org:Studio Millstone Inc.}} have a budget of {{amount:USD 3,374.81}} for the work in {{place:Springvale}}. Could you confirm the start date?
+--
+Thanks,
+{{person:Wilhelmina Haverford}}
+Directora de operaciones
+{{org:Studio Millstone Inc.}}
+Tel: {{phone:(405) 555-0195}}
+{{email:wilhelminahaverford@studio-millstone.example}}
+Office: {{place:Fenwick Bay}}

@@ -1,0 +1,29 @@
+%order mdy
+%known person|Winston Haverford
+%known org|Cendal Partners LLC
+From: "{{person:Cedric Abernathy}}" <{{email:cedric_abernathy@millstone-systems.example}}>
+To: "{{person:Winston Haverford}}" <{{email:winston.haverford@cendal-partners.example}}>
+Date: Fri, {{date:17 Jul 2026}} 11:45:00 +0100
+Subject: Factura {{id:Y3752960N}}
+
+Hola {{person:Winston}},
+
+Attached is our invoice for last month's services to {{org:Cendal Partners LLC}}.
+
+El total es {{amount:$14.65}}, con 5% de IVA sobre {{amount:$13.95}}.
+
+Payment is due by {{date:1 August 2026}}. Transfer to {{iban:IT5996998646387497121733301}}, quoting {{id:Y3752960N}}.
+
+Our tax number is {{id:M75735281}}.
+
+--
+Best regards,
+{{person:Cedric Abernathy}}
+Billing department
+{{org:Millstone Systems}}
+Tel: {{phone:+44 7700 900486}}
+{{email:cedric_abernathy@millstone-systems.example}}
+{{url:www.millstone-systems.example}}
+Office: {{place:Oakmere}}
+
+This message is confidential and intended only for the addressee.

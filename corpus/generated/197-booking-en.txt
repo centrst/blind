@@ -1,0 +1,19 @@
+%known person|Sebastian Crawley
+From: {{person:Barnaby Tennant}} <{{email:tennant.barnaby@ocaso-works.example}}>
+To: {{person:Sebastian Crawley}} <{{email:sebastian@esquilo-systems.example}}>
+Date: Thu, {{date:13 Mar 2025}} 14:30:00 +0100
+Subject: Your booking is confirmed
+
+Hello {{person:Sebastian}},
+
+Your dental check-up at {{org:Ocaso Works GmbH}} is booked for {{date:Mar. 24th, 2025}} at 11:45.
+
+The price is {{amount:$24.73}}, payable on arrival. A deposit of {{amount:$6.18}} is held on your card.
+
+--
+Thanks,
+{{person:Barnaby Tennant}}
+Reception
+{{org:Ocaso Works GmbH}}
+{{email:tennant.barnaby@ocaso-works.example}}
+{{url:www.ocaso-works.example}}

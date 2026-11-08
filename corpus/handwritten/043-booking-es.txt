@@ -1,0 +1,10 @@
+%known person|Florencio Vera
+From: Restaurante La Almadraba <reservas@la-almadraba.example>
+To: {{person:Florencio Vera}} <{{email:florencio_vera@gmail.com}}>
+Subject: Reserva para 6 personas
+
+Hola {{person:Florencio}},
+
+Tu mesa para 6 personas está reservada el sábado {{date:31 de octubre}} a las 21:00 a nombre de {{person:Vera}}.
+Menú degustación: {{amount:58,00 €}} por persona. Dejamos una señal de {{amount:60,00 €}}.
+Dirección: Paseo Marítimo 8, {{place:Cabo Redondo}}. Teléfono {{phone:+34 756 555 902}}.

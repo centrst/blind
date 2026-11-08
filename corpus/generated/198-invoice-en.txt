@@ -1,0 +1,25 @@
+%known person|Barnaby Rutherford
+%known org|Holdings Tramuntana LLC
+From: "{{person:Gwendolyn Blackwood}}" <{{email:gwendolynblackwood@studio-marisma.example}}>
+To: {{person:Barnaby Rutherford}} <{{email:brutherford@holdings-tramuntana.example}}>
+Date: Mon, {{date:20 Oct 2025}} 14:15:00 +0100
+Subject: Invoice {{id:US949343456}} from {{org:Studio Marisma Ltd}}
+
+Dear {{person:Barnaby}},
+
+Attached is our invoice for last month's services to {{org:Holdings Tramuntana LLC}}.
+
+Consulting, first half: {{amount:£9.02}}
+Consulting, second half: {{amount:$6.02}}
+Subtotal: {{amount:$15.04}}
+Tax (20%): {{amount:$3.01}}
+Total: {{amount:£18.05}}
+
+Please pay before {{date:19/11/2025}} to IBAN {{iban:GB06 FUTY 3681 0640 6422 06}}.
+
+--
+Best regards,
+{{person:Gwendolyn Blackwood}}
+Accounts
+{{org:Studio Marisma Ltd}}
+Tel: {{phone:0034 760 603 536}}

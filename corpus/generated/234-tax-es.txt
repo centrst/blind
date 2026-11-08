@@ -1,0 +1,15 @@
+%known person|Amparo Iglesias Espinosa
+From: {{person:Aurora Galindo Duarte}} <{{email:notificaciones.agalindo@transportes-wicker.example}}>
+To: {{person:Amparo Iglesias Espinosa}} <{{email:iglesias..amparo@outlook.com}}>
+Date: Tue, {{date:20 May 2025}} 10:00:00 +0100
+Subject: Notificación {{id:EXP-2025-0187}}: pago pendiente
+
+Estimado/a {{person:Amparo Iglesias Espinosa}},
+
+Según nuestros registros, consta una deuda de {{amount:647,52 EUR}} en el expediente {{id:EXP-2025-0187}}.
+
+Si no se abona antes del {{date:19 de junio de 2025}}, se aplicará un recargo del 5 %: {{amount:32,38 EUR}}, en total {{amount:679,90 EUR}}.
+
+Puede pagar por transferencia a {{iban:PT12 6046 6413 1152 5409 0954 2}} y conservar el justificante. Atención telefónica: {{phone:759 55 40 28}}.
+
+Este es un aviso automático. No responda a este correo.

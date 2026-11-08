@@ -1,0 +1,24 @@
+%known person|Honorio Olmos
+%known org|Logística Nevada S.A.
+From: {{person:Ulises Cifuentes}} <{{email:ulises_cifuentes@consultores-wicker.example}}>
+To: "{{person:Honorio Olmos}}" <{{email:honorio@logistica-nevada.example}}>
+Date: Sun, {{date:30 Mar 2025}} 10:45:00 +0100
+Subject: Factura {{id:EXP-2026-4623}} de {{org:Consultores Wicker S.A.}}
+
+Buenos días {{person:Honorio}},
+
+Adjuntamos la factura {{id:EXP-2026-4623}} por los servicios prestados a {{org:Logística Nevada S.A.}}.
+
+El total es {{amount:€ 159,63}}, con 4 % de IVA sobre {{amount:153,49 €}}.
+
+Agradecemos el pago antes del {{date:14 de abril de 2025}} en la cuenta {{iban:FR65 3551 4650 4796 6084 0624 042}}.
+
+Nuestro NIF es {{id:B95332741}}.
+
+--
+Gracias,
+{{person:Ulises Cifuentes}}
+Accounts
+{{org:Consultores Wicker S.A.}}
+Tel: {{phone:679-555-0160}}
+{{email:ulises_cifuentes@consultores-wicker.example}}

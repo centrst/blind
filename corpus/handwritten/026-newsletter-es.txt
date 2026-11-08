@@ -1,0 +1,13 @@
+%known person|Jacinta Beltrán
+From: Mercado del Sur <novedades@mercado-del-sur.example>
+To: {{person:Jacinta Beltrán}} <{{email:jacinta_beltran@gmail.com}}>
+Subject: Esta semana en el mercado
+
+Hola {{person:Jacinta}},
+
+Cesta de temporada por {{amount:14,90 €}} (antes {{amount:18,50 €}}). Envío gratis a partir de {{amount:40,00 €}}.
+Taller de cocina el sábado {{date:23 de mayo}} en {{place:Puente Nuevo}}. Plazas limitadas, 12 euros por persona.
+
+Pedidos: {{url:https://www.mercado-del-sur.example/cesta?sem=21}}
+Atención al cliente: {{phone:+34 751 555 204}}
+Para darte de baja: {{url:https://mercado-del-sur.example/baja?id=55120938&email=jacinta_beltran%40gmail.com}}

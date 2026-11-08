@@ -1,0 +1,20 @@
+%known person|Jasper Goodwin
+From: {{person:Jasper Goodwin}} <{{email:goodwin_jasper@gmail.com}}>
+To: "{{person:Phoebe Doherty}}" <{{email:phoebe@labs-dorsal.example}}>
+Date: Wed, {{date:10 Mar 2027}} 19:30:00 +0100
+Subject: Fwd: presupuesto {{org:Works Aldara}}
+Hi {{person:Phoebe}}, can you take this one? The client wants an answer by {{date:Mar. 15, 2027}}.
+---------- Forwarded message ---------
+From: {{person:Cordelia Tennant}} <{{email:cordelia.tennant@works-aldara.example}}>
+Date: {{date:10 Mar 2027}}
+Subject: Quote for project {{id:FAC/2024/8010}}
+
+Hi {{person:Jasper}},
+The board approved {{amount:USD 3,166.19}} for project {{id:FAC/2024/8010}}. When can you begin?
+--
+Best regards,
+{{person:Cordelia Tennant}}
+Purchasing
+{{org:Works Aldara}}
+{{email:cordelia.tennant@works-aldara.example}}
+{{url:www.works-aldara.example}}

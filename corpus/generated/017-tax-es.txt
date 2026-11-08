@@ -1,0 +1,17 @@
+%known person|Nicolás de la Torre
+From: "{{person:Ulises Olmos}}" <{{email:notificaciones.ulises.olmos@transportes-ocaso.example}}>
+To: {{person:Nicolás de la Torre}} <{{email:torre..nicolas@outlook.com}}>
+Date: Sun, {{date:19 Jul 2026}} 10:45:00 +0100
+Subject: Notificación {{id:EXP-2026-3455}}: pago pendiente
+
+A {{person:Nicolás de la Torre}}, titular del documento {{id:84164018T}}:
+
+Según nuestros registros, consta una deuda de {{amount:71,73 €}} en el expediente {{id:EXP-2026-3455}}.
+
+Si no se abona antes del {{date:8 de agosto de 2026}}, se aplicará un recargo del 10 %: {{amount:7,17 €}}, en total {{amount:78,90 €}}.
+
+Puede pagar por transferencia a {{iban:ES7315606314336933540236}} y conservar el justificante. Atención telefónica: {{phone:+44 7700 900372}}.
+
+Las cuotas de la Seguridad Social del periodo {{date:1 de julio}} están en la sede: {{url:https://sede.transportes-ocaso.example/cuotas/46949A137}}
+
+Este es un aviso automático. No responda a este correo.

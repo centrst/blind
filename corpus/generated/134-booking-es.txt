@@ -1,0 +1,23 @@
+%known person|Gloria Jaramillo Villalobos
+From: Booksy <no..reply@booksy.com>
+To: "{{person:Gloria Jaramillo Villalobos}}" <{{email:gloria@consultores-rastro.example}}>
+Date: Sat, {{date:9 May 2026}} 18:15:00 +0100
+Subject: Confirmación de cita {{id:EXP-2023-3751}}
+
+Estimado/a {{person:Gloria}},
+
+Hemos reservado sesión de fisioterapia para ti el {{date:26 de mayo del 2026}}. Estamos en {{place:San Telmo de Abajo}}.
+
+Total: {{amount:9,92 €}}. Cancelación gratuita hasta el {{date:10 de mayo}}.
+
+¿Dudas? Llámanos al {{phone:777 764 102}} o escribe a {{email:eloy@gestion-nevada.example}}.
+
+Manage your visit: {{url:https://booksy.com/en-es/424639_gestion-nevada_8451}}
+
+--
+Un saludo,
+{{person:Eloy Navarrete Quintana}}
+Reception
+{{org:Gestión Nevada}}
+Tel: {{phone:777 764 102}}
+{{url:www.gestion-nevada.example}}

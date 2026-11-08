@@ -1,0 +1,21 @@
+%order mdy
+%known person|Tamsin Ellsworth
+From: {{person:Tamsin Ellsworth}} <{{email:ellsworth_tamsin@gmail.com}}>
+To: {{person:Jasper Oakley}} <{{email:jasper@sotavento-supply.example}}>
+Date: Thu, {{date:3 Jun 2027}} 12:30:00 +0100
+Subject: Fwd: question from {{org:Millstone Systems}}
+Hi {{person:Jasper}}, can you take this one? The client wants an answer by {{date:June 8, 2027}}.
+---------- Forwarded message ---------
+From: {{person:Valentine Cartwright}} <{{email:valentine.cartwright@millstone-systems.example}}>
+Date: {{date:3 Jun 2027}}
+Subject: Quote for project {{id:86023123Z}}
+
+Dear {{person:Tamsin}},
+The board approved {{amount:$742.03}} for project {{id:86023123Z}}. When can you begin?
+--
+Kind regards,
+{{person:Valentine Cartwright}}
+Operations manager
+{{org:Millstone Systems}}
+Tel: {{phone:772 605 578}}
+{{url:www.millstone-systems.example}}

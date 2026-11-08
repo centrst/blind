@@ -1,0 +1,28 @@
+%order mdy
+%known person|Eleanor Vanderbilt
+%known org|Studio Pennywhistle Ltd
+From: {{person:Harold Crawley}} <{{email:harold@consulting-isleta.example}}>
+To: {{person:Eleanor Vanderbilt}} <{{email:eleanorvanderbilt@studio-pennywhistle.example}}>
+Date: Sun, {{date:24 Mar 2024}} 10:00:00 +0100
+Subject: Invoice {{id:EU153035210}}
+
+Hi {{person:Eleanor}},
+
+Attached is our invoice for last month's services to {{org:Studio Pennywhistle Ltd}}.
+
+Base {{amount:£433.13}} plus 20% tax = {{amount:$519.76}}
+
+Please pay before {{date:2024-05-08}} to IBAN {{iban:ES91 4427 1710 2952 9618 9389}}.
+
+Our tax number is {{id:C68818007}}.
+
+--
+Best regards,
+{{person:Harold Crawley}}
+Billing department
+{{org:Consulting Isleta}}
+Tel: {{phone:738-555-0120}}
+{{email:harold@consulting-isleta.example}}
+{{url:www.consulting-isleta.example}}
+
+This message is confidential and intended only for the addressee.

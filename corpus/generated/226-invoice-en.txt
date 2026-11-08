@@ -1,0 +1,30 @@
+%known person|Matilda Ingram
+%known org|Systems Lumbre Inc.
+From: {{person:Percival Crawley}} <{{email:crawley.percival@vendaval-labs.example}}>
+To: "{{person:Matilda Ingram}}" <{{email:matilda@systems-lumbre.example}}>
+Date: Sat, {{date:12 Jul 2025}} 16:00:00 +0100
+Subject: Invoice {{id:BKW6589BJ}} from {{org:Vendaval Labs Ltd}}
+
+Hi {{person:Matilda}},
+
+Please find attached invoice {{id:BKW6589BJ}} for the work done for {{org:Systems Lumbre Inc.}}.
+
+Consulting, first half: {{amount:$14.84}}
+Consulting, second half: {{amount:£9.89}}
+Subtotal: {{amount:24.73 USD}}
+Tax (8%): {{amount:$1.98}}
+Total: {{amount:£26.71}}
+
+Payment is due by {{date:11/08/25}}. Transfer to {{iban:DE51 2697 4433 6777 3390 02}}, quoting {{id:BKW6589BJ}}.
+
+Our tax number is {{id:V95759899}}.
+
+--
+Cheers,
+{{person:Percival Crawley}}
+Billing department
+{{org:Vendaval Labs Ltd}}
+Tel: {{phone:786 97 41 36}}
+{{url:www.vendaval-labs.example}}
+
+This message is confidential and intended only for the addressee.

@@ -1,0 +1,25 @@
+title = "Blind secret scanning"
+
+[extend]
+useDefault = true
+
+# Public model checksums, not credentials. Both the value and path must match.
+[[rules]]
+id = "generic-api-key"
+
+[[rules.allowlists]]
+description = "Pinned training tokenizer checksum"
+condition = "AND"
+regexTarget = "secret"
+paths = ['''(^|/)ner/train/sources\.py$''']
+regexes = ['''^3f3978e0c036f2c2588cac34a6047cbb0af0b0dc1814254e291028529805496d$''']
+
+[[rules.allowlists]]
+description = "Measured candidate tokenizer checksums"
+condition = "AND"
+regexTarget = "secret"
+paths = ['''(^|/)ner/CANDIDATES\.md$''']
+regexes = [
+  '''^ee028763434d18611c1c36356ea1d050e90a9fa94ede57fac48b39f85f818ad1$''',
+  '''^3ec8a90d8758fbc56d50831990c3a3a65660f020c5b06534adf43b04091ffa9e$''',
+]

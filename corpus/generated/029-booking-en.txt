@@ -1,0 +1,20 @@
+%order mdy
+%known person|Eleanor Vanderbilt
+From: {{person:Georgina Abernathy}} <{{email:georginaabernathy@ironbridge-holdings.example}}>
+To: {{person:Eleanor Vanderbilt}} <{{email:evanderbilt@isleta-partners.example}}>
+Date: Sat, {{date:13 Dec 2025}} 14:30:00 +0100
+Subject: Booking {{id:85149180H}} confirmed
+
+Hi {{person:Eleanor}},
+
+Your physio session at {{org:Ironbridge Holdings Ltd}} is booked for {{date:22nd December 2025}} at 19:45.
+
+The price is {{amount:£32.38}}, payable on arrival. A deposit of {{amount:USD 8.10}} is held on your card.
+
+--
+Best regards,
+{{person:Georgina Abernathy}}
+Reception
+{{org:Ironbridge Holdings Ltd}}
+Tel: {{phone:+34 775859977}}
+{{url:www.ironbridge-holdings.example}}

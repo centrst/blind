@@ -1,0 +1,23 @@
+%known person|Amparo Maldonado
+%known org|Estudio Nevada
+From: {{person:Estefanía Cuesta Villalobos}} <{{email:estefania_cuesta@ingenieria-tramuntana.example}}>
+To: "{{person:Amparo Maldonado}}" <{{email:amparomaldonado@estudio-nevada.example}}>
+Date: Sat, {{date:19 Apr 2025}} 08:15:00 +0100
+Subject: Re: oferta para {{org:Estudio Nevada}}
+Podemos aceptar {{amount:€ 2.557,05}} y enviar el contrato a {{email:amparomaldonado@estudio-nevada.example}}.
+On {{date:18/4/2025}}, {{person:Amparo Maldonado}} wrote:
+> Gracias {{person:Estefanía}}. Nos resulta alto. ¿Podríais dejarlo en {{amount:2.349,72 €}}? La reunión nos va bien, llámame al {{phone:+1 308 555 0145}} si cambia.
+>
+> El {{date:2025-04-17}}, {{person:Estefanía Cuesta Villalobos}} escribió:
+> > Hola {{person:Amparo}}, nuestra oferta para {{org:Estudio Nevada}} es de {{amount:2.764,38 €}}. ¿Quedamos el {{date:21/4/25}} a las 09:45?
+> > 
+> > --
+> > Atentamente,
+> > {{person:Estefanía Cuesta Villalobos}}
+> > Sales
+> > {{org:Ingeniería Tramuntana}}
+> > Tel: {{phone:+49 171 392 0009}}
+> > {{email:estefania_cuesta@ingenieria-tramuntana.example}}
+> > {{url:www.ingenieria-tramuntana.example}}
+
+{{person:Estefanía}}

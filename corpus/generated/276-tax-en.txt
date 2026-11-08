@@ -1,0 +1,18 @@
+%order mdy
+%known person|Lionel Ashworth
+From: {{person:Harold Kingsley}} <{{email:notificaciones.hkingsley@labs-umbral.example}}>
+To: {{person:Lionel Ashworth}} <{{email:lionel..lashworth@icloud.com}}>
+Date: Tue, {{date:11 Aug 2026}} 14:00:00 +0100
+Subject: Notification of outstanding balance
+
+To {{person:Lionel Ashworth}}, holder of ID {{id:Y7789381J}}:
+
+Our records show an unpaid balance of {{amount:$120.90}} on file {{id:EXP-2026-6596}}.
+
+If it is not paid by {{date:8/31/2026}}, a surcharge of 10% applies: {{amount:$12.09}}, for a total of {{amount:$132.99}}.
+
+Pay by transfer to {{iban:FR5497671649056317773990486}} and keep the receipt. For help call {{phone:794 689 521}}.
+
+Social security contributions for {{date:1st of August}} are listed in the portal: {{url:https://sede.labs-umbral.example/cuotas/11048A559}}
+
+This is an automatic notice. Do not reply.

@@ -1,0 +1,14 @@
+%order mdy
+%known person|Odette Whitcombe
+From: {{org:Cendal Labs LLC}} <{{email:security@cendal-labs.example}}>
+To: {{person:Odette Whitcombe}} <{{email:odette..whi@outlook.com}}>
+Date: Sun, {{date:22 Aug 2027}} 08:15:00 +0100
+Subject: New sign-in to your account
+
+Hola {{person:Odette}},
+
+Someone asked to change the password for {{email:odette..whi@outlook.com}} on {{date:August 22, 2027}}. Use this link within one hour: {{url:https://accounts.cendal-labs.example/reset?token=976547ab108441}}
+
+If this was not you, call {{phone:237-555-0149}} or write to {{email:security@cendal-labs.example}}.
+
+The {{org:Cendal Labs LLC}} security team

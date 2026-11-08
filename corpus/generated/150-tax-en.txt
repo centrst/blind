@@ -1,0 +1,17 @@
+%known person|Matilda Haverford
+From: {{person:Odette Jessop}} <{{email:notificaciones.odette_jessop@wicker-supply.example}}>
+To: {{person:Matilda Haverford}} <{{email:matilda_haverford@gmail.com}}>
+Date: Thu, {{date:22 Jan 2026}} 13:00:00 +0100
+Subject: Notice {{id:EXP-2026-6654}}: payment pending
+
+Dear {{person:Matilda Haverford}},
+
+Our records show an unpaid balance of {{amount:£30.58}} on file {{id:EXP-2026-6654}}.
+
+If it is not paid by {{date:11/02/2026}}, a surcharge of 20% applies: {{amount:6.12 USD}}, for a total of {{amount:USD 36.70}}.
+
+Pay by transfer to {{iban:DE38 8177 3013 9900 5725 02}} and keep the receipt. For help call {{phone:+34 772 660 357}}.
+
+Social security contributions for {{date:Jan. 1}} are listed in the portal: {{url:https://sede.wicker-supply.example/cuotas/42377A977}}
+
+This is an automatic notice. Do not reply.

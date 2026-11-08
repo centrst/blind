@@ -1,0 +1,13 @@
+%known person|Belén Zamora Rebollo
+From: {{org:Consultores Wicker}} <{{email:security@consultores-wicker.example}}>
+To: {{email:b..zamora@outlook.com}}
+Date: Mon, {{date:15 Mar 2027}} 11:30:00 +0100
+Subject: Nuevo inicio de sesión en tu cuenta
+
+Hola {{person:Belén}},
+
+Detectamos un inicio de sesión en {{email:b..zamora@outlook.com}} desde {{place:Puente Nuevo}} el {{date:15/03/2027}} a las 13:30.
+
+Si no fuiste tú, llama al {{phone:+34 799 479 403}} o escribe a {{email:security@consultores-wicker.example}}.
+
+El equipo de seguridad de {{org:Consultores Wicker}}

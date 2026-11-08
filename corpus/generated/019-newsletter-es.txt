@@ -1,0 +1,15 @@
+%known person|Fermina Espinosa
+From: {{org:Clínica Marisma SL}} <{{email:news@clinica-marisma.example}}>
+To: {{person:Fermina Espinosa}} <{{email:fer..espinosa@icloud.com}}>
+Date: Mon, {{date:25 Jan 2027}} 16:15:00 +0100
+Subject: Novedades de temporada
+
+Hola {{person:Fermina}}, estas son las novedades del mes.
+
+Nuestro producto estrella baja a {{amount:153,06 EUR}}, antes {{amount:191,33 €}}. La oferta termina el {{date:30 de enero del 2027}}.
+
+Compra online: {{url:https://www.clinica-marisma.example/tienda?utm_campaign=4325}}
+
+Recibes este correo porque {{email:fer..espinosa@icloud.com}} se suscribió. Darte de baja: {{url:https://news.clinica-marisma.example/unsubscribe?u=762341539x&e=fer..espinosa%40icloud.com}}
+
+{{org:Clínica Marisma S.L.}}, Atención al cliente {{phone:+34 772 534 277}}

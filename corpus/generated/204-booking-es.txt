@@ -1,0 +1,13 @@
+%known person|Nicolás Villalobos
+From: {{person:Baldomero Arroyo Galindo}} <{{email:baldomero_arroyo@logistica-bruma.example}}>
+To: {{person:Nicolás Villalobos}} <{{email:nicolas@reformas-lumbre.example}}>
+Date: Mon, {{date:2 Mar 2026}} 19:45:00 +0100
+Subject: Reserva confirmada
+
+Buenos días {{person:Nicolás}},
+
+Tu sesión de fisioterapia en {{org:Logística Bruma S.A.}} queda reservada para el {{date:13 de marzo de 2026}} a las 11:30.
+
+El importe es {{amount:132,56 €}}, a pagar en el local. Hemos retenido una señal de {{amount:€ 33,14}}.
+
+¿Dudas? Llámanos al {{phone:753 365 072}} o escribe a {{email:baldomero_arroyo@logistica-bruma.example}}.

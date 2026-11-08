@@ -1,0 +1,15 @@
+%known person|Lisandro Fontán
+From: {{org:Servicios Vendaval SA}} <{{email:news@servicios-vendaval.example}}>
+To: {{person:Lisandro Fontán}} <{{email:fontan..lisandro@icloud.com}}>
+Date: Thu, {{date:18 Jul 2024}} 18:45:00 +0100
+Subject: Novedades de temporada
+
+Hola {{person:Lisandro}}, estas son las novedades del mes.
+
+Nuestro producto estrella baja a {{amount:4,16 €}}, antes {{amount:5,20 EUR}}. La oferta termina el {{date:2024-07-25}}.
+
+Compra online: {{url:https://www.servicios-vendaval.example/tienda?utm_campaign=2108}}
+
+Recibes este correo porque {{email:fontan..lisandro@icloud.com}} se suscribió. Darte de baja: {{url:https://news.servicios-vendaval.example/unsubscribe?u=217237245x&e=fontan..lisandro%40icloud.com}}
+
+{{org:Servicios Vendaval S.A.}}, Atención al cliente {{phone:0034 755 943 372}}

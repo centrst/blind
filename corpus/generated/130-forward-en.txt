@@ -1,0 +1,21 @@
+%order mdy
+%known person|Cedric Vanderbilt
+From: {{person:Cedric Vanderbilt}} <{{email:cvanderbilt@ironbridge-systems.example}}>
+To: {{person:Phoebe Oakley}} <{{email:phoebe@works-wicker.example}}>
+Date: Mon, {{date:1 Mar 2027}} 19:30:00 +0100
+Subject: Fwd: {{org:Kepler Advisory Ltd}} quote
+{{person:Phoebe}}, forwarding below. Please check the numbers and call them on {{phone:802-555-0159}}.
+---------- Forwarded message ---------
+From: {{person:Priscilla Rutherford}} <{{email:priscillarutherford@kepler-advisory.example}}>
+Date: {{date:1 Mar 2027}}
+Subject: Quote for project {{id:FAC/2027/2163}}
+
+Hello {{person:Cedric}},
+We at {{org:Kepler Advisory Ltd}} have a budget of {{amount:125.85 USD}} for the work in {{place:Stonebridge}}. Could you confirm the start date?
+--
+Best regards,
+{{person:Priscilla Rutherford}}
+Directora de operaciones
+{{org:Kepler Advisory Ltd}}
+Tel: {{phone:802-555-0159}}
+{{email:priscillarutherford@kepler-advisory.example}}

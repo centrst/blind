@@ -1,0 +1,15 @@
+%known person|Amparo Villalobos
+From: {{org:Clínica Hontanar}} <{{email:news@clinica-hontanar.example}}>
+To: {{person:Amparo Villalobos}} <{{email:amparo..vil@icloud.com}}>
+Date: Sun, {{date:25 Aug 2024}} 16:45:00 +0100
+Subject: Novedades de temporada
+
+Hi {{person:Amparo}}, here is what is new this month.
+
+Our best seller is now {{amount:€ 30,72}}, down from {{amount:€ 38,40}}. Offer ends {{date:8-9-2024}}.
+
+Shop online: {{url:https://www.clinica-hontanar.example/shop?utm_campaign=2970}}
+
+Recibes este correo porque {{email:amparo..vil@icloud.com}} se suscribió. Darte de baja: {{url:https://news.clinica-hontanar.example/unsubscribe?u=591302615x&e=amparo..vil%40icloud.com}}
+
+{{org:Clínica Hontanar}}, Atención al cliente {{phone:+34 760178426}}

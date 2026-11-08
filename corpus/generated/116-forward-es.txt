@@ -1,0 +1,20 @@
+%known person|Honorio Arroyo
+From: {{person:Honorio Arroyo}} <{{email:honorio..arroyo@icloud.com}}>
+To: {{person:Facundo Duarte Figueroa}} <{{email:facundo_duarte@servicios-foxglove.example}}>
+Date: Tue, {{date:22 Oct 2024}} 19:00:00 +0100
+Subject: Fwd: presupuesto {{org:Gestión Jaspe}}
+Hola {{person:Facundo}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:2024-11-04}}.
+---------- Forwarded message ---------
+From: {{person:Ernesto Espinosa Ocaña}} <{{email:ernesto_espinosa@gestion-jaspe.example}}>
+Date: {{date:22 Oct 2024}}
+Subject: Presupuesto proyecto {{id:Y2471522A}}
+
+Hola {{person:Honorio}},
+En {{org:Gestión Jaspe}} disponemos de {{amount:€ 3.816,25}} para la obra en {{place:Almendral del Sur}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Saludos cordiales,
+{{person:Ernesto Espinosa Ocaña}}
+Operations manager
+{{org:Gestión Jaspe}}
+Tel: {{phone:797 05 50 89}}
+{{email:ernesto_espinosa@gestion-jaspe.example}}

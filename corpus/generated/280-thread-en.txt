@@ -1,0 +1,24 @@
+%order mdy
+%known person|Lionel Lambert
+%known org|Bruma Consulting GmbH
+From: {{person:Quentin Blackwood}} <{{email:quentinblackwood@marisma-logistics.example}}>
+To: {{person:Lionel Lambert}} <{{email:lionel_lambert@bruma-consulting.example}}>
+Date: Sun, {{date:17 May 2026}} 08:15:00 +0100
+Subject: Re: offer for {{org:Bruma Consulting GmbH}}
+We can accept {{amount:71.94 USD}} and send the contract to {{email:lionel_lambert@bruma-consulting.example}}.
+On {{date:16th May, 2026}}, {{person:Lionel Lambert}} wrote:
+> Thanks {{person:Quentin}}. That is high for us. Could you do {{amount:$66.10}}? The meeting works, call me on {{phone:+34 772 241 686}} if it moves.
+>
+> On {{date:5-15-26}}, {{person:Quentin Blackwood}} wrote:
+> > Hello {{person:Lionel}}, our offer for {{org:Bruma Consulting GmbH}} is {{amount:$77.77}}. Can we meet on {{date:May 27 2026}} at 16:00?
+> > 
+> > --
+> > Thanks,
+> > {{person:Quentin Blackwood}}
+> > Comercial
+> > {{org:Marisma Logistics}}
+> > Tel: {{phone:+34 782033341}}
+> > {{email:quentinblackwood@marisma-logistics.example}}
+> > {{url:www.marisma-logistics.example}}
+
+{{person:Quentin}}

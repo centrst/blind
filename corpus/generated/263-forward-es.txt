@@ -1,0 +1,21 @@
+%known person|Pilar Cifuentes
+From: "{{person:Pilar Cifuentes}}" <{{email:pilar_cifuentes@gmail.com}}>
+To: {{person:Dolores Jaramillo}} <{{email:djaramillo@gestion-pinar.example}}>
+Date: Fri, {{date:20 Mar 2026}} 18:00:00 +0100
+Subject: Fwd: consulta de {{org:Clínica Nevada S.L.}}
+Hola {{person:Dolores}}, ¿puedes encargarte de este? El cliente quiere respuesta antes del {{date:30 de marzo de 2026}}.
+---------- Forwarded message ---------
+From: {{person:Aurora Duarte}} <{{email:aduarte@clinica-nevada.example}}>
+Date: {{date:20 Mar 2026}}
+Subject: Presupuesto proyecto {{id:EXP-2023-0889}}
+
+Buenos días {{person:Pilar}},
+En {{org:Clínica Nevada S.L.}} disponemos de {{amount:38,65 EUR}} para la obra en {{place:Villaluenga Alta}}. ¿Puedes confirmarnos la fecha de inicio?
+--
+Atentamente,
+{{person:Aurora Duarte}}
+Operations manager
+{{org:Clínica Nevada S.L.}}
+Tel: {{phone:+34 781206122}}
+{{email:aduarte@clinica-nevada.example}}
+{{url:www.clinica-nevada.example}}

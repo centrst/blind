@@ -1,0 +1,13 @@
+%known person|Florencio Galindo
+From: {{org:Asesores Esquilo S.A.}} <{{email:security@asesores-esquilo.example}}>
+To: {{person:Florencio Galindo}} <{{email:galindo..florencio@icloud.com}}>
+Date: Fri, {{date:16 Aug 2024}} 14:15:00 +0100
+Subject: Nuevo inicio de sesión en tu cuenta
+
+Hola {{person:Florencio}},
+
+Detectamos un inicio de sesión en {{email:galindo..florencio@icloud.com}} desde {{place:Puente Nuevo}} el {{date:16 de AGOSTO de 2024}} a las 13:00.
+
+Si no fuiste tú, llama al {{phone:+44 7700 900221}} o escribe a {{email:security@asesores-esquilo.example}}.
+
+El equipo de seguridad de {{org:Asesores Esquilo S.A.}}

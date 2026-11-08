@@ -1,0 +1,15 @@
+%known person|Rosendo de Lara
+From: {{org:Reformas Vendaval SA}} <{{email:news@reformas-vendaval.example}}>
+To: {{person:Rosendo de Lara}} <{{email:ros..lara@icloud.com}}>
+Date: Thu, {{date:15 Apr 2027}} 08:45:00 +0100
+Subject: Ofertas de primavera
+
+Hola {{person:Rosendo}}, estas son las novedades del mes.
+
+Te esperamos en la jornada de puertas abiertas en {{place:Valdecañas}} el {{date:2027-05-05}}. Entrada {{amount:€ 173,23}}.
+
+Compra online: {{url:https://www.reformas-vendaval.example/tienda?utm_campaign=5606}}
+
+Recibes este correo porque {{email:ros..lara@icloud.com}} se suscribió. Darte de baja: {{url:https://news.reformas-vendaval.example/unsubscribe?u=737937925x&e=ros..lara%40icloud.com}}
+
+{{org:Reformas Vendaval S.A.}}, Atención al cliente {{phone:+49 171 392 0042}}

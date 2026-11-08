@@ -1,0 +1,22 @@
+%known person|Jasper Tennant
+From: "{{person:Odette Ashworth}}" <{{email:odetteashworth@dorsal-partners.example}}>
+To: "{{person:Jasper Tennant}}" <{{email:tennant.jasper@labs-tramuntana.example}}>
+Date: Fri, {{date:9 May 2025}} 12:00:00 +0100
+Subject: Your booking is confirmed
+
+Hi {{person:Jasper}},
+
+We have reserved a table for four for you on {{date:16 May 2025}}. The address is {{org:Dorsal Partners LLC}}, {{place:Ashford Reach}}.
+
+The price is {{amount:$94.10}}, payable on arrival. A deposit of {{amount:£23.53}} is held on your card.
+
+Questions? Call us on {{phone:+44 7700 900162}} or write to {{email:odetteashworth@dorsal-partners.example}}.
+
+--
+Thanks,
+{{person:Odette Ashworth}}
+Recepción
+{{org:Dorsal Partners LLC}}
+Tel: {{phone:+44 7700 900162}}
+{{url:www.dorsal-partners.example}}
+Office: {{place:Fenwick Bay}}

@@ -1,0 +1,16 @@
+%order mdy
+%known person|Isadora Quigley
+From: {{org:Isleta Holdings Ltd}} <{{email:news@isleta-holdings.example}}>
+To: {{email:isadora_qui@gmail.com}}
+Date: Sun, {{date:13 Sep 2026}} 09:30:00 +0100
+Subject: Spring offers inside
+
+Hi {{person:Isadora}}, here is what is new this month.
+
+Join our open day in {{place:Fenwick Bay}} on {{date:24 September, 2026}}. Entry {{amount:£34.47}}.
+
+Shop online: {{url:https://www.isleta-holdings.example/shop?utm_campaign=7588}}
+
+You receive this because {{email:isadora_qui@gmail.com}} subscribed. Unsubscribe: {{url:https://news.isleta-holdings.example/unsubscribe?u=420067415x&e=isadora_qui%40gmail.com}}
+
+{{org:Isleta Holdings Ltd}}, Customer care {{phone:+49 171 392 0011}}

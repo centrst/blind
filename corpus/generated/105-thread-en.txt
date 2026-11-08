@@ -1,0 +1,22 @@
+%known person|Quentin Rutherford
+%known org|Systems Rastro LLC
+From: {{person:Cordelia Goodwin}} <{{email:cordeliagoodwin@galeon-advisory.example}}>
+To: {{person:Quentin Rutherford}} <{{email:qrutherford@systems-rastro.example}}>
+Date: Thu, {{date:28 Jan 2027}} 16:00:00 +0100
+Subject: Re: offer for {{org:Systems Rastro LLC}}
+We can accept {{amount:1,051.40 USD}} and send the contract to {{email:qrutherford@systems-rastro.example}}.
+On {{date:January 27 2027}}, {{person:Quentin Rutherford}} wrote:
+> Thanks {{person:Cordelia}}. That is high for us. Could you do {{amount:USD 966.15}}? The meeting works, call me on {{phone:0034 799 309 637}} if it moves.
+>
+> On {{date:2027-01-26}}, {{person:Cordelia Goodwin}} wrote:
+> > Hello {{person:Quentin}}, our offer for {{org:Systems Rastro LLC}} is {{amount:1,136.65 USD}}. Can we meet on {{date:31st of Jan 2027}} at 15:30?
+> > 
+> > --
+> > Cheers,
+> > {{person:Cordelia Goodwin}}
+> > Comercial
+> > {{org:Galeón Advisory}}
+> > Tel: {{phone:+1 652 555 0116}}
+> > {{email:cordeliagoodwin@galeon-advisory.example}}
+
+{{person:Cordelia}}

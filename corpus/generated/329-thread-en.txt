@@ -1,0 +1,24 @@
+%order mdy
+%known person|Georgina Upshaw
+%known org|Marisma Labs
+From: {{person:Imogen Quigley}} <{{email:iquigley@studio-rastro.example}}>
+To: {{person:Georgina Upshaw}} <{{email:upshaw.georgina@marisma-labs.example}}>
+Date: Sun, {{date:7 Nov 2027}} 13:00:00 +0100
+Subject: Re: offer for {{org:Marisma Labs}}
+We can accept {{amount:£374.57}} and send the contract to {{email:upshaw.georgina@marisma-labs.example}}.
+On {{date:November 6, 2027}}, {{person:Georgina Upshaw}} wrote:
+> Thanks {{person:Imogen}}. That is high for us. Could you do {{amount:$344.20}}? The meeting works, call me on {{phone:+1 737 555 0122}} if it moves.
+>
+> On {{date:Nov. 5th, 2027}}, {{person:Imogen Quigley}} wrote:
+> > Hello {{person:Georgina}}, our offer for {{org:Marisma Labs}} is {{amount:USD 404.94}}. Can we meet on {{date:November 14th, 2027}} at 12:45?
+> > 
+> > --
+> > Best regards,
+> > {{person:Imogen Quigley}}
+> > Sales
+> > {{org:Studio Rastro LLC}}
+> > Tel: {{phone:+1 537 555 0124}}
+> > {{email:iquigley@studio-rastro.example}}
+> > {{url:www.studio-rastro.example}}
+
+{{person:Imogen}}

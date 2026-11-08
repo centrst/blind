@@ -1,0 +1,17 @@
+%known person|Herminia Urrutia
+From: "{{person:Joaquín de Lara}}" <{{email:notificaciones.joaquin_de@reformas-lumbre.example}}>
+To: {{person:Herminia Urrutia}} <{{email:urrutia_herminia@gmail.com}}>
+Date: Fri, {{date:10 Jul 2026}} 08:15:00 +0100
+Subject: Aviso de deuda pendiente
+
+Estimado/a {{person:Herminia Urrutia}},
+
+Según nuestros registros, consta una deuda de {{amount:2.546,88 €}} en el expediente {{id:EXP-2026-1435}}.
+
+Si no se abona antes del {{date:2026-08-09}}, se aplicará un recargo del 5 %: {{amount:127,34 €}}, en total {{amount:2.674,22 €}}.
+
+Puede pagar por transferencia a {{iban:ES6563199671780470828567}} y conservar el justificante. Atención telefónica: {{phone:0034 787 801 411}}.
+
+Las cuotas de la Seguridad Social del periodo {{date:01/07/2026}} están en la sede: {{url:https://sede.reformas-lumbre.example/cuotas/29710A624}}
+
+Este es un aviso automático. No responda a este correo.

@@ -1,0 +1,15 @@
+%known person|Cayetano de Lara
+From: {{org:Ingeniería Foxglove}} <{{email:news@ingenieria-foxglove.example}}>
+To: {{email:cay..lara@icloud.com}}
+Date: Fri, {{date:20 Feb 2026}} 18:30:00 +0100
+Subject: Novedades de temporada
+
+Hola {{person:Cayetano}}, estas son las novedades del mes.
+
+Join our open day in {{place:Montefrío Chico}} on {{date:03/03/2026}}. Entry {{amount:30,39 €}}.
+
+Compra online: {{url:https://www.ingenieria-foxglove.example/tienda?utm_campaign=2719}}
+
+You receive this because {{email:cay..lara@icloud.com}} subscribed. Unsubscribe: {{url:https://news.ingenieria-foxglove.example/unsubscribe?u=264568547x&e=cay..lara%40icloud.com}}
+
+{{org:Ingeniería Foxglove}}, Atención al cliente {{phone:+34 751493463}}

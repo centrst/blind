@@ -1,0 +1,13 @@
+%known person|Remedios Bustamante
+From: "{{person:Griselda Tejada}}" <{{email:griselda.tejada@reformas-galeon.example}}>
+To: {{person:Remedios Bustamante}} <{{email:bustamante_remedios@gmail.com}}>
+Date: Thu, {{date:5 Aug 2027}} 18:00:00 +0100
+Subject: Reserva confirmada
+
+Buenos días {{person:Remedios}},
+
+Tu sesión de fisioterapia en {{org:Reformas Galeón S.L.U.}} queda reservada para el {{date:2027-08-21}} a las 19:30.
+
+El importe es {{amount:234,32 €}}, a pagar en el local. Hemos retenido una señal de {{amount:58,58 EUR}}.
+
+¿Dudas? Llámanos al {{phone:781 648 619}} o escribe a {{email:griselda.tejada@reformas-galeon.example}}.

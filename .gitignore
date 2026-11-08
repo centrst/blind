@@ -1,0 +1,15 @@
+node_modules/
+dist/
+coverage/
+*.log
+.DS_Store
+.local/
+reports/
+.stryker-tmp/
+models/
+__pycache__/
+site-dist/
+.env
+.env.*
+*.pem
+*.key

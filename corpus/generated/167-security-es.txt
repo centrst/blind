@@ -1,0 +1,13 @@
+%known person|Fermina Medrano
+From: {{org:Estudio Kepler S.L.}} <{{email:security@estudio-kepler.example}}>
+To: "{{person:Fermina Medrano}}" <{{email:f..medrano@icloud.com}}>
+Date: Wed, {{date:1 Dec 2027}} 11:15:00 +0100
+Subject: Tu código de verificación
+
+Hola {{person:Fermina}},
+
+Tu código de verificación es {{id:162420}}. Caduca en 10 minutos. No lo compartas.
+
+Si no fuiste tú, llama al {{phone:+34 754 566 696}} o escribe a {{email:security@estudio-kepler.example}}.
+
+El equipo de seguridad de {{org:Estudio Kepler S.L.}}
