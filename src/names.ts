@@ -311,7 +311,8 @@ export const IBAN_LENGTHS: Record<string, number> = {
 // ------------------------------------------------------------ shared patterns
 
 /** The legal form a company name may end in ("S.L.", "Inc.", "GmbH"), with the space before it. */
-export const ORG_SUFFIX = /\s+(?:S\.?L\.?U?\.?|S\.?A\.?|S\.?L\.?P\.?|Inc\.?|LLC|Ltd\.?|GmbH|Corp\.?|B\.?V\.?)$/i;
+// Try each whitespace run once, rather than retrying at every space in it.
+export const ORG_SUFFIX = /(?<!\s)\s+(?:S\.?L\.?U?\.?|S\.?A\.?|S\.?L\.?P\.?|Inc\.?|LLC|Ltd\.?|GmbH|Corp\.?|B\.?V\.?)$/i;
 
 /** The at sign, or the ways mail gets it encoded: %40 and HTML entities. */
 export const AT_SRC = String.raw`(?:@|%40|&#0*64;|&#x0*40;|&commat;)`;
