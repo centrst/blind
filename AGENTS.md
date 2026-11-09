@@ -50,7 +50,7 @@ The gate is `.pre-merge.yml` (secret scanning, typecheck, lint, test, build). Pu
 - `src/amounts.ts`, `src/dates.ts` parsing, rendering, scaling plan, shifting
 - `src/blind.ts`, `src/unblind.ts` the two entry points. `blind` takes a previous `mapping` to continue a conversation; `createUnblinder` is streaming unblind
 - `src/receipt.ts` Ed25519 receipts for proxy mode (Web Crypto only), `src/version.ts` the version a receipt names
-- `src/leaks.ts` leak check and `assertNoLeaks`. `src/errors.ts` `BlindError` and its kinds, `LeakError`, `InputTooLargeError`, the text limit and `guard`
+- `src/leaks.ts` leak check and `assertNoLeaks`. `src/suspects.ts` the paranoid sweep: what blind leaves as written that still looks private, by kind and input offsets. `src/errors.ts` `BlindError` and its kinds, `LeakError`, `InputTooLargeError`, the text limit and `guard`
 - `src/fold.ts` same-length folds (look-alikes, full-width) and the accent-free skeleton used for known names
 - `src/cli/` the `blind` and `unblind` commands. `blind.ts` and `unblind.ts` are the bins, `run-*.ts` hold the logic and take an injected `IO`, `store.ts` owns `$BLIND_HOME/runs`
 - `ner/` workspace package `@centrst/blind-ner`: GLiNER on onnxruntime-node, plugs in through `detectors`. Its dependencies stay here, never in the core. `corpus/floors-ner.json` holds its floors

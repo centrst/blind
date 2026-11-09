@@ -13,6 +13,7 @@ import { placeholderLiterals, Placeholders, RandomFakes, REPLACE_MODES } from '.
 import { PairLog } from './pairlog.js';
 import { placeholderIdentities } from './identities.js';
 import { asciiLower, Surrogates } from './surrogates.js';
+import { findSuspects } from './suspects.js';
 import type { BlindOptions, BlindResult, Collision, DetectContext, Kind, KnownKind, KnownValue, Mapping, Pair, ReplaceWith, Span } from './types.js';
 import { BlindError, checkLimit, guard, InputTooLargeError, MAX_TEXT_LENGTH } from './errors.js';
 
@@ -93,6 +94,15 @@ function checkSize(texts: string[], limit: number): void {
   });
 }
 
+/** `allow` is a list of strings, or the sweep would clear nothing a reviewer meant it to. The message names the index, never the entry. */
+function checkAllow(allow: unknown): void {
+  if (allow === undefined) return;
+  if (!Array.isArray(allow)) throw new BlindError('invalid-option', 'blind: allow must be an array of strings');
+  allow.forEach((a, i) => {
+    if (typeof a !== 'string') throw new BlindError('invalid-option', `blind: allow entry ${i} is not a string`);
+  });
+}
+
 /**
  * Writes the blind copy of `texts`. An error names what went wrong (a field, a
  * kind, a stage), never a value or any of the text.
@@ -100,6 +110,7 @@ function checkSize(texts: string[], limit: number): void {
 export function blind(texts: string[], opts: BlindOptions = {}): BlindResult {
   return guard('blind', 'writing the blind copy', () => {
     checkSize(texts, opts.maxTextLength ?? MAX_TEXT_LENGTH);
+    checkAllow(opts.allow);
     return blindTexts(texts, opts);
   });
 }
@@ -522,6 +533,13 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   const leaks = checkLeaks({
     outputs: outTexts, replaced, originals, deny, amountKeys, dateKeys, dateOrder, unenforced,
   });
+  if (opts.paranoid) {
+    // A caller's public platform signs its mail with its name, like the built-in ones.
+    const platforms = (opts.allowDomains ?? []).map((d) => d.split('.')[0] ?? '');
+    const suspects = guard('blind', 'looking for suspects', () => findSuspects(folded, spansByText, [...(opts.allow ?? []), ...platforms]));
+    leaks.suspects = suspects;
+    if (suspects.length > 0) leaks.ok = false;
+  }
   // A kept plan that still collides is reported pair by pair, by kind and index.
   const planCollisions: Collision[] = [];
   if (collided) {

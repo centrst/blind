@@ -118,10 +118,28 @@ export interface UnenforcedKnown {
   reason: 'stop-word' | 'stop-word-part' | 'one-letter-part' | 'hangul-inside-word';
 }
 
+/** What the paranoid sweep thinks a suspect is: see `BlindOptions.paranoid`. */
+export type SuspectKind = 'name' | 'number' | 'handle' | 'encoded' | 'address';
+
+/**
+ * Text `blind` left as written that still looks private. Offsets are in the
+ * input text, not the blind one, so a reviewer can find it in what they hold.
+ * The value itself is never reported.
+ */
+export interface Suspect {
+  kind: SuspectKind;
+  textIndex: number;
+  start: number;
+  /** Exclusive. */
+  end: number;
+}
+
 export interface LeakReport {
-  /** True when nothing survived. `unenforced` never makes it false. */
+  /** True when nothing survived and, in paranoid mode, nothing looks private. `unenforced` never makes it false. */
   ok: boolean;
   hits: LeakHit[];
+  /** Paranoid mode only: what the sweep flagged and `allow` did not clear. Left out otherwise. */
+  suspects?: Suspect[];
   /** The `known` entries the check enforces only in part (as written or in capitals, or a two-syllable Korean value only at a word start): see `UnenforcedKnown`. Empty when every entry is enforced everywhere in any case. */
   unenforced: UnenforcedKnown[];
 }
@@ -140,6 +158,17 @@ export interface BlindOptions {
   allowDomains?: string[];
   /** Extra detectors, for example NER. Run alongside the built-ins. */
   detectors?: Detector[];
+  /**
+   * Fail closed on anything left that looks private. A sweep over the text
+   * blind leaves as written flags capitalised words, digit runs of five or
+   * more, handles, encoded payloads and spelled-out addresses, lists them in
+   * `leaks.suspects` and makes `leaks.ok` false, so `assertNoLeaks` throws and
+   * the CLI exits 2. Expect ordinary words among them: put a private one in
+   * `known` and a cleared one in `allow`, and run again.
+   */
+  paranoid?: boolean;
+  /** Paranoid mode: words and phrases a reviewer cleared as not private, matched whole, case-insensitively and without accents. */
+  allow?: string[];
   /**
    * What each value found becomes: `fake` (default), `placeholder` or `random`.
    * With a `mapping` the mode comes from it, and a different value here throws.
