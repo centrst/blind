@@ -28,7 +28,7 @@ Contracts and loan documents capitalise their defined terms, such as `Policy`, `
 
 ## Reproduce
 
-In a clone of the repository:
+In a clone of the repository, after `pnpm install --frozen-lockfile`:
 
 ```sh
 pnpm bench:gretel:setup

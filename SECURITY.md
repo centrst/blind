@@ -8,6 +8,7 @@ blind exists to keep private values from leaving your machine. A way to get a va
 | --- | --- |
 | Current source on `main` | yes |
 | Newest prerelease on `next` | yes |
+| The prerelease `latest` points at, until the first stable release | yes |
 | Older prereleases and the `0.0.0-stage` bootstrap | no |
 | Stable releases, when available | latest minor until 1.0 |
 

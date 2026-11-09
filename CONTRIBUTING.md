@@ -12,7 +12,7 @@ You need Node 22 or newer and pnpm (the version is pinned in `package.json` unde
 pnpm install --frozen-lockfile
 ```
 
-Tests use synthetic data only, and a test that needs a live phone prefix writes only the prefix and draws the rest at run time. Generated test inputs use the same reserved phone ranges and unownable mailboxes as the fixtures, and those with no reserved range (cards, IBANs, ids, IP addresses) may be live but are never printed: a failing property reports its seed and the kind and length of each input. See [TESTING.md](TESTING.md) for the rest of the commands.
+Tests use synthetic data only, and a test that needs a live phone prefix writes only the prefix and draws the rest at run time. Generated test inputs use the same reserved phone ranges and unownable mailboxes as the fixtures. Cards, IBANs, ids and IP addresses have no reserved range, so generated ones may be live, but they are never printed. A failing property reports its seed and the kind and length of each input. See [TESTING.md](TESTING.md) for the rest of the commands.
 
 ### Python dependency audit
 
@@ -81,7 +81,7 @@ Scratch files go in `.local/`, which git ignores.
 
 ## Release notes
 
-For a package behavior change, run `pnpm changeset`, select `@centrst/blind` and describe what users will notice. Commit the generated note with the change. The release PR workflow, run from GitHub Actions, batches these notes into one version and changelog. Documentation and tooling changes without a package behavior change need no changeset.
+For a package behavior change, run `pnpm changeset`, select `@centrst/blind` and describe what users will notice. Commit the generated note with the change. A maintainer's release PR, prepared with `pnpm version:release`, batches these notes into one version and changelog. Documentation and tooling changes without a package behavior change need no changeset.
 
 Merging a release PR does not publish. Both prerelease and stable publication require an explicit release action and the full local `pnpm verify` gate. [RELEASING.md](RELEASING.md) covers the channels, approvals and npm trusted publishing. The optional NER package remains private.
 
