@@ -15,9 +15,10 @@ const NAME_LIKE = /\p{Lu}\p{Ll}+(?:[ \t]+\p{Lu}\p{Ll}+)+/gu;
 const CUT_AFTER = 4;
 const centsKey = (minor: number, decimals: number): number => Math.round((minor / 10 ** decimals) * 100);
 
-/** Lookups built once per mapping, shared by one-shot and streaming unblind. */
+/** Lookups built once per mapping, shared by one-shot, reusable and streaming unblind. */
 interface Prepared {
-  mapping: Mapping;
+  mapping: Pick<Mapping, 'factor' | 'dayShift' | 'dateOrder' | 'refYear'>;
+  fakeWords: ReadonlySet<string>;
   mode: ReplaceWith;
   /** The text pairs, read by the same rule blind claimed its fakes by. */
   log: PairLog;
@@ -47,16 +48,19 @@ type Candidate = Span & {
 } & ({ what: 'pair' } | { what: 'invented' } | { what: 'amount'; occ: AmountOcc } | { what: 'date'; occ: DateOcc });
 
 function prepare(mapping: Mapping): Prepared {
+  // Own the pairs so a caller editing the source mapping cannot change a prepared restore.
+  const pairs = mapping.pairs.map(({ kind, real, fake }) => ({ kind, real, fake }));
+  const { factor, dayShift, dateOrder, refYear } = mapping;
   const mode = mapping.replaceWith ?? 'fake';
   // Placeholders stand for amounts and dates too, and are matched like any other fake.
   const placeholders = mode === 'placeholder';
-  const textPairs = placeholders ? mapping.pairs : mapping.pairs.filter((p) => p.kind !== 'amount' && p.kind !== 'date');
+  const textPairs = placeholders ? pairs : pairs.filter((p) => p.kind !== 'amount' && p.kind !== 'date');
   // Placeholders come back exactly as written, never in the case habit of a name.
   const log = new PairLog(textPairs, !placeholders);
 
   const amountExact = new Map<string, string>();
   const amountByValue = new Map<number, string>();
-  for (const p of mapping.pairs) {
+  for (const p of pairs) {
     if (p.kind !== 'amount' || placeholders) continue;
     if (!amountExact.has(p.fake)) amountExact.set(p.fake, p.real);
     const parsed = parseNumber(foldLookalikes(p.fake));
@@ -66,17 +70,18 @@ function prepare(mapping: Mapping): Prepared {
   }
   const dateExact = new Map<string, string>();
   const dateAnyCase = new Map<string, string>();
-  for (const p of mapping.pairs) {
+  for (const p of pairs) {
     if (p.kind !== 'date' || placeholders) continue;
     if (!dateExact.has(p.fake)) dateExact.set(p.fake, p.real);
     if (!dateAnyCase.has(p.fake.toLowerCase())) dateAnyCase.set(p.fake.toLowerCase(), p.real);
   }
 
+  const fakeWords = new Set(pairs.filter((p) => p.kind === 'person').map((p) => asciiLower(p.fake)));
   const keys = log.keys();
   // A placeholder carries its own brackets, so it is found even when the model glues a letter to it.
   const findPairs = placeholders ? literalFinder(keys, '', '') : fakeFinder(keys);
-  const longest = mapping.pairs.reduce((n, p) => Math.max(n, p.fake.length), 0);
-  return { mapping, mode, log, findPairs, amountExact, amountByValue, dateExact, dateAnyCase, collisions: collisions(mapping), holdback: Math.max(longest, 80) + 8 };
+  const longest = pairs.reduce((n, p) => Math.max(n, p.fake.length), 0);
+  return { mapping: { factor, dayShift, dateOrder, refYear }, mode, log, findPairs, fakeWords, amountExact, amountByValue, dateExact, dateAnyCase, collisions: collisions(mapping), holdback: Math.max(longest, 80) + 8 };
 }
 
 /** Every span unblind might rewrite in `text`, before overlaps are resolved. */
@@ -171,15 +176,13 @@ function checkSize(length: number, limit: number): void {
   if (length > limit) throw new InputTooLargeError(0, length, limit, 'unblind');
 }
 
+const FIRST_NAMES = Surrogates.firstNameSet();
 /** Names the model made up: a first name from our lists with no surrogate behind it. */
-function inventedNames(text: string, mapping: Mapping): string[] {
-  const firstNames = Surrogates.firstNameSet();
-  const fakeWords = new Set<string>();
-  for (const p of mapping.pairs) if (p.kind === 'person') fakeWords.add(asciiLower(p.fake));
+function inventedNames(text: string, fakeWords: ReadonlySet<string>): string[] {
   const out: string[] = [];
   for (const m of text.matchAll(NAME_LIKE)) {
     const words = m[0].split(/\s+/).map(asciiLower);
-    if (firstNames.has(words[0] as string) && !words.every((w) => fakeWords.has(w))) out.push(m[0]);
+    if (FIRST_NAMES.has(words[0] as string) && !words.every((w) => fakeWords.has(w))) out.push(m[0]);
   }
   return out;
 }
@@ -198,11 +201,36 @@ function inventedNames(text: string, mapping: Mapping): string[] {
 export function unblind(text: string, mapping: Mapping, opts?: UnblindOptions): UnblindResult {
   checkSize(text.length, limitOf(opts));
   const prep = guard('unblind', 'reading the mapping', () => prepare(mapping));
+  return restore(text, prep);
+}
+
+function restore(text: string, prep: Prepared): UnblindResult {
   return guard('unblind', 'rewriting the text', () => {
     const invented: string[] = [];
     const out = rewrite(text, prep, invented);
-    return { text: out, invented: [...new Set([...invented, ...inventedNames(text, mapping)])], collisions: prep.collisions };
+    return { text: out, invented: [...new Set([...invented, ...inventedNames(text, prep.fakeWords)])], collisions: prep.collisions.map((c) => ({ ...c })) };
   });
+}
+
+export interface PreparedUnblinder {
+  /** Restore one independent text. Limits and invented values apply to this text alone. */
+  unblind(text: string): UnblindResult;
+}
+
+/**
+ * Snapshot a mapping and build its lookups once for many independent texts.
+ * Each call has fresh result arrays and no stream state. To use an extended
+ * conversation mapping, prepare it again. The text limit applies per call.
+ */
+export function prepareUnblinder(mapping: Mapping, opts?: UnblindOptions): PreparedUnblinder {
+  const limit = limitOf(opts);
+  const prep = guard('unblind', 'reading the mapping', () => prepare(mapping));
+  return {
+    unblind(text) {
+      checkSize(text.length, limit);
+      return restore(text, prep);
+    },
+  };
 }
 
 export interface Unblinder {
@@ -263,7 +291,7 @@ export function createUnblinder(mapping: Mapping, opts?: UnblindOptions): Unblin
       done = true;
       const text = rewrite(pending, prep, ignored);
       pending = '';
-      return { text, invented: [...new Set([...ignored, ...inventedNames(all.join(''), mapping)])], collisions: prep.collisions };
+      return { text, invented: [...new Set([...ignored, ...inventedNames(all.join(''), prep.fakeWords)])], collisions: prep.collisions.map((c) => ({ ...c })) };
     }),
   };
 }

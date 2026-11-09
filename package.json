@@ -64,6 +64,7 @@
     "verify": "tsx scripts/verify.ts",
     "receipt:keys": "tsx scripts/receipt-keys.ts",
     "readme:example": "tsx scripts/readme-example.ts",
+    "bench:multi-text": "pnpm build && node scripts/bench/multi-text.mjs",
     "bench:presidio:setup": "python3.12 -m venv .local/presidio-venv && .local/presidio-venv/bin/pip install -r scripts/bench/requirements.txt",
     "bench:presidio": "tsx scripts/bench/export-corpus.ts && .local/presidio-venv/bin/python scripts/bench/presidio.py && tsx --tsconfig ner/tsconfig.json scripts/bench/score.ts",
     "bench:gretel:setup": "python3.12 -m venv .local/data-venv && .local/data-venv/bin/pip install -r scripts/bench/requirements-gretel.txt && mkdir -p .local/gretel && curl -fL -o .local/gretel/test.parquet https://huggingface.co/datasets/gretelai/synthetic_pii_finance_multilingual/resolve/7b844d16738527a04264f50214cb426a4cea0897/data/test-00000-of-00001.parquet",
