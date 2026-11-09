@@ -11,6 +11,7 @@ import { gluedPrefixBefore, unspaced } from './script.js';
 import { checkMapping, collisions } from './mapping.js';
 import { placeholderLiterals, Placeholders, RandomFakes, REPLACE_MODES } from './replace.js';
 import { PairLog } from './pairlog.js';
+import { placeholderIdentities } from './identities.js';
 import { asciiLower, Surrogates } from './surrogates.js';
 import type { BlindOptions, BlindResult, Collision, DetectContext, Kind, KnownKind, KnownValue, Mapping, Pair, ReplaceWith, Span } from './types.js';
 import { BlindError, checkLimit, guard, InputTooLargeError, MAX_TEXT_LENGTH } from './errors.js';
@@ -532,5 +533,6 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   const shared = collisions(mapping);
   const listed = new Set(shared.map((c) => c.index));
   const reported = [...shared, ...planCollisions.filter((c) => !listed.has(c.index))].sort((a, b) => a.index - b.index);
-  return { texts: outTexts, mapping, leaks, replaced: counts, collisions: reported };
+  const identities = mode === 'placeholder' ? placeholderIdentities(texts, spansByText, opts.known ?? [], mapping) : [];
+  return { texts: outTexts, identities, mapping, leaks, replaced: counts, collisions: reported };
 }

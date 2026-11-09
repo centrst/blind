@@ -162,8 +162,21 @@ export interface BlindOptions {
   maxTextLength?: number;
 }
 
+/** Related placeholders, with no original values. Each token still restores its own spelling. */
+export interface PersonIdentity {
+  names: string[];
+  emails: string[];
+}
+
 export interface BlindResult {
   texts: string[];
+  /**
+   * A legend for this call's placeholder texts. Each group links name forms
+   * and explicitly associated addresses. Send it beside the texts when the
+   * reader needs these relationships. Empty in fake and random modes.
+   * This is conservative inference from known/detected names, not verified identity.
+   */
+  identities: PersonIdentity[];
   mapping: Mapping;
   leaks: LeakReport;
   /** How many spans of each kind this call replaced, every occurrence counted. Earlier turns are not included. */

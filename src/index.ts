@@ -25,6 +25,7 @@ export type {
   UnenforcedKnown,
   Mapping,
   Pair,
+  PersonIdentity,
   ReplaceWith,
   Span,
   UnblindOptions,

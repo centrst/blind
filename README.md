@@ -185,7 +185,7 @@ random       From: Hilary Brierley <hilary@larkmoor-works.example>
 <!-- /modes -->
 
 - **`fake`**, the default, is what the rest of this README shows. Each fake keeps the kind and shape of its value, amounts keep their relations, dates keep their weekdays, and ids pass their checksums. The service can still do arithmetic, and an amount or date it works out maps back. What you lose: a fake reads like real data, so nothing in the text shows what was replaced.
-- **`placeholder`** writes `[REDACTED_PERSON_1]`, `[REDACTED_EMAIL_1]` and so on: the kind in upper case and a number per kind, counted in order of first appearance. One value keeps one placeholder across the texts of a call and across turns (C26). A placeholder already written in the input, such as a text redacted once before, is left alone and its number is never given to a value, in that call or a later turn (the mapping records it in `literals`). Placeholder output matches LLM Guard's `[REDACTED_PERSON_1]` format, so code written against it reads the same. What you lose: everything about a value but its kind. Amounts and dates become placeholders too, so the service cannot add, compare or count days, and a total it works out has no real value to map back to. Each spelling is its own value, so `Sophia Ward` and a later bare `Sophia` get two numbers, and the service may read them as two people.
+- **`placeholder`** writes `[REDACTED_PERSON_1]`, `[REDACTED_EMAIL_1]` and so on: the kind in upper case and a number per kind, counted in order of first appearance. One value keeps one placeholder across the texts of a call and across turns (C26). A placeholder already written in the input, such as a text redacted once before, is left alone and its number is never given to a value, in that call or a later turn (the mapping records it in `literals`). Placeholder output matches LLM Guard's `[REDACTED_PERSON_1]` format, so code written against it reads the same. What you lose: everything about a value but its kind. Amounts and dates become placeholders too, so the service cannot add, compare or count days, and a total it works out has no real value to map back to. Each spelling keeps its own token for exact restoration. The `identities` legend links related name and email placeholders for the reader, as shown below.
 - **`random`** writes an unrelated random value of the same kind. Names, companies, places, emails and URLs come from the same lists as `fake`. Phones, IBANs and ids become random digits in one fixed layout with no checksum, and IP addresses become documentation addresses. Amounts get unrelated random amounts and dates unrelated random dates (C28). What you lose: shape, format, checksums, amount scaling and week-aligned date shifts. Above, the base came out larger than the total. An amount or date the service computes from the fakes cannot be mapped back, so `unblind` leaves it as written and lists it in `invented`.
 
 In every mode one value gets one replacement within a call and across turns, the seed decides them, `unblind` and `createUnblinder` put the real values back (C27), and the leak check works the same way (C30). The mapping records the mode, so a later turn that passes it back keeps the mode without being told. Passing a different `replaceWith` with that mapping throws an error that names the field (C29).
@@ -194,6 +194,39 @@ In every mode one value gets one replacement within a call and across turns, the
 const b = blind([email], { known, replaceWith: 'placeholder' });
 const next = blind([followUp], { known, mapping: b.mapping });   // still placeholders
 ```
+
+### Related person placeholders
+
+In placeholder mode, `identities` groups related tokens without including original values. Send it beside `texts` so a reader can connect a full name, its short form and an explicitly associated address. Keep `mapping` local.
+
+```ts
+const b = blind([
+  'From: Dana Whitfield <dana.whitfield@mail.example>\n\nThanks, Dana',
+], {
+  known: [{ kind: 'person', value: 'Dana Whitfield' }],
+  replaceWith: 'placeholder',
+});
+assertNoLeaks(b);
+const message = JSON.stringify({ texts: b.texts, identities: b.identities });
+// Send message to the model. Keep b.mapping for unblind.
+```
+
+The legend for that input is:
+
+```json
+[
+  {
+    "names": ["[REDACTED_PERSON_1]", "[REDACTED_PERSON_2]"],
+    "emails": ["[REDACTED_EMAIL_1]"]
+  }
+]
+```
+
+Each group means those tokens refer to the same person according to the available evidence. Each token still restores its own original form. A short name can appear before the full name or in another text in the batch. Case, accents and look-alike spellings follow the same normalization as name detection.
+
+Full names from `known`, detected person spans and the previous mapping supply candidates. A first name links only if no other candidate has that name as any part. Initials, stop words, surnames alone and separately listed single-name people do not establish links. Two known people called Dana therefore leave a bare Dana unlinked, even if only one full name appears in the text. An email links only through a detected `Full Name <address>` mailbox, including a quoted display name. Matching local parts, shared domains and nearby prose supply no evidence. Conflicting display names leave a shared mailbox unlinked. Different address spellings stay separate.
+
+The legend contains only tokens used in this call and omits groups with fewer than two tokens. It recomputes links for every batch, so later evidence can remove an ambiguous link without changing existing tokens. Mailbox associations from earlier calls are not retained. These links express textual evidence, not verified ownership, and cannot distinguish two people with the same full name. Plain CLI output contains only the blind text; `--json` includes the legend. `fake` and `random` modes return an empty `identities` array.
 
 ## With model SDKs
 
@@ -488,7 +521,7 @@ blind [--known known.json] [--deny deny.txt] [--seed s] [--date-order dmy|mdy] [
 | `--seed` | Same seed and input give the same output. Default is random. |
 | `--date-order` | `dmy` (default) or `mdy` for dates like `07/04/2026`. |
 | `--replace-with` | `fake` (default), `placeholder` or `random`. The run file stores the mode, so `unblind` reads it from there. |
-| `--json` | Write `{ "runId", "texts" }` instead of plain text. |
+| `--json` | Write `{ "runId", "texts", "identities" }` instead of plain text. The identity legend contains placeholders only. |
 
 With several files they are blinded in one call, so the same person gets the same fake in all of them. The texts are separated by `===== text N =====` lines that carry no file names. Exit codes: 0 done, 1 usage or file error, 2 leak check hit. The mapping file permissions, the exit code and the silence about values on stderr are tested (C12).
 
