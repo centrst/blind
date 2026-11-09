@@ -60,7 +60,7 @@ describe('NER detector with a stub model', () => {
     expect(r3.mapping.pairs.filter((p) => p.kind === 'org')).toHaveLength(1);
   });
 
-  it('C40/N4: a NER span around a known Korean name glued into a word adds no span of its own, and the text round trips', async () => {
+  it('C13/N4: a NER span around a known Korean name glued into a word adds no span of its own, and the text round trips', async () => {
     const text = '김민수는 내일 옵니다. 우리팀김민수님도 왔어요. 서울 한빛김민수 팀장';
     const known = [{ kind: 'person' as const, value: '김민수' }];
     const b = stubBackend({ 김민수는: 'person', 우리팀김민수님도: 'organization', '서울 한빛': 'location' });

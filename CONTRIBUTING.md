@@ -45,7 +45,7 @@ Property tests are seeded. `NUM_RUNS` sets the case count. Each run writes its s
 
 ## Deeper suites
 
-These run before a release, through `pnpm verify`. Run the one that matches your change.
+`pnpm verify` runs the ones that check the published package before a release, in about 12 minutes. `pnpm verify --full` adds the NER package and mutation testing, which take hours. Run the one that matches your change.
 
 | Command | What it does | What it needs |
 | --- | --- | --- |
@@ -53,13 +53,14 @@ These run before a release, through `pnpm verify`. Run the one that matches your
 | `pnpm corpus:generate` | rebuilds `corpus/generated` (never edit those files by hand) | nothing extra |
 | `pnpm known-misses` | regenerates `corpus/adversarial/known-misses.md` | nothing extra |
 | `pnpm test:deep` | properties at 20,000 cases | a few minutes |
-| `pnpm mutation` | Stryker against the floor in `stryker.config.json` | about 30 minutes on a full run |
+| `pnpm mutation` | Stryker against the floor in `stryker.config.json` | over four hours on a full run on a laptop |
 | `pnpm build && pnpm build:ner` | builds the NER package, which imports the built core | nothing extra |
 | `pnpm test:ner` | the NER package: stub tests always, model tests when the model is present | the model, for the model tests |
 | `pnpm ner:download` | fetches the GLiNER weights once, pinned and checksummed | about 1.1 GB of disk and a network connection |
 | `pnpm ner:eval` | scorecard with and without the NER detector | the model |
-| `pnpm claims` | writes `CLAIMS.md` and fails on a claim without a passing test | reports from `pnpm test`, `pnpm mutation` and, for model claims, `pnpm test:ner` |
-| `pnpm verify` | all of the above in CI order, with `claims --strict`; `--fast` skips `test:deep` | the model and the time for a mutation run |
+| `pnpm claims` | writes `CLAIMS.md` and fails on a core claim without a passing test; `--full` also checks the NER claims and the mutation score | a report from `pnpm test`; with `--full`, also `pnpm mutation` and `pnpm test:ner` |
+| `pnpm verify` | the release gate for the published package, in CI order, with `claims --strict`; `--fast` skips `test:deep` | about 12 minutes |
+| `pnpm verify --full` | the release gate plus the NER package and mutation testing | the model, and hours for the mutation run |
 
 [TESTING.md](TESTING.md) explains how each claim is proved.
 
@@ -83,7 +84,7 @@ Scratch files go in `.local/`, which git ignores.
 
 For a package behavior change, run `pnpm changeset`, select `@centrst/blind` and describe what users will notice. Commit the generated note with the change. A maintainer's release PR, prepared with `pnpm version:release`, batches these notes into one version and changelog. Documentation and tooling changes without a package behavior change need no changeset.
 
-Merging a release PR does not publish. Both prerelease and stable publication require an explicit release action and the full local `pnpm verify` gate. [RELEASING.md](RELEASING.md) covers the channels, approvals and npm trusted publishing. The optional NER package remains private.
+Merging a release PR does not publish. Both prerelease and stable publication require an explicit release action and a passing local `pnpm verify` gate. [RELEASING.md](RELEASING.md) covers the channels, approvals and npm trusted publishing. The optional NER package remains private.
 
 ## Pull requests
 

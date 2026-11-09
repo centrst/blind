@@ -15,17 +15,17 @@ Open-source Centrst TypeScript library. Rewrites private text into a blind copy 
 - `pnpm test:deep` properties at 20,000 cases
 - `pnpm corpus` scorecard against `corpus/floors.json` (`corpus:generate` rebuilds the generated files)
 - `pnpm mutation` Stryker against the floor in `stryker.config.json`
-- `pnpm claims` writes `CLAIMS.md` from `reports/vitest.json` and `reports/vitest-ner.json` and fails on an unbacked claim. The NER claims show as skipped when their model tests did not run, and `--strict` fails on that too
+- `pnpm claims` writes `CLAIMS.md` from `reports/vitest.json` and fails on an unbacked core claim. C11 and the NER claims, listed in `OUTSIDE_CORE` in `scripts/lib/claims.ts`, show as not run. `pnpm claims --full` also reads `reports/vitest-ner.json` and the mutation report and checks them, and with `--strict` fails on NER claims whose model tests did not run
 - `pnpm evidence` writes `reports/evidence.html`
 - `pnpm known-misses` regenerates `corpus/adversarial/known-misses.md`
-- `pnpm verify` runs all of it in CI order with `claims --strict`, so it needs the model (`--fast` skips test:deep)
+- `pnpm verify` is the release gate for the published core, in CI order with `claims --strict`, about 12 minutes; `--fast` skips test:deep. `pnpm verify --full` adds the NER package, which needs the model, and mutation testing, which takes hours
 - `pnpm changeset` records a user-facing change for the batched release PR; documentation and tooling changes need no note unless package behavior changes
 - `pnpm version:release` consumes pending changesets and synchronizes the package, receipt version and lockfile; the release PR workflow runs it
 - `pnpm publish:next --dry-run` inspects a dated prerelease locally and never publishes; `--prepare` runs only in the release workflow. Normal publishing uses the Release workflow in RELEASING.md
 
 Typecheck, lint, test and build must pass before a change ships. `pnpm verify` before a release. Node 22 or newer, tested in CI on 22, 24 and 26. ESM, strict TypeScript. Run `tsx` and `stryker` through the pnpm scripts, scratch files go in `.local/`.
 
-The gate is `.pre-merge.yml` (secret scanning, typecheck, lint, test, build). Public CI runs on Ubuntu with actions pinned to full commit SHAs. Never use macOS GitHub-hosted runners. The heavy suites (test:deep, mutation, the NER model tests) run locally through `pnpm verify` before a release. The core is on npm, first as `0.1.0-next.20261109.1`. `release-pr.yml` batches Changesets without publishing, but cannot open its PR until the organization allows bot-created PRs and `changesets/action`, so until then a maintainer runs `pnpm version:release` on a feature branch. `release.yml` publishes only by manual dispatch of the verified head of `main`, to `next` or stable, with provenance and approval through the `release` environment. Configure npm trusted publishing and required reviewers as described in RELEASING.md. All changes use feature branches and pull requests; a maintainer merges them.
+The gate is `.pre-merge.yml` (secret scanning, typecheck, lint, test, build). Public CI runs on Ubuntu with actions pinned to full commit SHAs. Never use macOS GitHub-hosted runners. test:deep runs locally in `pnpm verify` before a release. Mutation testing and the NER model tests run locally through `pnpm verify --full` when a change touches the test suite or the NER package. The core is on npm, first as `0.1.0-next.20261109.1`. `release-pr.yml` batches Changesets without publishing, but cannot open its PR until the organization allows bot-created PRs and `changesets/action`, so until then a maintainer runs `pnpm version:release` on a feature branch. `release.yml` publishes only by manual dispatch of the verified head of `main`, to `next` or stable, with provenance and approval through the `release` environment. Configure npm trusted publishing and required reviewers as described in RELEASING.md. All changes use feature branches and pull requests; a maintainer merges them.
 
 ## Rules
 
@@ -36,7 +36,7 @@ The gate is `.pre-merge.yml` (secret scanning, typecheck, lint, test, build). Pu
 - Leak reports and error messages carry a kind and an index, never the value.
 - Detectors stay behind the `Detector` interface. NER plugs in there, not in the core.
 - Prose has no em dashes.
-- Every test that backs a claim starts with its ID (`C4/P4: ...`). A claim ID in the README or TESTING.md needs a passing test.
+- Every test that backs a claim starts with its ID (`C4/P4: ...`). A claim ID in the README or TESTING.md needs a passing test. The core release gate checks the core claims, and `pnpm verify --full` checks C11 and the NER claims too.
 - Floors in `corpus/floors.json` and the mutation break score only go up. The recorded floor resets are documented in TESTING.md. A new miss goes into `corpus/adversarial` as a case with `expect: silent` and a reason, then `pnpm known-misses`.
 - The CLI keeps real values off stdout and stderr on a leak: kinds and offsets only.
 

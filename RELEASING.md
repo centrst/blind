@@ -41,7 +41,7 @@ pnpm changeset
 
 Select `@centrst/blind`, the bump type and a short description of the change. Commit the generated `.changeset/*.md` file with the code. Use patch for compatible fixes and minor for compatible additions. Before 1.0, use minor for API or mapping-format breaks and describe the break. Documentation and tooling changes without a package behavior change need no changeset.
 
-To open the release PR, check out `main` on a feature branch and run `pnpm version:release`. It consumes the pending notes and updates `package.json`, `CHANGELOG.md`, `src/version.ts` and the lockfile together. It includes the workspace root and excludes the private NER package. Run the gate, open the PR as a maintainer, review the version and notes, run the full local gate on that candidate, then merge it. No package is published by that merge. Once Actions may create pull requests, `release-pr.yml` does the same from **Actions**.
+To open the release PR, check out `main` on a feature branch and run `pnpm version:release`. It consumes the pending notes and updates `package.json`, `CHANGELOG.md`, `src/version.ts` and the lockfile together. It includes the workspace root and excludes the private NER package. Run the gate, open the PR as a maintainer, review the version and notes, run `pnpm verify` on that candidate, then merge it. No package is published by that merge. Once Actions may create pull requests, `release-pr.yml` does the same from **Actions**.
 
 For the initial stable `0.1.0`, no changeset is pending, so `pnpm version:release` changes nothing. In its release PR, rename `## Unreleased` in `CHANGELOG.md` to `## 0.1.0` and keep its entries. Changesets inserts each later version above the newest version heading, so do not start a new `Unreleased` section after that. Also rewrite the README's Install section, which still calls the package a preview, because the README ships inside the immutable tarball. If pending changesets propose a later version, use that reviewed version rather than forcing the number back down.
 
@@ -55,17 +55,16 @@ Install the pinned pnpm version and Gitleaks 8.30.1, and set up pip-audit once a
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm ner:download
 source .local/python-audit-venv/bin/activate
 pnpm verify
 npm pack --dry-run
 ```
 
-The full gate includes model tests, 20,000-case properties, mutation testing, corpus floors and `claims --strict`. Do not use `--fast` for release evidence. A skipped required model check is not release evidence.
+The gate checks only what the package ships, in about 12 minutes. It covers secrets, the Python audit, typecheck, lint, build, the test suite, 20,000-case properties, corpus floors and `claims --strict` on the core claims. Do not use `--fast` for release evidence. The NER package is not published, so its tests are not part of this gate. Mutation testing measures the test suite rather than the package, and takes hours. Both run with `pnpm verify --full`, which belongs in the PR that changes the NER package or the test suite.
 
 Review the generated `CLAIMS.md`, `reports/evidence.html` and the tarball contents. Source maps contain source text and need disclosure review too. The pack tests install the tarball offline and run the library and both commands. Retain the reports and record the exact source commit in the release PR or release record. Regenerated claims can be committed through that PR; do not copy evidence from another source revision.
 
-After merge, check out the selected commit on `main` and run the full gate there before dispatching. The workflow's `verified_sha` input records the maintainer's statement that this local run passed. Matching a SHA does not prove the local run happened. The environment reviewer must review that evidence. The Release workflow's prepare job repeats typecheck, lint, tests and build on the actual version being packed, including the temporary prerelease version. The heavy suites remain local.
+After merge, check out the selected commit on `main` and run `pnpm verify` there before dispatching. The workflow's `verified_sha` input records the maintainer's statement that this local run passed. Matching a SHA does not prove the local run happened. The environment reviewer must review that evidence. The Release workflow's prepare job repeats typecheck, lint, tests and build on the actual version being packed, including the temporary prerelease version. The heavy suites remain local.
 
 ## Publish a prerelease
 
@@ -92,7 +91,7 @@ If the publish job fails, use **Re-run failed jobs**. The publish step skips `np
 
 ## After publishing
 
-Run `npm view @centrst/blind@X.Y.Z version dependencies bin`. It shows the version, no dependencies and the `blind` and `unblind` bins. The package page shows the provenance badge, linked to the source commit and the workflow run. In an empty folder, run `npm install @centrst/blind@X.Y.Z`. Then `echo 'Pay 120,00 € to ana@example.example' | npx blind --seed check` prints a blind copy and a run id, and `node -e "import('@centrst/blind').then(m => console.log(typeof m.blind))"` prints `function`. Keep the local full-gate reports with the source commit and workflow record. The CI `npm-package` artifact records the tarball and its integrity, not the full local gate.
+Run `npm view @centrst/blind@X.Y.Z version dependencies bin`. It shows the version, no dependencies and the `blind` and `unblind` bins. The package page shows the provenance badge, linked to the source commit and the workflow run. In an empty folder, run `npm install @centrst/blind@X.Y.Z`. Then `echo 'Pay 120,00 € to ana@example.example' | npx blind --seed check` prints a blind copy and a run id, and `node -e "import('@centrst/blind').then(m => console.log(typeof m.blind))"` prints `function`. Keep the local `pnpm verify` reports with the source commit and workflow record. The CI `npm-package` artifact records the tarball and its integrity, not the local gate.
 
 If npm accepted a publish but a later workflow step failed, the version already exists. Inspect the registry before retrying. Never try to replace the published tarball. Deprecate a faulty version with a reason and publish a fix.
 
