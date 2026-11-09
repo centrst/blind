@@ -3,6 +3,7 @@ import { dateKey, detectDates } from './dates.js';
 import { oneLetterPart, shortNamePart, stopWordValue, twoLetterStop, writtenAs } from './detect.js';
 import { foldLookalikes, skeleton } from './fold.js';
 import { TextLanguage } from './language.js';
+import { literalIndex } from './literal-index.js';
 import { alternativesMatcher, flexAtoms, literalAtoms } from './match.js';
 import { gluedPrefixBefore, unspaced, wordEdges } from './script.js';
 import type { DateOrder, Kind, LeakHit, LeakReport, UnenforcedKnown } from './types.js';
@@ -33,27 +34,25 @@ export interface LeakInput {
 const norm = (s: string): string => skeleton(foldLookalikes(s)).text;
 const WORD = /[\p{L}\p{N}_]/u;
 
-/**
- * Where `needle` occurs in `hay`. With `wholeWord`, a word character may not
- * touch it on a side where `wordEdges` asks for an edge, the rule detection
- * matches known values by: none beside Chinese or Japanese, none after Korean,
- * and a Hebrew or Arabic value may follow a glued prefix (`לדוד`, `ومحمد`).
- */
-function* occurrences(hay: string, needle: string, wholeWord: boolean): Generator<number> {
-  const edges = wordEdges(needle);
-  const edgeBefore = wholeWord && edges.before;
-  const edgeAfter = wholeWord && edges.after;
+/** Every occurrence of a plain deny entry, including overlapping copies. */
+function* occurrences(hay: string, needle: string): Generator<number> {
   let from = 0;
   for (;;) {
     const i = hay.indexOf(needle, from);
     if (i < 0) return;
     from = i + 1;
-    const before = hay[i - 1];
-    const after = hay[i + needle.length];
-    if (edgeBefore && before !== undefined && WORD.test(before) && !gluedPrefixBefore(hay, i, needle)) continue;
-    if (edgeAfter && after !== undefined && WORD.test(after)) continue;
     yield i;
   }
+}
+
+/** The same word edges and glued prefixes detection uses for known values. */
+function hasEdges(hay: string, needle: string, at: number, wholeWord: boolean): boolean {
+  if (!wholeWord) return true;
+  const edges = wordEdges(needle);
+  const before = hay[at - 1];
+  const after = hay[at + needle.length];
+  if (edges.before && before !== undefined && WORD.test(before) && !gluedPrefixBefore(hay, at, needle)) return false;
+  return !(edges.after && after !== undefined && WORD.test(after));
 }
 
 const ALNUM = /[A-Za-z0-9]/;
@@ -191,6 +190,8 @@ function prepare(all: Original[], deny: string[]): Prepared {
 
 function scan(input: LeakInput, prep: Prepared): LeakReport {
   const hits: LeakHit[] = [];
+  const findWords = literalIndex(prep.values.map((w) => w.rule === 'word' ? w.n : ''));
+  const flexible = prep.values.flatMap((w, index) => w.rule === 'flex' ? [{ index, match: w.match }] : []);
   // The language of each output with the engine's own text blanked, as detection read the input.
   let lang: TextLanguage | undefined;
   const language = (): TextLanguage => (lang ??= new TextLanguage(input.outputs, input.replaced.map((rs) => rs.map(([start, end]) => ({ start, end })))));
@@ -204,12 +205,20 @@ function scan(input: LeakInput, prep: Prepared): LeakReport {
     };
     const at = (i: number): number => sk.from[i] ?? i;
 
-    for (const w of prep.values) {
+    const matches = findWords(hay);
+    for (const { index, match } of flexible) {
+      const offsets = match(out).map(([offset]) => offset);
+      if (offsets.length) matches.set(index, offsets);
+    }
+    // Keep the report's original rule order, then occurrence order within each rule.
+    for (const [index, offsets] of [...matches].sort(([a], [b]) => a - b)) {
+      const w = prep.values[index]!;
       if (w.rule === 'flex') {
-        for (const [offset] of w.match(out)) push(w.kind, offset);
+        for (const offset of offsets) push(w.kind, offset);
         continue;
       }
-      for (const i of occurrences(hay, w.n, w.wholeWord)) {
+      for (const i of offsets) {
+        if (!hasEdges(hay, w.n, i, w.wholeWord)) continue;
         const slice = w.lowerCase || w.exact !== undefined ? out.slice(at(i), at(i + w.n.length - 1) + 1) : '';
         if (w.lowerCase && !/\p{Lu}/u.test(slice)) {
           if (twoLetterStop(w.n, language().at(textIndex, at(i)))) continue;
@@ -231,7 +240,7 @@ function scan(input: LeakInput, prep: Prepared): LeakReport {
     }
 
     for (const e of prep.deny) {
-      if (typeof e === 'string') for (const i of occurrences(hay, e, false)) push('deny', at(i));
+      if (typeof e === 'string') for (const i of occurrences(hay, e)) push('deny', at(i));
       else for (const [offset] of e(out)) push('deny', offset);
     }
   });
