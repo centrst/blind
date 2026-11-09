@@ -2,7 +2,13 @@
 
 All notable changes to this project are written down here. Changesets writes each version's entry from the notes in `.changeset`, grouped as major, minor and patch changes. The project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 0.1.0
+
+First stable release.
+
+### Added
+
+- `paranoid: true` (`--paranoid` on the command line) holds a text for review while any capitalised word, long number, handle, encoded run or spelled-out address is still left as written, until it is put in `known` or cleared in `allow`. On contract-style text it holds nearly every document, so it is a review step, not a filter.
 
 ### Changed
 

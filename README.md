@@ -26,10 +26,10 @@ Contents: [Install](#install) · [Quick start](#quick-start) · [What it looks l
 ## Install
 
 ```sh
-npm install @centrst/blind@next
+npm install @centrst/blind
 ```
 
-Node 22 or newer. The package is in preview, and both `next` and `latest` point at a preview build. Pin an exact version, such as `0.1.0-next.20261109.1`, for anything you depend on. `npm view @centrst/blind dist-tags` shows where each tag points.
+Node 22 or newer. Before 1.0, a minor version can change the API or the mapping format, and the changelog says when it does. `npm install @centrst/blind@next` installs the newest prerelease instead.
 
 This README describes the source revision you are reading. Each published version bundles its own copy.
 
