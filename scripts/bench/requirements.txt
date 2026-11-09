@@ -15,7 +15,7 @@ cryptography==50.0.2
 cymem==2.0.13
 en_core_web_lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.8.0/en_core_web_lg-3.8.0-py3-none-any.whl#sha256=293e9547a655b25499198ab15a525b05b9407a75f10255e405e8c3854329ab63
 es_core_news_lg @ https://github.com/explosion/spacy-models/releases/download/es_core_news_lg-3.8.0/es_core_news_lg-3.8.0-py3-none-any.whl#sha256=7c6c212715a12f31aacde3361754436945ff7376fb24cde57d0c277c9c9b050b
-filelock==4.2.4
+filelock==4.2.9
 h11==0.16.0
 httpcore==1.0.9
 httpx==0.28.1
