@@ -154,5 +154,15 @@
     ],
     "expect": "replaced",
     "seed": "adv"
+  },
+  {
+    "id": "F16",
+    "title": "bare hosts and paths under an email's private domain",
+    "text": "Write to mara@lindera.example. Use lindera.example, portal.lindera.example or billing.lindera.example/pay.",
+    "secrets": [
+      "lindera.example"
+    ],
+    "expect": "replaced",
+    "seed": "bare-hosts"
   }
 ]

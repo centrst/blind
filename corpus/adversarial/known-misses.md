@@ -2,7 +2,7 @@
 
 Generated from `corpus/adversarial/*.json` by `pnpm known-misses`. Do not edit by hand.
 
-23 inputs slip through silently. 54 more in the same set are caught, either replaced or reported by the leak check. Each miss below has a test marked expected-to-fail, so the build notices the day one starts working and this list gets shorter.
+23 inputs slip through silently. 55 more in the same set are caught, either replaced or reported by the leak check. Each miss below has a test marked expected-to-fail, so the build notices the day one starts working and this list gets shorter.
 
 A miss is silent when the value stays in the blind text and the leak check has nothing recorded to look for. When the leak check can see the value it reports it and the CLI exits 2, which counts as caught.
 

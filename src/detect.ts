@@ -28,6 +28,11 @@ export const PRIORITY = {
 
 const EMAIL_SRC = String.raw`[A-Za-z0-9._%+\-]+${AT_SRC}(?:[A-Za-z0-9\-]+\.)+[A-Za-z]{2,}`;
 const EMAIL_RE = new RegExp(String.raw`(?<![A-Za-z0-9._%+\-])${EMAIL_SRC}`, 'g');
+const THROUGH_AT = new RegExp(String.raw`^.*?${AT_SRC}`, 'i');
+
+/** The host after an email's literal or escaped at sign. */
+export const emailHost = (value: string): string => value.replace(THROUGH_AT, '');
+export const urlHost = (value: string): string | undefined => /^(?:https?:\/\/)?([^/?#:]+)/i.exec(value)?.[1];
 
 const NAME_WORD = String.raw`\p{Lu}[\p{L}'’.\-]*`;
 const NAME_PART = String.raw`(?:(?:de|del|la|las|los|van|von|da|di|y)[ \t]+)*${NAME_WORD}`;
@@ -98,19 +103,54 @@ export const emailDetector: Detector = {
 };
 
 const URL_RE = /(?:https?:\/\/|www\.)[^\s<>"'\])}]+/gi;
+const URL_TRAILING = /[.,;:!?)\]]+$/;
+const BARE_HOST_RE = /(?<![\p{L}\p{N}\p{M}_.@%+\-])([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+)(?![\p{L}\p{N}\p{M}_-]|\.[\p{L}\p{N}_-])(?::\d+)?(?:[/?#][^\s<>"'\])}]*)?/gu;
 
 export const urlDetector: Detector = {
   name: 'url',
   detect(text) {
     const out: Span[] = [];
     for (const m of text.matchAll(URL_RE)) {
-      const trimmed = m[0].replace(/[.,;:!?)\]]+$/, '');
+      const trimmed = m[0].replace(URL_TRAILING, '');
       if (trimmed.length < 8) continue;
       out.push({ start: m.index!, end: m.index! + trimmed.length, kind: 'url', priority: PRIORITY.url });
     }
     return out;
   },
 };
+
+/** Bare URLs under hosts already identified as private anywhere in the call. */
+function privateHosts(texts: string[], found: Span[][], ctx: DetectContext): Span[][] {
+  const hosts = new Set<string>();
+  found.forEach((spans, ti) => {
+    for (const s of spans) {
+      if (s.kind !== 'email' && s.kind !== 'url' && s.kind !== 'domain') continue;
+      const value = texts[ti]!.slice(s.start, s.end);
+      const host = s.kind === 'email' ? emailHost(value) : s.kind === 'url' ? urlHost(value) : value;
+      if (host && !ctx.isAllowedHost(host)) hosts.add(host.toLowerCase());
+    }
+  });
+  if (hosts.size === 0) return found;
+  return found.map((spans, ti) => {
+    const text = texts[ti]!;
+    const held = coverage(spans.filter((s) => s.kind === 'email' || s.kind === 'url'), text.length);
+    const more: Span[] = [];
+    for (const m of text.matchAll(BARE_HOST_RE)) {
+      const host = m[1]!.toLowerCase();
+      const end = m.index + m[0].replace(URL_TRAILING, '').length;
+      // A host inside an address belongs to that address. An address inside this
+      // URL's path or query belongs to the URL, just as with an explicit scheme.
+      if (held[m.index] || ctx.isAllowedHost(host)) continue;
+      // Compare complete labels, so neither a longer label nor a longer suffix matches.
+      for (let suffix = host; suffix.includes('.'); suffix = suffix.slice(suffix.indexOf('.') + 1)) {
+        if (!hosts.has(suffix)) continue;
+        more.push({ start: m.index, end, kind: 'url', priority: PRIORITY.url });
+        break;
+      }
+    }
+    return resolveSpans([...spans, ...more]);
+  });
+}
 
 const IBAN_RE = /(?<![\p{L}\p{N}])[A-Z]{2}\d{2}(?: ?[A-Z0-9]{4}){2,7}(?: ?[A-Z0-9]{1,3})?(?![\p{L}\p{N}])/gu;
 
@@ -681,16 +721,16 @@ export function callerDetector(d: Detector): Detector {
 
 /**
  * The spans `blind` replaces in each text of one call: every detector, overlaps
- * resolved, then bare mentions of any person found anywhere in the call.
+ * resolved, then bare hosts and mentions of any person found anywhere in the call.
  */
 export function findSpans(texts: string[], ctx: DetectContext, detectors: Detector[]): Span[][] {
-  const firstPass = texts.map((t) => {
+  const firstPass = privateHosts(texts, texts.map((t) => {
     const raw = detectors.flatMap((d) => d.detect(t, ctx)).filter((s) => {
       if ((s.kind === 'amount' || s.kind === 'date') && !s.meta) return false;
       return s.start >= 0 && s.end <= t.length;
     });
     return resolveSpans(raw);
-  });
+  }), ctx);
   // "Pilar Gómez <pilar@...>" in one text covers a later "Hola Pilar" in any text of the call.
   const tokens = nameTokens(firstPass.flatMap((spans, ti) => spans.filter((s) => s.kind === 'person').map((s) => (texts[ti] as string).slice(s.start, s.end))));
   // So is a short or stop-word part of a known full name ("Li" of "Li Na", "O" of "O Li", "Al" of "Al Brenner"),
