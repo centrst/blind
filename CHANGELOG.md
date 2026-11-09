@@ -8,7 +8,7 @@ First stable release.
 
 ### Added
 
-- `paranoid: true` (`--paranoid` on the command line) holds a text for review while any capitalised word, long number, handle, encoded run or spelled-out address is still left as written, until it is put in `known` or cleared in `allow`. On contract-style text it holds nearly every document, so it is a review step, not a filter.
+- `paranoid: true` (`--paranoid` on the command line) holds a text for review while blind leaves something that still looks private as written: a run of uncommon capitalised words, or a single one anywhere but the start of a sentence, a line or a subject line; a long number; a handle; an encoded run; or a spelled-out address. A single unknown name at the start of a sentence or line is not flagged. Each suspect stays until it is put in `known` or cleared in `allow`. On contract-style text it holds nearly every document, so it is a review step, not a filter.
 
 ### Changed
 
