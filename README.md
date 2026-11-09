@@ -17,7 +17,7 @@ All values above are invented, and the blind side is real output (see [What it l
 
 blind replaces what it finds, and it does not find everything: a company or town named only in plain prose can go out unchanged. Read the blind copy before you send it, and pass the names, companies and places you know are private in `known`. A way for blind to mark what it is unsure about, so you can correct it, is planned.
 
-The library has no runtime dependencies (C8), never touches the network (C7), and runs on standard JavaScript (C19). The local gate tests it on Node. The public CI workflow targets Node on Ubuntu; its first public run is still pending. Browsers, Workers, Deno and Bun are expected to run, with the limits described below. The `blind` and `unblind` commands also provide a terminal workflow.
+The library has no runtime dependencies (C8), never touches the network (C7), and runs on standard JavaScript (C19). The core gate runs on Node in public Ubuntu CI; the [initial public run passed](https://github.com/centrst/blind/actions/runs/42530204036). Browsers, Workers, Deno and Bun are expected to run, with the limits described below. The `blind` and `unblind` commands also provide a terminal workflow.
 
 The repository also has development dependencies for building, linting and testing. They are not installed with the published core package. The optional [`@centrst/blind-ner`](ner/README.md) prototype has its own runtime dependencies in `ner/` and is not bundled with the core.
 
