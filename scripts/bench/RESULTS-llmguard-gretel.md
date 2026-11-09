@@ -1,5 +1,7 @@
 # blind against LLM Guard, and all three tools on a dataset blind's authors did not write
 
+**Historical comparison.** LLM Guard execution is retired. Its archived 0.3.16 release requires vulnerable versions of Transformers and JSON Repair, and has no supported patched release. The install manifest and execution shortcuts have been removed. This report, the benchmark source and support for scoring previously recorded raw results remain available. The original environment is recorded in the [initial import](https://github.com/centrst/blind/commit/f1be8889ae5c01a064878dec619f8983d95227f2); it is not a supported installation.
+
 Run on 2026-10-24 at commit `4f5183f` on `fix/round-trip`, with `src` matching the commit (`srcDirty: false`). That commit adds the round-trip fixes from PR #13 to the code of the previous run at `2febde1`, and a second GLiNER threshold to the scorers. This file has two parts. Part 1 adds LLM Guard's Anonymize scanner to the corpus benchmark in [RESULTS.md](RESULTS.md). Part 2 scores Presidio, LLM Guard and blind on a sample of Gretel's synthetic finance documents. All numbers come from `reports/presidio-bench.json` and `reports/gretel-bench.json`, printed by `scripts/bench/score.ts` and `scripts/bench/score-gretel.ts`. The Presidio and blind numbers on the corpus are the same as in RESULTS.md, to the span.
 
 ## What changed since the previous run
@@ -20,18 +22,18 @@ Two other tools moved by a few spans, with no change in their code, their venvs 
 - GLiNER: `gliner_multi-v2.1` fp32 ONNX at threshold 0.3, as in RESULTS.md, and at 0.5 for one extra column on Gretel. Both ran uncached. It runs through `@centrst/blind-ner`, a prototype built from this repository, not on npm, so every GLiNER number in this file comes from that prototype.
 - Gretel: `gretelai/synthetic_pii_finance_multilingual`, Apache 2.0, test split, revision `7b844d1`, file SHA-256 `014e1057...3c8c72`. `gretel_sample.py` refuses any other file. pyarrow 26.0.0 reads it.
 - Python 3.12.15, Node v26.11.1, macOS 27.0.1 on arm64. LLM Guard picks its own torch device and chose Apple's MPS GPU. Presidio, GLiNER and blind ran on the CPU.
-- Every Python package is pinned in `scripts/bench/requirements-llmguard.txt` and `scripts/bench/requirements-gretel.txt`, both `pip freeze` output.
+- The original LLM Guard environment was frozen in the initial import. The maintained Gretel data environment is pinned in `scripts/bench/requirements-gretel.txt`.
 
-## How to reproduce
+## Running the supported comparisons now
+
+These commands run Presidio and blind. They do not rerun the retired LLM Guard comparator or reproduce its historical measurements.
 
 ```
 pnpm bench:presidio:setup   # once, see RESULTS.md
-pnpm bench:llmguard:setup   # once: venv in .local/llmguard-venv, about 1.1 GB, plus 700 MB of weights on first run
 pnpm bench:gretel:setup     # once: venv in .local/data-venv and the pinned Gretel parquet, 5.4 MB
 pnpm ner:download           # once, for the + GLiNER columns
 pnpm bench:presidio         # Presidio and blind on the corpus
-pnpm bench:llmguard         # LLM Guard on the corpus, then the same scoring with its columns added
-pnpm bench:gretel           # sample, Presidio, LLM Guard, score
+pnpm bench:gretel           # sample, Presidio, score; existing historical LLM Guard raw files can still be scored
 ```
 
 `score.ts` skips the LLM Guard columns when `reports/llmguard-raw.json` is missing, and the Presidio columns when `reports/presidio-raw.json` is missing. `score-gretel.ts` does the same with its two raw files.

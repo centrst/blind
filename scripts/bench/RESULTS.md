@@ -16,7 +16,9 @@ PR #13 claims that recall, precision and amount usability did not move. On this 
 - Python 3.12.15, Node v26.11.1, macOS 27.0.1 on arm64.
 - Every Python package is pinned in `scripts/bench/requirements.txt`, which is a `pip freeze` of the venv.
 
-## How to reproduce
+## Running the benchmark now
+
+The results above used Presidio 2.2.364. The maintained environment now pins Presidio 2.2.366 and cryptography 50.0.2 to address dependency advisories. The historical measurements below have not been replaced with results from these newer versions. The original environment is recorded in the [initial import](https://github.com/centrst/blind/blob/f1be8889ae5c01a064878dec619f8983d95227f2/scripts/bench/requirements.txt); it contains vulnerable dependencies and is not a supported installation.
 
 ```
 pnpm bench:presidio:setup   # once: venv in .local/presidio-venv, about 1 GB with both spaCy models

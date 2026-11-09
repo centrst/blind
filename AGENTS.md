@@ -5,6 +5,7 @@ Open-source Centrst TypeScript library. Rewrites private text into a blind copy 
 ## Commands
 
 - `pnpm install`
+- `pnpm audit:python` checks every Python requirements file with pip-audit 2.10.1; see README.md for the tool environment. Run `python3 -m unittest discover -s test -p audit_python_test.py` when changing the audit gate.
 - `pnpm typecheck`
 - `pnpm lint`
 - `pnpm secrets` scans the working tree, index and history with Gitleaks 8.30.1

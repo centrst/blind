@@ -228,11 +228,11 @@ $PY -I ner/train/train.py --variant full --epochs 2        # 2 h 28 min on an M4
 $PY -I ner/train/train.py --variant nogretel --epochs 2    # stops early, 51 min
 $PY -I ner/train/export.py ner/models/blind-ner-deberta-full full
 $PY -I ner/train/export.py ner/models/blind-ner-deberta-nogretel nogretel
-LLMGUARD_PY=.local/llmguard-venv/bin/python zsh ner/train/bench.sh   # every table above; LLM Guard needs pnpm bench:llmguard:setup
+zsh ner/train/bench.sh            # current model comparisons; LLM Guard execution is retired
 pnpm test:ner                     # runs the token-classifier model tests when the full model is present
 ```
 
-The corpus and Gretel LLM Guard and Presidio columns need their raw files from `pnpm bench:llmguard` and `pnpm bench:gretel`. MPS training is not bit-exact from run to run, so a retrained model may differ in the last digits. The weights below are the ones measured here.
+The LLM Guard columns are historical: its archived release requires vulnerable dependencies, so its install manifest and execution paths have been removed. Existing raw result files can still be scored. Presidio raw files come from `pnpm bench:presidio` and `pnpm bench:gretel`; its maintained environment has also been updated since the measurements above. See [the benchmark status](../scripts/bench/RESULTS-llmguard-gretel.md). MPS training is not bit-exact from run to run, so a retrained model may differ in the last digits. The weights below are the ones measured here.
 
 ## Weights
 

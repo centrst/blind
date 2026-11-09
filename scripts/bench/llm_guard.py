@@ -1,6 +1,11 @@
-"""Run LLM Guard's Anonymize scanner over the same texts the Presidio step reads.
+"""Historical benchmark source, retained to document the published measurements.
 
-Step 2 of `pnpm bench:llmguard` (blind's corpus) and of `pnpm bench:gretel` (the Gretel
+LLM Guard execution is retired: its archived release pins vulnerable dependencies.
+There is no supported install command. See RESULTS-llmguard-gretel.md.
+
+Run LLM Guard's Anonymize scanner over the same texts the Presidio step reads.
+
+Formerly step 2 of `pnpm bench:llmguard` (blind's corpus) and of `pnpm bench:gretel` (the Gretel
 sample). Reads an input file in the shape export-corpus.ts writes ({files: [{name, lang,
 text}]}) and writes, per configuration and per file, the sanitized text and the spans that
 were replaced, in the shape presidio.py writes, so scripts/bench/score.ts and

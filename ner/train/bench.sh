@@ -4,8 +4,8 @@
 # training and export:
 #   zsh ner/train/bench.sh
 # Needs: ner/models/gliner_multi-v2.1 (pnpm ner:download), ner/models/blind-ner-deberta-{full,nogretel,full2},
-# .local/train-venv (pnpm ner:train:setup), the pinned Gretel test parquet (pnpm bench:gretel:setup), and
-# for the LLM Guard columns on the held-out sets an LLM Guard venv (pnpm bench:llmguard:setup), path in $LLMGUARD_PY.
+# .local/train-venv (pnpm ner:train:setup), and the pinned Gretel test parquet (pnpm bench:gretel:setup).
+# LLM Guard execution is retired; existing historical raw results can still be scored.
 # Model output is cached in .local/bench-*-cache-*.json. Delete those files for uncached times.
 set -e
 FULL=ner/models/blind-ner-deberta-full
@@ -14,18 +14,10 @@ R2=ner/models/blind-ner-deberta-full2
 TC=(--tc "DeBERTa=$FULL" --tc "DeBERTa int8=$FULL,onnx/model_int8.onnx" --tc "DeBERTa 0.5=$FULL,onnx/model.onnx,0.5" --tc "DeBERTa no-Gretel=$NOG"
     --tc "DeBERTa r2=$R2" --tc "DeBERTa r2 int8=$R2,onnx/model_int8.onnx" --tc "DeBERTa r2 0.5=$R2,onnx/model.onnx,0.5")
 PY=.local/train-venv/bin/python
-LLMGUARD_PY=${LLMGUARD_PY:-.local/llmguard-venv/bin/python}
 
 # Held-out inputs (never trained on) and the Gretel sample.
 $PY -I ner/train/prepare.py evalsets --per-lang 500
 $PY -I scripts/bench/gretel_sample.py
-
-# LLM Guard on the held-out sets, when its venv is there. Its corpus and Gretel raw files come from `pnpm bench:llmguard` and `pnpm bench:gretel`.
-if [[ -x $LLMGUARD_PY ]]; then
-  for d in neutral privy nemotron; do
-    $LLMGUARD_PY -I scripts/bench/llm_guard.py --input reports/$d-input.json --out reports/$d-llmguard-raw.json --configs default,all
-  done
-fi
 
 pnpm exec tsx --tsconfig ner/tsconfig.json scripts/bench/score.ts --out reports/tc-corpus-bench.json "${TC[@]}" | tee reports/tc-corpus-bench.txt
 pnpm exec tsx --tsconfig ner/tsconfig.json scripts/bench/score-gretel.ts --out reports/tc-gretel-bench.json "${TC[@]}" | tee reports/tc-gretel-bench.txt
