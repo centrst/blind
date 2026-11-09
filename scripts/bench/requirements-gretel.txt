@@ -1,3 +1,3 @@
 # Pinned for scripts/bench/gretel_sample.py (pip freeze of the venv). Python 3.12.
 # Install with: pnpm bench:gretel:setup
-pyarrow==26.0.0
+pyarrow==26.0.1
