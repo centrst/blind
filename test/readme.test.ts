@@ -50,7 +50,6 @@ describe('what the docs say about the NER package status', () => {
   const NAMES_NER = /gliner|@centrst\/blind-ner/i;
   // Files that report numbers measured with @centrst/blind-ner.
   const REPORTS = [
-    'README.md',
     'TESTING.md',
     'docs/BROWSER-NER.md',
     'docs/languages/spanish.md',

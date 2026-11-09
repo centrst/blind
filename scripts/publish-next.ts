@@ -1,9 +1,8 @@
 /**
- * pnpm publish:next [--dry-run]: publishes the working tree to npm as a throwaway
- * prerelease on the `next` dist-tag, for example 0.1.0-next.20261109.2, and
- * leaves the repository at its real version. Nothing here touches `latest`, so
- * `npm install @centrst/blind` keeps resolving to the last real release while
- * `npm install @centrst/blind@next` gets the newest build.
+ * pnpm publish:next [--dry-run | --prepare]: prepares a dated prerelease.
+ * --prepare leaves the version in place for the release workflow's tests and
+ * pack step. --dry-run packs without publishing. With neither flag this remains
+ * the local, authenticated publish path, without CI provenance.
  *
  * The version is the package.json version, `-next.`, today's UTC date and a
  * counter that continues from what the registry already has for that date.
@@ -11,11 +10,14 @@
  * and builds, then come back from git, so both must be clean to start.
  */
 import { spawnSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { ROOT } from '../test/support/corpus.js';
+import { nextVersion, setVersion } from './lib/release.js';
+
+const ROOT = process.cwd();
 
 const dryRun = process.argv.includes('--dry-run');
+const prepare = process.argv.includes('--prepare');
 const pkgPath = join(ROOT, 'package.json');
 const versionPath = join(ROOT, 'src', 'version.ts');
 const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as { name: string; version: string };
@@ -36,6 +38,8 @@ function fail(message: string): never {
 }
 
 if (pkg.version.includes('-')) fail(`package.json is already at a prerelease version (${pkg.version}). Set it to the next real version first.`);
+if (dryRun && prepare) fail('Choose --dry-run or --prepare.');
+if (process.argv.slice(2).some((arg) => arg !== '--dry-run' && arg !== '--prepare')) fail('Unknown publish:next argument.');
 
 const dirty = run('git', ['status', '--porcelain', '--', 'package.json', 'src/version.ts'], true).trim();
 if (dirty) fail(`package.json or src/version.ts has uncommitted changes. Commit or revert them first, the script restores both files from git when it is done.\n${dirty}`);
@@ -52,23 +56,21 @@ function publishedVersions(): string[] {
   throw new Error('npm view failed');
 }
 
-const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-const prefix = `${pkg.version}-next.${today}.`;
-const taken = publishedVersions()
-  .filter((v) => v.startsWith(prefix))
-  .map((v) => Number(v.slice(prefix.length)))
-  .filter((n) => Number.isInteger(n));
-const version = `${prefix}${taken.length ? Math.max(...taken) + 1 : 1}`;
+const version = nextVersion(pkg.version, publishedVersions(), new Date());
 const sha = run('git', ['rev-parse', '--short', 'HEAD'], true).trim();
 
 const originalPkg = readFileSync(pkgPath, 'utf8');
 const originalVersion = readFileSync(versionPath, 'utf8');
 if (!originalVersion.includes(`'${pkg.version}'`)) fail(`src/version.ts does not name ${pkg.version}; the build check C19/B2 would fail too.`);
 
-console.log(`${dryRun ? 'dry run of' : 'publishing'} ${pkg.name}@${version} from ${sha}${dryRun ? '' : ' to the next tag'}`);
+console.log(`${prepare ? 'preparing' : dryRun ? 'dry run of' : 'publishing'} ${pkg.name}@${version} from ${sha}`);
+if (prepare) {
+  setVersion(ROOT, version);
+  if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `version=${version}\n`);
+  process.exit(0);
+}
 try {
-  writeFileSync(pkgPath, originalPkg.replace(`"version": "${pkg.version}"`, `"version": "${version}"`));
-  writeFileSync(versionPath, originalVersion.replace(`'${pkg.version}'`, `'${version}'`));
+  setVersion(ROOT, version);
   // prepack runs pnpm build, so dist carries the prerelease version in VERSION and receipts.
   run('npm', ['publish', '--tag', 'next', ...(dryRun ? ['--dry-run'] : [])]);
 } finally {

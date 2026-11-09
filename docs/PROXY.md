@@ -2,6 +2,8 @@
 
 Proxy mode puts blind in a shared service between your callers and the service that processes their text. Callers send private text to the proxy. It rewrites that text, stops if the leak check finds a value that remains (one blind found, or the caller gave in `known` or `deny`), forwards the blind copy, and restores the real values in the answer. With a signing key configured, each answer carries a receipt signed by the proxy's key.
 
+Install the core from npm as described in [README.md](../README.md#install). The proxy handler and runtime adapters are source examples in this repository, not a published proxy service.
+
 Use proxy mode when callers cannot run JavaScript, when one team should maintain the deny list and known values for everyone, or when you want one place to rewrite private text before it is forwarded.
 
 The code is in [examples/shared/handler.ts](../examples/shared/handler.ts), with adapters for [Cloudflare Workers](../examples/workers.ts), [Deno](../examples/deno.ts) and [AWS Lambda](../examples/lambda.ts). The tests in `test/examples.test.ts` run all of them against a stub upstream (C24, C25, C33).

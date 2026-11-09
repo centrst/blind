@@ -1,62 +1,110 @@
 # Releasing
 
-Publishing the source does not publish an npm package, a model or a hosted service. A release of `@centrst/blind` is a version tag on `main`; `.github/workflows/release.yml` publishes it with provenance through npm trusted publishing, so no publish credential exists anywhere. Only the core package is published. The NER package stays in this repository (see the last section).
+The core package is published as [`@centrst/blind`](https://www.npmjs.com/package/@centrst/blind). Its first usable npm build was `0.1.0-next.20261109.1`, published on 9 November 2026 from commit `ad1bdbe583ad65245d1077a3f8cd5dd940267564`. The earlier `0.0.0-stage` version was a registry bootstrap, not a supported build.
 
-## Source changes
+The source version in `package.json` is the stable version being developed. A prerelease adds `-next.YYYYMMDD.N` to that base without committing the temporary version. Publishing source, merging a release PR and publishing to npm are separate actions. Only the core package is published.
 
-Work on a feature branch. Run the gate in [CONTRIBUTING.md](CONTRIBUTING.md), review the files and open a pull request. A maintainer merges approved changes. Do not push directly to `main`.
+## Channels
 
-Keep research code and the measurements supporting published claims available. Do not include local reports, real inputs, mappings, downloaded datasets, model weights or deployment credentials in a source change. The tests use invented data.
+| Channel | Version | Install |
+| --- | --- | --- |
+| Prerelease | `X.Y.Z-next.YYYYMMDD.N` | `npm install @centrst/blind@next` |
+| Stable | `X.Y.Z` | `npm install @centrst/blind@latest` |
 
-## Throwaway builds on the `next` tag
-
-While a release is taking shape, builds can go to npm without a real version:
+Both `latest` and `next` initially pointed to `0.1.0-next.20261109.1`. A channel name does not establish stability. Until the first stable release replaces `latest`, an unqualified install also installs that prerelease. Check the registry instead of inferring publication status from the source version:
 
 ```sh
-pnpm publish:next --dry-run   # shows the version and the tarball, publishes nothing
-pnpm publish:next             # publishes to the next dist-tag
+npm view @centrst/blind dist-tags --json
+npm view @centrst/blind versions --json
 ```
 
-The script publishes the working tree as `X.Y.Z-next.YYYYMMDD.N`, where `X.Y.Z` is the version in `package.json`, the date is today's in UTC and `N` continues from what the registry already has for that date. It writes that version into `package.json` and `src/version.ts` for the pack and build, so receipts name the build, and restores both from git afterwards, which is why both must be clean to start.
+The workflow publishes previews with `--tag next` and stable versions with `--tag latest`. Later previews leave an existing stable `latest` unchanged. Published versions are permanent. Never move or reuse a published version or its release tag; publish a new version to correct a mistake.
 
-What makes this lane safe to use freely:
+## Set up automation once
 
-- It never touches `latest`. `npm install @centrst/blind` keeps resolving to the last real release, and caret ranges skip prereleases, so nobody gets a build by accident. Consumers that want one pin `@centrst/blind@next` or an exact version.
-- A prerelease version is as permanent as any other, so nothing needs unpublishing. The real `X.Y.Z` sorts after every `X.Y.Z-next.*` and takes over when it ships.
-- It runs from a maintainer's machine after `npm login`, so it carries no provenance. Only a tag produces a release.
+1. The organization must permit Actions to create pull requests. In GitHub's repository settings, enable **Actions > General > Allow GitHub Actions to create and approve pull requests**. The release PR workflow uses the repository's `GITHUB_TOKEN`, with no personal access token. It dispatches the core and Python CI workflows explicitly because token-created PRs do not trigger `pull_request` runs. At setup on 9 November 2026, the organization policy rejected enabling this repository setting with HTTP 409, so `release-pr.yml` runs only by manual dispatch. Once an organization owner allows the setting, add the `push` trigger on `main` back to that workflow so pending changesets open the PR on their own.
+2. Create the GitHub environment `release`. Add a maintainer as a required reviewer. Allow the branch `main` and tags matching `v*` through selected deployment branches and tags. Both manual channels use `main`; stable tag runs must point to a commit on `main`.
+3. In npm's [package settings](https://www.npmjs.com/package/@centrst/blind/access), add a GitHub Actions trusted publisher with organization `centrst`, repository `blind`, workflow filename `release.yml` and environment `release`. Allow direct publishing with `npm publish`. This connection authorizes both channels because both use that workflow and environment. A new connection must complete a successful publish within npm's setup window, currently two days, so configure it when a verified candidate is ready.
+4. After confirming trusted publishing works, select **Require two-factor authentication and disallow tokens** under npm publishing access. No `NPM_TOKEN` or `NODE_AUTH_TOKEN` belongs in repository secrets. The workflow uses npm 11.21.0 and GitHub OIDC, and publishes provenance from the public repository.
 
-## Once, before the first release
+These settings live outside Git. Check them before the first workflow publish. The workflow file alone cannot establish the npm trust relationship or enforce environment reviewers. See npm's [trusted publishing instructions](https://docs.npmjs.com/trusted-publishers/).
 
-The release workflow authenticates with npm trusted publishing, which is configured on the package's settings page on npmjs.com. That page exists only once the package does, so the very first publish is by hand:
+## Batch changes into a release PR
 
-1. On a maintainer's machine, `npm login` as a member of the `centrst` organization on npm, then `pnpm publish:next` from a clean checkout of `main`. This creates `@centrst/blind` on the registry as a prerelease. npm may point `latest` at it because no `latest` exists yet; a plain install then resolves to a version that says `next` in its name until the first release ships.
-2. On npmjs.com, open the package, **Settings**, **Trusted Publisher**, choose GitHub Actions and enter the organization `centrst`, the repository `blind`, the workflow filename `release.yml` and the environment `release`. Under **Publishing access**, choose the option that requires two-factor authentication or trusted publishing and disallows tokens.
-3. On GitHub, open **Settings**, **Environments**, create `release` and add the maintainers as required reviewers. Limit its deployment branches and tags to tags matching `v*`. Each release run then waits for an approval before the publish job starts.
-4. Add the package to the `developers` team of the npm organization if other maintainers need to manage it.
+Work on feature branches and open PRs. A maintainer merges them after the gate in [CONTRIBUTING.md](CONTRIBUTING.md) passes. Keep local reports, real inputs, mappings, downloaded datasets, weights and credentials out of source changes.
 
-## A release
+For a change users need to hear about, run:
 
-1. **Gate on a maintainer's machine.** The pinned pnpm version and Gitleaks 8.30.1 installed, the NER model fetched once with `pnpm ner:download`. Then `pnpm secrets`, `pnpm install --frozen-lockfile` and `pnpm verify`, which runs typecheck, lint, build, the unit and property tests, the NER model tests, 20,000 property cases, the corpus floors, mutation testing and `claims --strict`, and stops at the first failure. Red means no release. A skipped model check is not release evidence.
-2. **Changelog.** Move the `Unreleased` entries in `CHANGELOG.md` under a heading for the new version with the date. Write for someone who uses the package: new options, changed output, fixed misses, anything that breaks a stored mapping.
-3. **Version.** Pick `X.Y.Z` by semver. Before 1.0, a change that breaks the API or the mapping format bumps the minor. Set it in two places, which build check C19/B2 keeps equal: `package.json` with `npm version X.Y.Z --no-git-tag-version`, and `VERSION` in `src/version.ts`, which receipts name. For the first release, also replace the "not on npm yet" paragraph in the README's Install section with `npm install @centrst/blind`.
-4. **Tarball.** `npm pack --dry-run` lists what will ship: `dist/` (the built `.js`, `.d.ts` and `.js.map` files, with the bins in `dist/cli/`), `README.md`, `LICENSE`, `THIRD-PARTY-NOTICES.md` and `package.json`, nothing else. Source maps contain source text and need the same disclosure review as source files. The pack check (C37/K1) in `pnpm test` has already installed that tarball offline and run both commands.
-5. **Pull request.** Commit the changelog, the version bump and the regenerated `CLAIMS.md` as `Release X.Y.Z` and open a pull request. Its description names the `pnpm verify` run that passed. A maintainer approves and merges it.
-6. **Tag.** On the merged commit of `main`: `git tag -a vX.Y.Z -m "X.Y.Z"` and `git push origin vX.Y.Z`. The tag and `package.json` must name the same version; the workflow checks and refuses otherwise.
-7. **Approve the run.** The tag starts `release.yml`. It waits for a required reviewer of the `release` environment, then on an Ubuntu runner runs `pnpm install --frozen-lockfile`, typecheck, lint, test and build, and publishes:
+```sh
+pnpm changeset
+```
 
-   ```sh
-   npm publish --provenance --access public
-   ```
+Select `@centrst/blind`, the bump type and a short description of the change. Commit the generated `.changeset/*.md` file with the code. Use patch for compatible fixes and minor for compatible additions. Before 1.0, use minor for API or mapping-format breaks and describe the break. Documentation and tooling changes without a package behavior change need no changeset.
 
-   A failed step publishes nothing: fix the cause on `main` through a pull request, delete the tag locally and on the remote, and tag again. `prepack` runs `pnpm build` first, so a stale `dist/` cannot ship. Nobody runs `npm publish` by hand for a release; provenance only comes from a CI job npm can verify. Never move or reuse a tag that did publish.
-8. **Check npm.** Within a few minutes:
-   - `npm view @centrst/blind@X.Y.Z version dependencies bin` shows the version, no dependencies, and the `blind` and `unblind` bins.
-   - The package page on npmjs.com shows the provenance badge, linked to the tag's commit and the workflow run.
-   - In an empty folder: `npm install @centrst/blind@X.Y.Z`, then `echo 'Pay 120,00 € to ana@example.example' | npx blind --seed check` prints a blind copy and a run id, and `node -e "import('@centrst/blind').then(m => console.log(typeof m.blind))"` prints `function`.
-   - If something is wrong, deprecate the version with `npm deprecate @centrst/blind@X.Y.Z "<reason>"` and release a fix. Do not unpublish.
+`release-pr.yml` combines pending notes into one draft PR when you run it from **Actions**. Its version command updates `package.json`, `CHANGELOG.md`, `src/version.ts` and the lockfile together. It includes the workspace root and excludes the private NER package. Review the version and notes, run the full local gate on that candidate, then let a maintainer merge it. No package is published by that merge.
+
+While organization policy blocks bot-created PRs, prepare the same change on a feature branch with `pnpm version:release`, run the gate and open a PR as a maintainer. This uses the same versioning and changelog command without a personal token or an organization policy change. The publish workflow works independently of how the release PR was opened.
+
+For the initial stable `0.1.0`, the source already names the intended version. Prepare its stable changelog entry through a PR. If pending changesets propose a later version, use that reviewed version rather than forcing the number back down.
+
+## Node versions
+
+The package supports Node 22 or newer. CI runs the gate on Node 26, the active LTS, and the typecheck, tests and build on 22 and 24. The release workflows run on 26. Drop 22 from the matrix and raise `engines` when Node ends its support on 30 April 2027, and add each new LTS line when it starts.
+
+## Verify the candidate locally
+
+Install the pinned pnpm version and Gitleaks 8.30.1. Set up pip-audit as described in [CONTRIBUTING.md](CONTRIBUTING.md#python-dependency-audit). Fetch the pinned model once with `pnpm ner:download`, then run:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm verify
+npm pack --dry-run
+```
+
+The full gate includes model tests, 20,000-case properties, mutation testing, corpus floors and `claims --strict`. Do not use `--fast` for release evidence. A skipped required model check is not release evidence.
+
+Review the generated `CLAIMS.md`, `reports/evidence.html` and the tarball contents. Source maps contain source text and need disclosure review too. The pack tests install the tarball offline and run the library and both commands. Retain the reports and record the exact source commit in the release PR or release record. Regenerated claims can be committed through that PR; do not copy evidence from another source revision.
+
+After merge, check out the selected commit on `main` and run the full gate there before dispatching. The workflow's `verified_sha` input records the maintainer's statement that this local run passed. Matching a SHA does not prove the local run happened. The environment reviewer must review that evidence. The Release workflow's prepare job repeats typecheck, lint, tests and build on the actual version being packed, including the temporary prerelease version. The heavy suites remain local.
+
+## Publish a prerelease
+
+In **Actions > Release > Run workflow**, select branch `main`, channel `next` and the full SHA of the verified commit. The CLI equivalent is:
+
+```sh
+gh workflow run release.yml --ref main \
+  -f channel=next -f verified_sha="$(git rev-parse HEAD)"
+```
+
+The workflow rejects a dispatch on another branch or when `main` has advanced beyond `verified_sha`. It chooses the next unused date counter from npm, updates both version values in the runner and runs typecheck, lint, tests and build. It uploads the tested tarball and a `release.json` source and integrity record as the `npm-package` artifact.
+
+Review that candidate and approve the `release` environment. A separate job downloads the same tarball, publishes it with provenance to `next`, then compares npm's version, integrity, dependencies and command entries against the candidate. It does not rebuild the package in the publishing job.
+
+`pnpm publish:next --dry-run` remains available locally for inspecting a preview tarball. It temporarily changes the two version files and restores their original contents afterward. `--prepare` is used by CI and leaves the temporary version in place for its gate. The older local `pnpm publish:next` path still requires `npm login`, has no CI provenance and is unnecessary for normal releases. Neither local path is a substitute for the full verification gate.
+
+## Publish a stable version
+
+Merge the reviewed release PR, with no pending changesets left on `main`, and verify that commit locally. Dispatch **Release** on `main` with channel `stable` and its full `verified_sha`. Approve the `release` environment after reviewing the candidate. The workflow publishes the source's exact `X.Y.Z` version to `latest`.
+
+Tag-based releases also work, once the repository's `Publication hold - tags` ruleset lets a maintainer create `v*` tags. It currently blocks creating, updating and deleting every tag with no bypass actor, so use the dispatch path until that changes:
+
+```sh
+git tag -a vX.Y.Z -m 'Release X.Y.Z'
+git push origin vX.Y.Z
+```
+
+The tag must match `package.json`, contain a stable version and point to a commit on `main`. For tag runs, the environment reviewer must check the local verification record for that commit before approving. Tags never publish a prerelease through this workflow. Keep release tags immutable, including after a failed attempt. Retry the workflow for a transient failure; if source needs a fix, merge it and use a new version and tag.
+
+## After publishing
+
+Check the exact version on npm, its provenance and the workflow run. Install it into an empty project and exercise the library and both commands. Keep the local full-gate reports with the source commit and workflow record. The CI `npm-package` artifact records the tarball and its integrity, not the full local gate.
+
+If npm accepted a publish but a later workflow step failed, the version already exists. Inspect the registry before retrying. Never try to replace the published tarball. Deprecate a faulty version with a reason and publish a fix.
+
+The README bundled in an npm version is part of that immutable tarball. Documentation fixes reach the GitHub repository through a PR and reach npm with the next package version.
 
 ## The NER package
 
-`@centrst/blind-ner` in `ner/` is a prototype. It is marked `private` and is not published with the core. Build it from source with `pnpm build` and `pnpm build:ner`. See [ner/README.md](ner/README.md) for model requirements and measured limits.
+`@centrst/blind-ner` in `ner/` is a prototype built from this repository, not on npm. It remains `private` and is excluded from versioning and publishing. Build it with `pnpm build` and `pnpm build:ner`. See [ner/README.md](ner/README.md) for model requirements and measured limits.
 
-Publishing it requires its own review: model distribution and notices, a real peer dependency range for the core, package contents, an offline installation check, release notes and a distinct versioning procedure. Training source is available for reproducing research; training runs and model distribution are separate decisions.
+Publishing it needs its own review of model distribution, notices, a real peer dependency range, package contents, offline installation, release notes and versioning. Training source supports reproducing research; training runs and model distribution remain separate decisions.

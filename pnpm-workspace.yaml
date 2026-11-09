@@ -1,4 +1,5 @@
 packages:
+  - .
   - ner
 allowBuilds:
   esbuild: true

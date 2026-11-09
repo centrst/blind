@@ -6,6 +6,7 @@
 - [ ] `pnpm lint` passes
 - [ ] `pnpm test` passes
 - [ ] `pnpm build` passes
+- [ ] A Changeset describes any package behavior change, or this PR needs no release note
 - [ ] Every fixture is synthetic: invented names, companies, amounts and numbers, `.example` domains
 - [ ] No network calls in `src`, and no `node:` imports or Node-only globals in `src` outside `src/cli`
 - [ ] No `Math.random`; randomness goes through the seeded `Rng`
