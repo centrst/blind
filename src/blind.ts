@@ -1,11 +1,11 @@
 import { AmountPlan, amountKey, detectPercents, freeAmountFake, parseNumber, type AmountOcc } from './amounts.js';
 import { dateKey, freeDateFake, shiftOcc, type DateOcc } from './dates.js';
-import { builtinDetectors, callerDetector, checkKnown, findSpans, knownDetector, knownPart, lowerCasePart, oneLetterPart, personTokens, stopWordValue } from './detect.js';
+import { builtinDetectors, callerDetector, checkKnown, emailHost, findSpans, knownDetector, knownPart, lowerCasePart, oneLetterPart, personTokens, stopWordValue, urlHost } from './detect.js';
 import { foldLookalikes, skeleton, stripInvisible } from './fold.js';
 import type { IdMeta } from './ids.js';
 import { TextLanguage, type Lang } from './language.js';
 import { checkLeaks, denyDomains, shortTextLeaks, type Original } from './leaks.js';
-import { AT_SRC, DEFAULT_ALLOW_DOMAINS, ORG_SUFFIX, PARTICLES } from './names.js';
+import { DEFAULT_ALLOW_DOMAINS, ORG_SUFFIX, PARTICLES } from './names.js';
 import { Rng } from './prng.js';
 import { gluedPrefixBefore, unspaced } from './script.js';
 import { checkMapping, collisions } from './mapping.js';
@@ -16,8 +16,6 @@ import { asciiLower, Surrogates } from './surrogates.js';
 import type { BlindOptions, BlindResult, Collision, DetectContext, Kind, KnownKind, KnownValue, Mapping, Pair, ReplaceWith, Span } from './types.js';
 import { BlindError, checkLimit, guard, InputTooLargeError, MAX_TEXT_LENGTH } from './errors.js';
 
-/** An address up to and including its at sign, so what is left is the host. */
-const THROUGH_AT = new RegExp(String.raw`^.*?${AT_SRC}`, 'i');
 const GEN_ORDER: Kind[] = ['person', 'org', 'place', 'domain', 'email', 'url', 'phone', 'iban', 'id'];
 
 const WORD_CH = /[\p{L}\p{N}\p{M}]/u;
@@ -253,13 +251,13 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
           out = make(() => sur.email(real, orig, around));
           // A role address on a public platform (no-reply@...) stays as it is on purpose.
           if (out.toLowerCase() !== real.toLowerCase()) addOriginal('email', real);
-          const host = real.replace(THROUGH_AT, '');
+          const host = emailHost(real);
           if (!isAllowedHost(host)) addOriginal('domain', host);
           break;
         }
         case 'url': {
           out = make(() => sur.url(real, orig, around));
-          const host = /^(?:https?:\/\/)?([^/?#:]+)/i.exec(real)?.[1];
+          const host = urlHost(real);
           if (host && !isAllowedHost(host)) addOriginal('domain', host);
           break;
         }
