@@ -310,6 +310,17 @@ Surrogates go back to real values, so `unblind(blind(x))` is exactly `x` (C1), l
 
 Streaming `unblind`. `push` returns the text that is safe to show so far, possibly empty. `end` returns the rest and the `invented` list for the whole answer (C22).
 
+`prepareUnblinder(mapping, { maxTextLength }?) -> { unblind(text) }` prepares a mapping once for repeated independent answers or structured fields. Each call returns the same `{ text, invented, collisions }` as one-shot `unblind`, with a separate text limit and fresh result arrays. It snapshots the mapping. Prepare again after extending a conversation mapping.
+
+```ts
+import { prepareUnblinder } from '@centrst/blind';
+
+const prepared = prepareUnblinder(mapping);
+const restored = blindTexts.map((text) => prepared.unblind(text).text);
+```
+
+Pass structured fields to `blind` as separate texts and restore them separately. Joining fields can change detection context or create matches across field boundaries. The [multi-text benchmark](docs/MULTI-TEXT-PERFORMANCE.md) records the leak-check scaling fix and reusable restoration measurements.
+
 `assertNoLeaks(result)` throws `LeakError` when `result.leaks` has hits. A `known` entry the check enforces only as written or in capitals, or a two-syllable Korean one only where a word starts, is listed in `leaks.unenforced` and does not make it throw. The check covers the values blind found and the ones it was given in `known` and `deny`, not every private value: one that nothing found and nobody listed is neither replaced nor reported. A hit carries a kind, a text index and an offset, never the value.
 
 Every error blind throws itself is a `BlindError` with a `kind` (`LeakError` and `InputTooLargeError` are subclasses), and its message names a field, a kind or an index, never a value. Any other error raised inside `blind` or `unblind`, a custom detector's included, is replaced by a `BlindError` of kind `internal` that names only the stage, even when its message starts with `blind: ` (C42). A detector's error never reaches the caller as thrown, not even a `BlindError`: only its kind does. `blind` throws a new `BlindError` with the same kind and the message `blind: detector error while detecting values (<kind>)`, and drops the detector's message, stack and cause, so a detector that needs to tell the caller something throws a `BlindError` with the matching kind (C42).
