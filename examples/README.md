@@ -24,6 +24,8 @@ In proxy mode, the receipt's `returned` is the hash of the blind answer the upst
 
 See [docs/PROXY.md](../docs/PROXY.md) for the request and response format, the limits and receipt verification, with a Python verifier.
 
+Install the published core in your application with `npm install @centrst/blind@next`, or pin an exact version. See the [install instructions](../README.md#install) for the current release policy. The adapters and shared handler are source examples in this repository, not package exports.
+
 The examples import `@centrst/blind` by name, as your code would. In this repository, that name points at `src/`. `test/examples.test.ts` runs every example against a stub upstream and checks that only blind text crosses, real values come back, a leak stops forwarding, receipts verify, and a missing credential, an oversized body, a bad `known` entry, a slow upstream and an internal error each get their status without echoing input.
 
 Your upstream can be a model call, a ticket classifier, a search index or a log pipeline. It receives the blind text so it can process it without receiving the values that were rewritten.

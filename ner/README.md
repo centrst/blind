@@ -2,7 +2,7 @@
 
 An optional multilingual NER detector for `@centrst/blind`. It finds people, organizations and places that the pattern detectors cannot, using GLiNER (`gliner_multi-v2.1`) on ONNX Runtime, in process. Inference is fully local. The only network use is the one-time model download, which is a separate script.
 
-This package is a prototype and private for now: build it from this repository, it is not on npm. The core library stays at zero runtime dependencies.
+The core `@centrst/blind` is [available on npm](../README.md#install). This package is a private prototype, built from this repository, not on npm. The core library stays at zero runtime dependencies.
 
 ## Use
 

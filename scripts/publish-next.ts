@@ -1,31 +1,37 @@
 /**
- * pnpm publish:next [--dry-run]: publishes the working tree to npm as a throwaway
- * prerelease on the `next` dist-tag, for example 0.1.0-next.20261109.2, and
- * leaves the repository at its real version. Nothing here touches `latest`, so
- * `npm install @centrst/blind` keeps resolving to the last real release while
- * `npm install @centrst/blind@next` gets the newest build.
+ * pnpm publish:next --dry-run | --prepare: a dated prerelease version.
  *
- * The version is the package.json version, `-next.`, today's UTC date and a
- * counter that continues from what the registry already has for that date.
- * package.json and src/version.ts carry the prerelease version while npm packs
- * and builds, then come back from git, so both must be clean to start.
+ * --dry-run packs the prerelease locally with `npm publish --dry-run`, so you can see
+ * the version and the tarball, then restores package.json and src/version.ts from
+ * copies taken first. dist keeps the prerelease build until the next `pnpm build`.
+ * --prepare is for the release workflow only. It leaves the version in place for the
+ * gate and the pack step, and writes it to GITHUB_OUTPUT. Publishing happens only in
+ * the release workflow, never from this script.
+ *
+ * The version is the package.json version, `-next.`, today's UTC date and a counter
+ * that continues from what the registry already has for that date. Both files must
+ * be clean to start.
  */
 import { spawnSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { ROOT } from '../test/support/corpus.js';
+import { fileURLToPath } from 'node:url';
+import { nextVersion, publishedVersions, setVersion } from './lib/release.js';
 
-const dryRun = process.argv.includes('--dry-run');
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
+const args = process.argv.slice(2);
+const dryRun = args.includes('--dry-run');
+const prepare = args.includes('--prepare');
 const pkgPath = join(ROOT, 'package.json');
 const versionPath = join(ROOT, 'src', 'version.ts');
 const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as { name: string; version: string };
 
-function run(cmd: string, args: string[], capture = false): string {
-  const r = spawnSync(cmd, args, { cwd: ROOT, encoding: 'utf8', stdio: capture ? ['ignore', 'pipe', 'pipe'] : 'inherit' });
+function run(cmd: string, cmdArgs: string[], capture = false): string {
+  const r = spawnSync(cmd, cmdArgs, { cwd: ROOT, encoding: 'utf8', stdio: capture ? ['ignore', 'pipe', 'pipe'] : 'inherit' });
   if (r.error) throw r.error;
   if (r.status !== 0) {
     if (capture) process.stderr.write(r.stderr);
-    throw new Error(`${cmd} ${args.join(' ')} exited with ${r.status}`);
+    throw new Error(`${cmd} ${cmdArgs.join(' ')} exited with ${r.status}`);
   }
   return r.stdout ?? '';
 }
@@ -35,45 +41,42 @@ function fail(message: string): never {
   process.exit(1);
 }
 
+if (args.some((arg) => arg !== '--dry-run' && arg !== '--prepare')) fail('Unknown publish:next argument.');
+if (dryRun === prepare) fail('Pass --dry-run to inspect a prerelease locally. Publishing uses the Release workflow in RELEASING.md.');
+if (prepare && process.env.GITHUB_ACTIONS !== 'true') fail('--prepare is for the release workflow. Use --dry-run locally.');
 if (pkg.version.includes('-')) fail(`package.json is already at a prerelease version (${pkg.version}). Set it to the next real version first.`);
 
 const dirty = run('git', ['status', '--porcelain', '--', 'package.json', 'src/version.ts'], true).trim();
-if (dirty) fail(`package.json or src/version.ts has uncommitted changes. Commit or revert them first, the script restores both files from git when it is done.\n${dirty}`);
+if (dirty) fail(`package.json or src/version.ts has uncommitted changes. Commit or revert them first.\n${dirty}`);
 
-/** Versions already on the registry, or none when the package does not exist yet. */
-function publishedVersions(): string[] {
-  const r = spawnSync('npm', ['view', pkg.name, 'versions', '--json'], { cwd: ROOT, encoding: 'utf8' });
-  if (r.status === 0) {
-    const parsed = JSON.parse(r.stdout) as string | string[];
-    return Array.isArray(parsed) ? parsed : [parsed];
-  }
-  if (/E404/.test(r.stderr + r.stdout)) return [];
-  process.stderr.write(r.stderr);
-  throw new Error('npm view failed');
-}
-
-const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-const prefix = `${pkg.version}-next.${today}.`;
-const taken = publishedVersions()
-  .filter((v) => v.startsWith(prefix))
-  .map((v) => Number(v.slice(prefix.length)))
-  .filter((n) => Number.isInteger(n));
-const version = `${prefix}${taken.length ? Math.max(...taken) + 1 : 1}`;
+const version = nextVersion(pkg.version, publishedVersions(pkg.name, ROOT), new Date());
 const sha = run('git', ['rev-parse', '--short', 'HEAD'], true).trim();
 
 const originalPkg = readFileSync(pkgPath, 'utf8');
 const originalVersion = readFileSync(versionPath, 'utf8');
 if (!originalVersion.includes(`'${pkg.version}'`)) fail(`src/version.ts does not name ${pkg.version}; the build check C19/B2 would fail too.`);
 
-console.log(`${dryRun ? 'dry run of' : 'publishing'} ${pkg.name}@${version} from ${sha}${dryRun ? '' : ' to the next tag'}`);
-try {
-  writeFileSync(pkgPath, originalPkg.replace(`"version": "${pkg.version}"`, `"version": "${version}"`));
-  writeFileSync(versionPath, originalVersion.replace(`'${pkg.version}'`, `'${version}'`));
-  // prepack runs pnpm build, so dist carries the prerelease version in VERSION and receipts.
-  run('npm', ['publish', '--tag', 'next', ...(dryRun ? ['--dry-run'] : [])]);
-} finally {
+console.log(`${prepare ? 'preparing' : 'dry run of'} ${pkg.name}@${version} from ${sha}`);
+if (prepare) {
+  setVersion(ROOT, version);
+  if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `version=${version}\n`);
+  process.exit(0);
+}
+
+function restore(): void {
   writeFileSync(pkgPath, originalPkg);
   writeFileSync(versionPath, originalVersion);
 }
-
-if (!dryRun) console.log(`\ninstall it with: npm install ${pkg.name}@${version}\nor follow the lane: npm install ${pkg.name}@next`);
+const onSignal = (signal: NodeJS.Signals) => {
+  restore();
+  process.exit(signal === 'SIGINT' ? 130 : 143);
+};
+process.once('SIGINT', onSignal);
+process.once('SIGTERM', onSignal);
+try {
+  setVersion(ROOT, version);
+  // prepack runs pnpm build, so dist carries the prerelease version in VERSION and receipts.
+  run('npm', ['publish', '--tag', 'next', '--dry-run']);
+} finally {
+  restore();
+}

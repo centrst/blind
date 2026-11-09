@@ -1,60 +1,208 @@
 name: Release
 
-# Publishes @centrst/blind to npm with provenance when a version tag is pushed.
-#
-# Authentication is npm trusted publishing: npm accepts the OIDC token GitHub
-# issues to this workflow, so no publish credential exists anywhere. The trusted
-# publisher is configured on the package's settings page on npmjs.com and names
-# this repository, this workflow file and the `release` environment. RELEASING.md
-# says how to set it up; the package has to exist on npm before that page does.
-#
-# The `release` environment is where the protected release authorization lives:
-# its required reviewers in the repository settings approve each run before the
-# publish job starts.
+# Publishes @centrst/blind to npm through trusted publishing (GitHub OIDC, no token).
+# Runs only by manual dispatch of the maintainer-verified head of main. RELEASING.md
+# describes the channels, the one-time npm and environment setup, and the gate a
+# maintainer runs locally before dispatching.
 
 on:
-  push:
-    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: Release channel
+        type: choice
+        options: [next, stable]
+        default: next
+        required: true
+      verified_sha:
+        description: Full commit SHA whose local pnpm verify report you reviewed
+        type: string
+        required: true
 
 permissions:
   contents: read
 
+env:
+  npm_config_registry: https://registry.npmjs.org
+
+# One release run at a time, across both channels, so a preview cannot be allocated
+# while a stable release of the same base waits for approval. A newer dispatch
+# replaces a pending run, which then shows as cancelled.
 concurrency:
-  group: release-${{ github.ref }}
+  group: npm-release
   cancel-in-progress: false
 
 jobs:
-  publish:
+  prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 90 # pnpm test alone takes about 18 minutes on a laptop
-    environment: release
-    permissions:
-      id-token: write # the OIDC token npm trusts, and provenance
-      contents: read
+    timeout-minutes: 30
+    outputs:
+      source: ${{ github.sha }}
+      version: ${{ steps.pack.outputs.version }}
+      tag: ${{ steps.check.outputs.tag }}
+      filename: ${{ steps.pack.outputs.filename }}
+      integrity: ${{ steps.pack.outputs.integrity }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6
+      # No dependency cache: a release build installs from the lockfile alone.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 26
+      - run: pnpm install --frozen-lockfile
+      - name: Require a fresh dispatch of the verified main head and an unpublished version
+        id: check
+        env:
+          CHANNEL: ${{ inputs.channel }}
+          VERIFIED_SHA: ${{ inputs.verified_sha }}
+        run: pnpm exec tsx scripts/check-release.ts
+      - name: Allocate the next prerelease version
+        if: steps.check.outputs.tag == 'next'
+        id: next
+        run: pnpm publish:next --prepare
+      # Build and pack here, and record the tarball's digest as a job output. Lint and
+      # tests run in the gate job, so their dependencies never share a runner with
+      # the job whose outputs the publish job trusts.
+      - run: pnpm build
+      - name: Pack the build
+        id: pack
+        env:
+          RELEASE_VERSION: ${{ steps.next.outputs.version || steps.check.outputs.version }}
+          RELEASE_TAG: ${{ steps.check.outputs.tag }}
+        run: |
+          mkdir -p .local/release
+          npm pack --ignore-scripts --json --pack-destination .local/release > .local/pack.json
+          node --input-type=module <<'JS'
+          import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
+          const [pack] = JSON.parse(readFileSync('.local/pack.json', 'utf8'));
+          if (pack.version !== process.env.RELEASE_VERSION) throw new Error('Packed version differs from release version.');
+          if (!/^sha512-[A-Za-z0-9+/]+=*$/.test(pack.integrity ?? '')) throw new Error('npm pack reported no sha512 integrity.');
+          const release = { version: pack.version, tag: process.env.RELEASE_TAG, source: process.env.GITHUB_SHA, filename: pack.filename, integrity: pack.integrity };
+          writeFileSync('.local/release/release.json', JSON.stringify(release, null, 2) + '\n');
+          appendFileSync(process.env.GITHUB_OUTPUT, `version=${pack.version}\nfilename=${pack.filename}\nintegrity=${pack.integrity}\n`);
+          appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Package ${release.version}\n\nTag ${release.tag}\n\nSource ${release.source}\n\nIntegrity ${release.integrity}\n`);
+          JS
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: npm-package
+          path: .local/release/
+          if-no-files-found: error
+          retention-days: 30
+
+  gate:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
           persist-credentials: false
       - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version: 22
-          cache: pnpm
-          registry-url: https://registry.npmjs.org
-      - name: Tag matches package.json version
+          node-version: 26
+      # test/secrets.test.ts runs the pinned scanner.
+      - name: Install Gitleaks
         env:
-          TAG: ${{ github.ref_name }}
+          GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
         run: |
-          version="$(node -p "require('./package.json').version")"
-          if [ "$TAG" != "v${version}" ]; then
-            echo "Tag $TAG does not match package.json version ${version}" >&2
-            exit 1
-          fi
-      - name: npm that supports trusted publishing
-        run: npm install -g npm@11 && npm --version
+          tool_dir="$RUNNER_TEMP/gitleaks"
+          mkdir -p "$tool_dir"
+          curl --fail --silent --show-error --location \
+            https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz \
+            --output "$tool_dir/gitleaks.tar.gz"
+          printf '%s  %s\n' "$GITLEAKS_SHA256" "$tool_dir/gitleaks.tar.gz" | sha256sum --check --strict
+          tar -xzf "$tool_dir/gitleaks.tar.gz" -C "$tool_dir" gitleaks
+          echo "$tool_dir" >> "$GITHUB_PATH"
       - run: pnpm install --frozen-lockfile
+      - name: Use the version the prepare job packed
+        if: needs.prepare.outputs.tag == 'next'
+        env:
+          RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
+        run: pnpm version:sync "$RELEASE_VERSION"
       - run: pnpm typecheck
       - run: pnpm lint
       - run: pnpm test
-      - run: pnpm build
-      - run: npm publish --provenance --access public
+
+  publish:
+    needs: [prepare, gate]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+    # No checkout and no install: this job runs only npm and the downloaded tarball.
+    steps:
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 26
+      - name: Require npm with trusted publishing support
+        run: npm --version | awk -F. '{ exit !($1 > 11 || ($1 == 11 && $2 >= 5)) }'
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: npm-package
+          path: ${{ runner.temp }}/release
+      - name: Check the tarball against the digest the prepare job recorded
+        working-directory: ${{ runner.temp }}/release
+        env:
+          FILENAME: ${{ needs.prepare.outputs.filename }}
+          EXPECTED: ${{ needs.prepare.outputs.integrity }}
+        run: |
+          actual="sha512-$(openssl dgst -sha512 -binary "$FILENAME" | base64 -w0)"
+          [ "$actual" = "$EXPECTED" ] || { echo 'The tarball differs from the one the prepare job packed.' >&2; exit 1; }
+          tar -xzf "$FILENAME" package/package.json
+          node --input-type=module <<'JS'
+          import { readFileSync } from 'node:fs';
+          const p = JSON.parse(readFileSync('package/package.json', 'utf8'));
+          const deps = { ...p.dependencies, ...p.optionalDependencies, ...p.peerDependencies };
+          if (Object.keys(deps).length) throw new Error('The packed package declares dependencies.');
+          for (const hook of ['preinstall', 'install', 'postinstall']) if (p.scripts?.[hook]) throw new Error(`The packed package has a ${hook} script.`);
+          if (!p.bin?.blind || !p.bin?.unblind) throw new Error('The packed package is missing a command entry.');
+          JS
+      - name: Publish the tested tarball with provenance, once
+        working-directory: ${{ runner.temp }}/release
+        env:
+          RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+          FILENAME: ${{ needs.prepare.outputs.filename }}
+          EXPECTED: ${{ needs.prepare.outputs.integrity }}
+          SOURCE_SHA: ${{ needs.prepare.outputs.source }}
+        run: |
+          if [ "$RELEASE_TAG" = next ]; then
+            base="${RELEASE_VERSION%%-*}"
+            if [ -n "$(npm view "@centrst/blind@${base}" version 2>/dev/null || true)" ]; then
+              echo "Stable ${base} is already published, so this preview would sort below it." >&2
+              exit 1
+            fi
+          fi
+          existing="$(npm view "@centrst/blind@${RELEASE_VERSION}" dist.integrity 2>/dev/null || true)"
+          if [ -n "$existing" ]; then
+            [ "$existing" = "$EXPECTED" ] || { echo 'This version is already on npm with a different tarball.' >&2; exit 1; }
+            echo 'This exact tarball is already published. Skipping npm publish.'
+          else
+            head="$(git ls-remote "https://github.com/${GITHUB_REPOSITORY}" refs/heads/main | cut -f1)"
+            [ "$head" = "$SOURCE_SHA" ] || { echo 'main has moved past the source commit. Dispatch a new run.' >&2; exit 1; }
+            npm publish "./$FILENAME" --tag "$RELEASE_TAG" --access public --provenance --ignore-scripts
+          fi
+      - name: Check the published version, integrity and dist-tag
+        env:
+          RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+          EXPECTED: ${{ needs.prepare.outputs.integrity }}
+        run: |
+          for _ in 1 2 3 4 5 6 7 8 9 10; do
+            integrity="$(npm view "@centrst/blind@${RELEASE_VERSION}" dist.integrity 2>/dev/null || true)"
+            tagged="$(npm view @centrst/blind "dist-tags.${RELEASE_TAG}" 2>/dev/null || true)"
+            if [ "$integrity" = "$EXPECTED" ] && [ "$tagged" = "$RELEASE_VERSION" ]; then
+              echo "npm serves ${RELEASE_VERSION} on ${RELEASE_TAG} with the tested integrity."
+              exit 0
+            fi
+            sleep 15
+          done
+          echo 'npm does not yet serve the tested tarball on its dist-tag. Inspect the registry before retrying.' >&2
+          exit 1

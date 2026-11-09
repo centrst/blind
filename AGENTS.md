@@ -5,7 +5,7 @@ Open-source Centrst TypeScript library. Rewrites private text into a blind copy 
 ## Commands
 
 - `pnpm install`
-- `pnpm audit:python` checks every Python requirements file with pip-audit 2.10.1; see README.md for the tool environment. Run `python3 -m unittest discover -s test -p audit_python_test.py` when changing the audit gate.
+- `pnpm audit:python` checks every Python requirements file with pip-audit 2.10.1; see CONTRIBUTING.md for the tool environment. Run `python3 -m unittest discover -s test -p audit_python_test.py` when changing the audit gate.
 - `pnpm typecheck`
 - `pnpm lint`
 - `pnpm secrets` scans the working tree, index and history with Gitleaks 8.30.1
@@ -19,11 +19,13 @@ Open-source Centrst TypeScript library. Rewrites private text into a blind copy 
 - `pnpm evidence` writes `reports/evidence.html`
 - `pnpm known-misses` regenerates `corpus/adversarial/known-misses.md`
 - `pnpm verify` runs all of it in CI order with `claims --strict`, so it needs the model (`--fast` skips test:deep)
-- `pnpm publish:next` publishes the working tree to npm as a dated prerelease on the `next` dist-tag (`--dry-run` to look first); real releases follow RELEASING.md
+- `pnpm changeset` records a user-facing change for the batched release PR; documentation and tooling changes need no note unless package behavior changes
+- `pnpm version:release` consumes pending changesets and synchronizes the package, receipt version and lockfile; the release PR workflow runs it
+- `pnpm publish:next --dry-run` inspects a dated prerelease locally and never publishes; `--prepare` runs only in the release workflow. Normal publishing uses the Release workflow in RELEASING.md
 
-Typecheck, lint, test and build must pass before a change ships. `pnpm verify` before a release. Node 22 or newer, ESM, strict TypeScript. Run `tsx` and `stryker` through the pnpm scripts, scratch files go in `.local/`.
+Typecheck, lint, test and build must pass before a change ships. `pnpm verify` before a release. Node 22 or newer, tested in CI on 22, 24 and 26. ESM, strict TypeScript. Run `tsx` and `stryker` through the pnpm scripts, scratch files go in `.local/`.
 
-The gate is `.pre-merge.yml` (secret scanning, typecheck, lint, test, build). Public CI runs on Ubuntu with actions pinned to full commit SHAs. Never use macOS GitHub-hosted runners. The heavy suites (test:deep, mutation, the NER model tests) run locally through `pnpm verify` before a release. A release is a version tag on `main`; `release.yml` publishes it with provenance through npm trusted publishing, after a required reviewer approves the run (RELEASING.md). All changes use feature branches and pull requests; a maintainer merges them.
+The gate is `.pre-merge.yml` (secret scanning, typecheck, lint, test, build). Public CI runs on Ubuntu with actions pinned to full commit SHAs. Never use macOS GitHub-hosted runners. The heavy suites (test:deep, mutation, the NER model tests) run locally through `pnpm verify` before a release. The core is on npm, first as `0.1.0-next.20261109.1`. `release-pr.yml` batches Changesets without publishing, but cannot open its PR until the organization allows bot-created PRs and `changesets/action`, so until then a maintainer runs `pnpm version:release` on a feature branch. `release.yml` publishes only by manual dispatch of the verified head of `main`, to `next` or stable, with provenance and approval through the `release` environment. Configure npm trusted publishing and required reviewers as described in RELEASING.md. All changes use feature branches and pull requests; a maintainer merges them.
 
 ## Rules
 

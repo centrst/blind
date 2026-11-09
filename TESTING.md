@@ -169,7 +169,7 @@ The suite runs the whole corpus and every property with these patched to throw: 
 - ten side-by-side corpus examples (real and blind are both synthetic),
 - the exact commit, seed and command that produced it.
 
-Every release attaches the report. Anyone who asks "what does it actually do" gets this page.
+For each release, retain the full local report with its source commit and workflow record. The release workflow stores the tested tarball and a source and integrity manifest in its `npm-package` artifact. That artifact does not replace the local model, deep-property and mutation evidence. [RELEASING.md](RELEASING.md) describes the release gate. Publication on npm alone does not establish that this full gate passed.
 
 ## 9. The optional NER detector
 

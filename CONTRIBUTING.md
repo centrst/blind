@@ -12,6 +12,21 @@ You need Node 22 or newer and pnpm (the version is pinned in `package.json` unde
 pnpm install --frozen-lockfile
 ```
 
+Tests use synthetic data only, and a test that needs a live phone prefix writes only the prefix and draws the rest at run time. Generated test inputs use the same reserved phone ranges and unownable mailboxes as the fixtures. Cards, IBANs, ids and IP addresses have no reserved range, so generated ones may be live, but they are never printed. A failing property reports its seed and the kind and length of each input. See [TESTING.md](TESTING.md) for the rest of the commands.
+
+### Python dependency audit
+
+`pnpm audit:python` runs before merge, during `pnpm verify`, and weekly in CI. It audits the pinned benchmark and training environments without installing their model weights. Set up its tool environment once:
+
+```sh
+python3.12 -m venv .local/python-audit-venv
+.local/python-audit-venv/bin/python -m pip install pip-audit==2.10.1
+source .local/python-audit-venv/bin/activate
+pnpm audit:python
+```
+
+The manifests contain frozen package versions, so the audit uses `--no-deps`. Unpinned requirements, unavailable advisory results and reported vulnerabilities fail the check. Only the two explicitly reviewed, SHA-256-pinned spaCy model wheels are excluded from advisory lookup because they are distributed outside PyPI; the gate reports those exclusions. Model compatibility is checked separately when changing their environment.
+
 ## The gate
 
 Install [Gitleaks 8.30.1](https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1) and put its binary on your PATH. Every pull request must pass these commands in order. Public CI runs them on Ubuntu; the local gate runs them before review.
@@ -63,6 +78,12 @@ These run before a release, through `pnpm verify`. Run the one that matches your
 - **Prose has no em dashes.**
 
 Scratch files go in `.local/`, which git ignores.
+
+## Release notes
+
+For a package behavior change, run `pnpm changeset`, select `@centrst/blind` and describe what users will notice. Commit the generated note with the change. A maintainer's release PR, prepared with `pnpm version:release`, batches these notes into one version and changelog. Documentation and tooling changes without a package behavior change need no changeset.
+
+Merging a release PR does not publish. Both prerelease and stable publication require an explicit release action and the full local `pnpm verify` gate. [RELEASING.md](RELEASING.md) covers the channels, approvals and npm trusted publishing. The optional NER package remains private.
 
 ## Pull requests
 
