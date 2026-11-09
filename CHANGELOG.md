@@ -15,7 +15,7 @@ First stable release.
 - The README states that an amount the model computes from fakes comes back close but not always exact. It is listed in `invented` unless it equals another fake, and then `unblind` restores that fake's real amount with `invented` empty, so an empty list does not verify a computed total. Exact restoration of derived amounts is issue #25.
 - `EUR -100`, a minus between a currency code and the number, is not read as an amount, so it goes out unscaled. It is listed as known miss F17.
 - `pnpm verify` is the release gate for the published core and takes about 12 minutes. The NER package and mutation testing moved to `pnpm verify --full`.
-- Release notes are batched with Changesets. Publishing supports explicit `next` and stable channels through GitHub Actions and npm trusted publishing.
+- Release notes are batched with Changesets. Publishing supports explicit `next` and stable channels through GitHub Actions and npm trusted publishing. The workflow stages each version on npm, and a maintainer approves it with 2FA before it is public.
 - Installation, security support and release documentation now describe the published core prerelease and the private NER package separately.
 - The README now describes only what the package ships. Names, companies and places come from `known`, context and paranoid mode, and the NER detector is mentioned once as separate work in development.
 
