@@ -47,7 +47,7 @@ regex==2026.9.29
 requests==2.34.2
 rich==15.0.0
 safetensors==0.8.0
-sentencepiece==0.2.2
+sentencepiece==0.2.3
 setuptools==84.2.1
 shellingham==1.5.4
 six==1.17.0
