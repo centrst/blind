@@ -49,6 +49,25 @@ describe('values the model computes from fakes', () => {
     expect(unblind('Due 15 March 2026.', b.mapping)).toEqual({ text: 'Due 22 February 2026.', invented: ['15 March 2026'], collisions: [] });
   });
 
+  it('restore a computed date that equals a fake as that date, without listing it', () => {
+    const b = blind(['Due 25 January 2026. Paid 22 February 2026.'], { seed: 'm-4' });
+    expect(b.texts).toEqual(['Due 15 February 2026. Paid 15 March 2026.']);
+    expect(unblind('Due 15 March 2026.', b.mapping)).toEqual({ text: 'Due 22 February 2026.', invented: [], collisions: [] });
+  });
+
+  it('restore a yearless date moved across a year end a day off, listed in invented', () => {
+    const b = blind(['Due 10 December.'], { seed: 'y25', now: new Date('2024-06-01T00:00:00Z') });
+    expect(b.texts).toEqual(['Due 31 December.']);
+    const back = unblind('Due 1 March.', b.mapping);
+    expect(back.text).toBe('Due 9 February.');
+    expect(back.invented).toHaveLength(1);
+  });
+
+  it('leave a computed negative amount written EUR -74 unchanged and unlisted', () => {
+    const b = blind(['Invoice A for EUR 100. Invoice B for EUR 200.'], { seed: 'synthetic-private-workflow' });
+    expect(unblind('EUR 75 - EUR 149 = EUR -74', b.mapping)).toEqual({ text: 'EUR 100 - EUR 200 = EUR -74', invented: [], collisions: [] });
+  });
+
   const source = 'Dana Mercer <dana@northwind.example> sent invoice A for EUR 100, due 6 November 2026. Dana Mercer <dana@northwind.example> sent invoice B for EUR 200, due 9 November 2026.';
   const fixture = () => blind([source], { replaceWith: 'fake', seed: 'synthetic-private-workflow', known: [{ kind: 'person', value: 'Dana Mercer' }] });
 

@@ -164,5 +164,16 @@
     ],
     "expect": "replaced",
     "seed": "bare-hosts"
+  },
+  {
+    "id": "F17",
+    "title": "negative amount with the minus after a currency code",
+    "text": "A refund of EUR -100 was booked against the old order.",
+    "secrets": [
+      "EUR -100"
+    ],
+    "expect": "silent",
+    "why": "The amount pattern reads a sign before the currency or the number, not between a currency code and the number, so EUR -100 is not an amount to blind. It goes out unscaled, and a computed EUR -74 in an answer comes back unchanged without being listed in invented. -100 €, -€100.00 and -$1,234.56 are scaled.",
+    "seed": "adv"
   }
 ]

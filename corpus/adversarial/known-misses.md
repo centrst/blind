@@ -2,7 +2,7 @@
 
 Generated from `corpus/adversarial/*.json` by `pnpm known-misses`. Do not edit by hand.
 
-23 inputs slip through silently. 55 more in the same set are caught, either replaced or reported by the leak check. Each miss below has a test marked expected-to-fail, so the build notices the day one starts working and this list gets shorter.
+24 inputs slip through silently. 55 more in the same set are caught, either replaced or reported by the leak check. Each miss below has a test marked expected-to-fail, so the build notices the day one starts working and this list gets shorter.
 
 A miss is silent when the value stays in the blind text and the leak check has nothing recorded to look for. When the leak check can see the value it reports it and the CLI exits 2, which counts as caught.
 
@@ -17,6 +17,7 @@ A miss is silent when the value stays in the blind text and the leak check has n
 | E7 | encodings | `"Total: &euro;247,80 con IVA"` | The currency entity is not read as a currency sign, so the bare number is not an amount. |
 | F13 | formats | `"Patient Ana Ruiz was seen on Tuesday and sent home."` | A name in plain prose with no title, address or known list entry has nothing a pattern can hold on to. A NER detector (the optional @centrst/blind-ner package) or a known list finds it. |
 | F14 | formats | `"Reference 123 45 6789 is on the form."` | Three short digit groups separated by spaces look like many other numbers. Only the dashed form, or the spaced form after a label such as SSN, counts as an SSN. |
+| F17 | formats | `"A refund of EUR -100 was booked against the old order."` | The amount pattern reads a sign before the currency or the number, not between a currency code and the number, so EUR -100 is not an amount to blind. It goes out unscaled, and a computed EUR -74 in an answer comes back unchanged without being listed in invented. -100 €, -€100.00 and -$1,234.56 are scaled. |
 | O1 | obfuscated | `"Write to ana at gestoria dot example before Friday."` | Spelled-out "at" and "dot" are prose, not an address. The known domain never appears in its dotted form, so neither the detectors nor the leak check see it. |
 | O3 | obfuscated | `"Write to ana@gestoria .example before Friday."` | A space inside the domain breaks the address pattern and the known domain pattern. The local part is caught through the known name only. |
 | O4 | obfuscated | `"Contact: ana [at] gestoria [dot] example"` | Bracketed "at" and "dot" words are not an address, and the known domain is not written out. |
