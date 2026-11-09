@@ -18,7 +18,7 @@ options:
   --seed <string>      same seed and input give the same output
   --date-order <o>     dmy (default) or mdy for dates like 07/04/2026
   --replace-with <m>   fake (default), placeholder ([REDACTED_PERSON_1]) or random
-  --json               write { "runId", "texts" } instead of plain text
+  --json               write { "runId", "texts", "identities" } instead of plain text
   -h, --help           show this help
 
 exit codes: 0 done, 1 usage or file error, 2 the leak check found something
@@ -118,7 +118,7 @@ export async function blindMain(argv: string[], io: IO): Promise<number> {
     }
 
     const runId = saveRun(io, result.mapping);
-    if (options.json) io.stdout(`${JSON.stringify({ runId, texts: result.texts })}\n`);
+    if (options.json) io.stdout(`${JSON.stringify({ runId, texts: result.texts, identities: result.identities })}\n`);
     else if (result.texts.length === 1) io.stdout(result.texts[0] as string);
     else result.texts.forEach((t, i) => io.stdout(`${i === 0 ? '' : '\n'}===== text ${i + 1} =====\n${t}`));
     io.stderr(`blind: run ${runId}\n`);

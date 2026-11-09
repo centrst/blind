@@ -8,7 +8,7 @@ import type { IO } from '../src/cli/io.js';
 import { blindMain, readDeny, readKnown } from '../src/cli/run-blind.js';
 import { unblindMain } from '../src/cli/run-unblind.js';
 import { newRunId, validRunId } from '../src/cli/store.js';
-import { blind } from '../src/index.js';
+import { blind, type PersonIdentity } from '../src/index.js';
 import { ROOT } from './support/corpus.js';
 
 // Synthetic thread. Every name, number and domain is invented.
@@ -194,6 +194,21 @@ describe('CLI in process', () => {
     expect(parsed.runId).toBe(runIdOf(io.err));
     // One mapping for both files: the same amount gets the same fake.
     expect(/\d+,\d\d €/.exec(parsed.texts[0]!)![0]).toBe(/\d+,\d\d €/.exec(parsed.texts[1]!)![0]);
+  });
+
+  it('C12: placeholder JSON includes an identity legend without private values and restores each form', async () => {
+    const text = 'From: Dana Whitfield <dana.whitfield@mail.example>\nThanks, Dana';
+    const io = fakeIO(text);
+    expect(await blindMain(['--json', '--replace-with', 'placeholder'], io)).toBe(0);
+    const parsed = JSON.parse(io.out) as { runId: string; texts: string[]; identities: PersonIdentity[] };
+    expect(parsed.identities).toEqual([{
+      names: ['[REDACTED_PERSON_1]', '[REDACTED_PERSON_2]'], emails: ['[REDACTED_EMAIL_1]'],
+    }]);
+    expect(io.out).not.toMatch(/Dana|Whitfield|mail\.example/);
+    expect(Object.keys(parsed).sort()).toEqual(['identities', 'runId', 'texts']);
+    const restored = fakeIO(parsed.texts[0]!);
+    expect(await unblindMain(['--run', parsed.runId], restored)).toBe(0);
+    expect(restored.out).toBe(text);
   });
 
   it('C12: several files are separated by a numbered marker that holds no file name', async () => {
