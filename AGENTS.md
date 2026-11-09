@@ -19,10 +19,11 @@ Open-source Centrst TypeScript library. Rewrites private text into a blind copy 
 - `pnpm evidence` writes `reports/evidence.html`
 - `pnpm known-misses` regenerates `corpus/adversarial/known-misses.md`
 - `pnpm verify` runs all of it in CI order with `claims --strict`, so it needs the model (`--fast` skips test:deep)
+- `pnpm publish:next` publishes the working tree to npm as a dated prerelease on the `next` dist-tag (`--dry-run` to look first); real releases follow RELEASING.md
 
 Typecheck, lint, test and build must pass before a change ships. `pnpm verify` before a release. Node 22 or newer, ESM, strict TypeScript. Run `tsx` and `stryker` through the pnpm scripts, scratch files go in `.local/`.
 
-The gate is `.pre-merge.yml` (secret scanning, typecheck, lint, test, build). Public CI runs on Ubuntu with actions pinned to full commit SHAs. Never use macOS GitHub-hosted runners. The heavy suites (test:deep, mutation, the NER model tests) run locally through `pnpm verify` before a release. Publishing is a separate decision; this tree has no release workflow. All changes use feature branches and pull requests; a maintainer merges them.
+The gate is `.pre-merge.yml` (secret scanning, typecheck, lint, test, build). Public CI runs on Ubuntu with actions pinned to full commit SHAs. Never use macOS GitHub-hosted runners. The heavy suites (test:deep, mutation, the NER model tests) run locally through `pnpm verify` before a release. A release is a version tag on `main`; `release.yml` publishes it with provenance through npm trusted publishing, after a required reviewer approves the run (RELEASING.md). All changes use feature branches and pull requests; a maintainer merges them.
 
 ## Rules
 

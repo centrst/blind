@@ -62,6 +62,7 @@
     "claims": "tsx scripts/claims.ts",
     "evidence": "tsx scripts/evidence.ts",
     "verify": "tsx scripts/verify.ts",
+    "publish:next": "tsx scripts/publish-next.ts",
     "receipt:keys": "tsx scripts/receipt-keys.ts",
     "readme:example": "tsx scripts/readme-example.ts",
     "bench:multi-text": "pnpm build && node scripts/bench/multi-text.mjs",
