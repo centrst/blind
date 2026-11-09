@@ -39,7 +39,7 @@ packaging==26.3
 pandas==3.1.0
 propcache==0.5.4
 protobuf==7.36.2
-pyarrow==26.0.0
+pyarrow==26.0.1
 Pygments==2.21.0
 python-dateutil==3.0.0
 PyYAML==6.0.3
