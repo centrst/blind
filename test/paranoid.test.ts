@@ -197,12 +197,12 @@ describe('paranoid mode in the CLI', () => {
     expect(runs()).toEqual([]);
   });
 
-  it('C51: --allow clears suspects from a file, and needs --paranoid', async () => {
+  it('C51: --allow clears suspects from a file, hashtags included, and needs --paranoid', async () => {
     const allow = join(work, 'allow.txt');
-    writeFileSync(allow, '# cleared by review\nLucía\n');
-    const o = io('Hola Lucía, nos vemos.\n');
+    writeFileSync(allow, '# cleared by review\n#\nLucía\n#zorina\n');
+    const o = io('Hola Lucía, nos vemos. Follow #zorina for updates.\n');
     expect(await blindMain(['--paranoid', '--allow', allow, '--seed', 'p'], o)).toBe(0);
-    expect(o.out).toBe('Hola Lucía, nos vemos.\n');
+    expect(o.out).toBe('Hola Lucía, nos vemos. Follow #zorina for updates.\n');
     expect(runs()).toHaveLength(1);
     const bare = io('Hola.\n');
     expect(await blindMain(['--allow', allow], bare)).toBe(1);

@@ -551,7 +551,7 @@ blind [--known known.json] [--deny deny.txt] [--seed s] [--date-order dmy|mdy] [
 | `--date-order` | `dmy` (default) or `mdy` for dates like `07/04/2026`. |
 | `--replace-with` | `fake` (default), `placeholder` or `random`. The run file stores the mode, so `unblind` reads it from there. |
 | `--paranoid` | Also exit 2 on any suspect the [paranoid sweep](#paranoid-mode) flags, listed on stderr by text, input offsets and kind. |
-| `--allow` | With `--paranoid`, one cleared word or phrase per line. Blank lines and `#` comments are skipped. |
+| `--allow` | With `--paranoid`, one cleared word or phrase per line. Blank lines are skipped, and so are comments: `#` alone or followed by a space, so a cleared hashtag such as `#launch` can be listed. |
 | `--json` | Write `{ "runId", "texts", "identities" }` instead of plain text. The identity legend contains placeholders only. |
 
 With several files they are blinded in one call, so the same person gets the same fake in all of them. The texts are separated by `===== text N =====` lines that carry no file names. Exit codes: 0 done, 1 usage or file error, 2 leak check hit or paranoid suspect. The mapping file permissions, the exit code and the silence about values on stderr are tested (C12).

@@ -49,7 +49,12 @@ export function readKnown(path: string): KnownValue[] {
   });
 }
 
-export function readDeny(path: string, flag = '--deny'): string[] {
+/**
+ * One entry per line, blank lines skipped. In a --deny file every line that starts with `#`
+ * is a comment. In an --allow file only `#` alone or followed by a space is, so a cleared
+ * hashtag (`#zorina`) can be listed.
+ */
+export function readDeny(path: string, flag: '--deny' | '--allow' = '--deny'): string[] {
   let raw: string;
   try {
     raw = readFileSync(path, 'utf8');
@@ -59,7 +64,7 @@ export function readDeny(path: string, flag = '--deny'): string[] {
   return raw
     .split(/\r?\n/)
     .map((l) => l.trim())
-    .filter((l) => l && !l.startsWith('#'));
+    .filter((l) => l && !(flag === '--allow' ? /^#(?:\s|$)/.test(l) : l.startsWith('#')));
 }
 
 export async function blindMain(argv: string[], io: IO): Promise<number> {
