@@ -8,7 +8,7 @@ First stable release.
 
 ### Added
 
-- `paranoid: true` (`--paranoid` on the command line) holds a text for review while blind leaves something that still looks private as written: a run of uncommon capitalised words, or a single one anywhere but the start of a sentence, a line or a subject line; a long number; a handle; an encoded run; or a spelled-out address. A single unknown name at the start of a sentence or line is not flagged. Each suspect stays until it is put in `known` or cleared in `allow`. The command line writes nothing and exits 2 while a suspect remains. `blind()` still returns the blind texts and sets `leaks.ok` to false, so a library caller must check `leaks.ok` or call `assertNoLeaks` before sending them. On contract-style text it holds nearly every document, so it is a review step, not a filter.
+- `paranoid: true` (`--paranoid` on the command line) holds a text for review while blind leaves something that still looks private as written: a run of uncommon capitalised words, or a single one anywhere but the start of a sentence, a line or a subject line; a long number; a handle; an encoded run; or a spelled-out address. A single unknown name at the start of a sentence or line, or right after an opening bracket, a quotation mark, a dash or a bullet, is not flagged, so read the blind copy before sending it. Each suspect stays until it is put in `known` or cleared in `allow`. The command line writes nothing and exits 2 while a suspect remains. `blind()` still returns the blind texts and sets `leaks.ok` to false, so a library caller must check `leaks.ok` or call `assertNoLeaks` before sending them. On contract-style text it holds nearly every document, so it is a review step, not a filter.
 
 ### Changed
 

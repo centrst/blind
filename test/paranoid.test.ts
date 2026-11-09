@@ -209,3 +209,16 @@ describe('paranoid mode in the CLI', () => {
     expect(bare.err).toContain('--allow needs --paranoid');
   });
 });
+
+describe('paranoid sweep limits the README states', () => {
+  it('does not flag a single unknown name right after an opening bracket or a quotation mark, but flags it bare or in square brackets', () => {
+    const flagged = (text: string) => {
+      const r = blind([text], { seed: 'limits', paranoid: true });
+      return (r.leaks.suspects ?? []).map((s) => text.slice(s.start, s.end));
+    };
+    expect(flagged('Please contact (Zorina) tomorrow.')).toEqual([]);
+    expect(flagged('Please contact "Zorina" tomorrow.')).toEqual([]);
+    expect(flagged('Please contact Zorina tomorrow.')).toEqual(['Zorina']);
+    expect(flagged('Please contact [Zorina] tomorrow.')).toEqual(['Zorina']);
+  });
+});
