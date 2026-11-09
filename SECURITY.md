@@ -7,12 +7,11 @@ blind exists to keep private values from leaving your machine. A way to get a va
 | Version | Supported |
 | --- | --- |
 | Current source on `main` | yes |
+| The latest stable minor version, on `latest` | yes, until 1.0 |
 | Newest prerelease on `next` | yes |
-| The prerelease `latest` points at, until the first stable release | yes |
-| Older prereleases and the `0.0.0-stage` bootstrap | no |
-| Stable releases, when available | latest minor until 1.0 |
+| Older minor versions, older prereleases and the `0.0.0-stage` bootstrap | no |
 
-The first npm prerelease was `0.1.0-next.20261109.1`, published on 9 November 2026. Check `npm view @centrst/blind dist-tags --json` for the current channels. The initial `latest` tag also pointed to that prerelease. Report the exact installed version, not only the tag. See [RELEASING.md](RELEASING.md) for the channel policy.
+`0.1.0` is the first stable version. Before it, `latest` pointed at the prerelease `0.1.0-next.20261109.1`. Check `npm view @centrst/blind dist-tags --json` for the current channels. Report the exact installed version, not only the tag. See [RELEASING.md](RELEASING.md) for the channel policy.
 
 ## Reporting a vulnerability
 
