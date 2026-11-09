@@ -1,8 +1,10 @@
 /**
  * pnpm claims: build CLAIMS.md from the test reports and fail when a claim ID
  * in the README or TESTING.md has no test, or when any of its tests failed.
- * The NER claims show as skipped when their model tests did not run.
- * `--strict` (what `pnpm verify` uses) fails on those too.
+ * By default this checks the core release gate: the NER claims and C11, the
+ * mutation score, are listed as outside it. `--full` checks those too, and the
+ * NER claims then show as skipped when their model tests did not run.
+ * `--strict` (what `pnpm verify` uses) fails on skipped NER claims under `--full`.
  */
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -10,7 +12,8 @@ import { ROOT } from '../test/support/corpus.js';
 import { claimStatus, evaluateClaims, loadMutation, mutationFloor } from './lib/claims.js';
 
 const strict = process.argv.includes('--strict');
-const { claims, problems, testCount } = evaluateClaims({ strict });
+const full = process.argv.includes('--full');
+const { claims, problems, testCount } = evaluateClaims({ strict, full });
 
 const lines: string[] = [
   '# Claims',
@@ -44,4 +47,4 @@ if (problems.length) {
   process.exit(1);
 }
 const skipped = claims.filter((c) => c.notes.length).length;
-console.log(skipped ? `CLAIMS.md written. ${claims.length} claims, ${skipped} skipped (NER tests did not run), the rest backed by passing tests.` : `CLAIMS.md written. ${claims.length} claims, all backed by passing tests.`);
+console.log(skipped ? `CLAIMS.md written. ${claims.length} claims, ${skipped} not run in this gate, the rest backed by passing tests.` : `CLAIMS.md written. ${claims.length} claims, all backed by passing tests.`);

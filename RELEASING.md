@@ -55,17 +55,16 @@ Install the pinned pnpm version and Gitleaks 8.30.1, and set up pip-audit once a
 
 ```sh
 pnpm install --frozen-lockfile
-pnpm ner:download
 source .local/python-audit-venv/bin/activate
 pnpm verify
 npm pack --dry-run
 ```
 
-The full gate includes model tests, 20,000-case properties, mutation testing, corpus floors and `claims --strict`. Do not use `--fast` for release evidence. A skipped required model check is not release evidence.
+The gate checks only what the package ships, in about 12 minutes. It covers secrets, the Python audit, typecheck, lint, build, the test suite, 20,000-case properties, corpus floors and `claims --strict` on the core claims. Do not use `--fast` for release evidence. The NER package is not published, so its tests are not part of this gate. Mutation testing measures the test suite rather than the package, and takes hours. Both run with `pnpm verify --full`, which belongs in the PR that changes the NER package or the test suite.
 
 Review the generated `CLAIMS.md`, `reports/evidence.html` and the tarball contents. Source maps contain source text and need disclosure review too. The pack tests install the tarball offline and run the library and both commands. Retain the reports and record the exact source commit in the release PR or release record. Regenerated claims can be committed through that PR; do not copy evidence from another source revision.
 
-After merge, check out the selected commit on `main` and run the full gate there before dispatching. The workflow's `verified_sha` input records the maintainer's statement that this local run passed. Matching a SHA does not prove the local run happened. The environment reviewer must review that evidence. The Release workflow's prepare job repeats typecheck, lint, tests and build on the actual version being packed, including the temporary prerelease version. The heavy suites remain local.
+After merge, check out the selected commit on `main` and run `pnpm verify` there before dispatching. The workflow's `verified_sha` input records the maintainer's statement that this local run passed. Matching a SHA does not prove the local run happened. The environment reviewer must review that evidence. The Release workflow's prepare job repeats typecheck, lint, tests and build on the actual version being packed, including the temporary prerelease version. The heavy suites remain local.
 
 ## Publish a prerelease
 

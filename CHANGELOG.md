@@ -6,6 +6,8 @@ All notable changes to this project are written down here. Changesets writes eac
 
 ### Changed
 
+- The README states that an amount the model computes from fakes comes back close but not always exact, and is listed in `invented`. Exact restoration of derived amounts is issue #25.
+- `pnpm verify` is the release gate for the published core and takes about 12 minutes. The NER package and mutation testing moved to `pnpm verify --full`.
 - Release notes are batched with Changesets. Publishing supports explicit `next` and stable channels through GitHub Actions and npm trusted publishing.
 - Installation, security support and release documentation now describe the published core prerelease and the private NER package separately.
 - The README now describes only what the package ships. Names, companies and places come from `known`, context and paranoid mode, and the NER detector is mentioned once as separate work in development.

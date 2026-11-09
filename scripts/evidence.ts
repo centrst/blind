@@ -27,7 +27,7 @@ const seedPath = join(ROOT, 'reports', 'seed.txt');
 const seed = existsSync(seedPath) ? readFileSync(seedPath, 'utf8').trim() : 'not recorded (run pnpm test)';
 const command = process.env.EVIDENCE_COMMAND ?? 'pnpm verify';
 
-const { claims, problems, testCount } = evaluateClaims();
+const { claims, problems, testCount } = evaluateClaims({ full: process.argv.includes('--full') });
 const files = loadCorpus();
 const floors = loadFloors();
 const cards: Record<Mode, Scorecard> = { bare: scoreCorpus(files, 'bare'), known: scoreCorpus(files, 'known') };
@@ -99,6 +99,8 @@ ${(['known', 'bare'] as const)
   : '';
 
 const allOk = problems.length === 0;
+const notRun = claims.filter((c) => c.notes.length).length;
+const backedText = notRun ? `${claims.length - notRun} claims backed, ${notRun} not run in this gate` : 'all claims backed';
 const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>blind evidence report</title>
@@ -118,7 +120,7 @@ pre{margin:0;padding:10px;border:1px solid var(--line);white-space:pre-wrap;word
 .scroll{overflow-x:auto}
 </style></head><body><main>
 <h1>blind evidence report</h1>
-<p><span class="badge ${allOk ? 'ok' : 'bad'}">${allOk ? 'all claims backed' : `${problems.length} problem(s)`}</span></p>
+<p><span class="badge ${allOk ? 'ok' : 'bad'}">${allOk ? backedText : `${problems.length} problem(s)`}</span></p>
 <dl class="meta">
 <dt>commit</dt><dd>${esc(commit)}${dirty ? ' (working tree had uncommitted changes)' : ''}</dd>
 <dt>property seed</dt><dd>${esc(seed)}</dd>
@@ -158,4 +160,4 @@ ${examples}
 `;
 mkdirSync(join(ROOT, 'reports'), { recursive: true });
 writeFileSync(join(ROOT, 'reports', 'evidence.html'), html);
-console.log(`reports/evidence.html written (${(html.length / 1024).toFixed(0)} KB). ${problems.length ? `${problems.length} claim problem(s).` : 'All claims backed.'}`);
+console.log(`reports/evidence.html written (${(html.length / 1024).toFixed(0)} KB). ${problems.length ? `${problems.length} claim problem(s).` : `${backedText[0]?.toUpperCase()}${backedText.slice(1)}.`}`);

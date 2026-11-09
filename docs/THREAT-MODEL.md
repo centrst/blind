@@ -20,7 +20,7 @@ That holds only for values the detectors find. See [What is not covered](#what-i
 
 ## What is only obscured: amounts and dates
 
-With the default `replaceWith: 'fake'`, amounts and dates are not replaced. They are scaled and shifted, on purpose, so a model can still add, compare and count days, and its answers map back.
+With the default `replaceWith: 'fake'`, amounts and dates are not replaced. They are scaled and shifted, on purpose, so a model can still add, compare and count days. A date it moves by days or weeks maps back exactly. An amount it computes comes back close but not always exact, as the Limits section of the README describes.
 
 - **Amounts.** Every amount in a conversation is multiplied by one factor between 0.6 and 1.6, in steps of 0.001. A draw within 0.05 of 1 (0.951 to 1.049, 99 values) is thrown away and drawn again, so 902 factors remain: 0.600 to 0.950 and 1.050 to 1.600. Each is about equally likely, near 1 in 900 (0.600 and 1.600 at half that), and none stands out as a better first guess.
 - **Dates.** Every date in a conversation moves by one shift, a whole number of weeks between 1 and 10, forward or back. That is 20 possible shifts.

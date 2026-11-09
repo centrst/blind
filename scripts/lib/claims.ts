@@ -20,11 +20,23 @@ export interface Claim {
   skipped: number;
   /** Hard failures. Any of these fails `pnpm claims`. */
   problems: string[];
-  /** Soft notes on a NER claim whose tests did not run. `--strict` turns them into problems. */
+  /**
+   * Soft notes: a NER claim whose tests did not run, or, in the core gate, a claim
+   * that only `pnpm verify --full` checks. `--strict` turns the first kind into
+   * problems, never the second.
+   */
   notes: string[];
 }
 
 export type ClaimStatus = 'pass' | 'fail' | 'skipped';
+
+/**
+ * Claims the core release gate does not check: C11, the mutation score, and the
+ * NER package claims. Every NER claim in the TESTING.md table must be listed, and
+ * every listed claim but C11 must be a NER claim, so editing a table cell cannot
+ * drop a shipped claim from the gate.
+ */
+export const OUTSIDE_CORE = new Set(['C11', 'C13', 'C14', 'C15', 'C16', 'C17', 'C18', 'C47']);
 
 const read = (p: string): string => readFileSync(join(ROOT, p), 'utf8');
 const idNum = (id: string): number => Number(id.slice(1));
@@ -55,12 +67,16 @@ interface VitestJson {
   testResults: Array<{ assertionResults: Array<{ title: string; fullName: string; status: string }> }>;
 }
 
-/** Core tests, plus the NER package tests when `pnpm test:ner` has written its report. */
-export function loadTests(): TestRecord[] | null {
+/**
+ * Core tests, plus the NER package tests when `withNer` is set and `pnpm test:ner`
+ * has written its report. The core gate leaves the NER report out, since nothing
+ * in that gate refreshes it.
+ */
+export function loadTests(withNer = true): TestRecord[] | null {
   const p = join(ROOT, 'reports', 'vitest.json');
   if (!existsSync(p)) return null;
   const out: TestRecord[] = [];
-  for (const f of ['vitest.json', 'vitest-ner.json']) {
+  for (const f of withNer ? ['vitest.json', 'vitest-ner.json'] : ['vitest.json']) {
     const path = join(ROOT, 'reports', f);
     if (!existsSync(path)) continue;
     const json = JSON.parse(readFileSync(path, 'utf8')) as VitestJson;
@@ -91,9 +107,13 @@ export interface ClaimsResult {
  * Claims whose evidence cell in TESTING.md starts with "NER" live in the NER
  * package. Their tests skip without the model, so without `strict` they count
  * as skipped rather than failed, and CLAIMS.md says so.
+ *
+ * Without `full`, this is the core release gate: the NER claims and C11, the
+ * mutation score, are outside it. They are listed as not run, never as passed,
+ * and a test of theirs that ran and failed still fails the check.
  */
-export function evaluateClaims(opts: { strict?: boolean } = {}): ClaimsResult {
-  const tests = loadTests();
+export function evaluateClaims(opts: { strict?: boolean; full?: boolean } = {}): ClaimsResult {
+  const tests = loadTests(Boolean(opts.full));
   const problems: string[] = [];
   if (!tests) return { claims: [], problems: ['reports/vitest.json is missing. Run `pnpm test` first.'], testCount: 0 };
   const nerReport = existsSync(join(ROOT, 'reports', 'vitest-ner.json'));
@@ -117,6 +137,16 @@ export function evaluateClaims(opts: { strict?: boolean } = {}): ClaimsResult {
         notes: [],
       };
       const ner = (d?.evidence ?? '').startsWith('NER');
+      if (d && ner !== (OUTSIDE_CORE.has(id) && id !== 'C11')) c.problems.push('its TESTING.md evidence and OUTSIDE_CORE in scripts/lib/claims.ts disagree');
+      if (!opts.full && OUTSIDE_CORE.has(id)) {
+        if (!d) c.problems.push('not declared in the TESTING.md claims table');
+        if (c.failed > 0) c.problems.push(`${c.failed} test(s) failed`);
+        c.notes.push(ner
+          ? 'outside the core release gate: `pnpm verify --full` runs the NER package tests'
+          : 'outside the core release gate: `pnpm verify --full` runs mutation testing');
+        for (const p of c.problems) problems.push(`${c.id}: ${p}`);
+        return c;
+      }
       if (!d) c.problems.push('not declared in the TESTING.md claims table');
       if (c.failed > 0) c.problems.push(`${c.failed} test(s) failed`);
       if (ner && !nerReport) c.notes.push('not run: `pnpm test:ner` has written no report');
