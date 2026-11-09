@@ -1,4 +1,4 @@
-import type { LeakHit, LeakReport, UnenforcedKnown } from './types.js';
+import type { LeakHit, LeakReport, SuspectKind, UnenforcedKnown } from './types.js';
 
 /** What a `BlindError` is about. */
 export type BlindErrorKind =
@@ -74,6 +74,9 @@ const HIT_KINDS: Record<LeakHit['kind'], true> = {
   person: true, org: true, email: true, domain: true, phone: true, place: true, id: true, url: true, iban: true, amount: true, date: true, deny: true,
 };
 
+const SUSPECT_KINDS: Record<SuspectKind, true> = { name: true, number: true, handle: true, encoded: true, address: true };
+const suspectKindOf = (k: unknown): string => (typeof k === 'string' && Object.hasOwn(SUSPECT_KINDS, k) ? k : 'other');
+
 const kindOf = (k: unknown): string => (typeof k === 'string' && Object.hasOwn(HIT_KINDS, k) ? k : 'other');
 
 /** A leak report as `blind` returns it, or one built by hand before `unenforced` existed. */
@@ -91,7 +94,12 @@ export class LeakError extends BlindError {
     const oneLetter = list.some((u) => u?.reason === 'one-letter-part');
     const note = (parts.length ? `; known entries with a ${oneLetter ? 'stop-word or one-letter' : 'stop-word'} part enforced only as written or in capitals: ${parts.join(', ')}` : '')
       + (hangul.length ? `; two-syllable Korean known entries enforced only where a word starts: ${hangul.join(', ')}` : '');
-    super('leak', `blind: ${report.hits.length} leak(s) in text ${texts} (kinds: ${kinds})${note}`);
+    const suspects = Array.isArray(report.suspects) ? report.suspects : [];
+    const flagged = suspects.length
+      ? `${report.hits.length ? '; ' : ''}${suspects.length} suspect(s) in paranoid mode in text ${[...new Set(suspects.map((s) => (Number.isInteger(s?.textIndex) ? s.textIndex : '?')))].join(', ')} (kinds: ${[...new Set(suspects.map((s) => suspectKindOf(s?.kind)))].join(', ')})`
+      : '';
+    const leaks = report.hits.length || !suspects.length ? `${report.hits.length} leak(s) in text ${texts} (kinds: ${kinds})` : '';
+    super('leak', `blind: ${leaks}${flagged}${note}`);
     this.name = 'LeakError';
   }
 }

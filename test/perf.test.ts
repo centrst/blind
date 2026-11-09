@@ -56,6 +56,16 @@ describe.skipIf(process.env.BLIND_SKIP_PERF)('time against text length', () => {
     expect(large, `200 KB ${small.toFixed(2)} s, 800 KB ${large.toFixed(2)} s`).toBeLessThanOrEqual(1.5 * 4 * small);
   });
 
+  it('C41: with paranoid: true, an 800 KB text takes at most 1.5 times four times the CPU time of a 200 KB text', () => {
+    const run = (t: string): number => {
+      blind([t], { seed: 'perf', paranoid: true });
+      return once(() => blind([t], { seed: 'perf', paranoid: true }));
+    };
+    const small = run(text(200 * 1024));
+    const large = run(text(800 * 1024));
+    expect(large, `200 KB ${small.toFixed(2)} s, 800 KB ${large.toFixed(2)} s`).toBeLessThanOrEqual(1.5 * 4 * small);
+  });
+
   it('C49: unblind of an 800 KB answer takes at most 1.5 times four times a 200 KB one with the same 4,000-pair mapping and no more than the blind that made it, and streaming it in 200-character chunks at most 1.5 times one-shot', () => {
     const source = text(800 * 1024);
     let made: ReturnType<typeof blind> | undefined;

@@ -21,7 +21,7 @@ The library has no runtime dependencies (C8), never touches the network (C7), an
 
 The repository also has development dependencies for building, linting and testing. They are not installed with the published core package. The optional [`@centrst/blind-ner`](ner/README.md) prototype has its own runtime dependencies in `ner/` and is not bundled with the core.
 
-Contents: [Install](#install) · [Quick start](#quick-start) · [What it looks like](#what-it-looks-like) · [First layer of a request](#as-the-first-layer-of-a-request) · [Conversations](#conversations) · [Streaming](#streaming) · [Fakes, placeholders or random values](#fakes-placeholders-or-random-values) · [Model SDKs](#with-model-sdks) · [Proxy mode](#proxy-mode-and-signed-receipts) · [Where it runs](#where-it-runs) · [API](#api) · [What it finds](#what-it-finds) · [Language support](#language-support) · [Compared](#compared-with-other-tools) · [CLI](#command-line) · [Limits](#limits) · [Claims](#claims)
+Contents: [Install](#install) · [Quick start](#quick-start) · [What it looks like](#what-it-looks-like) · [First layer of a request](#as-the-first-layer-of-a-request) · [Conversations](#conversations) · [Streaming](#streaming) · [Fakes, placeholders or random values](#fakes-placeholders-or-random-values) · [Paranoid mode](#paranoid-mode) · [Model SDKs](#with-model-sdks) · [Proxy mode](#proxy-mode-and-signed-receipts) · [Where it runs](#where-it-runs) · [API](#api) · [What it finds](#what-it-finds) · [Language support](#language-support) · [Compared](#compared-with-other-tools) · [CLI](#command-line) · [Limits](#limits) · [Claims](#claims)
 
 ## Install
 
@@ -228,6 +228,33 @@ Full names from `known`, detected person spans and the previous mapping supply c
 
 The legend contains only tokens used in this call and omits groups with fewer than two tokens. It recomputes links for every batch, so later evidence can remove an ambiguous link without changing existing tokens. Mailbox associations from earlier calls are not retained. These links express textual evidence, not verified ownership, and cannot distinguish two people with the same full name. Plain CLI output contains only the blind text; `--json` includes the legend. `fake` and `random` modes return an empty `identities` array.
 
+## Paranoid mode
+
+The leak check only knows values blind found or you gave it. A name nothing found goes out as written, and nothing reports it. `paranoid: true` adds a review gate for that case: before the blind copy is used, a sweep reads the text blind leaves as written and flags anything that still looks private (C50):
+
+- `name`: capitalised words that are not common ones, a run of them anywhere (`Patient Ana Ruiz`), a single one anywhere but the start of a sentence, a line or a subject line (`Hola Lucía`). Function words, months, weekdays, mail headers, greetings and the public platforms' names are left alone.
+- `number`: five digits or more in groups (`123 45 6789`, `ES91 210 0041 8450`).
+- `handle`: `@` or `#` before a word (`@AnaRuiz_Design`), including the tail of an address the detector did not take whole.
+- `encoded`: MIME encoded words, quoted-printable escapes and base64 runs, which hide text from every pattern.
+- `address`: an address spelled out (`ana at gestoria dot example`, `[at]`, `[dot]`).
+
+Each suspect is listed in `leaks.suspects` by kind, text index and offsets in the input text, so a reviewer can find it in what they hold. The value is never in the report. Any suspect makes `leaks.ok` false, so `assertNoLeaks` throws and the CLI exits 2 with nothing written. The blind copy and the mapping are the same with or without the sweep.
+
+The review loop: put a suspect that is private in `known`, so it is replaced, and one that is not in `allow`, matched whole without regard to case or accents, and run again (C51). An `allow` list kept across documents is how a team's review gets faster.
+
+```ts
+const res = blind([note], { paranoid: true, known, allow: ['Seguridad Social'] });
+assertNoLeaks(res);   // throws until every suspect is replaced or cleared
+```
+
+How much it catches and what it costs, measured 2026-11-09:
+
+- On the labelled corpus it flags at least 99% of the values that survive detection (C52): 1,097 of 1,106 in bare mode and 506 of 508 with the known lists. The ones it misses are Hebrew and Arabic names, which have no capitals, and one place name alone at the start of a line. 21% of corpus runs also carry a false alarm. The common-word list was tuned on this corpus, so that rate is a best case.
+- On the 888 Gretel finance documents, which blind was not tuned on, it flagged 2,891 of the 3,365 labelled values blind left (86%), but contracts capitalise their terms (`Policy`, `Borrower`, `Agreement`), so it held 877 of the 888 documents, with about 15 suspects per document that match no label. Gretel's labels are not complete, so some of those are private too. `pnpm bench:paranoid` reruns it on the sample `pnpm bench:gretel` writes.
+- Of the 23 known misses in the adversarial set it flags 12: an unlabelled name in prose, split IBANs, a spaced SSN, handles, hashtags, encoded words and base64, and spelled-out addresses (C52). Prose numbers and dates, words split by a soft break or a wrap, and an underscored handle in lower case still go through.
+
+Use it where a human reviews what leaves, or where a held document is cheaper than a leaked one. With `replaceWith: 'placeholder'` nothing in the blind copy reads like real data, so what the reviewer sees and what the service receives make the same point: every value blind replaced is marked, and every value it left was looked at.
+
 ## With model SDKs
 
 blind does not call any model. These are the usual places to put it.
@@ -334,6 +361,8 @@ One mapping per call, consistent across every text in the call, so a thread of s
 | `dateOrder` | `'dmy'` (default) or `'mdy'` for `07/04/2026`. |
 | `allowDomains` | Extra public domains left untouched. |
 | `detectors` | Extra `Detector`s that run next to the built-in ones, such as the NER package. |
+| `paranoid` | `true` to fail closed on text left as written that looks private. See [Paranoid mode](#paranoid-mode). The suspects go into `leaks.suspects`, which is left out otherwise. |
+| `allow` | With `paranoid`, words and phrases a reviewer cleared as not private. Not an array of strings throws `invalid-option` with the entry's index. |
 
 `unblind(text, mapping) -> { text, invented, collisions }` restores mapped values in an answer and reports invented values.
 
@@ -511,7 +540,7 @@ If the leak check finds a value it found or was given in the output, `blind` exi
 ### `blind`
 
 ```
-blind [--known known.json] [--deny deny.txt] [--seed s] [--date-order dmy|mdy] [--replace-with fake|placeholder|random] [--json] [files...]
+blind [--known known.json] [--deny deny.txt] [--seed s] [--date-order dmy|mdy] [--replace-with fake|placeholder|random] [--paranoid [--allow allow.txt]] [--json] [files...]
 ```
 
 | Option | Meaning |
@@ -521,9 +550,11 @@ blind [--known known.json] [--deny deny.txt] [--seed s] [--date-order dmy|mdy] [
 | `--seed` | Same seed and input give the same output. Default is random. |
 | `--date-order` | `dmy` (default) or `mdy` for dates like `07/04/2026`. |
 | `--replace-with` | `fake` (default), `placeholder` or `random`. The run file stores the mode, so `unblind` reads it from there. |
+| `--paranoid` | Also exit 2 on any suspect the [paranoid sweep](#paranoid-mode) flags, listed on stderr by text, input offsets and kind. |
+| `--allow` | With `--paranoid`, one cleared word or phrase per line. Blank lines are skipped, and so are comments: `#` alone or followed by a space, so a cleared hashtag such as `#launch` can be listed. |
 | `--json` | Write `{ "runId", "texts", "identities" }` instead of plain text. The identity legend contains placeholders only. |
 
-With several files they are blinded in one call, so the same person gets the same fake in all of them. The texts are separated by `===== text N =====` lines that carry no file names. Exit codes: 0 done, 1 usage or file error, 2 leak check hit. The mapping file permissions, the exit code and the silence about values on stderr are tested (C12).
+With several files they are blinded in one call, so the same person gets the same fake in all of them. The texts are separated by `===== text N =====` lines that carry no file names. Exit codes: 0 done, 1 usage or file error, 2 leak check hit or paranoid suspect. The mapping file permissions, the exit code and the silence about values on stderr are tested (C12).
 
 ### `unblind`
 
@@ -570,7 +601,7 @@ blind lowers what leaves your machine. It is not 100%, so check the blind copy b
 - Chat apps with memory (ChatGPT, Claude on the web) remember across chats, while each new conversation gets new fakes. Memory can then hold one real person under several fake names, or two real people under one fake name, and a name the model recalls from memory does not map back. Turn memory off, or keep related work in one conversation and pass its mapping along. Consistent fakes across chats need a profile system that does not exist yet: a saved set of real-to-fake pairs that a new conversation starts from. Whether a "do not remember this" line helps is still an open experiment.
 - A fixed `seed` reused across conversations makes fakes linkable and lets anyone who knows it test guesses. Use it for tests and examples only.
 - Writing style, rare situations and context can still identify people.
-- A value the detectors miss goes through unchanged. The leak check catches the ones it knows about, so pass your own names, addresses and client domains in `known` and `deny`.
+- A value the detectors miss goes through unchanged. The leak check catches the ones it knows about, so pass your own names, addresses and client domains in `known` and `deny`. [Paranoid mode](#paranoid-mode) flags most of the rest for review, but not names in scripts without capitals (Hebrew, Arabic, Chinese, Japanese, Korean), a single unknown word at the start of a sentence or line, or numbers under five digits.
 - Colons count as separators in ID leak checks only when the original ID contained one, as in an IPv6 address. This avoids treating `10:00:00` as code `100000`, but an ID reformatted with new colons may go unreported.
 - A text longer than `maxTextLength` (1,048,576 UTF-16 code units by default) is refused with an `input-too-large` error (C32). Time grows about linearly with the text, but a large document still takes seconds (C41), so the limit bounds the work of one call.
 - Bare numbers without a currency are not scaled, and prose numbers ("twenty euros") are not detected.
@@ -588,7 +619,7 @@ blind lowers what leaves your machine. It is not 100%, so check the blind copy b
 
 ## Claims
 
-Every promise in this file has an ID, C1 to C49 (the number 48 is unused), and a test with that ID in its name. `pnpm claims` writes [CLAIMS.md](CLAIMS.md) from the test report, and the check fails when a claim has no test or one of its tests failed. [TESTING.md](TESTING.md) says how each claim is proved: property tests, a labeled corpus with recall and precision floors, an adversarial set with its known misses, mutation testing, a no-network suite and build checks. Detection recall and precision per kind have published floors (C9). Every known miss is listed and its test is marked expected-to-fail (C10). The tests themselves are checked by mutation testing against a floor (C11). The optional NER package in [ner/](ner/README.md) has its own claims (C13 to C18) and floors. `pnpm evidence` puts all of it on one page.
+Every promise in this file has an ID, C1 to C52 (the number 48 is unused), and a test with that ID in its name. `pnpm claims` writes [CLAIMS.md](CLAIMS.md) from the test report, and the check fails when a claim has no test or one of its tests failed. [TESTING.md](TESTING.md) says how each claim is proved: property tests, a labeled corpus with recall and precision floors, an adversarial set with its known misses, mutation testing, a no-network suite and build checks. Detection recall and precision per kind have published floors (C9). Every known miss is listed and its test is marked expected-to-fail (C10). The tests themselves are checked by mutation testing against a floor (C11). The optional NER package in [ner/](ner/README.md) has its own claims (C13 to C18) and floors. `pnpm evidence` puts all of it on one page.
 
 ## Development
 

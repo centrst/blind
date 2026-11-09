@@ -28,6 +28,8 @@ export type {
   PersonIdentity,
   ReplaceWith,
   Span,
+  Suspect,
+  SuspectKind,
   UnblindOptions,
   UnblindResult,
 } from './types.js';
