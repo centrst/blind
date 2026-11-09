@@ -1,0 +1,61 @@
+name: Mutation
+
+# Stryker against the floor in stryker.config.json, which carries claim C11.
+# A full run takes about two hours, too long for the release gate or a schedule,
+# so it runs only when a maintainer starts it from Actions. Stryker's incremental
+# file is kept in the Actions cache, so a run soon after another re-tests only the
+# mutants that later changes touch. Stryker does not notice changes to dependencies,
+# its config or the shared test helpers, so the cache key hashes those and a change
+# to any of them starts a fresh run. GitHub evicts a cache unused for seven days.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mutation
+  cancel-in-progress: false
+
+jobs:
+  mutation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 26
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Restore Stryker's incremental file
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: reports/mutation/incremental.json
+          key: stryker-incremental-${{ hashFiles('pnpm-lock.yaml', 'stryker.config.json', 'vitest.mutation.config.ts', 'test/support/**', 'corpus/**') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: stryker-incremental-${{ hashFiles('pnpm-lock.yaml', 'stryker.config.json', 'vitest.mutation.config.ts', 'test/support/**', 'corpus/**') }}-
+      # Stryker exits non-zero below thresholds.break, which fails this job.
+      - run: pnpm mutation --concurrency 4
+      - name: The report is at or above the floor (C11)
+        run: pnpm exec vitest run test/mutation-floor.test.ts
+        env:
+          MUTATION_REPORT_REQUIRED: '1'
+          VITEST_NO_JSON: '1'
+      # Saved even when the run fails, so the next run resumes instead of starting over.
+      - name: Save Stryker's incremental file
+        if: always() && hashFiles('reports/mutation/incremental.json') != ''
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: reports/mutation/incremental.json
+          key: stryker-incremental-${{ hashFiles('pnpm-lock.yaml', 'stryker.config.json', 'vitest.mutation.config.ts', 'test/support/**', 'corpus/**') }}-${{ github.run_id }}-${{ github.run_attempt }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always() && hashFiles('reports/mutation/mutation.json') != ''
+        with:
+          name: mutation-report
+          path: |
+            reports/mutation/mutation.json
+            reports/mutation/index.html

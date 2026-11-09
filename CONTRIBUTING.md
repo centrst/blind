@@ -53,7 +53,7 @@ Property tests are seeded. `NUM_RUNS` sets the case count. Each run writes its s
 | `pnpm corpus:generate` | rebuilds `corpus/generated` (never edit those files by hand) | nothing extra |
 | `pnpm known-misses` | regenerates `corpus/adversarial/known-misses.md` | nothing extra |
 | `pnpm test:deep` | properties at 20,000 cases | a few minutes |
-| `pnpm mutation` | Stryker against the floor in `stryker.config.json` | over four hours on a full run on a laptop |
+| `pnpm mutation` | Stryker against the floor in `stryker.config.json`; `mutation.yml` also runs it from Actions when a maintainer starts it, keeping the incremental file between runs | over four hours on a full run on a laptop |
 | `pnpm build && pnpm build:ner` | builds the NER package, which imports the built core | nothing extra |
 | `pnpm test:ner` | the NER package: stub tests always, model tests when the model is present | the model, for the model tests |
 | `pnpm ner:download` | fetches the GLiNER weights once, pinned and checksummed | about 1.1 GB of disk and a network connection |
