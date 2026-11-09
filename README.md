@@ -404,7 +404,7 @@ What a model can still use, on blind's corpus, and whether answers map back on b
 | blind core | 100% | 100% | 99.9% | 379 of 379, 888 of 888 |
 | blind + GLiNER | 100% | 100% | 99.9% | 379 of 379, 888 of 888 |
 
-blind's core took 0.3 ms per file. Presidio took about 20 to 30 ms, and LLM Guard 44 to 79 ms on a GPU and 75 to 117 ms on a CPU. GLiNER (`gliner_multi-v2.1`, through the `@centrst/blind-ner` prototype, built from this repository, not on npm) timings come from four setups: 49 ms per corpus email and 107 ms per Gretel document for the fp32 model on the native ONNX Runtime addon, on the CPU of the arm64 Mac that ran these benchmarks (chip not recorded); 47 ms per email for fp32 and 64 ms for the re-quantized `wo8m-gu8` on the same addon, on an Apple M4 Max CPU with onnxruntime-node 1.30.0; 68 ms per email on WebGPU and 193 ms on WASM for `wo8m-gu8` in Chromium with onnxruntime-web 1.30.0 on that M4 Max ([docs/BROWSER-NER.md](docs/BROWSER-NER.md)); and 175 ms per email for fp32 on the native addon in the first measurement, on an older M-series Mac whose chip was not recorded. Every number, configuration and caveat is in [RESULTS.md](scripts/bench/RESULTS.md) and [RESULTS-llmguard-gretel.md](scripts/bench/RESULTS-llmguard-gretel.md), and `pnpm bench:presidio`, `pnpm bench:llmguard` and `pnpm bench:gretel` rerun them.
+blind's core took 0.3 ms per file. Presidio took about 20 to 30 ms, and LLM Guard 44 to 79 ms on a GPU and 75 to 117 ms on a CPU. GLiNER (`gliner_multi-v2.1`, through the `@centrst/blind-ner` prototype, built from this repository, not on npm) timings come from four setups: 49 ms per corpus email and 107 ms per Gretel document for the fp32 model on the native ONNX Runtime addon, on the CPU of the arm64 Mac that ran these benchmarks (chip not recorded); 47 ms per email for fp32 and 64 ms for the re-quantized `wo8m-gu8` on the same addon, on an Apple M4 Max CPU with onnxruntime-node 1.30.0; 68 ms per email on WebGPU and 193 ms on WASM for `wo8m-gu8` in Chromium with onnxruntime-web 1.30.0 on that M4 Max ([docs/BROWSER-NER.md](docs/BROWSER-NER.md)); and 175 ms per email for fp32 on the native addon in the first measurement, on an older M-series Mac whose chip was not recorded. Every number, configuration and caveat is in [RESULTS.md](scripts/bench/RESULTS.md) and [RESULTS-llmguard-gretel.md](scripts/bench/RESULTS-llmguard-gretel.md), and `pnpm bench:presidio` and `pnpm bench:gretel` run the supported comparisons. LLM Guard execution has been retired because its archived release pins vulnerable dependencies; its source and historical results remain available.
 
 ### Where another tool fits better
 
@@ -551,6 +551,7 @@ Every promise in this file has an ID, C1 to C49 (the number 48 is unused), and a
 ```
 pnpm install --frozen-lockfile
 pnpm secrets       # Gitleaks 8.30.1 must be installed
+pnpm audit:python  # Python with pip-audit 2.10.1; setup below
 pnpm typecheck
 pnpm lint
 pnpm test          # unit, properties (2,000 cases), corpus, adversarial, CLI, no-network, build
@@ -562,6 +563,17 @@ pnpm bench:presidio  # the Presidio benchmark (after `pnpm bench:presidio:setup`
 ```
 
 Node 22 or newer. Tests use synthetic data only, and a test that needs a live phone prefix writes only the prefix and draws the rest at run time. Generated test inputs use the same reserved phone ranges and unownable mailboxes as the fixtures, and those with no reserved range (cards, IBANs, ids, IP addresses) may be live but are never printed: a failing property reports its seed and the kind and length of each input. See [TESTING.md](TESTING.md) for the rest of the commands.
+
+The Python dependency audit also runs before merge, during `pnpm verify`, and weekly in CI. It audits the pinned benchmark and training environments without installing their model weights. Set up its tool environment once:
+
+```sh
+python3.12 -m venv .local/python-audit-venv
+.local/python-audit-venv/bin/python -m pip install pip-audit==2.10.1
+source .local/python-audit-venv/bin/activate
+pnpm audit:python
+```
+
+The manifests contain frozen package versions, so the audit uses `--no-deps`. Unpinned requirements, unavailable advisory results and reported vulnerabilities fail the check. Only the two explicitly reviewed, SHA-256-pinned spaCy model wheels are excluded from advisory lookup because they are distributed outside PyPI; the gate reports those exclusions. Model compatibility is checked separately when changing their environment.
 
 To send a change, read [CONTRIBUTING.md](CONTRIBUTING.md). To report a way past blind's protection, follow [SECURITY.md](SECURITY.md) and report it privately.
 

@@ -11,3 +11,9 @@ updates:
     directory: /
     schedule:
       interval: weekly
+  - package-ecosystem: pip
+    directories:
+      - /scripts/bench
+      - /ner/train
+    schedule:
+      interval: weekly

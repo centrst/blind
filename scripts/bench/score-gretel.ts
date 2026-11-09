@@ -1,5 +1,5 @@
 /**
- * Step 4 of `pnpm bench:gretel`: score Presidio, LLM Guard and blind on the Gretel sample.
+ * Step 3 of `pnpm bench:gretel`: score Presidio, historical LLM Guard results and blind on the Gretel sample.
  *
  * Reads reports/gretel-input.json (gretel_sample.py), reports/gretel-presidio-raw.json
  * (presidio.py) and reports/gretel-llmguard-raw.json (llm_guard.py), skipping a tool whose

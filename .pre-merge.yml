@@ -10,6 +10,7 @@ package_manager: pnpm
 
 preflight:
   - command: pnpm secrets
+  - command: pnpm audit:python
   - command: pnpm install --frozen-lockfile
 
 stages:

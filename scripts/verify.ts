@@ -30,6 +30,7 @@ interface Step {
 
 const steps: Step[] = [
   { name: 'secrets', cmd: process.execPath, args: ['scripts/secrets.mjs'] },
+  { name: 'audit:python', cmd: 'python3', args: ['scripts/audit-python.py'] },
   { name: 'typecheck', cmd: bin('tsc'), args: ['--noEmit'] },
   { name: 'typecheck:ner', cmd: bin('tsc'), args: ['--noEmit', '-p', 'ner/tsconfig.json'] },
   { name: 'lint', cmd: bin('eslint'), args: ['src', 'test', 'scripts', 'examples', 'ner/src', 'ner/test', 'ner/scripts'] },

@@ -153,7 +153,7 @@ The suite runs the whole corpus and every property with these patched to throw: 
 
 `pnpm bench:presidio:setup` builds a Python venv with Presidio and the large spaCy models for English and Spanish, once. `pnpm bench:presidio` runs Presidio on the stripped corpus, scores it with the same strict scorer as `pnpm corpus`, runs blind on the same files, and measures how many amounts and dates each tool replaces (blind scales and shifts them) while keeping them usable for arithmetic. The results, versions and caveats are in [scripts/bench/RESULTS.md](scripts/bench/RESULTS.md). It is informational, not a gate: the corpus is blind's home ground, and Presidio's misses there say less than its wins. Spans Presidio finds that blind misses are candidates for new corpus or adversarial cases.
 
-`pnpm bench:llmguard` adds LLM Guard's Anonymize scanner to the same tables, and `pnpm bench:gretel` scores all three tools on a sample of a dataset blind's authors did not write. Results and caveats for both are in [scripts/bench/RESULTS-llmguard-gretel.md](scripts/bench/RESULTS-llmguard-gretel.md).
+`pnpm bench:gretel` scores Presidio and blind on a sample of a dataset blind's authors did not write. LLM Guard execution is retired because its archived release pins vulnerable dependencies; existing historical raw results can still be scored. The historical comparison and its limits remain in [scripts/bench/RESULTS-llmguard-gretel.md](scripts/bench/RESULTS-llmguard-gretel.md).
 
 ## 8. The evidence report
 
@@ -201,6 +201,6 @@ The corpus is synthetic and its names are uncommon, which a model finds easier t
 | `pnpm corpus:generate` | regenerate `corpus/generated` from `scripts/gen-corpus.ts` |
 | `pnpm known-misses` | regenerate `corpus/adversarial/known-misses.md` from the case files |
 | `pnpm bench:presidio` | the Presidio benchmark (after `pnpm bench:presidio:setup` once) |
-| `pnpm bench:llmguard` | adds LLM Guard's columns to the corpus benchmark (after `pnpm bench:llmguard:setup` once) |
-| `pnpm bench:gretel` | Presidio, LLM Guard and blind on a fixed sample of Gretel's synthetic finance set (after `pnpm bench:gretel:setup` once) |
+| `pnpm audit:python` | audits every Python requirements file; see README.md for pip-audit setup and the two reviewed model-wheel exclusions |
+| `pnpm bench:gretel` | Presidio and blind on a fixed sample of Gretel's synthetic finance set (after `pnpm bench:gretel:setup` once) |
 | `pnpm readme:example` | regenerate the README examples from the code; `test/readme.test.ts` fails when they drift |

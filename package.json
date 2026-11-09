@@ -66,11 +66,10 @@
     "readme:example": "tsx scripts/readme-example.ts",
     "bench:presidio:setup": "python3.12 -m venv .local/presidio-venv && .local/presidio-venv/bin/pip install -r scripts/bench/requirements.txt",
     "bench:presidio": "tsx scripts/bench/export-corpus.ts && .local/presidio-venv/bin/python scripts/bench/presidio.py && tsx --tsconfig ner/tsconfig.json scripts/bench/score.ts",
-    "bench:llmguard:setup": "python3.12 -m venv .local/llmguard-venv && .local/llmguard-venv/bin/pip install -r scripts/bench/requirements-llmguard.txt",
-    "bench:llmguard": "tsx scripts/bench/export-corpus.ts && .local/llmguard-venv/bin/python -I scripts/bench/llm_guard.py && tsx --tsconfig ner/tsconfig.json scripts/bench/score.ts",
     "bench:gretel:setup": "python3.12 -m venv .local/data-venv && .local/data-venv/bin/pip install -r scripts/bench/requirements-gretel.txt && mkdir -p .local/gretel && curl -fL -o .local/gretel/test.parquet https://huggingface.co/datasets/gretelai/synthetic_pii_finance_multilingual/resolve/7b844d16738527a04264f50214cb426a4cea0897/data/test-00000-of-00001.parquet",
-    "bench:gretel": ".local/data-venv/bin/python -I scripts/bench/gretel_sample.py && .local/presidio-venv/bin/python scripts/bench/presidio.py --input reports/gretel-input.json --out reports/gretel-presidio-raw.json --configs default,with_org && .local/llmguard-venv/bin/python -I scripts/bench/llm_guard.py --input reports/gretel-input.json --out reports/gretel-llmguard-raw.json --configs default,all && tsx --tsconfig ner/tsconfig.json scripts/bench/score-gretel.ts",
-    "secrets": "node scripts/secrets.mjs"
+    "bench:gretel": ".local/data-venv/bin/python -I scripts/bench/gretel_sample.py && .local/presidio-venv/bin/python scripts/bench/presidio.py --input reports/gretel-input.json --out reports/gretel-presidio-raw.json --configs default,with_org && tsx --tsconfig ner/tsconfig.json scripts/bench/score-gretel.ts",
+    "secrets": "node scripts/secrets.mjs",
+    "audit:python": "python3 scripts/audit-python.py"
   },
   "devDependencies": {
     "@stryker-mutator/core": "^10.1.1",

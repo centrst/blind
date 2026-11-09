@@ -1,5 +1,5 @@
 /**
- * Step 3 of `pnpm bench:presidio` and `pnpm bench:llmguard`: score Presidio, LLM Guard and
+ * Step 3 of `pnpm bench:presidio`: score Presidio, historical LLM Guard results and
  * blind side by side on the labelled corpus.
  *
  * Reads reports/presidio-raw.json (scripts/bench/presidio.py) and, when it exists,
@@ -187,7 +187,7 @@ for (const cfg of LLM_GUARD) {
   tools[`llmguard:${cfg}`] = { label: `LLM Guard ${cfg}`, card: (s) => scoreExternal(s, get, `llmguard-raw.json ${cfg}`), use: (s) => usabilityPlaceholders(s, get) };
 }
 if (!raw) console.log('no reports/presidio-raw.json, skipping the Presidio columns (pnpm bench:presidio)');
-if (!llmGuard) console.log('no reports/llmguard-raw.json, skipping the LLM Guard columns (pnpm bench:llmguard)');
+if (!llmGuard) console.log('no historical reports/llmguard-raw.json, skipping the retired LLM Guard comparator');
 tools['blind:bare'] = { label: 'blind bare', card: (s) => scoreBlind(s, 'bare'), use: (s) => usabilityBlind(s, 'bare') };
 tools['blind:known'] = { label: 'blind known', card: (s) => scoreBlind(s, 'known'), use: (s) => usabilityBlind(s, 'known') };
 const gliner = await loadNer(files);
