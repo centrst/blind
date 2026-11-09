@@ -1,6 +1,6 @@
 export { blind } from './blind.js';
 export { checkMapping } from './mapping.js';
-export { createUnblinder, unblind, type Unblinder } from './unblind.js';
+export { createUnblinder, prepareUnblinder, unblind, type PreparedUnblinder, type Unblinder } from './unblind.js';
 export { assertNoLeaks } from './leaks.js';
 export { BlindError, LeakError, type BlindErrorKind } from './errors.js';
 export { builtinDetectors, knownDetector } from './detect.js';
