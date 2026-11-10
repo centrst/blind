@@ -673,7 +673,7 @@ function kindOf(fn: () => unknown): string {
 
 describe('a call blind cannot read as meant', () => {
   const secret = 'Orvane Kelpstrom';
-  const options = 'known, deny, seed, now, dateOrder, allowDomains, detectors, paranoid, allow, replaceWith, mapping, maxTextLength';
+  const options = 'known, deny, seed, now, dateOrder, allowDomains, detectors, paranoid, allow, replaceWith, keep, mapping, maxTextLength';
 
   it('refuses texts that are not an array of strings, naming the index and never the text', () => {
     expect(kindOf(() => blind(secret as unknown as string[]))).toBe('invalid-option: blind: texts must be an array of strings; pass one text as [text]');

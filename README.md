@@ -150,6 +150,7 @@ blind lowers what leaves your machine. It is not 100%, so check the blind copy b
 [THREAT-MODEL.md](docs/THREAT-MODEL.md) says who the adversary is, what is replaced, what is only scaled or shifted, and when to use `placeholder` or `random` instead.
 
 - Amounts are scaled by one factor and dates shifted by one shift for the whole conversation, so relations between them hold. One known amount gives away every amount, and one known date every date. When the service does not need to compute with them, use `replaceWith: 'placeholder'` or `'random'`.
+- In `fake` mode `unblind` treats every amount and date it does not know as computed from fakes. One the model adds from general knowledge is rescaled or shifted too. With the seed of the example above, `The VAT registration threshold is £90,000` can come back as `£139,104`, and `The tax year ends on 5 April 2026` as `14 June 2026`. Both are listed in `invented`, but the text has already changed. A month, quarter or year the model derives from a shifted date is not mapped back and not listed: `due in December 2025, i.e. Q4 2025` stays that way when the real date is 3 March 2026. When amounts and dates need not be hidden, pass `keep: ['amount', 'date']` (C53).
 - Chat apps with memory (ChatGPT, Claude on the web) remember across chats, while each new conversation gets new fakes. Memory can then hold one real person under several fake names, or two real people under one fake name, and a name the model recalls from memory does not map back. Turn memory off, or keep related work in one conversation and pass its mapping along.
 - A fixed `seed` reused across conversations makes fakes linkable and lets anyone who knows it test guesses. Use it for tests and examples only.
 - Writing style, rare situations and context can still identify people.
@@ -237,6 +238,8 @@ In every mode one value gets one replacement within a call and across turns, the
 const b = blind([email], { known, replaceWith: 'placeholder' });
 const next = blind([followUp], { known, mapping: b.mapping });   // still placeholders
 ```
+
+When only names, addresses and ids need hiding, `keep` leaves kinds as written in any mode: `keep: ['amount', 'date']` sends real amounts and dates, so the service reasons from true figures and public facts such as a tax deadline stay right. A kept value gets no pair and is not a leak hit or a paranoid suspect, though a `known` or `deny` entry still is. The mapping records the kinds, a later turn keeps them, and a different `keep` with that mapping throws. `unblind` then leaves an amount or date it does not know as written and does not list it in `invented` (C53).
 
 ### Related person placeholders
 
@@ -384,7 +387,7 @@ If the leak check finds a value it found or was given in the output, `blind` exi
 ### `blind`
 
 ```
-blind [--known known.json] [--deny deny.txt] [--seed s] [--date-order dmy|mdy] [--replace-with fake|placeholder|random] [--paranoid [--allow allow.txt]] [--json] [files...]
+blind [--known known.json] [--deny deny.txt] [--seed s] [--date-order dmy|mdy] [--replace-with fake|placeholder|random] [--keep kinds] [--paranoid [--allow allow.txt]] [--json] [files...]
 ```
 
 | Option | Meaning |
@@ -394,6 +397,7 @@ blind [--known known.json] [--deny deny.txt] [--seed s] [--date-order dmy|mdy] [
 | `--seed` | Same seed and input give the same output. Default is random. |
 | `--date-order` | `dmy` (default) or `mdy` for dates like `07/04/2026`. |
 | `--replace-with` | `fake` (default), `placeholder` or `random`. The run file stores the mode, so `unblind` reads it from there. |
+| `--keep` | Comma-separated kinds to leave as written, such as `amount,date`. The run file stores them, so `unblind` needs no flag. |
 | `--paranoid` | Also exit 2 on any suspect the [paranoid sweep](#paranoid-mode) flags, listed on stderr by text, input offsets and kind. |
 | `--allow` | With `--paranoid`, one cleared word or phrase per line. Blank lines are skipped, and so are comments: `#` alone or followed by a space, so a cleared hashtag such as `#launch` can be listed. |
 | `--json` | Write `{ "runId", "texts", "identities" }` instead of plain text. The identity legend contains placeholders only. |
@@ -447,7 +451,8 @@ One mapping per call, consistent across every text in the call, so a thread of s
 | `deny` | Strings that must not appear in the output, plain or `*@domain`. Checked after rewriting. A `*@domain` entry also removes that domain from the public allowlist. |
 | `seed` | Same seed and input give the same output (C6). Omitted means a random seed from Web Crypto. |
 | `replaceWith` | `'fake'` (default), `'placeholder'` or `'random'`: what each value found becomes. See [Fakes, placeholders or random values](#fakes-placeholders-or-random-values). With a `mapping` the mode comes from it, and a different value throws. |
-| `mapping` | The mapping of an earlier call, to continue a conversation (C21). The seed, date order and `replaceWith` then come from it. It must keep blind's invariants (`checkMapping`), or `blind` throws an error that names the field. |
+| `keep` | Kinds to leave as written, such as `['amount', 'date']` (C53). See [Fakes, placeholders or random values](#fakes-placeholders-or-random-values). An entry that is not a kind throws `invalid-option` with its index. With a `mapping` the kinds come from it, and a different list throws. |
+| `mapping` | The mapping of an earlier call, to continue a conversation (C21). The seed, date order, `replaceWith` and `keep` then come from it. It must keep blind's invariants (`checkMapping`), or `blind` throws an error that names the field. |
 | `now` | Only picks a year for dates written without one. |
 | `dateOrder` | `'dmy'` (default) or `'mdy'` for `07/04/2026`. |
 | `allowDomains` | Extra public domains left untouched. |

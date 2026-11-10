@@ -18,6 +18,8 @@ Names, companies, emails, URLs on private domains, phone numbers, IBANs, card nu
 
 That holds only for values the detectors find. See [What is not covered](#what-is-not-covered).
 
+A kind the caller lists in `keep` is not replaced at all: it goes out as written, and the leak check and paranoid mode do not report it. `keep: ['amount', 'date']` leaves amounts and dates real while the rest is replaced. Only a `known` or `deny` entry is still reported when it is left in.
+
 ## What is only obscured: amounts and dates
 
 With the default `replaceWith: 'fake'`, amounts and dates are not replaced. They are scaled and shifted, on purpose, so a model can still add, compare and count days. A date it moves by days or weeks maps back exactly. An amount it computes comes back close but not always exact, as the Limits section of the README describes.
