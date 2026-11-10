@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { blind } from '../blind.js';
 import { REPLACE_MODES } from '../replace.js';
-import type { DateOrder, KnownKind, KnownValue, ReplaceWith } from '../types.js';
+import { KINDS as ALL_KINDS } from '../mapping.js';
+import type { DateOrder, Kind, KnownKind, KnownValue, ReplaceWith } from '../types.js';
 import { parseArgs, UsageError } from './args.js';
 import type { IO } from './io.js';
 import { saveRun } from './store.js';
@@ -18,6 +19,8 @@ options:
   --seed <string>      same seed and input give the same output
   --date-order <o>     dmy (default) or mdy for dates like 07/04/2026
   --replace-with <m>   fake (default), placeholder ([REDACTED_PERSON_1]) or random
+  --keep <kinds>       comma-separated kinds to leave as written, for example
+                       amount,date. The run remembers them for unblind
   --paranoid           also fail on anything left that looks private: capitalised
                        words, long digit runs, handles, encoded text, spelled-out
                        addresses. Expect ordinary words among them
@@ -67,6 +70,15 @@ export function readDeny(path: string, flag: '--deny' | '--allow' = '--deny'): s
     .filter((l) => l && !(flag === '--allow' ? /^#(?:\s|$)/.test(l) : l.startsWith('#')));
 }
 
+/** `--keep amount,date`: kinds by name, comma-separated. */
+export function readKeep(list: string): Kind[] {
+  return list.split(',').map((k, i) => {
+    const kind = k.trim();
+    if (!ALL_KINDS.has(kind as Kind)) throw new UsageError(`--keep entry ${i + 1} is not a kind (${[...ALL_KINDS].join(', ')})`);
+    return kind as Kind;
+  });
+}
+
 export async function blindMain(argv: string[], io: IO): Promise<number> {
   try {
     const { options, positional } = parseArgs(argv, {
@@ -75,6 +87,7 @@ export async function blindMain(argv: string[], io: IO): Promise<number> {
       seed: { value: true },
       'date-order': { value: true },
       'replace-with': { value: true },
+      keep: { value: true },
       paranoid: { value: false },
       allow: { value: true },
       json: { value: false },
@@ -89,6 +102,8 @@ export async function blindMain(argv: string[], io: IO): Promise<number> {
     if (options.allow !== undefined && !options.paranoid) throw new UsageError('--allow needs --paranoid');
     const mode = options['replace-with'];
     if (mode !== undefined && !REPLACE_MODES.includes(mode as ReplaceWith)) throw new UsageError(`--replace-with must be ${REPLACE_MODES.join(', ')}`);
+
+    const keep = typeof options.keep === 'string' ? readKeep(options.keep) : undefined;
 
     const texts: string[] = [];
     if (positional.length > 0) {
@@ -114,6 +129,7 @@ export async function blindMain(argv: string[], io: IO): Promise<number> {
       seed: typeof options.seed === 'string' ? options.seed : undefined,
       dateOrder: order as DateOrder | undefined,
       replaceWith: mode as ReplaceWith | undefined,
+      ...(keep ? { keep } : {}),
     });
 
     // By index and kind only, whatever the outcome, so the caller can give the entry another way (--replace-with placeholder, --deny).

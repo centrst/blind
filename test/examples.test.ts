@@ -119,6 +119,17 @@ describe('examples: the shared handler', () => {
     expect(up.seen.length).toBe(1);
   });
 
+  it('C53: the handler refuses a caller mapping that keeps kinds as written, so a caller cannot switch replacement off', async () => {
+    const up = echo();
+    const h = createBlindHandler({ authenticate: AUTH, forward: up.forward });
+    const first = (await (await h(post({ texts: [REAL], returnMapping: true }))).json()) as BlindResponseBody;
+    const crafted = { ...(first.mapping as Mapping), keep: ['person', 'email', 'domain'] } as Mapping;
+    const res = await h(post({ texts: [REAL], mapping: crafted }));
+    expect(res.status).toBe(400);
+    expect(await res.text()).toContain('(keep)');
+    expect(up.seen.length).toBe(1);
+  });
+
   it('C29: the handler takes replaceWith, keeps the mode of the mapping on the next turn, and refuses a request that asks for another', async () => {
     const up = echo();
     const h = createBlindHandler({ authenticate: AUTH, forward: up.forward });

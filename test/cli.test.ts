@@ -400,6 +400,22 @@ describe('CLI in process', () => {
     expect((JSON.parse(readFileSync(join(home, 'runs', `${runIdOf(plain.err)}.json`), 'utf8')) as { replaceWith: string }).replaceWith).toBe('fake');
   });
 
+  it('C53: --keep leaves the kinds as written, the run stores them, and unblind follows the mapping with no flag', async () => {
+    const b = fakeIO(EMAIL);
+    expect(await blindMain(['--known', writeKnown(), '--seed', 's9', '--keep', 'amount, date'], b)).toBe(0);
+    for (const real of ['580,80 €', '480,00 €', '15 de abril de 2026']) expect(b.out, real).toContain(real);
+    for (const real of ['Marta', 'Quesada', 'Joaquín', '+34 754 118 902']) expect(b.out, real).not.toContain(real);
+    const id = runIdOf(b.err);
+    const saved = JSON.parse(readFileSync(join(home, 'runs', `${id}.json`), 'utf8')) as { mapping: { keep: string[] } };
+    expect(saved.mapping.keep).toEqual(['amount', 'date']);
+    const u = fakeIO(`Recuerda: el modelo 303 vence el 20 de abril de 2026 y suma 99,00 €.\n${b.out}`);
+    expect(await unblindMain(['--run', id], u)).toBe(0);
+    expect(u.out).toBe(`Recuerda: el modelo 303 vence el 20 de abril de 2026 y suma 99,00 €.\n${EMAIL}`);
+    const bad = fakeIO('x');
+    expect(await blindMain(['--keep', 'amount,money'], bad)).toBe(1);
+    expect(bad.err).toContain('--keep entry 2 is not a kind');
+  });
+
   it('C12: the home directory defaults to ~/.blind when BLIND_HOME is unset', async () => {
     const io = fakeIO('Total 100,00 €');
     io.env = {};

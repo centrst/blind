@@ -6,7 +6,7 @@ import { BlindError } from './errors.js';
 import { placeholderNumber, REPLACE_MODES } from './replace.js';
 import type { Collision, Kind, Mapping, ReplaceWith } from './types.js';
 
-const KINDS = new Set<Kind>(['person', 'org', 'email', 'domain', 'phone', 'place', 'id', 'url', 'iban', 'amount', 'date']);
+export const KINDS = new Set<Kind>(['person', 'org', 'email', 'domain', 'phone', 'place', 'id', 'url', 'iban', 'amount', 'date']);
 /** Kinds whose fake always differs from the real value when blind made it. */
 const ALWAYS_CHANGED = new Set<Kind>(['person', 'org', 'place', 'phone', 'iban', 'id', 'date']);
 /** The same in `random` mode, where an amount's fake is drawn to differ too. */
@@ -46,6 +46,10 @@ export function checkMapping(m: unknown): asserts m is Mapping {
   if (x.literals !== undefined) {
     const lit = x.literals;
     if (mode !== 'placeholder' || !Array.isArray(lit) || !lit.every((l) => typeof l === 'string' && /^\[REDACTED_[A-Z]+_[1-9]\d*\]$/.test(l))) bad('literals');
+  }
+  if (x.keep !== undefined) {
+    const keep = x.keep;
+    if (!Array.isArray(keep) || keep.length === 0 || new Set(keep).size !== keep.length || !keep.every((k) => KINDS.has(k as Kind))) bad('keep');
   }
   (x.pairs as unknown[]).forEach((p, i) => {
     const q = p as Record<string, unknown> | null;

@@ -717,6 +717,56 @@ export function p15OtherModesLeakCheck(): void {
   );
 }
 
+/**
+ * `keep: ['amount', 'date']` in any mode: every inserted amount and date comes
+ * out as written, no pair or count is made for them, every other inserted value
+ * is still gone, the leak check is clean, and the text round trips. An answer
+ * that adds amounts and dates of its own streams in any chunking to exactly the
+ * one-shot result, with those left as written and not listed in `invented`.
+ */
+export function p21KeepAmountsAndDates(): void {
+  const added = 'For reference, the threshold is £90,000 and the year ends on 5 April 2026, with 1.234,50 € due 31/01/2027.';
+  check(
+    fc.property(
+      emailCase, seedArb, fc.constantFrom<ReplaceWith>('fake', 'placeholder', 'random'),
+      fc.array(fc.integer({ min: 1, max: 48 }), { minLength: 1, maxLength: 200 }),
+      (c, seed, replaceWith, sizes) => {
+        const res = blind([c.text], { known: c.known, seed, now: NOW, dateOrder: c.dateOrder, replaceWith, keep: ['amount', 'date'] });
+        const out = res.texts[0] as string;
+        for (const sp of c.spans) {
+          if ((sp.kind === 'amount' || sp.kind === 'date') && !out.includes(sp.value)) throw new Error(`${replaceWith}: a kept ${sp.kind} did not come out as written`);
+        }
+        if (res.replaced.amount !== undefined || res.replaced.date !== undefined) throw new Error(`${replaceWith}: a kept kind was counted as replaced`);
+        if (res.mapping.pairs.some((p) => p.kind === 'amount' || p.kind === 'date')) throw new Error(`${replaceWith}: a kept kind has a pair`);
+        if (JSON.stringify(res.mapping.keep) !== '["amount","date"]') throw new Error(`${replaceWith}: the mapping does not record keep`);
+        const left = survivors({ ...c, spans: c.spans.filter((sp) => sp.kind !== 'amount' && sp.kind !== 'date') }, out, res.mapping.pairs);
+        if (left.length) throw new Error(`${replaceWith}: still in the blind text: ${left.join(', ')}`);
+        if (!res.leaks.ok) throw new Error(`${replaceWith}: the leak check fired on a kept value`);
+        const mapping = JSON.parse(JSON.stringify(res.mapping)) as Mapping;
+        roundTrips(unblind(out, mapping), c.text, `${replaceWith}: keep`);
+        const answer = `${added}\n${out}\n${added}`;
+        const whole = unblind(answer, mapping);
+        if (!whole.text.startsWith(`${added}\n`) || !whole.text.endsWith(`\n${added}`)) throw new Error(`${replaceWith}: an amount or date the answer added was rewritten`);
+        for (const v of ['£90,000', '5 April 2026', '1.234,50 €', '31/01/2027']) {
+          if (whole.invented.includes(v)) throw new Error(`${replaceWith}: an added amount or date was listed in invented`);
+        }
+        const u = createUnblinder(mapping);
+        let streamed = '';
+        let at = 0;
+        for (let i = 0; at < answer.length; i++) {
+          const n = sizes[i % sizes.length] as number;
+          streamed += u.push(answer.slice(at, at + n));
+          at += n;
+        }
+        const tail = u.end();
+        streamed += tail.text;
+        if (streamed !== whole.text) throw new Error(`${replaceWith}: the streamed text differs from one-shot unblind`);
+        if (JSON.stringify(tail.invented) !== JSON.stringify(whole.invented)) throw new Error(`${replaceWith}: the invented list differs`);
+      },
+    ),
+  );
+}
+
 export { toCase };
 
 // -------------------------------------------------------------------- P16

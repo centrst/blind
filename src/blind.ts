@@ -8,7 +8,7 @@ import { checkLeaks, denyDomains, shortTextLeaks, type Original } from './leaks.
 import { DEFAULT_ALLOW_DOMAINS, ORG_SUFFIX, PARTICLES } from './names.js';
 import { Rng } from './prng.js';
 import { gluedPrefixBefore, unspaced } from './script.js';
-import { checkMapping, collisions } from './mapping.js';
+import { checkMapping, collisions, KINDS } from './mapping.js';
 import { placeholderLiterals, Placeholders, RandomFakes, REPLACE_MODES } from './replace.js';
 import { PairLog } from './pairlog.js';
 import { placeholderIdentities } from './identities.js';
@@ -82,6 +82,23 @@ function replaceMode(opts: BlindOptions): ReplaceWith {
 }
 
 /**
+ * The kinds this call leaves as written: the mapping's when continuing, else
+ * the option's. A list with other kinds than the mapping's throws, as
+ * `replaceWith` does, so one conversation never keeps a kind in one turn and
+ * replaces it in the next. Kept in the order of `KINDS`, so the same kinds
+ * make the same mapping.
+ */
+function keptKinds(opts: BlindOptions): Kind[] {
+  const asked = opts.keep === undefined ? undefined : new Set(opts.keep);
+  if (!opts.mapping) return [...KINDS].filter((k) => asked?.has(k));
+  const kept = opts.mapping.keep ?? [];
+  if (asked !== undefined && (asked.size !== kept.length || kept.some((k) => !asked.has(k)))) {
+    throw new BlindError('invalid-option', 'blind: keep differs from the kinds the mapping was made with. Leave keep out to continue the mapping');
+  }
+  return kept;
+}
+
+/**
  * Time grows about linearly with the text, but a very large one still costs
  * seconds of CPU and its memory. The limit bounds the work of one call, so an
  * oversized input fails fast with an error instead of stalling. Past the limit
@@ -91,6 +108,15 @@ function checkSize(texts: string[], limit: number): void {
   checkLimit('blind', limit);
   texts.forEach((t, i) => {
     if (t.length > limit) throw new InputTooLargeError(i, t.length, limit);
+  });
+}
+
+/** `keep`: a list of kinds, or left out. The message names the index, never the entry. */
+function checkKeep(list: unknown): void {
+  if (list === undefined) return;
+  if (!Array.isArray(list)) throw new BlindError('invalid-option', 'blind: keep must be an array of kinds');
+  list.forEach((k, i) => {
+    if (!KINDS.has(k as Kind)) throw new BlindError('invalid-option', `blind: keep entry ${i} is not a kind; the kinds are ${[...KINDS].join(', ')}`);
   });
 }
 
@@ -106,7 +132,7 @@ function checkStrings(name: 'allow' | 'deny' | 'allowDomains', list: unknown): v
 /** Every option `blind` reads. A key outside this list is a mistake, and a silent one would leave a `known` list unread. */
 const OPTIONS: Record<keyof BlindOptions, true> = {
   known: true, deny: true, seed: true, now: true, dateOrder: true, allowDomains: true, detectors: true,
-  paranoid: true, allow: true, replaceWith: true, mapping: true, maxTextLength: true,
+  paranoid: true, allow: true, replaceWith: true, keep: true, mapping: true, maxTextLength: true,
 };
 
 /**
@@ -133,6 +159,7 @@ function checkCall(texts: unknown, opts: unknown): void {
   checkStrings('deny', o.deny);
   checkStrings('allowDomains', o.allowDomains);
   checkStrings('allow', o.allow);
+  checkKeep(o.keep);
   // These three go into the mapping, which `unblind` and the next turn refuse when they are not valid.
   if (o.seed !== undefined && (typeof o.seed !== 'string' || o.seed.length === 0)) throw new BlindError('invalid-option', 'blind: seed must be a string that is not empty');
   if (o.dateOrder !== undefined && o.dateOrder !== 'dmy' && o.dateOrder !== 'mdy') throw new BlindError('invalid-option', 'blind: dateOrder must be dmy or mdy');
@@ -156,6 +183,8 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   const prev = opts.mapping;
   if (prev !== undefined) checkMapping(prev);
   const mode = replaceMode(opts);
+  const keepList = keptKinds(opts);
+  const keep = new Set(keepList);
   const seed = prev?.seed ?? opts.seed ?? globalThis.crypto.randomUUID();
   const root = new Rng(seed);
   const dateOrder = prev?.dateOrder ?? opts.dateOrder ?? 'dmy';
@@ -175,7 +204,8 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   const known: KnownValue[] = [...(opts.known ?? [])];
   for (const p of prev?.pairs ?? []) {
     const kind = CARRIED[p.kind];
-    if (kind && !(kind === 'domain' && isAllowedHost(p.real))) known.push({ kind, value: p.real });
+    // A kept kind's value from an earlier pair (a host of a replaced address) stays as written, so it is not looked for.
+    if (kind && !keep.has(p.kind) && !(kind === 'domain' && isAllowedHost(p.real))) known.push({ kind, value: p.real });
   }
   const ctx: DetectContext = { dateOrder, isAllowedHost, known };
 
@@ -185,6 +215,9 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   const folded = texts.map(foldLookalikes);
   const found = guard('blind', 'detecting values', () => findSpans(folded, ctx, detectors));
   const spansByText = mode === 'placeholder' ? found.map((spans, ti) => joinNames(spans, folded[ti] as string)) : found;
+  // The spans blind writes over. A kept span took part in resolution, so no other kind claims its
+  // text, and it still masks the paranoid sweep and language detection, but it is written as it stands.
+  const active = keep.size ? spansByText.map((spans) => spans.filter((s) => !keep.has(s.kind))) : spansByText;
 
   // Words fakes must avoid, so a fake never collides with real text.
   const avoid = new Set<string>();
@@ -207,7 +240,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
     if (prev) sur.restore(prev.pairs);
     // One word after a title is a surname ("Mr Holloway"), wherever the text first writes it bare and
     // whoever found it. This comes before the known people get their fakes, so a known "Holloway" is one too.
-    spansByText.forEach((spans, ti) => {
+    active.forEach((spans, ti) => {
       const text = folded[ti] as string;
       for (const s of spans) {
         const word = stripInvisible(text.slice(s.start, s.end));
@@ -227,13 +260,13 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
       }
       return lang.call;
     };
-    for (const k of known) if (k.kind === 'person') sur.prime(k.value, firstSeen(k.value));
+    if (!keep.has('person')) for (const k of known) if (k.kind === 'person') sur.prime(k.value, firstSeen(k.value));
   }
 
   // Generate in a fixed kind order so related fakes (names, then emails) line up.
   const fake = new Map<Span, string>();
   const entries: Array<{ ti: number; span: Span }> = [];
-  spansByText.forEach((spans, ti) => spans.forEach((span) => entries.push({ ti, span })));
+  active.forEach((spans, ti) => spans.forEach((span) => entries.push({ ti, span })));
   const orderOf = (k: Kind): number => GEN_ORDER.indexOf(k);
   const originals: Original[] = [];
   const addOriginal = (kind: Kind, value: string, known?: true): void => {
@@ -309,13 +342,13 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
           // A role address on a public platform (no-reply@...) stays as it is on purpose.
           if (out.toLowerCase() !== real.toLowerCase()) addOriginal('email', real);
           const host = emailHost(real);
-          if (!isAllowedHost(host)) addOriginal('domain', host);
+          if (!isAllowedHost(host) && !keep.has('domain')) addOriginal('domain', host);
           break;
         }
         case 'url': {
           out = make(() => sur.url(real, orig, around));
           const host = urlHost(real);
-          if (host && !isAllowedHost(host)) addOriginal('domain', host);
+          if (host && !isAllowedHost(host) && !keep.has('domain')) addOriginal('domain', host);
           break;
         }
         case 'phone':
@@ -340,10 +373,10 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   // The known values follow the ones found in the texts, in the order the pairs have.
   originals.push(...knownOriginals);
 
-  const amountSpans = spansByText.map((spans) => spans.filter((s) => s.kind === 'amount'));
+  const amountSpans = active.map((spans) => spans.filter((s) => s.kind === 'amount'));
   const amountOccs = amountSpans.map((spans) => spans.map((s) => s.meta as AmountOcc));
   const amountKeys = new Set(amountOccs.flat().map(amountKey));
-  const dateKeys = new Set(spansByText.flat().flatMap((s) => (s.kind === 'date' ? [dateKey(s.meta as DateOcc)] : [])));
+  const dateKeys = new Set(active.flat().flatMap((s) => (s.kind === 'date' ? [dateKey(s.meta as DateOcc)] : [])));
   let refYear = prev?.refYear ?? (opts.now ?? new Date()).getUTCFullYear();
   outer: for (const spans of prev ? [] : spansByText) {
     for (const s of spans) {
@@ -377,7 +410,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
       if (!dateRealOf.has(p.fake)) dateRealOf.set(p.fake, p.real);
     }
     const out = new Map<Span, string>();
-    spansByText.forEach((spans, ti) => {
+    active.forEach((spans, ti) => {
       for (const s of spans) {
         if (s.kind !== 'date') continue;
         const written = (texts[ti] as string).slice(s.start, s.end);
@@ -465,7 +498,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
     // every draw collides the last plan stays and its colliding pairs are
     // listed in `collisions`. The final leak check skips amounts and dates
     // blind wrote, so it does not report that case.
-    const size = spansByText.reduce((n, spans) => n + spans.filter((s) => s.kind === 'amount' || s.kind === 'date').length, 0);
+    const size = active.reduce((n, spans) => n + spans.filter((s) => s.kind === 'amount' || s.kind === 'date').length, 0);
     const attempts = Math.max(2, Math.min(PLAN_ATTEMPTS, Math.floor(PLAN_BUDGET / Math.max(1, size))));
     // A draw is also taken again when an amount in two relations (10,43 as
     // 10,03 plus 4 % and as 4 % of 260,63) keeps only its first: one factor
@@ -523,7 +556,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   const datePairs: Pair[] = [];
   // Random dates are drawn once per spelling, in text order, under the same rule as the plan's.
   const randomDates = mode === 'random' ? dateFakes((o) => random.date(o, refYear)) : null;
-  spansByText.forEach((spans, ti) => {
+  active.forEach((spans, ti) => {
     for (const s of spans) {
       if (s.kind !== 'date') continue;
       const written = (texts[ti] as string).slice(s.start, s.end);
@@ -544,7 +577,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
     let out = '';
     let at = 0;
     const ranges: Array<[number, number]> = [];
-    for (const s of spansByText[ti] as Span[]) {
+    for (const s of active[ti] as Span[]) {
       const f = fake.get(s);
       if (f === undefined) continue;
       counts[s.kind] = (counts[s.kind] ?? 0) + 1;
@@ -575,7 +608,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
     pairs.push(p);
   }
 
-  const mapping: Mapping = { version: 1, seed, replaceWith: mode, factor, dayShift, dateOrder, refYear, pairs, ...(literals.length ? { literals } : {}) };
+  const mapping: Mapping = { version: 1, seed, replaceWith: mode, factor, dayShift, dateOrder, refYear, pairs, ...(literals.length ? { literals } : {}), ...(keepList.length ? { keep: keepList } : {}) };
   const leaks = checkLeaks({
     outputs: outTexts, replaced, originals, deny, amountKeys, dateKeys, dateOrder, unenforced,
   });
@@ -597,6 +630,6 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   const shared = collisions(mapping);
   const listed = new Set(shared.map((c) => c.index));
   const reported = [...shared, ...planCollisions.filter((c) => !listed.has(c.index))].sort((a, b) => a.index - b.index);
-  const identities = mode === 'placeholder' ? placeholderIdentities(texts, spansByText, opts.known ?? [], mapping) : [];
+  const identities = mode === 'placeholder' ? placeholderIdentities(texts, active, opts.known ?? [], mapping) : [];
   return { texts: outTexts, identities, mapping, leaks, replaced: counts, collisions: reported };
 }
