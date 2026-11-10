@@ -673,7 +673,7 @@ function kindOf(fn: () => unknown): string {
 
 describe('a call blind cannot read as meant', () => {
   const secret = 'Orvane Kelpstrom';
-  const options = 'known, deny, seed, now, dateOrder, allowDomains, detectors, paranoid, allow, replaceWith, mapping, maxTextLength';
+  const options = 'known, deny, seed, now, dateOrder, allowDomains, detectors, paranoid, allow, replaceWith, keep, mapping, maxTextLength';
 
   it('refuses texts that are not an array of strings, naming the index and never the text', () => {
     expect(kindOf(() => blind(secret as unknown as string[]))).toBe('invalid-option: blind: texts must be an array of strings; pass one text as [text]');
@@ -757,7 +757,8 @@ describe('what the leak check is told to look for', () => {
   });
 
   it('the host of an email in any escaped form, or of a URL with or without its scheme, is looked for as a domain', () => {
-    expect(leftOver('email', 'ana%40zqhost', 'ANA%40ZQHOST')).toEqual([['email', 44], ['domain', 50]]);
+    // `info` and not a name: a name in the local part is found again bare, here inside the copy.
+    expect(leftOver('email', 'info%40zqhost', 'INFO%40ZQHOST')).toEqual([['email', 43], ['domain', 50]]);
     expect(leftOver('email', 'ana&#64;zqhosta', 'ZQHOSTA')).toEqual([['domain', 46]]);
     expect(leftOver('email', 'ana&#x40;zqhostb', 'ZQHOSTB')).toEqual([['domain', 47]]);
     expect(leftOver('email', 'ana&#0064;zqhostc', 'ZQHOSTC')).toEqual([['domain', 48]]);

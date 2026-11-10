@@ -218,6 +218,10 @@ export function createBlindHandler(opts: BlindHandlerOptions): (request: Request
     }
   };
 
+  /**
+   * Checks a caller's mapping, blinds the texts, refuses on a leak, forwards the blind copy and
+   * restores the answer. Error bodies name a field, a kind or an index, never a value.
+   */
   async function handle(body: BlindRequestBody, request: Request): Promise<Response> {
     if (body.mapping !== undefined) {
       // A mapping from the caller must keep blind's invariants, or a crafted one (factor 1, no shift)
@@ -227,6 +231,9 @@ export function createBlindHandler(opts: BlindHandlerOptions): (request: Request
       } catch (e) {
         return json({ error: 'mapping', message: e instanceof Error ? e.message : 'invalid mapping' }, 400);
       }
+      // This handler never makes a mapping that keeps kinds as written. One from a caller would switch
+      // replacement off for those kinds while the receipt still says the leak check passed.
+      if (body.mapping.keep !== undefined) return json({ error: 'mapping', message: 'blind: the mapping is not valid (keep)' }, 400);
     }
 
     // A continued conversation keeps its mapping's mode, so the operator default only applies to a new one.

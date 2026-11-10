@@ -6,7 +6,7 @@ blind rewrites private text into a blind copy before it goes to a model or anoth
 ```
 real   From: Sophia Ward <sophia@ward-bookkeeping.example>
        Total: £1,240.80 (£1,034.00 + 20% VAT), due on 3 March 2026.
-blind  From: Hilary Brierley <hilary@larkmoor-works.example>
+blind  From: Hilary Brierley <hilary@harbour-clinic.example>
        Total: £802.80 (£669.00 + 20% VAT), due on 23 December 2025.
 ```
 <!-- /example -->
@@ -15,9 +15,9 @@ All values above are invented, and the blind side is real output. The real text 
 
 blind has no runtime dependencies (C8), makes no network calls (C7) and runs on standard JavaScript (C19). That is the design. There is no model to download, no native code to build and nothing else to audit, and nothing leaves your process. CI tests it on Node 22, 24 and 26. Browsers, Workers, Deno and Bun offer the same standard APIs but are not tested in CI. The `blind` and `unblind` commands cover terminal use.
 
-The trade is names. Without a model, blind finds a person, company or place in two ways. You list it in `known`, or the text gives it away with a sender line such as `Sophia Ward <sophia@ward-bookkeeping.example>`, a title such as `Dr.` or `Sra.`, or a later mention of a name it already found. A name that appears only in plain prose goes out unchanged, and the leak check cannot report it, because nothing found it. On blind's test corpus of 381 synthetic texts, mostly emails, it found 67.1% of people, 29.7% of companies and none of the places with nothing passed in. With one person per email listed in `known`, it found 98.7% of all the people.
+The trade is names. Without a model, blind finds a person, company or place in two ways. You list it in `known`, or the text gives it away where mail usually puts a name: a sender line such as `Sophia Ward <sophia@ward-bookkeeping.example>`, a greeting (`Dear Margaret,`), the line after a closing (`Kind regards,`), a label (`Patient:`), a title such as `Dr.` or `Sra.`, a legal suffix (`Finchley Dental Ltd`), the words of a private address (`margaret.holloway@finchley-dental.example`), or a later mention of a name it already found. A name that appears only in plain prose goes out unchanged, and the leak check cannot report it, because nothing found it. On blind's test corpus of 381 synthetic texts, mostly emails, it found 85.1% of people, 98.2% of companies and none of the places with nothing passed in. With one person per email listed in `known`, it found 99.3% of all the people. The corpus is home ground: its emails were written with these same greetings and signatures, so expect less on mail that writes names elsewhere.
 
-So list every person, company and place you know is private in `known`. A listed value is replaced and leak-checked in any letter case (C3). The few exceptions, such as stop words and one-letter parts of a name, are named in `leaks.unenforced`. For text you cannot list in advance, turn on [paranoid mode](#paranoid-mode). It flags anything blind left that still looks private, such as an unfound capitalised name, a long digit run or an encoded block, and makes `assertNoLeaks` throw until each one is listed or cleared (C50, C51). It over-flags, so plan for a review step. Read the blind copy before you send it either way.
+So list every person, company and place you know is private in `known`. A listed value is replaced and leak-checked in any letter case (C3). A long list is cheap: an entry the text does not contain costs about 15 microseconds, so 10,000 contacts add about 0.15 s to a call (C55). The few exceptions, such as stop words and one-letter parts of a name, are named in `leaks.unenforced`. For text you cannot list in advance, turn on [paranoid mode](#paranoid-mode). It flags anything blind left that still looks private, such as an unfound capitalised name, a long digit run or an encoded block, and makes `assertNoLeaks` throw until each one is listed or cleared (C50, C51). It over-flags, so plan for a review step. Read the blind copy before you send it either way.
 
 A separate package with a named-entity detector is in development. It finds more names in plain prose, but it needs a 1.1 GB model and native dependencies, so it stays out of this one. With just this package, use `known` and paranoid mode.
 
@@ -67,8 +67,8 @@ IBAN GB82 WEST 1234 5698 7654 32, card 4111 1111 1111 1111 12/28.
 Policy number 48213907. Call me on +44 7700 900123. Thanks, Sophia
 
 blind
-From: Hilary Brierley <hilary@larkmoor-works.example>
-Hi Barry, here is the invoice from Moorcroft Joinery Ltd.
+From: Hilary Brierley <hilary@harbour-clinic.example>
+Hi Barry, here is the invoice from Copperfield Labs Ltd.
 Total: £802.80 (£669.00 + 20% VAT), due on 23 December 2025.
 IBAN GB50 SLGZ 8496 0974 3683 54, card 4111 1150 5986 1850 12/28.
 Policy number 84733788. Call me on +44 7700 900570. Thanks, Hilary
@@ -80,7 +80,7 @@ Policy number 84733788. Call me on +44 7700 900570. Thanks, Hilary
 - A fake number is drawn from a range no one holds wherever such a range exists: UK mobiles become 07700 900xxx, North American numbers NXX-555-01XX (both kept for fiction), Spanish mobiles 75 to 79 (kept in reserve and not yet given to any operator), and IP addresses documentation addresses. A fake can only coincide with a real number where there is no such range: Spanish landlines and special-rate numbers, other UK numbers, numbers from other countries, IBANs, SSNs, DNI, NIE and CIF, VAT numbers and policy or invoice ids. Cards use the first six digits of the networks' published test numbers (4111 11 for Visa, 5555 55 for Mastercard and so on), but no card range is reserved, so a fake card can still match an issued one. A fake address at a public provider (gmail.com, outlook.com) keeps the provider, so its mailbox can exist too. Check the fakes before a downstream system calls, pays or writes to them.
 - The email is English, so the fakes are too: a woman's English name for Sophia, an English surname and an English host (C31).
 - "Sophia" in the sign-off gets the same fake as the sender, because a name found once is found again.
-- "Moorcroft Joinery Ltd." went through unchanged. A company named only in prose is not found unless it is in `known`. The leak check cannot report it either, since nothing found it. Paranoid mode flags it for review. This is the main thing to plan for.
+- "Moorcroft Joinery Ltd." became another company because it ends in a legal suffix. A company named in prose without one (`Moorcroft Joinery`), and a person named in prose away from a greeting, a signature, a label or a title, is not found unless it is in `known`. The leak check cannot report it either, since nothing found it. Paranoid mode flags it for review. This is the main thing to plan for.
 
 Pass the mapping to the next call and the conversation stays consistent:
 
@@ -107,7 +107,7 @@ The fixed seed is only there to make this example reproducible. Leave `seed` out
 
 **Scope.** What is tested is plain text in English and Spanish prose: emails, threads, invoices and the like. JSON, CSV and other structured formats pass through as text. Detection inside them is weaker, and field names such as `"name":` or a `surname` column are not used to find values. Other locales are not found: a German or French date (`7. April 2026`, `7 avril 2026`), a German or French phone layout (`(030) 123 45 67`, `01 23 45 67 89`) and titles such as `Herr`, `Frau`, `M.` or `Mme` go out as written. Each text may be at most 1,048,576 UTF-16 code units (`text.length`) by default. A longer one makes `blind` throw a `BlindError` with kind `input-too-large`, the index of the text, its length and the limit, never its content, before any work is done (C32). The `maxTextLength` option changes the limit, and `Infinity` turns it off. Time grows about linearly with the text. A test fails if 800 KB takes more than six times the CPU time of 200 KB (C41). An answer given to `unblind`, or every chunk pushed to one `createUnblinder` together, has the same limit by default, set by a last argument `{ maxTextLength }`, and a longer one throws the same `input-too-large` error with index 0, while unblind time grows about linearly with the answer and stays below the time it took to blind the text (C32, C49).
 
-- **Names, orgs, places.** Found through your `known` list, `Name <address>` anywhere in the text, titles such as `Dr.`, `Sra.` or `Mrs` before a name, values carried from earlier turns, and any `Detector` you add. A person found once is also found wherever the name appears again bare, in any text of the call, unless the text also uses that word in lower case as an ordinary word. A sender with company words (`Clínica`, `Asesores`, `Labs`, `S.L.`, `Inc`) is an org, and an org found once is found again by its full name. Fakes come from small built-in English and Spanish lists, in the language of the value: an English name, company, place or host gets an English fake and a Spanish one a Spanish fake, and a value that says nothing about its language (`Mena`, `Daniel`) follows the paragraph around it. A first name keeps its gender (C31). Email local parts follow the fake name. Casing (ALL CAPS, lower case) is carried over.
+- **Names, orgs, places.** Found through your `known` list, `Name <address>` anywhere in the text, titles such as `Dr.`, `Sra.` or `Mrs` before a name, values carried from earlier turns, and any `Detector` you add. Ordinary mail gives more away (C54). At the start of a line, one to three capitalised words after a greeting (`Dear Margaret,`, `Hi Ana, Luis and Marta,`, `Hola Belén:`, `Estimado/a Cayetano,`, `Buenos días Isidro,`) are a person, and so is a name after a label (`Name:`, `Patient:`, `Customer:`, `Client:`, `Contact:`, `Attn:`, `Nombre:`, `Paciente:`, `Cliente:`), while `Company:`, `Organisation:` and `Empresa:` label an org when the rest of the line is only the company name (`Company: Dorsal Partners (billing)` labels nothing). The line right after a closing (`Regards,`, `Kind regards,`, `Best,`, `Thanks,`, `Cheers,`, `Sincerely,`, `Saludos,`, `Un saludo,`, `Atentamente,`, `Gracias,`) holding only one to four capitalised words is a person, and then the first of the next three lines that holds only a company name with a company word or legal suffix is an org, unless a blank line comes first. A name line with anything else on it (`Odette Ashworth, CEO`) starts neither. Quoted lines (`> > Kind regards,`) count too. Group, role and common words keep these from counting: `Hi all`, `Hi team`, `Dear Sir`, `Dear Customer`, `Hola a todos`, a closing followed by `Accounts` or `Sent from my iPhone`. Anywhere in the text, capitalised words before a legal suffix (`Ltd`, `LLC`, `Inc`, `GmbH`, `PLC`, `Corp`, `S.L.`, `S.A.`) are an org, without a word that only opens the sentence (`Regarding`). The words of a private address count as well: the parts of its local part, three letters or more, not role words such as `info`, `sales` or `no-reply`, not common words such as `will` and not words of the private hosts, are found again wherever the text writes them capitalised as words of their own (`Margaret` for `margaret.holloway@...`), and the words of its host written as capitalised words (`Finchley Dental` for `finchley-dental.example`, with or without a legal suffix) are an org when the host label has two to six hyphenated words. A one-word host (`dorsal.example`) marks nothing. An address at a public provider (`gmail.com`) says nothing. A person found once is also found wherever the name appears again bare, in any text of the call, unless the text also uses that word in lower case as an ordinary word. A name word of one or two letters (`Li`) is not, so list the full name in `known` (`Li Na`), since a single Latin letter alone is refused there. A sender with company words (`Clínica`, `Asesores`, `Labs`, `S.L.`, `Inc`) is an org, and an org found once is found again by its full name. Fakes come from small built-in English and Spanish lists, in the language of the value: an English name, company, place or host gets an English fake and a Spanish one a Spanish fake, and a value that says nothing about its language (`Mena`, `Daniel`) follows the paragraph around it. A first name keeps its gender (C31). Email local parts follow the fake name. Casing (ALL CAPS, lower case) is carried over.
 - **Emails, domains, URLs.** Domains become `*.example`. URL paths keep their shape, long ids in paths and query strings are scrambled, emails in query strings are rewritten. Public platforms (gmail.com, google.com, outlook.com, icloud.com, booksy.com, fresha.com, calendly.com, github.com and a few more) are left alone.
 - **Phones, IBANs.** Same length and format, separators kept. A UK, Spanish or North American mobile stays a mobile of its country, and a landline a landline (C31). Fake IBANs carry valid check digits.
 - **Typed ids.** Payment cards (Luhn and network checked, in any one separator style), US SSNs (dashed), Spanish DNI, NIE and CIF (control character checked), EU VAT numbers, and IPv4 and IPv6 addresses. Each fake passes the same check as the original and keeps what says what it is: the card network, the NIE letter, the CIF organisation type, the VAT country. IP addresses become documentation addresses (RFC 5737 and RFC 3849). The same number written two ways gets one fake (C20).
@@ -120,7 +120,7 @@ The fixed seed is only there to make this example reproducible. Leave `seed` out
 
 The leak check only knows values blind found or you gave it. A name nothing found goes out as written, and nothing reports it. `paranoid: true` adds a review gate for that case. Before the blind copy is used, a sweep reads the text blind leaves as written and flags anything that still looks private (C50):
 
-- `name`: capitalised words that are not common ones, a run of them anywhere (`Patient Ana Ruiz`), a single one anywhere but the start of a sentence, a line or a subject line (`Hola Lucía`). A single one right after an opening bracket, a quotation mark, a dash, a bullet or a `>` quote marker counts as starting a sentence, so `(Zorina)` and `"Zorina"` are not flagged. Function words, months, weekdays, mail headers, greetings and the public platforms' names are left alone.
+- `name`: capitalised words that are not common ones, a run of them anywhere (`Patient Ana Ruiz`), a single one anywhere but the start of a sentence, a line or a subject line (`Nos vemos con Lucía`). A single one right after an opening bracket, a quotation mark, a dash, a bullet or a `>` quote marker counts as starting a sentence, so `(Zorina)` and `"Zorina"` are not flagged. Function words, months, weekdays, mail headers, greetings and the public platforms' names are left alone.
 - `number`: five digits or more in groups (`123 45 6789`, `ES91 210 0041 8450`).
 - `handle`: `@` or `#` before a word (`@AnaRuiz_Design`), including the tail of an address the detector did not take whole.
 - `encoded`: MIME encoded words, quoted-printable escapes and base64 runs, which hide text from every pattern.
@@ -137,9 +137,9 @@ assertNoLeaks(res);   // throws until every suspect is replaced or cleared
 
 How much it catches and what it costs, measured 2026-11-09:
 
-- On the labelled corpus it flags at least 99% of the values that survive detection (C52): 1,097 of 1,106 in bare mode and 506 of 508 with the known lists. In bare mode it misses 9 values. Seven are Hebrew and Arabic names, which have no capitals. One is a place name alone at the start of a line. One is the title `Dr.`, which the scorer counts as part of a name. With the known lists it misses 2, the place name and the title. 21% of corpus runs also carry a false alarm. The common-word list was tuned on this corpus, so that rate is a best case.
+- On the labelled corpus it flags at least 97% of the values that survive detection (C52): 390 of 399 in bare mode and 183 of 185 with the known lists, measured 2026-11-10. Before blind read greetings, signatures, labels and legal suffixes, 1,106 values survived in bare mode and it flagged 1,097. It misses the same values as then, so the share is lower only because fewer survive. In bare mode it misses 9 values. Seven are Hebrew and Arabic names, which have no capitals. One is a place name alone at the start of a line. One is the title `Dr.`, which the scorer counts as part of a name. With the known lists it misses 2, the place name and the title. 21% of corpus runs also carry a false alarm. The common-word list was tuned on this corpus, so that rate is a best case.
 - On the 888 Gretel finance documents, which blind was not tuned on, it flagged 2,891 of the 3,365 labelled values blind left (86%) and held 877 of the 888 documents. Contracts capitalise terms such as `Policy`, `Borrower` and `Agreement`, so about 15 suspects per document match no label. Gretel's labels are incomplete, so some of those are private too. The run is recorded in [RESULTS-paranoid.md](scripts/bench/RESULTS-paranoid.md).
-- Of the 24 known misses in the adversarial set it flags 12: an unlabelled name in prose, split IBANs, a spaced SSN, handles, hashtags, encoded words and base64, and spelled-out addresses (C52). Prose numbers and dates, words split by a soft break or a wrap, and an underscored handle in lower case still go through.
+- Of the 28 known misses in the adversarial set it flags 16: an unlabelled name in prose, a signature a blank line below its closing or with a job title after the name, a company in prose without a legal suffix or named only by a one-word host, split IBANs, a spaced SSN, handles, hashtags, encoded words and base64, and spelled-out addresses (C52). Prose numbers and dates, words split by a soft break or a wrap, and an underscored handle in lower case still go through.
 
 Use it where a human reviews what leaves, or where a held document is cheaper than a leaked one. With `replaceWith: 'placeholder'` nothing in the blind copy reads like real data. Every value blind replaced is marked, and a reviewer has looked at every value it left.
 
@@ -150,6 +150,7 @@ blind lowers what leaves your machine. It is not 100%, so check the blind copy b
 [THREAT-MODEL.md](docs/THREAT-MODEL.md) says who the adversary is, what is replaced, what is only scaled or shifted, and when to use `placeholder` or `random` instead.
 
 - Amounts are scaled by one factor and dates shifted by one shift for the whole conversation, so relations between them hold. One known amount gives away every amount, and one known date every date. When the service does not need to compute with them, use `replaceWith: 'placeholder'` or `'random'`.
+- In `fake` mode `unblind` treats every amount and date it does not know as computed from fakes. One the model adds from general knowledge is rescaled or shifted too. With the seed of the example above, `The VAT registration threshold is £90,000` can come back as `£139,104`, and `The tax year ends on 5 April 2026` as `14 June 2026`. Both are listed in `invented`, but the text has already changed. A month, quarter or year the model derives from a shifted date is not mapped back and not listed: `due in December 2025, i.e. Q4 2025` stays that way when the real date is 3 March 2026. When amounts and dates need not be hidden, pass `keep: ['amount', 'date']` (C53).
 - Chat apps with memory (ChatGPT, Claude on the web) remember across chats, while each new conversation gets new fakes. Memory can then hold one real person under several fake names, or two real people under one fake name, and a name the model recalls from memory does not map back. Turn memory off, or keep related work in one conversation and pass its mapping along.
 - A fixed `seed` reused across conversations makes fakes linkable and lets anyone who knows it test guesses. Use it for tests and examples only.
 - Writing style, rare situations and context can still identify people.
@@ -159,7 +160,7 @@ blind lowers what leaves your machine. It is not 100%, so check the blind copy b
 - An amount the model computes from fakes, such as a difference or a total, comes back close but not always exact. Each fake is rounded to the precision it is written in, and `unblind` divides the computed result by the factor, which carries that rounding through. Over 500 seeds, the difference between `EUR 200` and `EUR 100` came back as `EUR 99` or `EUR 101` in 150 of them. A total of many amounts can drift further, since each operand brings its own rounding. A computed amount is listed in `invented` unless it equals the fake of an amount in the mapping. Then `unblind` restores that amount's real value and does not list it, even when the model meant a different number. If the mapping also holds `EUR 99`, the answer `EUR 149 - EUR 75 = EUR 74` can come back as `EUR 200 - EUR 100 = EUR 99` with `invented` empty. A negative amount with the minus after a currency code, such as `EUR -74`, is not read as an amount at all. It comes back unchanged and is not listed, so a computed negative difference can look right when it is not. The same layout in your text, `EUR -100`, goes out unscaled. `-100 €`, `-€100.00` and `-$1,234.56` are scaled. Check a computed total against your own figures, or use `replaceWith: 'placeholder'` when exact totals matter.
 - A date the model moves by days or weeks maps back exactly, since every date shifts by the same whole number of days. A date it moves by months can come back a few days off, because the months around the fake and the real date differ in length. `25 January 2026` blinded to `15 February 2026`, and the model's one month later, `15 March 2026`, came back as `22 February 2026`, listed in `invented`. Like an amount, a computed date that equals the fake of a date in the mapping comes back as that date's real value without being listed. A date written without a year is restored in the mapping's reference year, so one the model moves across a year end can come back a day off. `10 December`, blinded to `31 December` and moved 60 days to `1 March`, came back as `9 February` instead of `8 February`.
 - Bare numbers without a currency are not scaled, and prose numbers ("twenty euros") are not detected.
-- A name that appears only in plain prose, with no sender line, title or earlier mention, goes through unless you list it in `known`. In documents with no headers, titles or sender lines, such as CSV, EDI or bank statements, the core has nothing to start from, and it found 3.6% of names on the Gretel sample. A name that is also an ordinary lower-case word in the same text (Rose and rose) is not carried to its bare mentions, and the leak check still reports those.
+- A name that appears only in plain prose, with no sender line, greeting, signature, label, title or earlier mention, goes through unless you list it in `known`, and so does a company in prose without a legal suffix. In documents with none of these, such as CSV, EDI or bank statements, the core has nothing to start from, and it found 3.6% of names on the Gretel sample in the 24 October run. A name that is also an ordinary lower-case word in the same text (Rose and rose) is not carried to its bare mentions. The leak check still reports those when blind found the name in a span such as a sender line, but a name it took only from an email address (`rosa@casa-verde.example`) is then not found at all, so list it in `known`.
 - SWIFT and BIC codes, and phone layouts such as Mexican `(55) 1234-5678` or Swedish `08-41 19 42`, are missed. Durations and frequencies such as "monthly" or "30 years" are not dates to blind and stay as written.
 - Typed ids are checked by their rules, so a card number with a wrong Luhn digit or a DNI with the wrong letter is treated as a generic id, or missed when its shape is too weak. An SSN written with spaces and no label is missed. A version tag such as `1.2.3.4` reads as an IPv4 address and is replaced.
 - A phone, IBAN or id fake the model writes in another layout (a card number without its spaces, a phone with dashes) is mapped back in that layout when it has eight letters and digits or more. A shorter one is matched only as written, since six digits written `12.03.26` could be a date. A phone the model rewrites in another form (`07700 900123` for `+44 7700 900123`) is not mapped back.
@@ -218,11 +219,11 @@ function unblindStream(mapping: Mapping): TransformStream<string, string> {
 ```
 real         From: Sophia Ward <sophia@ward-bookkeeping.example>
              Total: £1,240.80 (£1,034.00 + 20% VAT), due on 3 March 2026.
-fake         From: Hilary Brierley <hilary@larkmoor-works.example>
+fake         From: Hilary Brierley <hilary@harbour-clinic.example>
              Total: £802.80 (£669.00 + 20% VAT), due on 23 December 2025.
 placeholder  From: [REDACTED_PERSON_1] <[REDACTED_EMAIL_1]>
              Total: £[REDACTED_AMOUNT_1] (£[REDACTED_AMOUNT_2] + 20% VAT), due on [REDACTED_DATE_1].
-random       From: Hilary Brierley <hilary@larkmoor-works.example>
+random       From: Hilary Brierley <hilary@harbour-clinic.example>
              Total: £6,322.90 (£4.29 + 20% VAT), due on 15 December 2026.
 ```
 <!-- /modes -->
@@ -237,6 +238,8 @@ In every mode one value gets one replacement within a call and across turns, the
 const b = blind([email], { known, replaceWith: 'placeholder' });
 const next = blind([followUp], { known, mapping: b.mapping });   // still placeholders
 ```
+
+When only names, addresses and ids need hiding, `keep` leaves kinds as written in any mode: `keep: ['amount', 'date']` sends real amounts and dates, so the service reasons from true figures and public facts such as a tax deadline stay right. A kept value gets no pair and is not a leak hit or a paranoid suspect, though a `known` or `deny` entry still is. The mapping records the kinds, a later turn keeps them, and a different `keep` with that mapping throws. `unblind` then leaves an amount or date it does not know as written and does not list it in `invented` (C53).
 
 ### Related person placeholders
 
@@ -384,7 +387,7 @@ If the leak check finds a value it found or was given in the output, `blind` exi
 ### `blind`
 
 ```
-blind [--known known.json] [--deny deny.txt] [--seed s] [--date-order dmy|mdy] [--replace-with fake|placeholder|random] [--paranoid [--allow allow.txt]] [--json] [files...]
+blind [--known known.json] [--deny deny.txt] [--seed s] [--date-order dmy|mdy] [--replace-with fake|placeholder|random] [--keep kinds] [--paranoid [--allow allow.txt]] [--json] [files...]
 ```
 
 | Option | Meaning |
@@ -394,6 +397,7 @@ blind [--known known.json] [--deny deny.txt] [--seed s] [--date-order dmy|mdy] [
 | `--seed` | Same seed and input give the same output. Default is random. |
 | `--date-order` | `dmy` (default) or `mdy` for dates like `07/04/2026`. |
 | `--replace-with` | `fake` (default), `placeholder` or `random`. The run file stores the mode, so `unblind` reads it from there. |
+| `--keep` | Comma-separated kinds to leave as written, such as `amount,date`. The run file stores them, so `unblind` needs no flag. |
 | `--paranoid` | Also exit 2 on any suspect the [paranoid sweep](#paranoid-mode) flags, listed on stderr by text, input offsets and kind. |
 | `--allow` | With `--paranoid`, one cleared word or phrase per line. Blank lines are skipped, and so are comments: `#` alone or followed by a space, so a cleared hashtag such as `#launch` can be listed. |
 | `--json` | Write `{ "runId", "texts", "identities" }` instead of plain text. The identity legend contains placeholders only. |
@@ -447,7 +451,8 @@ One mapping per call, consistent across every text in the call, so a thread of s
 | `deny` | Strings that must not appear in the output, plain or `*@domain`. Checked after rewriting. A `*@domain` entry also removes that domain from the public allowlist. |
 | `seed` | Same seed and input give the same output (C6). Omitted means a random seed from Web Crypto. |
 | `replaceWith` | `'fake'` (default), `'placeholder'` or `'random'`: what each value found becomes. See [Fakes, placeholders or random values](#fakes-placeholders-or-random-values). With a `mapping` the mode comes from it, and a different value throws. |
-| `mapping` | The mapping of an earlier call, to continue a conversation (C21). The seed, date order and `replaceWith` then come from it. It must keep blind's invariants (`checkMapping`), or `blind` throws an error that names the field. |
+| `keep` | Kinds to leave as written, such as `['amount', 'date']` (C53). See [Fakes, placeholders or random values](#fakes-placeholders-or-random-values). An entry that is not a kind throws `invalid-option` with its index. With a `mapping` the kinds come from it, and a different list throws. |
+| `mapping` | The mapping of an earlier call, to continue a conversation (C21). The seed, date order, `replaceWith` and `keep` then come from it. It must keep blind's invariants (`checkMapping`), or `blind` throws an error that names the field. |
 | `now` | Only picks a year for dates written without one. |
 | `dateOrder` | `'dmy'` (default) or `'mdy'` for `07/04/2026`. |
 | `allowDomains` | Extra public domains left untouched. |
@@ -484,19 +489,19 @@ The mapping is a plain JSON-serializable object holding the real values. Store i
 
 ## Detectors
 
-Built-in detection is deterministic: known values, patterns with checksums, and context words. It does not find a name in plain prose with no title, address or list entry, so pass those in `known`. `Detector` is a small interface (`detect(text, ctx) -> Span[]`) for detection of your own. Your detectors run next to the built-in ones, and the replacement, scaling, shifting and leak code treats their spans the same way.
+Built-in detection is deterministic: known values, patterns with checksums, and context words. It does not find a name in plain prose with no greeting, signature, label, title, legal suffix, address or list entry, so pass those in `known`. `Detector` is a small interface (`detect(text, ctx) -> Span[]`) for detection of your own. Your detectors run next to the built-in ones, and the replacement, scaling, shifting and leak code treats their spans the same way.
 
 ## Language support
 
-blind's built-in fakes and formats cover English and Spanish. Each fake follows the language of the value it replaces, read from the name lists, accents, company suffixes, country domains and spelling. A value that says nothing follows its paragraph, then the whole text, and is English when nothing says (C31). Spanish-specific handling includes checked DNI, NIE and CIF numbers, Spanish date and amount formats, and titles such as `Sra.` Spanish company words such as `S.L.`, `Asesores` and `Clínica` help identify sender organizations. Mixed English and Spanish text was also measured. Other languages are not covered by these built-in lists or tested in these benchmarks. A Korean `known` value is found and leak-checked where a word starts, with a particle or another word glued on after it (`김민수는`, `김민수회사`), and a value of three syllables or more also inside a word; a two-syllable value is not found inside a word and is listed in `leaks.unenforced` with reason `hangul-inside-word`, and a one-syllable one is refused. A Korean name is not split into parts, so the given name alone (`민수`) is found only when it is passed in `known` too.
+blind's built-in fakes and formats cover English and Spanish. Each fake follows the language of the value it replaces, read from the name lists, accents, company suffixes, country domains and spelling. A value that says nothing follows its paragraph, then the whole text, and is English when nothing says (C31). Spanish-specific handling includes checked DNI, NIE and CIF numbers, Spanish date and amount formats, and titles such as `Sra.` Spanish company words such as `S.L.`, `Asesores` and `Clínica` help identify sender organizations, and Spanish greetings, closings and labels (`Hola`, `Estimada`, `Un saludo`, `Paciente:`) are read like the English ones. Mixed English and Spanish text was also measured. Other languages are not covered by these built-in lists or tested in these benchmarks. A Korean `known` value is found and leak-checked where a word starts, with a particle or another word glued on after it (`김민수는`, `김민수회사`), and a value of three syllables or more also inside a word; a two-syllable value is not found inside a word and is listed in `leaks.unenforced` with reason `hangul-inside-word`, and a one-syllable one is refused. A Korean name is not split into parts, so the given name alone (`민수`) is found only when it is passed in `known` too.
 
-Strict recall with nothing passed in `known`, from the 24 October 2026 benchmark run, when blind's corpus had 379 files. It has 381 now, after two Hebrew and Arabic cases were added. The corpus is home ground. The Gretel finance sample is not. Round trip means exact restoration.
+Strict recall with nothing passed in `known`. The corpus columns were measured on 2026-11-10 on the 381-file corpus (the Hebrew and Arabic cases are in no row). The Gretel column is from the 24 October 2026 benchmark run, before greetings, signatures, labels, legal suffixes and address words were read, and has not been rerun since. The corpus is home ground. The Gretel finance sample is not. Round trip means exact restoration.
 
-| Language | Corpus files | Person recall | ID / date recall | Round trip | Gretel person recall |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| English | 116 | 73.2% | 100% / 100% | 116/116 | 4.5% |
-| Spanish | 164 | 61.7% | 100% / 99.8% | 164/164 | 3.0% |
-| Mixed | 99 | 69.8% | 100% / 100% | 99/99 | not measured |
+| Language | Corpus files | Person recall | Company recall | ID / date recall | Round trip | Gretel person recall, 24 October |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| English | 116 | 87.9% | 99.5% | 100% / 100% | 116/116 | 4.5% |
+| Spanish | 164 | 82.6% | 98.2% | 100% / 100% | 164/164 | 3.0% |
+| Mixed | 99 | 86.9% | 98.3% | 100% / 100% | 99/99 | not measured |
 
 Gretel has 444 English and 444 Spanish documents. They rarely carry sender lines or titles, which is why the core finds so few of their names. Its Spanish person labels are noisy. See the [Spanish language page](docs/languages/spanish.md), the [corpus benchmark](scripts/bench/RESULTS.md) and the [LLM Guard and Gretel benchmark](scripts/bench/RESULTS-llmguard-gretel.md) for methods and caveats.
 
@@ -563,7 +568,7 @@ Sources: rehydra's [README on npm](https://www.npmjs.com/package/rehydra) (versi
 
 Presidio and LLM Guard ran next to blind on two datasets. blind's own corpus had 379 synthetic emails in English and Spanish when these numbers were measured (two handwritten cases in Hebrew and Arabic were added later), all written by blind's authors, so treat it as home ground. The Gretel sample is 888 synthetic finance documents in English and Spanish that nobody here wrote. Gretel labels only some entities, so precision there is a floor.
 
-Recall and precision on the Gretel sample, with nothing passed in `known`.
+Recall and precision on the Gretel sample, with nothing passed in `known`, from the 24 October 2026 run. blind's row predates its reading of greetings, signatures, labels, legal suffixes and address words, and has not been rerun.
 
 | | names | companies | places | ids | calendar dates, recall |
 | --- | --- | --- | --- | --- | --- |
@@ -583,7 +588,7 @@ blind's core took 0.3 ms per file. Presidio took about 20 to 30 ms, and LLM Guar
 
 ### Where another tool fits better
 
-- Presidio, for Python pipelines and for redacting stored data. It can also map answers back if you write the operator and deanonymizer pair its pseudonymization sample shows. On English names in the Gretel sample it found 70.1%, where blind's core, with nothing passed in, found 4.5%.
+- Presidio, for Python pipelines and for redacting stored data. It can also map answers back if you write the operator and deanonymizer pair its pseudonymization sample shows. On English names in the Gretel sample it found 70.1%, where blind's core, with nothing passed in, found 4.5% in the 24 October run.
 - LLM Guard had the best name precision on the Gretel sample. Its repository was archived on 9 July 2026, so fixes will not come, and its default model is licensed for non-commercial use only.
 - Google and AWS, when the data already lives in that cloud and the work is batch redaction at scale.
 - Limina, for a managed service with support and many languages.

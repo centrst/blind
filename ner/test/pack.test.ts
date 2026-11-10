@@ -37,7 +37,7 @@ let installed = '';
 let files: string[] = [];
 let packed: Manifest;
 
-describe('C53: the packed NER tarball', () => {
+describe('C56: the packed NER tarball', () => {
   beforeAll(() => {
     tmp = mkdtempSync(join(tmpdir(), 'blind-ner-pack-'));
     const out = execFileSync(PNPM, ['pack', '--json', '--pack-destination', tmp], {
@@ -69,7 +69,7 @@ describe('C53: the packed NER tarball', () => {
     if (tmp) rmSync(tmp, { recursive: true, force: true });
   });
 
-  it('C53: the tarball holds the build, the licence texts, the notices and the README, and nothing else', () => {
+  it('C56: the tarball holds the build, the licence texts, the notices and the README, and nothing else', () => {
     for (const f of files) {
       expect(['LICENSE', 'README.md', 'THIRD-PARTY-NOTICES.md', 'package.json', 'licenses/APACHE-2.0.txt'].includes(f) || f.startsWith('dist/'), f).toBe(true);
     }
@@ -83,7 +83,7 @@ describe('C53: the packed NER tarball', () => {
     for (const [name, version] of Object.entries(packed.dependencies ?? {})) expect(notices, name).toContain(`## ${name}\n\n- Version: ${version}`);
   });
 
-  it('C53: the packed manifest is public, names the core it was built with as a caret peer range, and pins its two libraries', () => {
+  it('C56: the packed manifest is public, names the core it was built with as a caret peer range, and pins its two libraries', () => {
     expect(packed.name).toBe('@centrst/blind-ner');
     expect(packed.version).toBe(source.version);
     expect(packed.private).toBeUndefined();
@@ -100,7 +100,7 @@ describe('C53: the packed NER tarball', () => {
     expect(Object.keys(source.scripts ?? {})).toEqual(['build']);
   });
 
-  it('C53: beside the core, with no registry, it imports by package name, blinds names a stub backend finds and round trips', () => {
+  it('C56: beside the core, with no registry, it imports by package name, blinds names a stub backend finds and round trips', () => {
     writeFileSync(
       join(app, 'check.mjs'),
       `import { blindWithNer, createNerDetector } from '@centrst/blind-ner';
@@ -128,7 +128,7 @@ process.stdout.write(JSON.stringify({
     expect(JSON.parse(out)).toEqual({ detector: 'function', left: [], same: true, ok: true });
   });
 
-  it('C53: the download command ships executable, prints its usage without a directory, and the entry never loads it', () => {
+  it('C56: the download command ships executable, prints its usage without a directory, and the entry never loads it', () => {
     expect(packed.bin).toEqual({ 'blind-ner-download': 'dist/cli/download.js' });
     const bin = join(installed, 'dist', 'cli', 'download.js');
     expect(read(bin).startsWith('#!/usr/bin/env node\n')).toBe(true);

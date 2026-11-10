@@ -82,6 +82,8 @@ export interface Mapping {
    * or a later one. Left out when there are none.
    */
   literals?: string[];
+  /** Kinds this conversation leaves as written: see `BlindOptions.keep`. Left out when there are none. */
+  keep?: Kind[];
 }
 
 export interface LeakHit {
@@ -174,6 +176,17 @@ export interface BlindOptions {
    * With a `mapping` the mode comes from it, and a different value here throws.
    */
   replaceWith?: ReplaceWith;
+  /**
+   * Kinds left as written, for a caller who needs names and ids hidden but
+   * amounts or dates real. A span of a kept kind is still found, so nothing
+   * else claims its text, but it gets no fake, no pair and no count in
+   * `replaced`, and it is neither a leak hit nor a paranoid suspect. A
+   * `known` or `deny` entry still is. The mapping records the kinds, so
+   * `unblind` leaves an amount or date it does not know as written when
+   * that kind is kept. With a `mapping` the kinds come from it, and a
+   * different list here throws.
+   */
+  keep?: Kind[];
   /**
    * The mapping of an earlier call, for the next turn of a conversation. Every
    * value seen before keeps its fake, amounts keep the same factor and dates

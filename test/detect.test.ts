@@ -363,7 +363,7 @@ describe('names found once, found again', () => {
   });
 
   it('leaves a name the text also writes as an ordinary lower-case word', () => {
-    expect(find(['From: Rosa Paz <rosa@x.example>\n\nHola Rosa, la casa rosa.'])).toEqual([['person:Rosa Paz']]);
+    expect(find(['From: Rosa Paz <rosa@x.example>\n\nVi a Rosa en la casa rosa.'])).toEqual([['person:Rosa Paz']]);
     // Lower case inside an address does not count.
     expect(find(['From: Rosa Paz <rosa@x.example>\n\nHola Rosa.'])).toEqual([['person:Rosa Paz', 'person:Rosa']]);
   });

@@ -20,6 +20,9 @@ interface Prepared {
   mapping: Pick<Mapping, 'factor' | 'dayShift' | 'dateOrder' | 'refYear'>;
   fakeWords: ReadonlySet<string>;
   mode: ReplaceWith;
+  /** Amounts, dates or both left as written by blind: one the mapping does not know is the answer's own and stays as written. */
+  keptAmounts: boolean;
+  keptDates: boolean;
   /** The text pairs, read by the same rule blind claimed its fakes by. */
   log: PairLog;
   /** Where a fake of the mapping is written in a text. */
@@ -107,7 +110,8 @@ function prepare(mapping: Mapping): Prepared {
   const longest = pairs.reduce((n, p) => Math.max(n, p.fake.length), 0);
   // In another layout a fake takes up to two separators after each letter or digit.
   const longestFlex = 3 * [...flexReal.keys()].reduce((n, k) => Math.max(n, k.length), 0);
-  return { mapping: { factor, dayShift, dateOrder, refYear }, mode, log, findPairs, findFlex, flexReal, fakeWords, amountExact, amountByValue, dateExact, dateAnyCase, collisions: collisions(mapping), holdback: Math.max(longest, longestFlex, 80) + 8 };
+  const keep = new Set(mapping.keep ?? []);
+  return { mapping: { factor, dayShift, dateOrder, refYear }, mode, keptAmounts: keep.has('amount'), keptDates: keep.has('date'), log, findPairs, findFlex, flexReal, fakeWords, amountExact, amountByValue, dateExact, dateAnyCase, collisions: collisions(mapping), holdback: Math.max(longest, longestFlex, 80) + 8 };
 }
 
 /** Every span unblind might rewrite in `text`, before overlaps are resolved. */
@@ -175,7 +179,7 @@ function rewrite(text: string, prep: Prepared, invented: string[], found = candi
         const a = s.occ;
         const exact = prep.amountExact.get(lit) ?? prep.amountByValue.get(centsKey(a.minor, a.decimals));
         if (exact !== undefined) rep = exact;
-        else {
+        else if (!prep.keptAmounts) {
           if (scaled) rep = formatNumber(Math.max(0, Math.round(a.minor / mapping.factor)), a.decimals, a.dec, a.thou);
           invented.push(text.slice(a.fullStart, a.fullEnd));
         }
@@ -184,7 +188,7 @@ function rewrite(text: string, prep: Prepared, invented: string[], found = candi
       case 'date': {
         const exact = prep.dateExact.get(lit) ?? prep.dateAnyCase.get(lit.toLowerCase());
         if (exact !== undefined) rep = exact;
-        else {
+        else if (!prep.keptDates) {
           if (scaled) rep = renderDate(shiftOcc(s.occ, -mapping.dayShift, mapping.refYear));
           invented.push(lit);
         }
@@ -230,7 +234,8 @@ function inventedNames(text: string, fakeWords: ReadonlySet<string>): string[] {
  * Put real values back into text that came from a blind copy. With `fake`
  * output, amounts are divided by the factor and dates shifted back. With
  * `placeholder` and `random` output an amount or date that is not a known fake
- * stays as written. `invented` lists amounts, dates, emails, names and unknown
+ * stays as written, and so does one of a kind the mapping keeps (`keep`), which
+ * is not listed either: nothing was scaled or shifted. `invented` lists amounts, dates, emails, names and unknown
  * placeholders in the text that no surrogate stands behind. `collisions`
  * lists mapping pairs that share a fake with an earlier pair, by kind and
  * index, since those come back as the earlier value. An answer longer than

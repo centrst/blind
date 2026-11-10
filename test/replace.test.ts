@@ -41,13 +41,14 @@ describe('placeholder output', () => {
     const r = placeholder([EMAIL]);
     expect(r.texts[0]).toBe([
       'From: [REDACTED_PERSON_1] <[REDACTED_EMAIL_1]>',
-      'Hola [REDACTED_PERSON_2], te paso la factura de Gestoría Norte S.L.',
+      // The legal suffix makes the company an org, its full stop included.
+      'Hola [REDACTED_PERSON_2], te paso la factura de [REDACTED_ORG_1]',
       'Total: [REDACTED_AMOUNT_1] € (cuota [REDACTED_AMOUNT_2] € + 20 %), vence el [REDACTED_DATE_1].',
       'IBAN [REDACTED_IBAN_1], tarjeta [REDACTED_ID_1] 12/28.',
       'DNI [REDACTED_ID_2]. Llámame al [REDACTED_PHONE_1]. Un saludo, [REDACTED_PERSON_3]',
     ].join('\n'));
     expect(r.leaks.ok).toBe(true);
-    expect(r.replaced).toMatchObject({ person: 3, email: 1, amount: 2, date: 1, iban: 1, id: 2, phone: 1 });
+    expect(r.replaced).toMatchObject({ person: 3, org: 1, email: 1, amount: 2, date: 1, iban: 1, id: 2, phone: 1 });
     expect(r.mapping).toMatchObject({ replaceWith: 'placeholder', factor: 1, dayShift: 0 });
   });
 

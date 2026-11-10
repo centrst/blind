@@ -130,7 +130,7 @@ The first NER release follows core `0.2.0`, so its range is `^0.2.0`. Before 1.0
 
 Run `pnpm verify --full` on the commit, with the model present (`pnpm ner:download`). It adds the NER typecheck, lint, build and tests to the core gate, and mutation testing. The workflow's gate job also runs `pnpm test:ner`, but the runner has no weights, so the model tests skip there. The local run is the evidence for C15 to C18.
 
-`pnpm build && pnpm build:ner && pnpm -C ner pack --dry-run` lists what ships: `dist/`, `licenses/APACHE-2.0.txt`, `README.md`, `THIRD-PARTY-NOTICES.md`, `package.json` and `LICENSE`, which pnpm copies from the workspace root. The pack check (C53) in `pnpm test:ner` unpacks that tarball beside the core with no registry access and uses it by package name.
+`pnpm build && pnpm build:ner && pnpm -C ner pack --dry-run` lists what ships: `dist/`, `licenses/APACHE-2.0.txt`, `README.md`, `THIRD-PARTY-NOTICES.md`, `package.json` and `LICENSE`, which pnpm copies from the workspace root. The pack check (C56) in `pnpm test:ner` unpacks that tarball beside the core with no registry access and uses it by package name.
 
 ### Once, before the first release
 
