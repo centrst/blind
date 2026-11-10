@@ -58,8 +58,8 @@ const version = nextVersion(pkg.version, publishedVersions(pkg.name, ROOT), new 
 const sha = run('git', ['rev-parse', '--short', 'HEAD'], true).trim();
 
 const originalPkg = readFileSync(pkgPath, 'utf8');
-const originalVersion = readFileSync(versionPath, 'utf8');
-if (core && !originalVersion.includes(`'${pkg.version}'`)) fail(`src/version.ts does not name ${pkg.version}; the build check C19/B2 would fail too.`);
+const originalVersion = core ? readFileSync(versionPath, 'utf8') : undefined;
+if (originalVersion !== undefined && !originalVersion.includes(`'${pkg.version}'`)) fail(`src/version.ts does not name ${pkg.version}; the build check C19/B2 would fail too.`);
 
 console.log(`${prepare ? 'preparing' : 'dry run of'} ${pkg.name}@${version} from ${sha}`);
 if (prepare) {
@@ -70,7 +70,7 @@ if (prepare) {
 
 function restore(): void {
   writeFileSync(pkgPath, originalPkg);
-  writeFileSync(versionPath, originalVersion);
+  if (originalVersion !== undefined) writeFileSync(versionPath, originalVersion);
 }
 const onSignal = (signal: NodeJS.Signals) => {
   restore();

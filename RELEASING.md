@@ -72,7 +72,7 @@ In **Actions > Release > Run workflow**, select branch `main`, package `blind`, 
 
 ```sh
 gh workflow run release.yml --ref main \
-  -f channel=next -f verified_sha="$(git rev-parse HEAD)"
+  -f package=blind -f channel=next -f verified_sha="$(git rev-parse HEAD)"
 ```
 
 Before it builds anything, the workflow refuses a dispatch on another branch, a `verified_sha` that is not `main`'s head at the start of the run, a re-run of the prepare job, and a source version that is already on npm. A preview of a published `X.Y.Z` would sort below it, so after each stable release, merge a release PR that raises the version before the next preview. The workflow then chooses the next unused date counter from npm and updates both version values in the runner. The prepare job builds and packs the tarball and records its sha512 digest as a job output. A separate gate job then runs typecheck, lint and tests on the same source and version, so test dependencies never run beside the digest the publish job trusts. The tests rebuild `dist` and pack it again, and the `tsc` build is deterministic, so that rebuild has the same digest as the uploaded tarball. It uploads the tarball and a `release.json` source and integrity record as the `npm-package` artifact.
