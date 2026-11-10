@@ -2,11 +2,16 @@
 
 import { foldLookalikes } from './fold.js';
 
+/** A space that groups thousands: a plain, no-break, narrow no-break or thin space (`1 240,80 €`). */
+const GROUP_SPACE = String.raw`[ \u00a0\u202f\u2009]`;
+const GROUP_SPACE_RE = new RegExp(GROUP_SPACE, 'g');
+
 export interface ParsedNumber {
   minor: number;
   decimals: number;
   dec: ',' | '.' | null;
-  thou: ',' | '.' | null;
+  /** The thousands separator: a comma, a dot or the space the number groups with, written back as it was. */
+  thou: string | null;
 }
 
 export interface AmountOcc extends ParsedNumber {
@@ -19,7 +24,9 @@ export interface AmountOcc extends ParsedNumber {
   raw: string;
 }
 
-const NUM = String.raw`\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{1,2})?|\d+(?:[.,]\d{1,2})?`;
+// At most five spaced groups after the first: the sixteen digits the fake of the largest amount may have. An open
+// count would read a long run of three-digit groups with no currency again from each group, time that grows with its square.
+const NUM = String.raw`\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{1,2})?|\d{1,3}(?:${GROUP_SPACE}\d{3}){1,5}(?:[.,]\d{1,2})?|\d+(?:[.,]\d{1,2})?`;
 const SYM = String.raw`[€$£¥]`;
 const CODE = String.raw`(?:EUR|USD|GBP|CHF|MXN|CAD|AUD|JPY|COP|ARS|CLP|BRL)`;
 const WORD = String.raw`(?:euros?|d[óo]lares|dollars?|pounds?|libras)`;
@@ -34,11 +41,25 @@ const SUFFIX_RE = new RegExp(
 );
 const PERCENT_RE = /(?<![\d.,])(\d+(?:[.,]\d+)?)[ \t  ]?%/g;
 
+/**
+ * Reads a number as written: its value in units of its last decimal, how many decimals it has, and its decimal and
+ * thousands marks, told apart by position and group size. Null for anything that is not digits and marks, or a
+ * value a double does not hold exactly.
+ */
 export function parseNumber(raw: string): ParsedNumber | null {
   const hasDot = raw.includes('.');
   const hasComma = raw.includes(',');
   let dec: ParsedNumber['dec'] = null;
   let thou: ParsedNumber['thou'] = null;
+  const space = raw.match(GROUP_SPACE_RE)?.[0];
+  if (space !== undefined) {
+    // Groups of three split by spaces: the one dot or comma left, if any, is the decimal mark.
+    const [intPart = '', frac = '', ...more] = raw.replace(GROUP_SPACE_RE, '').split(/[.,]/);
+    if (more.length > 0 || !/^\d+$/.test(intPart) || (frac && !/^\d+$/.test(frac))) return null;
+    const minor = Number(intPart + frac);
+    if (!Number.isSafeInteger(minor)) return null;
+    return { minor, decimals: frac.length, dec: frac ? (hasDot ? '.' : ',') : null, thou: space };
+  }
   if (hasDot && hasComma) {
     if (raw.lastIndexOf('.') > raw.lastIndexOf(',')) {
       dec = '.';
@@ -59,8 +80,11 @@ export function parseNumber(raw: string): ParsedNumber | null {
   const noThou = thou ? raw.split(thou).join('') : raw;
   const [intPart, frac = ''] = dec ? noThou.split(dec) : [noThou, ''];
   if (!/^\d+$/.test(intPart as string) || (frac && !/^\d+$/.test(frac))) return null;
-  if ((intPart as string).length + frac.length > 15) return null;
-  return { minor: Number((intPart as string) + frac), decimals: frac.length, dec, thou };
+  // Any whole number of units a double holds exactly. `blind` takes amounts up to `MAX_AMOUNT_DIGITS`, so the
+  // fake of the largest one, a digit longer under a factor above 1, still reads back here.
+  const minor = Number((intPart as string) + frac);
+  if (!Number.isSafeInteger(minor)) return null;
+  return { minor, decimals: frac.length, dec, thou };
 }
 
 export function formatNumber(
@@ -76,6 +100,10 @@ export function formatNumber(
   return decimals ? `${int}${dec ?? '.'}${frac}` : int;
 }
 
+/** The most digits an amount `blind` scales may have: its fake, at most 1.6 times as large, is still an exact number. */
+export const MAX_AMOUNT_DIGITS = 15;
+
+/** Every amount in `text`: a number with a currency sign, code or word before or after it, in text order. */
 export function detectAmounts(text: string): AmountOcc[] {
   const out: AmountOcc[] = [];
   const seen = new Set<number>();

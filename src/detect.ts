@@ -1,4 +1,4 @@
-import { detectAmounts } from './amounts.js';
+import { detectAmounts, MAX_AMOUNT_DIGITS } from './amounts.js';
 import { detectDates } from './dates.js';
 import { foldLookalikes, skeleton } from './fold.js';
 import { detectIds } from './ids.js';
@@ -199,7 +199,10 @@ export const phoneDetector: Detector = {
         out.push({ start: m.index!, end: m.index! + m[0].length, kind: 'phone', priority: PRIORITY.phone });
       }
     }
-    return out;
+    if (out.length === 0) return out;
+    // Digits an amount holds are that amount: `650.000.000 €` and `850 000 000 EUR` are not phone numbers.
+    const amounts = coverage(detectAmounts(text), text.length);
+    return out.filter((s) => !covered(amounts, s.start, s.end));
   },
 };
 
@@ -242,6 +245,19 @@ const HONORIFIC = String.raw`(?:Sr|Sra|Srta|Dña|Dra|Dr|Mr|Mrs|Ms|Mx|Prof|Profa|
 // A name after a title: no "y" between words, and a second title starts a new name.
 const TITLED_WORD = String.raw`(?!(?:${HONORIFIC})(?!\p{L}))${NAME_WORD}`;
 const TITLED_PART = String.raw`(?:(?:de|del|la|las|los|van|von|da|di)[ \t]+)*${TITLED_WORD}`;
+/** Titles a given name follows (`Don Luis`). After any other title one word is a surname (`Mr Holloway`, `Sra. Ruiz`). */
+const GIVEN_NAME_TITLE = /^(?:Dña|D\.|Dª|Don|Doña)(?!\p{L})/iu;
+const TITLE_BEFORE = new RegExp(String.raw`(?<![\p{L}\p{N}])(?<title>${HONORIFIC})[ \t]+$`, 'u');
+
+/**
+ * Whether the word at `start` stands right after a title that takes a surname
+ * (`Mr Holloway`, `Sra. Ruiz`), whichever detector found the word: a known
+ * value and a name found again bare count too.
+ */
+export function afterSurnameTitle(text: string, start: number): boolean {
+  const title = TITLE_BEFORE.exec(text.slice(Math.max(0, start - 16), start))?.groups?.title;
+  return title !== undefined && !GIVEN_NAME_TITLE.test(title);
+}
 const HONORIFIC_RE = new RegExp(
   String.raw`(?<![\p{L}\p{N}])(?:${HONORIFIC})[ \t]+(?<name>${TITLED_WORD}(?:[ \t]+${TITLED_PART}){0,2})`,
   'gud',
@@ -268,7 +284,8 @@ export const contextDetector: Detector = {
     for (const m of text.matchAll(HONORIFIC_RE)) {
       const [s, e] = m.indices!.groups!.name as [number, number];
       // "Sr. García:" or "Dr. Mena." ends the name at punctuation the pattern may have taken.
-      const name = text.slice(s, e).replace(/[.'’\-]+$/, '');
+      // So does a full stop after a word of three letters or more: "Dr. Okafor. Holloway agreed" is one name and a new sentence, "Dr. J. Orvane" one name.
+      const name = text.slice(s, e).replace(/(?<=\p{L}{3})\.\s.*$/su, '').replace(/[.'’\-]+$/, '');
       if (name.split(/\s+/).every((w) => PARTICLES.has(w.toLowerCase()))) continue;
       out.push({ start: s, end: s + name.length, kind: 'person', priority: PRIORITY.honorific });
     }
@@ -292,7 +309,7 @@ export const contextDetector: Detector = {
 export const amountDetector: Detector = {
   name: 'amount',
   detect(text) {
-    return detectAmounts(text).map((o) => ({
+    return detectAmounts(text).filter((o) => o.minor < 10 ** MAX_AMOUNT_DIGITS).map((o) => ({
       start: o.start, end: o.end, kind: 'amount' as const, priority: PRIORITY.amount, meta: o,
     }));
   },

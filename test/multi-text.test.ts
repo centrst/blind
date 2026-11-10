@@ -139,7 +139,8 @@ describe('prepared independent restoration', () => {
   });
 
   it('C36: hides mapping failures behind the same error boundary as one-shot restoration', () => {
-    const mapping = { get pairs() { throw new Error('sensitive@invented.example'); } } as unknown as Mapping;
+    const valid = blind(['tavia@norwick.example'], { seed: 'c36' }).mapping;
+    const mapping = { ...valid, get pairs(): never { throw new Error('sensitive@invented.example'); } } as unknown as Mapping;
     expect(() => prepareUnblinder(mapping)).toThrow(/^unblind: internal error while reading the mapping$/);
   });
 });
