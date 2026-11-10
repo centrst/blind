@@ -151,6 +151,7 @@ export function blind(texts: string[], opts: BlindOptions = {}): BlindResult {
   });
 }
 
+/** The work of `blind` once the call is checked: detect, pick the fakes, write the blind copies, check for leaks. */
 function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   const prev = opts.mapping;
   if (prev !== undefined) checkMapping(prev);

@@ -51,6 +51,7 @@ type Candidate = Span & {
   outerEnd: number;
 } & ({ what: 'pair' } | { what: 'flex'; real: string } | { what: 'invented' } | { what: 'amount'; occ: AmountOcc } | { what: 'date'; occ: DateOcc });
 
+/** Checks `mapping` and builds the lookups every restore of it reads. Throws `invalid-mapping` with the field when it is not valid. */
 function prepare(mapping: Mapping): Prepared {
   // A damaged or hand-edited mapping is refused by name: a factor of 0 would write `Infinity` into the answer.
   checkMapping(mapping);

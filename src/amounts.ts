@@ -41,6 +41,11 @@ const SUFFIX_RE = new RegExp(
 );
 const PERCENT_RE = /(?<![\d.,])(\d+(?:[.,]\d+)?)[ \t  ]?%/g;
 
+/**
+ * Reads a number as written: its value in units of its last decimal, how many decimals it has, and its decimal and
+ * thousands marks, told apart by position and group size. Null for anything that is not digits and marks, or a
+ * value a double does not hold exactly.
+ */
 export function parseNumber(raw: string): ParsedNumber | null {
   const hasDot = raw.includes('.');
   const hasComma = raw.includes(',');
@@ -98,6 +103,7 @@ export function formatNumber(
 /** The most digits an amount `blind` scales may have: its fake, at most 1.6 times as large, is still an exact number. */
 export const MAX_AMOUNT_DIGITS = 15;
 
+/** Every amount in `text`: a number with a currency sign, code or word before or after it, in text order. */
 export function detectAmounts(text: string): AmountOcc[] {
   const out: AmountOcc[] = [];
   const seen = new Set<number>();
