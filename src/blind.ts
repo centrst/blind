@@ -94,13 +94,49 @@ function checkSize(texts: string[], limit: number): void {
   });
 }
 
-/** `allow` is a list of strings, or the sweep would clear nothing a reviewer meant it to. The message names the index, never the entry. */
-function checkAllow(allow: unknown): void {
-  if (allow === undefined) return;
-  if (!Array.isArray(allow)) throw new BlindError('invalid-option', 'blind: allow must be an array of strings');
-  allow.forEach((a, i) => {
-    if (typeof a !== 'string') throw new BlindError('invalid-option', `blind: allow entry ${i} is not a string`);
+/** An option that is a list of strings, or left out. The message names the option and the index, never the entry. */
+function checkStrings(name: 'allow' | 'deny' | 'allowDomains', list: unknown): void {
+  if (list === undefined) return;
+  if (!Array.isArray(list)) throw new BlindError('invalid-option', `blind: ${name} must be an array of strings`);
+  list.forEach((a, i) => {
+    if (typeof a !== 'string') throw new BlindError('invalid-option', `blind: ${name} entry ${i} is not a string`);
   });
+}
+
+/** Every option `blind` reads. A key outside this list is a mistake, and a silent one would leave a `known` list unread. */
+const OPTIONS: Record<keyof BlindOptions, true> = {
+  known: true, deny: true, seed: true, now: true, dateOrder: true, allowDomains: true, detectors: true,
+  paranoid: true, allow: true, replaceWith: true, mapping: true, maxTextLength: true,
+};
+
+/**
+ * Refuses a call `blind` cannot read as meant, before any work: texts that are
+ * not an array of strings (a bare string is the usual slip), options that are
+ * not an object, an option `blind` does not know (`knwon`), a list option of
+ * the wrong type, and a seed, date order or `now` no mapping can hold. A misspelt option would otherwise be ignored, the values
+ * in it would go out as written, and the leak check would still pass. The
+ * message names the option or the index, never a key or value the caller wrote.
+ */
+function checkCall(texts: unknown, opts: unknown): void {
+  if (typeof texts === 'string') throw new BlindError('invalid-option', 'blind: texts must be an array of strings; pass one text as [text]');
+  if (!Array.isArray(texts)) throw new BlindError('invalid-option', 'blind: texts must be an array of strings');
+  texts.forEach((t, i) => {
+    if (typeof t !== 'string') throw new BlindError('invalid-option', `blind: text ${i} is not a string`);
+  });
+  if (opts === null || typeof opts !== 'object' || Array.isArray(opts)) throw new BlindError('invalid-option', 'blind: options must be an object');
+  const o = opts as Record<string, unknown>;
+  if (Object.keys(o).some((k) => !Object.hasOwn(OPTIONS, k))) {
+    throw new BlindError('invalid-option', `blind: options has a key blind does not know; the options are ${Object.keys(OPTIONS).join(', ')}`);
+  }
+  if (o.known !== undefined && !Array.isArray(o.known)) throw new BlindError('invalid-known', 'blind: known must be an array of { kind, value }');
+  if (o.detectors !== undefined && !Array.isArray(o.detectors)) throw new BlindError('invalid-option', 'blind: detectors must be an array');
+  checkStrings('deny', o.deny);
+  checkStrings('allowDomains', o.allowDomains);
+  checkStrings('allow', o.allow);
+  // These three go into the mapping, which `unblind` and the next turn refuse when they are not valid.
+  if (o.seed !== undefined && (typeof o.seed !== 'string' || o.seed.length === 0)) throw new BlindError('invalid-option', 'blind: seed must be a string that is not empty');
+  if (o.dateOrder !== undefined && o.dateOrder !== 'dmy' && o.dateOrder !== 'mdy') throw new BlindError('invalid-option', 'blind: dateOrder must be dmy or mdy');
+  if (o.now !== undefined && !(o.now instanceof Date && !Number.isNaN(o.now.getTime()))) throw new BlindError('invalid-option', 'blind: now must be a valid Date');
 }
 
 /**
@@ -109,8 +145,8 @@ function checkAllow(allow: unknown): void {
  */
 export function blind(texts: string[], opts: BlindOptions = {}): BlindResult {
   return guard('blind', 'writing the blind copy', () => {
+    checkCall(texts, opts);
     checkSize(texts, opts.maxTextLength ?? MAX_TEXT_LENGTH);
-    checkAllow(opts.allow);
     return blindTexts(texts, opts);
   });
 }
@@ -182,6 +218,16 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
       return lang.call;
     };
     for (const k of known) if (k.kind === 'person') sur.prime(k.value, firstSeen(k.value));
+  }
+
+  // One word after a title is a surname ("Mr Holloway"), wherever the text first writes it bare.
+  if (mode !== 'placeholder') {
+    spansByText.forEach((spans, ti) => {
+      for (const s of spans) {
+        if (s.kind !== 'person' || (s.meta as { surname?: unknown } | undefined)?.surname !== true) continue;
+        sur.registerPerson(stripInvisible((folded[ti] as string).slice(s.start, s.end)), lang.at(ti, s.start), true);
+      }
+    });
   }
 
   // Generate in a fixed kind order so related fakes (names, then emails) line up.
@@ -316,7 +362,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
     if (r && f && r.decimals === f.decimals) pinned.set(amountKey(r), f.minor);
   }
   const percents = texts.map(detectPercents);
-  const thouHint = new Map<string, ',' | '.'>();
+  const thouHint = new Map<string, string>();
   for (const occs of amountOccs) for (const o of occs) if (o.thou) thouHint.set(String(o.dec), o.thou);
 
   // Each spelling of a date keeps one fake, and no two spellings share one: a

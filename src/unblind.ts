@@ -3,12 +3,12 @@ import { detectDates, renderDate, shiftOcc, type DateOcc } from './dates.js';
 import { emailDetector, resolveSpans } from './detect.js';
 import { foldLookalikes } from './fold.js';
 import { PLACEHOLDER_RE } from './replace.js';
-import { fakeFinder, literalFinder } from './match.js';
+import { fakeFinder, FLEX_MIN, flexFinder, flexKey, flexRestore, literalFinder } from './match.js';
 import { PairLog } from './pairlog.js';
 import { asciiLower, Surrogates } from './surrogates.js';
 import type { Collision, Mapping, ReplaceWith, Span, UnblindOptions, UnblindResult } from './types.js';
 import { BlindError, checkLimit, guard, InputTooLargeError, MAX_TEXT_LENGTH } from './errors.js';
-import { collisions } from './mapping.js';
+import { checkMapping, collisions } from './mapping.js';
 
 const NAME_LIKE = /\p{Lu}\p{Ll}+(?:[ \t]+\p{Lu}\p{Ll}+)+/gu;
 /** A stream tries to let text out once it holds this many holdbacks, so each push reads little of the tail again. */
@@ -24,6 +24,10 @@ interface Prepared {
   log: PairLog;
   /** Where a fake of the mapping is written in a text. */
   findPairs: (text: string) => Array<[number, number]>;
+  /** Where a phone, IBAN or id fake is written in another layout, with its key in `flexReal`. */
+  findFlex: (text: string) => Array<[number, number, string]>;
+  /** The real value behind a phone, IBAN or id fake, by the fake's letters and digits. */
+  flexReal: Map<string, string>;
   amountExact: Map<string, string>;
   amountByValue: Map<number, string>;
   dateExact: Map<string, string>;
@@ -45,9 +49,11 @@ type Candidate = Span & {
   /** Where the value and anything it reads around it begin and end. */
   outerStart: number;
   outerEnd: number;
-} & ({ what: 'pair' } | { what: 'invented' } | { what: 'amount'; occ: AmountOcc } | { what: 'date'; occ: DateOcc });
+} & ({ what: 'pair' } | { what: 'flex'; real: string } | { what: 'invented' } | { what: 'amount'; occ: AmountOcc } | { what: 'date'; occ: DateOcc });
 
 function prepare(mapping: Mapping): Prepared {
+  // A damaged or hand-edited mapping is refused by name: a factor of 0 would write `Infinity` into the answer.
+  checkMapping(mapping);
   // Own the pairs so a caller editing the source mapping cannot change a prepared restore.
   const pairs = mapping.pairs.map(({ kind, real, fake }) => ({ kind, real, fake }));
   const { factor, dayShift, dateOrder, refYear } = mapping;
@@ -80,8 +86,27 @@ function prepare(mapping: Mapping): Prepared {
   const keys = log.keys();
   // A placeholder carries its own brackets, so it is found even when the model glues a letter to it.
   const findPairs = placeholders ? literalFinder(keys, '', '') : fakeFinder(keys);
+  // A model often writes a number its own way (`+447700900692`, a card with dashes). A phone, IBAN or id fake
+  // is also found by its letters and digits in any layout, the first pair with them winning as everywhere else.
+  // An IP address is left out: its dots carry the value (`192.0.2.123` is not `192.0.21.23`). So is a fake whose
+  // letters and digits two different values share, which only the layout as written tells apart.
+  const flexReal = new Map<string, string>();
+  const shared = new Set<string>();
+  for (const p of placeholders ? [] : pairs) {
+    if (p.kind !== 'phone' && p.kind !== 'iban' && p.kind !== 'id') continue;
+    if (p.kind === 'id' && (/^\d{1,3}(?:\.\d{1,3}){3}$/.test(p.fake) || p.fake.includes(':'))) continue;
+    const key = flexKey(p.fake);
+    if (key.length < FLEX_MIN) continue;
+    const held = flexReal.get(key);
+    if (held === undefined) flexReal.set(key, p.real);
+    else if (flexKey(held) !== flexKey(p.real)) shared.add(key);
+  }
+  for (const key of shared) flexReal.delete(key);
+  const findFlex = flexFinder([...flexReal.keys()]);
   const longest = pairs.reduce((n, p) => Math.max(n, p.fake.length), 0);
-  return { mapping: { factor, dayShift, dateOrder, refYear }, mode, log, findPairs, fakeWords, amountExact, amountByValue, dateExact, dateAnyCase, collisions: collisions(mapping), holdback: Math.max(longest, 80) + 8 };
+  // In another layout a fake takes up to two separators after each letter or digit.
+  const longestFlex = 3 * [...flexReal.keys()].reduce((n, k) => Math.max(n, k.length), 0);
+  return { mapping: { factor, dayShift, dateOrder, refYear }, mode, log, findPairs, findFlex, flexReal, fakeWords, amountExact, amountByValue, dateExact, dateAnyCase, collisions: collisions(mapping), holdback: Math.max(longest, longestFlex, 80) + 8 };
 }
 
 /** Every span unblind might rewrite in `text`, before overlaps are resolved. */
@@ -91,8 +116,13 @@ function candidates(text: string, prep: Prepared): Candidate[] {
   for (const [start, end] of prep.findPairs(text)) {
     out.push({ ...at(start, end), what: 'pair', kind: 'person', priority: 100 });
   }
+  for (const [start, end, key] of prep.findFlex(text)) {
+    // Written as the mapping has it, a fake is a pair above.
+    if (prep.log.knows(text.slice(start, end))) continue;
+    out.push({ ...at(start, end), what: 'flex', real: prep.flexReal.get(key) as string, kind: 'id', priority: 98 });
+  }
   const ctx = { dateOrder: prep.mapping.dateOrder, isAllowedHost: () => false };
-  const pairSpans = out.slice();
+  const pairSpans = out.filter((c) => c.what === 'pair');
   if (prep.mode === 'placeholder') {
     // A placeholder the mapping does not know was made up by the model.
     for (const m of text.matchAll(PLACEHOLDER_RE)) {
@@ -133,6 +163,9 @@ function rewrite(text: string, prep: Prepared, invented: string[], found = candi
     switch (s.what) {
       case 'pair':
         rep = prep.log.restore(lit) ?? null;
+        break;
+      case 'flex':
+        rep = flexRestore(lit, s.real);
         break;
       case 'invented':
         invented.push(lit);
@@ -176,6 +209,11 @@ function checkSize(length: number, limit: number): void {
   if (length > limit) throw new InputTooLargeError(0, length, limit, 'unblind');
 }
 
+/** Refuses an answer or chunk that is not a string, by name, before any work is done. */
+function checkText(text: unknown): asserts text is string {
+  if (typeof text !== 'string') throw new BlindError('invalid-option', 'unblind: the text must be a string');
+}
+
 const FIRST_NAMES = Surrogates.firstNameSet();
 /** Names the model made up: a first name from our lists with no surrogate behind it. */
 function inventedNames(text: string, fakeWords: ReadonlySet<string>): string[] {
@@ -199,6 +237,7 @@ function inventedNames(text: string, fakeWords: ReadonlySet<string>): string[] {
  * `input-too-large` error before any work is done.
  */
 export function unblind(text: string, mapping: Mapping, opts?: UnblindOptions): UnblindResult {
+  checkText(text);
   checkSize(text.length, limitOf(opts));
   const prep = guard('unblind', 'reading the mapping', () => prepare(mapping));
   return restore(text, prep);
@@ -227,6 +266,7 @@ export function prepareUnblinder(mapping: Mapping, opts?: UnblindOptions): Prepa
   const prep = guard('unblind', 'reading the mapping', () => prepare(mapping));
   return {
     unblind(text) {
+      checkText(text);
       checkSize(text.length, limit);
       return restore(text, prep);
     },
@@ -267,6 +307,7 @@ export function createUnblinder(mapping: Mapping, opts?: UnblindOptions): Unblin
   return {
     push: (chunk) => guard('unblind', 'rewriting a chunk', () => {
       if (done) throw new BlindError('stream-closed', 'unblind: push after end');
+      checkText(chunk);
       checkSize(total + chunk.length, limit);
       total += chunk.length;
       pending += chunk;

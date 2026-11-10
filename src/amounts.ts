@@ -2,11 +2,16 @@
 
 import { foldLookalikes } from './fold.js';
 
+/** A space that groups thousands: a plain, no-break, narrow no-break or thin space (`1 240,80 €`). */
+const GROUP_SPACE = String.raw`[ \u00a0\u202f\u2009]`;
+const GROUP_SPACE_RE = new RegExp(GROUP_SPACE, 'g');
+
 export interface ParsedNumber {
   minor: number;
   decimals: number;
   dec: ',' | '.' | null;
-  thou: ',' | '.' | null;
+  /** The thousands separator: a comma, a dot or the space the number groups with, written back as it was. */
+  thou: string | null;
 }
 
 export interface AmountOcc extends ParsedNumber {
@@ -19,7 +24,7 @@ export interface AmountOcc extends ParsedNumber {
   raw: string;
 }
 
-const NUM = String.raw`\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{1,2})?|\d+(?:[.,]\d{1,2})?`;
+const NUM = String.raw`\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{1,2})?|\d{1,3}(?:${GROUP_SPACE}\d{3})+(?:[.,]\d{1,2})?|\d+(?:[.,]\d{1,2})?`;
 const SYM = String.raw`[€$£¥]`;
 const CODE = String.raw`(?:EUR|USD|GBP|CHF|MXN|CAD|AUD|JPY|COP|ARS|CLP|BRL)`;
 const WORD = String.raw`(?:euros?|d[óo]lares|dollars?|pounds?|libras)`;
@@ -39,6 +44,14 @@ export function parseNumber(raw: string): ParsedNumber | null {
   const hasComma = raw.includes(',');
   let dec: ParsedNumber['dec'] = null;
   let thou: ParsedNumber['thou'] = null;
+  const space = raw.match(GROUP_SPACE_RE)?.[0];
+  if (space !== undefined) {
+    // Groups of three split by spaces: the one dot or comma left, if any, is the decimal mark.
+    const [intPart = '', frac = '', ...more] = raw.replace(GROUP_SPACE_RE, '').split(/[.,]/);
+    if (more.length > 0 || !/^\d+$/.test(intPart) || (frac && !/^\d+$/.test(frac))) return null;
+    if (intPart.length + frac.length > 15) return null;
+    return { minor: Number(intPart + frac), decimals: frac.length, dec: frac ? (hasDot ? '.' : ',') : null, thou: space };
+  }
   if (hasDot && hasComma) {
     if (raw.lastIndexOf('.') > raw.lastIndexOf(',')) {
       dec = '.';

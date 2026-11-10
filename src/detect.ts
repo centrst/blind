@@ -242,6 +242,8 @@ const HONORIFIC = String.raw`(?:Sr|Sra|Srta|Dña|Dra|Dr|Mr|Mrs|Ms|Mx|Prof|Profa|
 // A name after a title: no "y" between words, and a second title starts a new name.
 const TITLED_WORD = String.raw`(?!(?:${HONORIFIC})(?!\p{L}))${NAME_WORD}`;
 const TITLED_PART = String.raw`(?:(?:de|del|la|las|los|van|von|da|di)[ \t]+)*${TITLED_WORD}`;
+/** Titles a given name follows (`Don Luis`). After any other title one word is a surname (`Mr Holloway`, `Sra. Ruiz`). */
+const GIVEN_NAME_TITLE = /^(?:Dña|D\.|Dª|Don|Doña)(?!\p{L})/iu;
 const HONORIFIC_RE = new RegExp(
   String.raw`(?<![\p{L}\p{N}])(?:${HONORIFIC})[ \t]+(?<name>${TITLED_WORD}(?:[ \t]+${TITLED_PART}){0,2})`,
   'gud',
@@ -268,9 +270,12 @@ export const contextDetector: Detector = {
     for (const m of text.matchAll(HONORIFIC_RE)) {
       const [s, e] = m.indices!.groups!.name as [number, number];
       // "Sr. García:" or "Dr. Mena." ends the name at punctuation the pattern may have taken.
-      const name = text.slice(s, e).replace(/[.'’\-]+$/, '');
+      // So does a full stop after a word of three letters or more: "Dr. Okafor. Holloway agreed" is one name and a new sentence, "Dr. J. Orvane" one name.
+      const name = text.slice(s, e).replace(/(?<=\p{L}{3})\.\s.*$/su, '').replace(/[.'’\-]+$/, '');
       if (name.split(/\s+/).every((w) => PARTICLES.has(w.toLowerCase()))) continue;
-      out.push({ start: s, end: s + name.length, kind: 'person', priority: PRIORITY.honorific });
+      // One word after a title that takes a surname gets a surname for its fake: see `Surrogates.registerPerson`.
+      const surname = !/\s/.test(name) && !GIVEN_NAME_TITLE.test(m[0]);
+      out.push({ start: s, end: s + name.length, kind: 'person', priority: PRIORITY.honorific, ...(surname ? { meta: { surname: true } } : {}) });
     }
     const re = new RegExp(LABELLED_ID_RE.source, LABELLED_ID_RE.flags);
     for (let m = re.exec(text); m; m = re.exec(text)) {

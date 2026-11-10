@@ -867,7 +867,7 @@ describe('C36: errors and long or odd input', () => {
       try {
         run();
       } catch (e) {
-        expect((e as Error).message).toMatch(/^unblind: internal error while /);
+        expect((e as Error).message).toBe('blind: the mapping is not valid (pairs[0])');
         expect(quotes((e as Error).message, [secret])).toBe(false);
       }
     }
