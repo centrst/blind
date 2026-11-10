@@ -20,14 +20,14 @@ The output does not change for any input. `test/known-prefilter.test.ts` (C55) r
 
 ## Measurements
 
-Apple M4 Max, Node v26.13.0, against the base commit `2f448f2`. Known people are `Marta<i> Vandermeer<i>`. The short text is `Hello Marta42 Vandermeer42, see you.` and the long one is 200 KB of generated corpus text. Wall milliseconds: the first call in a fresh process, then the best of two more calls with the same list in parentheses. Times vary with machine load.
+Apple M4 Max, Node v26.13.0, against the base commit `567ca5b`. Known people are `Marta<i> Vandermeer<i>`. The short text is `Hello Marta42 Vandermeer42, see you.` and the long one is 200 KB of generated corpus text. Wall milliseconds: the first call in a fresh process, then the best of two more calls with the same list in parentheses. Times vary with machine load.
 
 | Known people | Short, before | Short, after | 200 KB, before | 200 KB, after |
 | ---: | ---: | ---: | ---: | ---: |
-| 0 | 13 (0) | 11 (0) | 423 (282) | 353 (221) |
-| 1,000 | 1,013 (48) | 33 (12) | 5,857 (5,489) | 375 (229) |
-| 4,000 | 4,088 (194) | 76 (46) | 21,958 (21,739) | 421 (270) |
-| 10,000 | 9,969 (546) | 144 (115) | 53,569 (53,613) | 521 (365) |
+| 0 | 16 (0) | 16 (0) | 517 (308) | 440 (237) |
+| 1,000 | 1,031 (46) | 39 (12) | 5,803 (4,760) | 461 (258) |
+| 4,000 | 4,060 (185) | 74 (41) | 21,655 (21,585) | 514 (301) |
+| 10,000 | 9,968 (529) | 140 (105) | 52,503 (52,646) | 607 (399) |
 
 ## What is left
 
@@ -44,7 +44,7 @@ To measure the base commit with the same script:
 
 ```sh
 mkdir -p .local/known-before
-git archive 2f448f2 src package.json tsconfig.json tsconfig.build.json | tar -x -C .local/known-before
+git archive 567ca5b src package.json tsconfig.json tsconfig.build.json | tar -x -C .local/known-before
 pnpm exec tsc -p .local/known-before/tsconfig.build.json
 node scripts/bench/known-list.mjs ../../.local/known-before/dist/index.js
 ```
