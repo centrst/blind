@@ -122,7 +122,7 @@ describe.skipIf(process.env.BLIND_SKIP_PERF)('time against the size of known', (
     const d = process.cpuUsage(before);
     return (d.user + d.system) / 1e6;
   };
-  const text = 'Hello Corvina Lestrade, see you at nine.';
+  const text = 'The meeting moved to nine, see you there.';
   /** `n` invented people and companies the text does not write, under a prefix of their own so no other test compiled them. */
   const absent = (prefix: string, n: number): KnownValue[] =>
     Array.from({ length: n }, (_, i) => (i % 4 === 3 ? { kind: 'org', value: `${prefix}${i} Vandermeer Logistics` } : { kind: 'person', value: `${prefix}${i} Vandermeer${i}` }));

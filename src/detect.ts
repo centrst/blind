@@ -852,6 +852,14 @@ export function asciiKeyText(text: string): string {
 /** The longest of `pieces`, or null when they are all empty. */
 const longest = (pieces: string[]): string | null => pieces.reduce<string | null>((a, p) => (p && (!a || p.length > a.length) ? p : a), null);
 
+/**
+ * One `known` value ready to match: its pattern, compiled on first use, and the
+ * keys that tell the prefilter whether a text can hold it. A phone's keys are its
+ * digits, with and without a country code; a name, company or place's are the
+ * longest run of each form without whitespace, on the skeleton; any other kind's
+ * are the longest ASCII run of each form, in lower case. A form with no key leaves
+ * the entry without keys, so it is tried on every text.
+ */
 function knownEntry(k: KnownValue): KnownEntry {
   const textual = k.kind === 'person' || k.kind === 'org' || k.kind === 'place';
   const lazy = (make: () => (text: string) => Array<[number, number]>): (() => (text: string) => Array<[number, number]>) => {
@@ -896,6 +904,11 @@ function knownEntry(k: KnownValue): KnownEntry {
   return { kind: k.kind, skel: textual, exact, find, space: textual ? 'skel' : 'ascii', keys };
 }
 
+/**
+ * The detector over `known`. With `filtered`, an entry's pattern runs only on a
+ * text that holds one of its keys; without it, every entry runs on every text.
+ * Both push the spans in the order of `known`.
+ */
 function knownMatcher(known: KnownValue[], filtered: boolean): Detector {
   checkKnown(known);
   const entries = known.map(knownEntry);
