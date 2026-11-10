@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const CORE = String.raw`(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)`;
@@ -8,6 +8,16 @@ const PACKAGE = new RegExp(`^${CORE}(?:-next\\.\\d{8}\\.[1-9]\\d*)?$`);
 const ALREADY_PUBLISHED = 'The source version is already published. Merge a release PR that raises it first.';
 
 export type Channel = 'next' | 'stable';
+
+/** Where each package the release workflow publishes lives, by the value of its `package` input. */
+const PACKAGE_DIRS: Record<string, string> = { blind: '.', 'blind-ner': 'ner' };
+
+/** The directory of the package a release run publishes. No input means the core. */
+export function packageDir(root: string, name = 'blind'): string {
+  const dir = Object.hasOwn(PACKAGE_DIRS, name) ? PACKAGE_DIRS[name] : undefined;
+  if (dir === undefined) throw new Error('Unknown release package.');
+  return join(root, dir);
+}
 
 export function assertStableVersion(version: string): void {
   if (!STABLE.test(version)) throw new Error('The source version must be a stable X.Y.Z version.');
@@ -28,6 +38,11 @@ export function pendingChangesets(dir: string): boolean {
   return readdirSync(dir).some((name) => name.endsWith('.md') && name !== 'README.md');
 }
 
+/** True when a changelog written by hand has a heading for `version`, as the NER package's must before a stable release. */
+export function changelogHas(file: string, version: string): boolean {
+  return readFileSync(file, 'utf8').split('\n').some((line) => line === `## ${version}` || line.startsWith(`## ${version} `));
+}
+
 export interface ReleaseCheck {
   version: string;
   channel: string;
@@ -39,7 +54,14 @@ export interface ReleaseCheck {
   mainSha: string;
   runAttempt: string;
   published: string[];
+  /** Release notes are not ready: pending changesets for the core, no changelog heading for the NER package. */
   pendingNotes: boolean;
+  /**
+   * For the NER package only: the core in this tree is not the one on npm. Its version
+   * is unpublished, or changesets are pending. The NER tarball names that version as
+   * its peer and was tested against that source, so the core goes out first.
+   */
+  coreUnreleased?: boolean;
 }
 
 /**
@@ -58,6 +80,7 @@ export function checkRelease(input: ReleaseCheck): Channel {
   if (input.mainSha !== input.sha) throw new Error('main has moved past the verified commit. Verify the new head and dispatch again.');
   if (input.runAttempt !== '1') throw new Error('Dispatch a new run instead of re-running the prepare job.');
   if (input.published.includes(input.version)) throw new Error(ALREADY_PUBLISHED);
+  if (input.coreUnreleased) throw new Error('Release the core first. The NER package names the core version in this tree as its peer.');
   if (input.channel === 'stable' && input.pendingNotes) throw new Error('Merge the release PR before publishing a stable version.');
   return input.channel;
 }
@@ -98,12 +121,15 @@ export function syncVersion(root: string): void {
     `/** The package version, kept equal to package.json by a build check. */\nexport const VERSION = '${pkg.version}';\n`);
 }
 
-/** Sets the version in package.json and src/version.ts, after checking it, so a bad value writes nothing. */
-export function setVersion(root: string, version: string): void {
+/**
+ * Sets the version of the package in `dir`, after checking it, so a bad value writes
+ * nothing: package.json, and src/version.ts where the package has one (the core).
+ */
+export function setVersion(dir: string, version: string): void {
   assertPackageVersion(version);
-  const file = join(root, 'package.json');
+  const file = join(dir, 'package.json');
   const pkg = JSON.parse(readFileSync(file, 'utf8')) as { version: string };
   pkg.version = version;
   writeFileSync(file, `${JSON.stringify(pkg, null, 2)}\n`);
-  syncVersion(root);
+  if (existsSync(join(dir, 'src', 'version.ts'))) syncVersion(dir);
 }

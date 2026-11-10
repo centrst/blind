@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { checkHash, download, entryUrl, LICENCE, licenceLine, MANIFEST, sha256Hex, type Entry, type Fetcher } from '../scripts/download-model.js';
+import { checkHash, download, entryUrl, LICENCE, licenceLine, MANIFEST, sha256Hex, type Entry, type Fetcher } from '../src/download.js';
 
 const enc = new TextEncoder();
 const CARD = '---\nlanguage: multilingual\nlicense: apache-2.0\n---\n\n# Stub card\n';

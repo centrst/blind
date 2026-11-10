@@ -2,7 +2,7 @@
 
 The core package is published as [`@centrst/blind`](https://www.npmjs.com/package/@centrst/blind). Its first usable npm build was `0.1.0-next.20261109.1`, published on 9 November 2026 from commit `ad1bdbe583ad65245d1077a3f8cd5dd940267564`. The earlier `0.0.0-stage` version was a registry bootstrap, not a supported build.
 
-The source version in `package.json` is the next stable version once a release PR has raised it, and the last published stable version until then. A prerelease adds `-next.YYYYMMDD.N` to that base without committing the temporary version. Publishing source, merging a release PR and publishing to npm are separate actions. Only the core package is published.
+The source version in `package.json` is the next stable version once a release PR has raised it, and the last published stable version until then. A prerelease adds `-next.YYYYMMDD.N` to that base without committing the temporary version. Publishing source, merging a release PR and publishing to npm are separate actions. This page describes the core package. The NER package, `@centrst/blind-ner`, is ready to publish through the same workflow and has not been released; [its section](#the-ner-package) lists what differs.
 
 ## Channels
 
@@ -41,7 +41,7 @@ pnpm changeset
 
 Select `@centrst/blind`, the bump type and a short description of the change. Commit the generated `.changeset/*.md` file with the code. Use patch for compatible fixes and minor for compatible additions. Before 1.0, use minor for API or mapping-format breaks and describe the break. Documentation and tooling changes without a package behavior change need no changeset.
 
-To open the release PR, check out `main` on a feature branch and run `pnpm version:release`. It consumes the pending notes and updates `package.json`, `CHANGELOG.md`, `src/version.ts` and the lockfile together. It includes the workspace root and excludes the private NER package. Run the gate, open the PR as a maintainer, review the version and notes, run `pnpm verify` on that candidate, then merge it. No package is published by that merge. Once Actions may create pull requests, `release-pr.yml` does the same from **Actions**.
+To open the release PR, check out `main` on a feature branch and run `pnpm version:release`. It consumes the pending notes and updates `package.json`, `CHANGELOG.md`, `src/version.ts` and the lockfile together. It versions the workspace root and leaves the NER package alone, which Changesets ignores and a maintainer versions by hand. Run the gate, open the PR as a maintainer, review the version and notes, run `pnpm verify` on that candidate, then merge it. No package is published by that merge. Once Actions may create pull requests, `release-pr.yml` does the same from **Actions**.
 
 For the initial stable `0.1.0`, no changeset is pending, so `pnpm version:release` changes nothing. In its release PR, rename `## Unreleased` in `CHANGELOG.md` to `## 0.1.0` and keep its entries. Changesets inserts each later version above the newest version heading, so do not start a new `Unreleased` section after that. Also rewrite the README's Install section, which still calls the package a preview, because the README ships inside the immutable tarball. If pending changesets propose a later version, use that reviewed version rather than forcing the number back down.
 
@@ -60,7 +60,7 @@ pnpm verify
 npm pack --dry-run
 ```
 
-The gate checks only what the package ships, in about 12 minutes. It covers secrets, the Python audit, typecheck, lint, build, the test suite, 20,000-case properties, corpus floors and `claims --strict` on the core claims. Do not use `--fast` for release evidence. The NER package is not published, so its tests are not part of this gate. Mutation testing measures the test suite rather than the package, and takes hours. Both run with `pnpm verify --full`, which belongs in the PR that changes the NER package or the test suite. To get a mutation score for a revision without running it locally, start **Actions > Mutation > Run workflow**, which runs `mutation.yml` and fails below the floor.
+The gate checks only what the package ships, in about 12 minutes. It covers secrets, the Python audit, typecheck, lint, build, the test suite, 20,000-case properties, corpus floors and `claims --strict` on the core claims. Do not use `--fast` for release evidence. The NER package has its own gate, so its tests are not part of this one. Mutation testing measures the test suite rather than the package, and takes hours. Both run with `pnpm verify --full`, which belongs in the PR that changes the NER package or the test suite. To get a mutation score for a revision without running it locally, start **Actions > Mutation > Run workflow**, which runs `mutation.yml` and fails below the floor.
 
 Review the generated `CLAIMS.md`, `reports/evidence.html` and the tarball contents. Source maps contain source text and need disclosure review too. The pack tests install the tarball offline and run the library and both commands. Retain the reports and record the exact source commit in the release PR or release record. Regenerated claims can be committed through that PR; do not copy evidence from another source revision.
 
@@ -68,7 +68,7 @@ After merge, check out the selected commit on `main` and run `pnpm verify` there
 
 ## Publish a prerelease
 
-In **Actions > Release > Run workflow**, select branch `main`, channel `next` and the full SHA of the verified commit. The CLI equivalent is:
+In **Actions > Release > Run workflow**, select branch `main`, package `blind`, channel `next` and the full SHA of the verified commit. The CLI equivalent is:
 
 ```sh
 gh workflow run release.yml --ref main \
@@ -112,6 +112,41 @@ The README bundled in an npm version is part of that immutable tarball. Document
 
 ## The NER package
 
-`@centrst/blind-ner` in `ner/` is a prototype built from this repository, not on npm. It remains `private` and is excluded from versioning and publishing. Build it with `pnpm build` and `pnpm build:ner`. See [ner/README.md](ner/README.md) for model requirements and measured limits.
+`@centrst/blind-ner` in `ner/` is packaged for npm and has not been released: until its first release it is a prototype built from this repository, not on npm. It uses the same workflow, `release` environment, staging and 2FA approval as the core. Select it with the workflow's `package` input. These are the differences.
 
-Publishing it needs its own review of model distribution, notices, a real peer dependency range, package contents, offline installation, release notes and versioning. Training source supports reproducing research; training runs and model distribution remain separate decisions.
+### Versioning and notes
+
+Changesets ignores this package, so `pnpm changeset` notes are for the core only. In a release PR, set `version` in `ner/package.json` by hand and write the entry in `ner/CHANGELOG.md` under a `## X.Y.Z` heading. The workflow refuses a stable release whose version has no heading there. Use the core's rules for the number: before 1.0, minor for a break.
+
+### The core range
+
+`ner/package.json` names the core as a peer dependency with `workspace:^`. pnpm links the workspace copy and, when it packs, writes a caret range on the core's version in this tree: `^0.2.0` while the core is `0.2.0`. So each NER version names the core it was built and tested with, and nobody edits the range. The tarball is made with `pnpm pack`, never `npm pack`, which would ship the `workspace:` text. The publish job refuses a tarball whose peer range is not a plain version range.
+
+That makes the order fixed: the core first. The workflow refuses an NER release, on either channel, while changesets are pending or while npm does not have the core version in `package.json`. Otherwise the NER tarball would name a core nobody can install, or would have been tested against core source that npm does not have.
+
+The first NER release follows core `0.2.0`, so its range is `^0.2.0`. Before 1.0 a caret range stops at the next minor, so after each core minor, release the NER package again, even with no changes of its own.
+
+### Gate
+
+Run `pnpm verify --full` on the commit, with the model present (`pnpm ner:download`). It adds the NER typecheck, lint, build and tests to the core gate, and mutation testing. The workflow's gate job also runs `pnpm test:ner`, but the runner has no weights, so the model tests skip there. The local run is the evidence for C15 to C18.
+
+`pnpm build && pnpm build:ner && pnpm -C ner pack --dry-run` lists what ships: `dist/`, `licenses/APACHE-2.0.txt`, `README.md`, `THIRD-PARTY-NOTICES.md`, `package.json` and `LICENSE`, which pnpm copies from the workspace root. The pack check (C53) in `pnpm test:ner` unpacks that tarball beside the core with no registry access and uses it by package name.
+
+### Once, before the first release
+
+1. npm shows a package's settings only once the package exists, so the first version is a placeholder a maintainer publishes by hand with 2FA. The core's was `0.0.0-stage`, described as a temporary placeholder for staged publishing. Do the same for `@centrst/blind-ner`.
+2. In that package's npm settings, add a GitHub Actions trusted publisher with organization `centrst`, repository `blind`, workflow filename `release.yml` and environment `release`, with **Allow `npm publish`** and **Allow `npm dist-tag`** unchecked, as for the core. After the first workflow publish, select **Require two-factor authentication and disallow tokens**.
+3. In the first release PR, rename `## Unreleased` in `ner/CHANGELOG.md` to the version. Also change the status wording, which stops being true once the version is approved: `ner/README.md` ships in the tarball and says the package is not on npm, and the B3 test in `test/readme.test.ts` requires that sentence in every file that reports NER numbers. Change the test and those files together.
+
+### Publish and check
+
+```sh
+gh workflow run release.yml --ref main \
+  -f package=blind-ner -f channel=next -f verified_sha="$(git rev-parse HEAD)"
+```
+
+Use `channel=stable` for a stable version. Approve the `release` environment, then the staged version, as for the core: `npm stage list @centrst/blind-ner`.
+
+Then `npm view @centrst/blind-ner@X.Y.Z version dependencies peerDependencies bin` shows the version, the two pinned libraries, the core range and the `blind-ner-download` command. In an empty folder, `npm install @centrst/blind @centrst/blind-ner@X.Y.Z` and `npx blind-ner-download ./models/gliner_multi-v2.1` fetch the pair and the model, and `node -e "import('@centrst/blind-ner').then(async (m) => console.log(typeof (await m.GlinerModel.load('./models/gliner_multi-v2.1')).predict))"` prints `function`.
+
+The weights are never published by this repository: the download command fetches them from Hugging Face at a pinned revision. Training source supports reproducing research; training runs and distributing a trained model remain separate decisions.

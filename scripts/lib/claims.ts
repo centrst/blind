@@ -36,7 +36,7 @@ export type ClaimStatus = 'pass' | 'fail' | 'skipped';
  * every listed claim but C11 must be a NER claim, so editing a table cell cannot
  * drop a shipped claim from the gate.
  */
-export const OUTSIDE_CORE = new Set(['C11', 'C13', 'C14', 'C15', 'C16', 'C17', 'C18', 'C47']);
+export const OUTSIDE_CORE = new Set(['C11', 'C13', 'C14', 'C15', 'C16', 'C17', 'C18', 'C47', 'C53']);
 
 const read = (p: string): string => readFileSync(join(ROOT, p), 'utf8');
 const idNum = (id: string): number => Number(id.slice(1));
