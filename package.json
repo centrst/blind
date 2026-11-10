@@ -66,6 +66,7 @@
     "receipt:keys": "tsx scripts/receipt-keys.ts",
     "readme:example": "tsx scripts/readme-example.ts",
     "bench:multi-text": "pnpm build && node scripts/bench/multi-text.mjs",
+    "bench:known-list": "pnpm build && node scripts/bench/known-list.mjs",
     "bench:presidio:setup": "python3.12 -m venv .local/presidio-venv && .local/presidio-venv/bin/pip install -r scripts/bench/requirements.txt",
     "bench:presidio": "tsx scripts/bench/export-corpus.ts && .local/presidio-venv/bin/python scripts/bench/presidio.py && tsx --tsconfig ner/tsconfig.json scripts/bench/score.ts",
     "bench:paranoid": "tsx scripts/bench/paranoid.ts",

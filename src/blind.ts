@@ -249,16 +249,29 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
     });
     // Known people get their fakes up front, so slugs and email locals can use them,
     // in the language around the first name of theirs the text writes.
-    const firstSeen = (value: string): Lang => {
-      // Compared folded and on the skeleton, as the matcher found them: `Ивaн` in a folded text is `Иван`.
-      const word = (t: string): string => skeleton(foldLookalikes(t)).text;
-      const words = new Set(personTokens(value).map(word));
-      for (const [ti, spans] of spansByText.entries()) {
-        for (const s of spans) {
-          if (s.kind === 'person' && personTokens((folded[ti] as string).slice(s.start, s.end)).some((t) => words.has(word(t)))) return lang.at(ti, s.start);
+    // Compared folded and on the skeleton, as the matcher found them: `Ивaн` in a folded text is `Иван`.
+    const word = (t: string): string => skeleton(foldLookalikes(t)).text;
+    // Each word of a person span, with the first span that writes it, in text and span order.
+    const firstSpan = new Map<string, { order: number; ti: number; start: number }>();
+    let order = 0;
+    for (const [ti, spans] of spansByText.entries()) {
+      for (const s of spans) {
+        if (s.kind !== 'person') continue;
+        for (const t of personTokens((folded[ti] as string).slice(s.start, s.end))) {
+          const w = word(t);
+          if (!firstSpan.has(w)) firstSpan.set(w, { order, ti, start: s.start });
         }
+        order++;
       }
-      return lang.call;
+    }
+    /** The language at the first person span that writes a word of `value`. */
+    const firstSeen = (value: string): Lang => {
+      let first: { order: number; ti: number; start: number } | undefined;
+      for (const t of personTokens(value)) {
+        const at = firstSpan.get(word(t));
+        if (at && (!first || at.order < first.order)) first = at;
+      }
+      return first ? lang.at(first.ti, first.start) : lang.call;
     };
     if (!keep.has('person')) for (const k of known) if (k.kind === 'person') sur.prime(k.value, firstSeen(k.value));
   }
@@ -476,7 +489,10 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   const planReals: Original[] = spansByText.flatMap((spans, ti) =>
     spans.flatMap((s) => (s.kind === 'amount' || s.kind === 'date' ? [{ kind: 'person' as const, value: (folded[ti] as string).slice(s.start, s.end) }] : [])),
   );
-  const leaksIn = shortTextLeaks({ originals: [...originals, ...planReals], deny, amountKeys, dateKeys, dateOrder });
+  // Prepared on the first fake to check: a call without amounts or dates never pays for it.
+  const leakInput = { originals: [...originals, ...planReals], deny, amountKeys, dateKeys, dateOrder };
+  let prepared: ((text: string) => boolean) | undefined;
+  const leaksIn = (text: string): boolean => (prepared ??= shortTextLeaks(leakInput))(text);
   // A fake is checked as its plain-digit fold, so a full-width fake of a real amount is caught too.
   const collides = (fakes: Map<Span, string>): boolean => [...fakes.values()].some((f) => leaksIn(foldLookalikes(f)));
   let factor = 1;

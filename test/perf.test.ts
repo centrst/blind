@@ -1,6 +1,8 @@
 import { spawnSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
 import { blind, createUnblinder, unblind } from '../src/index.js';
+import { everyKnownDetector } from '../src/detect.js';
+import type { KnownValue } from '../src/types.js';
 import { loadCorpus, ROOT } from './support/corpus.js';
 
 it('C41: a known organization with a long whitespace run finishes within the process deadline', () => {
@@ -33,6 +35,22 @@ it('C41: a megabyte of three-digit groups split by spaces, with no currency, fin
   expect(result.error?.message).toBeUndefined();
   expect(result.status).toBe(0);
   expect(result.stdout).toBe('[{"amount":1},true]');
+});
+
+it('C55: a text that repeats a key 1,000 known entries share runs in a 64 MB heap', () => {
+  // Every occurrence of every entry's key was kept, one copy per entry: about 22 million offsets here.
+  const script = `
+    import { blind } from './dist/index.js';
+    const known = Array.from({ length: 1000 }, (_, i) => ({ kind: 'person', value: 'Al' + i + ' Johnsonia' }));
+    const result = blind(['johnsonia'.repeat(22_000)], { known, seed: 'shared-key' });
+    process.stdout.write(String(result.texts[0].length));
+  `;
+  const result = spawnSync(process.execPath, ['--max-old-space-size=64', '--input-type=module', '-e', script], {
+    cwd: ROOT, encoding: 'utf8', timeout: 20_000,
+  });
+  expect(result.error?.message).toBeUndefined();
+  expect(result.status).toBe(0);
+  expect(result.stdout).toBe('198000');
 });
 
 /**
@@ -104,5 +122,34 @@ describe.skipIf(process.env.BLIND_SKIP_PERF)('time against text length', () => {
     expect(stream()).toBe(unblind(large, mapping).text);
     const streamed = best(stream);
     expect(streamed, `one-shot ${oneLarge.toFixed(3)} s, streamed ${streamed.toFixed(3)} s`).toBeLessThanOrEqual(1.5 * oneLarge);
+  });
+});
+
+/**
+ * A known list the text does not contain. Each entry used to cost its own
+ * compiled pattern and a scan of the text on every call. The reference here is
+ * that work alone: the matcher that tries every entry, on the same text, after
+ * `blind`, so neither run finds patterns the engine compiled before.
+ */
+describe.skipIf(process.env.BLIND_SKIP_PERF)('time against the size of known', () => {
+  const once = (fn: () => unknown): number => {
+    const before = process.cpuUsage();
+    fn();
+    const d = process.cpuUsage(before);
+    return (d.user + d.system) / 1e6;
+  };
+  const text = 'The meeting moved to nine, see you there.';
+  /** `n` invented people and companies the text does not write, under a prefix of their own so no other test compiled them. */
+  const absent = (prefix: string, n: number): KnownValue[] =>
+    Array.from({ length: n }, (_, i) => (i % 4 === 3 ? { kind: 'org', value: `${prefix}${i} Vandermeer Logistics` } : { kind: 'person', value: `${prefix}${i} Vandermeer${i}` }));
+
+  it('C55: with 8,000 known entries the text does not contain, blind on a short text takes at most a quarter of the CPU time of compiling and running one pattern per entry', () => {
+    const known = absent('Ostrava', 8000);
+    blind([text], { known: absent('Warmup', 200), seed: 'perf' });
+    let out: ReturnType<typeof blind> | undefined;
+    const fast = once(() => (out = blind([text], { known, seed: 'perf' })));
+    expect(out?.texts[0]).toBe(text);
+    const every = once(() => everyKnownDetector(known).detect(text, { dateOrder: 'dmy', isAllowedHost: () => false }));
+    expect(fast, `blind ${fast.toFixed(3)} s, one pattern per entry ${every.toFixed(3)} s`).toBeLessThanOrEqual(every / 4);
   });
 });
