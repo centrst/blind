@@ -37,6 +37,22 @@ it('C41: a megabyte of three-digit groups split by spaces, with no currency, fin
   expect(result.stdout).toBe('[{"amount":1},true]');
 });
 
+it('C55: a text that repeats a key 1,000 known entries share runs in a 64 MB heap', () => {
+  // Every occurrence of every entry's key was kept, one copy per entry: about 22 million offsets here.
+  const script = `
+    import { blind } from './dist/index.js';
+    const known = Array.from({ length: 1000 }, (_, i) => ({ kind: 'person', value: 'Al' + i + ' Johnsonia' }));
+    const result = blind(['johnsonia'.repeat(22_000)], { known, seed: 'shared-key' });
+    process.stdout.write(String(result.texts[0].length));
+  `;
+  const result = spawnSync(process.execPath, ['--max-old-space-size=64', '--input-type=module', '-e', script], {
+    cwd: ROOT, encoding: 'utf8', timeout: 20_000,
+  });
+  expect(result.error?.message).toBeUndefined();
+  expect(result.status).toBe(0);
+  expect(result.stdout).toBe('198000');
+});
+
 /**
  * Time grows about linearly with the text. CPU time, not wall time, so other
  * work on the machine counts less, and a bound of 1.5 times linear so a loaded

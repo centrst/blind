@@ -4,7 +4,7 @@ import { foldLookalikes, skeleton } from './fold.js';
 import { detectIds } from './ids.js';
 import { alternativesMatcher, esc, flexAtoms, literalAtoms, matchAlternatives, spacedAtoms } from './match.js';
 import { AFTER, BEFORE, edged, hangulAtWordStartOnly, unspaced } from './script.js';
-import { literalIndex } from './literal-index.js';
+import { literalPresence } from './literal-index.js';
 import { TextLanguage } from './language.js';
 import { AT_SRC, COMMON_LABELS, COUNTRY_CODES, FUNCTION_WORDS, IBAN_LENGTHS, ORG_SUFFIX, PARTICLES, ROLE_WORDS, type Lang } from './names.js';
 import type { DetectContext, Detector, KnownKind, KnownValue, Span, UnenforcedKnown } from './types.js';
@@ -912,30 +912,31 @@ function knownEntry(k: KnownValue): KnownEntry {
 function knownMatcher(known: KnownValue[], filtered: boolean): Detector {
   checkKnown(known);
   const entries = known.map(knownEntry);
-  /** Per key space, the entries with keys there and a finder over all their keys. */
-  let index: Map<KeySpace, { owners: number[]; find: (text: string) => Map<number, number[]> }> | undefined;
+  /** Per key space, each distinct key's entries and a finder over the distinct keys. */
+  let index: Map<KeySpace, { owners: number[][]; find: (text: string) => Set<number> }> | undefined;
   const always = entries.flatMap((e, i) => (e.keys ? [] : [i]));
   const candidates = (text: string, sk: string | undefined): number[] => {
     if (!filtered) return entries.map((_, i) => i);
     if (!index) {
       index = new Map();
       for (const space of ['skel', 'ascii', 'digits'] as const) {
-        const owners: number[] = [];
-        const keys: string[] = [];
+        // One key shared by many entries is searched once, so a text that repeats it costs no more.
+        const byKey = new Map<string, number[]>();
         entries.forEach((e, i) => {
           if (e.space !== space || !e.keys) return;
           for (const key of e.keys) {
-            owners.push(i);
-            keys.push(key);
+            const list = byKey.get(key);
+            if (!list) byKey.set(key, [i]);
+            else if (list[list.length - 1] !== i) list.push(i);
           }
         });
-        if (keys.length) index.set(space, { owners, find: literalIndex(keys) });
+        if (byKey.size) index.set(space, { owners: [...byKey.values()], find: literalPresence([...byKey.keys()]) });
       }
     }
     const hit = new Set(always);
     for (const [space, { owners, find }] of index) {
       const t = space === 'skel' ? (sk as string) : space === 'ascii' ? asciiKeyText(text) : text.replace(PHONE_SEP, '');
-      for (const key of find(t).keys()) hit.add(owners[key] as number);
+      for (const key of find(t)) for (const i of owners[key] as number[]) hit.add(i);
     }
     // In the order of `known`, as the spans were pushed when every entry was tried.
     return [...hit].sort((a, b) => a - b);

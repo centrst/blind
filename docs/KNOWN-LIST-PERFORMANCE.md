@@ -10,7 +10,7 @@ A second cost grew with the known list times the text: to choose the language of
 
 ## Fix
 
-- `knownDetector` gives each entry one or more keys: strings that every match of the entry must contain. For a name, company or place, matched on the skeleton of the text, that is the longest run of each form without whitespace. For an email, domain or id, matched in any letter case, it is the longest ASCII run in lower case, looked up in a copy of the text with ASCII letters lowered and the long s and Kelvin sign read as `s` and `k`, the only other code points such a pattern matches to an ASCII letter. For a phone it is its digits, looked up in the text with phone separators removed. One Aho-Corasick index (`src/literal-index.ts`) finds which keys a text holds. Only those entries compile their pattern, once per call, and run it. An entry without a usable key is tried on every text as before. The spans are pushed in the order of `known`, as before.
+- `knownDetector` gives each entry one or more keys: strings that every match of the entry must contain. For a name, company or place, matched on the skeleton of the text, that is the longest run of each form without whitespace. For an email, domain or id, matched in any letter case, it is the longest ASCII run in lower case, looked up in a copy of the text with ASCII letters lowered and the long s and Kelvin sign read as `s` and `k`, the only other code points such a pattern matches to an ASCII letter. For a phone it is its digits, looked up in the text with phone separators removed. One Aho-Corasick search (`literalPresence` in `src/literal-index.ts`) finds which keys a text holds. It searches each distinct key once, however many entries share it, and records only whether it occurs, so a text that repeats a shared key thousands of times costs no more memory than one that writes it once. Only those entries compile their pattern, once per call, and run it. An entry without a usable key is tried on every text as before. The spans are pushed in the order of `known`, as before.
 - The language of each known person's fake is read from a map of each name word to the first person span that writes it, built once per call.
 - `foldLookalikes` and `skeleton` skip their per-character checks for ASCII, which they never change except to lower its case.
 - `checkKnown` builds a value's forms for the Korean rule only when the value has a Hangul letter.
@@ -24,10 +24,10 @@ Apple M4 Max, Node v26.13.0, against the base commit `567ca5b`. Known people are
 
 | Known people | Short, before | Short, after | 200 KB, before | 200 KB, after |
 | ---: | ---: | ---: | ---: | ---: |
-| 0 | 16 (0) | 16 (0) | 517 (308) | 440 (237) |
-| 1,000 | 1,031 (46) | 39 (12) | 5,803 (4,760) | 461 (258) |
-| 4,000 | 4,060 (185) | 74 (41) | 21,655 (21,585) | 514 (301) |
-| 10,000 | 9,968 (529) | 140 (105) | 52,503 (52,646) | 607 (399) |
+| 0 | 16 (0) | 16 (0) | 517 (308) | 444 (237) |
+| 1,000 | 1,031 (46) | 39 (13) | 5,803 (4,760) | 462 (264) |
+| 4,000 | 4,060 (185) | 75 (42) | 21,655 (21,585) | 511 (294) |
+| 10,000 | 9,968 (529) | 145 (109) | 52,503 (52,646) | 605 (397) |
 
 ## What is left
 

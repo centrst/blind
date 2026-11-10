@@ -7,6 +7,7 @@ import fc from 'fast-check';
 import { describe, expect, it } from 'vitest';
 import { asciiKeyText, everyKnownDetector, knownDetector } from '../src/detect.js';
 import { foldLookalikes } from '../src/fold.js';
+import { literalIndex, literalPresence } from '../src/literal-index.js';
 import type { DetectContext, KnownValue, Span } from '../src/types.js';
 import { loadAdversarial } from './support/adversarial.js';
 import { loadCorpus } from './support/corpus.js';
@@ -151,6 +152,28 @@ describe('C55: the known-value prefilter', () => {
         const [fast, every] = both(c.known, t);
         expect(fast).toEqual(every);
       }
+    }
+  });
+
+  it('C55: the presence search finds exactly the values the offset search finds, with repeated, nested and overlapping values', () => {
+    // A small alphabet, so values nest, overlap, repeat and share suffixes often.
+    const word = fc.string({ unit: fc.constantFrom('a', 'b', 'c'), maxLength: 4 });
+    check(
+      fc.property(fc.array(word, { maxLength: 12 }), fc.string({ unit: fc.constantFrom('a', 'b', 'c', ' '), maxLength: 60 }), (values, text) => {
+        expect([...literalPresence(values)(text)].sort((a, b) => a - b)).toEqual([...literalIndex(values)(text).keys()].sort((a, b) => a - b));
+      }),
+    );
+  });
+
+  it('C55: finds exactly the spans of the matcher that tries every entry when many entries share a key', () => {
+    const known: KnownValue[] = [
+      ...Array.from({ length: 30 }, (_, i): KnownValue => ({ kind: 'person', value: `Al${i} Johnsonia` })),
+      ...Array.from({ length: 10 }, (_, i): KnownValue => ({ kind: 'email', value: `al${i}@johnsonia.example` })),
+      { kind: 'person', value: 'Johnsonia' },
+    ];
+    for (const text of ['Al7 Johnsonia wrote to al3@johnsonia.example.', 'johnsonia'.repeat(50), 'Johnsonia, Al12 Johnsonia and AL29 JOHNSONIA']) {
+      const [fast, every] = both(known, text);
+      expect(fast).toEqual(every);
     }
   });
 
