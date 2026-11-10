@@ -55,7 +55,7 @@ describe('C56: the packed NER tarball', () => {
     app = join(tmp, 'app');
     installed = join(app, 'node_modules', '@centrst', 'blind-ner');
     mkdirSync(installed, { recursive: true });
-    mkdirSync(join(app, 'node_modules', '@huggingface'));
+    mkdirSync(join(app, 'node_modules', '@huggingface'), { recursive: true });
     execFileSync('tar', ['-xzf', tarball, '-C', installed, '--strip-components', '1']);
     symlinkSync(ROOT, join(app, 'node_modules', '@centrst', 'blind'), 'junction');
     for (const dep of Object.keys(source.dependencies ?? {})) {
