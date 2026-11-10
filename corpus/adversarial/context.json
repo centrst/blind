@@ -171,5 +171,80 @@
     ],
     "expect": "replaced",
     "seed": "adv"
+  },
+  {
+    "id": "X12",
+    "title": "greeting, sign-off and company with nothing in known",
+    "text": "Dear Margaret,\n\nPlease send the contract to margaret.holloway@finchley-dental.example.\n\nKind regards,\nPriya Raman\nFinchley Dental Ltd",
+    "secrets": [
+      "Margaret",
+      "Holloway",
+      "Priya",
+      "Raman",
+      "Finchley"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "X13",
+    "title": "label lines with nothing in known",
+    "text": "Name: Margaret Holloway\nPatient: Priya Raman\nCompany: Finchley Dental Ltd",
+    "secrets": [
+      "Margaret",
+      "Holloway",
+      "Priya",
+      "Raman",
+      "Finchley"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "X14",
+    "title": "sign-off a blank line below its closing",
+    "text": "Thanks for the call.\n\nKind regards,\n\nPriya Raman",
+    "secrets": [
+      "Priya",
+      "Raman"
+    ],
+    "expect": "silent",
+    "why": "A sign-off counts only on the line right after the closing. With a blank line between them the name is a line of capitalised words like a heading, and nothing else in the text names it.",
+    "seed": "adv"
+  },
+  {
+    "id": "X15",
+    "title": "company in prose with a company word but no legal suffix",
+    "text": "The retainer for Strand & Partners is due on Friday.",
+    "secrets": [
+      "Strand"
+    ],
+    "expect": "silent",
+    "why": "In prose only a legal suffix marks a company. A company word alone (Partners, Group, Studio) is too common in ordinary sentences to count, so a known list or a NER detector finds it.",
+    "seed": "adv"
+  },
+  {
+    "id": "X16",
+    "title": "sign-off name followed by a job title",
+    "text": "Thanks for the call.\n\nRegards,\nOdette Ashworth, CEO\nDorsal Partners",
+    "secrets": [
+      "Odette",
+      "Ashworth",
+      "Dorsal"
+    ],
+    "expect": "silent",
+    "why": "A sign-off counts only when the line right after the closing holds nothing but capitalised words. A title after a comma makes it a line of prose, so neither the name nor the company below it is taken.",
+    "seed": "adv"
+  },
+  {
+    "id": "X17",
+    "title": "company named after a one-word private host",
+    "text": "From: ana@dorsal.example\n\nThe Dorsal team will call.",
+    "secrets": [
+      "Dorsal"
+    ],
+    "expect": "silent",
+    "why": "Only a host label of two to six hyphenated words marks a company in the text. A one-word label is too often an ordinary word to take as a name.",
+    "seed": "adv"
   }
 ]

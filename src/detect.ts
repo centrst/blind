@@ -2,10 +2,10 @@ import { detectAmounts, MAX_AMOUNT_DIGITS } from './amounts.js';
 import { detectDates } from './dates.js';
 import { foldLookalikes, skeleton } from './fold.js';
 import { detectIds } from './ids.js';
-import { alternativesMatcher, flexAtoms, literalAtoms, matchAlternatives, spacedAtoms } from './match.js';
+import { alternativesMatcher, esc, flexAtoms, literalAtoms, matchAlternatives, spacedAtoms } from './match.js';
 import { AFTER, BEFORE, edged, hangulAtWordStartOnly, unspaced } from './script.js';
 import { TextLanguage } from './language.js';
-import { AT_SRC, COUNTRY_CODES, IBAN_LENGTHS, ORG_SUFFIX, PARTICLES, type Lang } from './names.js';
+import { AT_SRC, COMMON_LABELS, COUNTRY_CODES, FUNCTION_WORDS, IBAN_LENGTHS, ORG_SUFFIX, PARTICLES, ROLE_WORDS, type Lang } from './names.js';
 import type { DetectContext, Detector, KnownKind, KnownValue, Span, UnenforcedKnown } from './types.js';
 import { BlindError, isBlindErrorKind, type BlindErrorKind } from './errors.js';
 
@@ -20,6 +20,7 @@ export const PRIORITY = {
   known: 70,
   displayName: 65,
   honorific: 63,
+  cue: 62,
   labelledId: 61,
   id: 60,
   mention: 40,
@@ -119,8 +120,8 @@ export const urlDetector: Detector = {
   },
 };
 
-/** Bare URLs under hosts already identified as private anywhere in the call. */
-function privateHosts(texts: string[], found: Span[][], ctx: DetectContext): Span[][] {
+/** The hosts of the emails, URLs and domains found anywhere in the call that are not public. */
+function hostsOf(texts: string[], found: Span[][], ctx: DetectContext): Set<string> {
   const hosts = new Set<string>();
   found.forEach((spans, ti) => {
     for (const s of spans) {
@@ -130,6 +131,12 @@ function privateHosts(texts: string[], found: Span[][], ctx: DetectContext): Spa
       if (host && !ctx.isAllowedHost(host)) hosts.add(host.toLowerCase());
     }
   });
+  return hosts;
+}
+
+/** Bare URLs under hosts already identified as private anywhere in the call. */
+function privateHosts(texts: string[], found: Span[][], ctx: DetectContext): Span[][] {
+  const hosts = hostsOf(texts, found, ctx);
   if (hosts.size === 0) return found;
   return found.map((spans, ti) => {
     const text = texts[ti]!;
@@ -324,9 +331,320 @@ export const dateDetector: Detector = {
   },
 };
 
+// ------------------------------------------------------------------ mail cues
+// Where ordinary mail puts a name: after a greeting, on the line after a
+// closing, after a label such as "Patient:", and before a legal suffix.
+
+/** `phrase` matched in either case, letter by letter: these patterns cannot take the `i` flag, under which `\p{Lu}` matches lower case too. */
+const anyCase = (phrase: string): string =>
+  phrase
+    .split(' ')
+    .map((w) => [...w].map((c) => (c.toLowerCase() === c.toUpperCase() ? esc(c) : `[${c.toUpperCase()}${c.toLowerCase()}]`)).join(''))
+    .join('[ \\t]+');
+const phrases = (list: string): string => list.trim().split(/\s*\n\s*/).map(anyCase).join('|');
+
+/** A capitalised word of a name, or an initial (`J.`). */
+const CUE_WORD = String.raw`(?:\p{Lu}[\p{Ll}\p{Lu}\p{M}'’\-]*\p{L}|\p{Lu}\.)`;
+const CUE_PARTICLE = String.raw`(?:(?:de|del|la|las|los|van|von|da|di|der|den)[ \t]+)`;
+const cueRun = (most: number): string => String.raw`${CUE_WORD}(?:[ \t]+${CUE_PARTICLE}*${CUE_WORD}){0,${most - 1}}`;
+const CUE_RUN_RE = new RegExp(cueRun(4), 'gu');
+const TITLE_FIRST = new RegExp(String.raw`^(?:${HONORIFIC})(?![\p{L}])`, 'u');
+/** Quote markers and indentation before the text of a line. */
+const LINE_LEAD = /^[ \t]*(?:>[ \t]*)*/;
+
+const GREETING_RE = new RegExp(
+  String.raw`^(?:${phrases(`
+    Dear
+    Hi
+    Hello
+    Hey
+    Hiya
+    Good morning
+    Good afternoon
+    Good evening
+    Hola
+    Buenos días
+    Buenos dias
+    Buenas tardes
+    Buenas noches
+    Buenas
+  `)}|[Ee]stimad[oa](?:\/[oa])?|[Qq]uerid[oa](?:\/[oa])?)(?:[ \t]*,)?[ \t]+(?<name>${cueRun(3)}(?:(?:[ \t]*,[ \t]*|[ \t]+(?:and|y|&)[ \t]+)${cueRun(3)}){0,3})(?=[ \t]*(?:[,:;!.]|$))`,
+  'du',
+);
+
+const CLOSING = phrases(`
+  Regards
+  Kind regards
+  Best regards
+  Warm regards
+  Warmest regards
+  With regards
+  Many thanks
+  Best wishes
+  All the best
+  Best
+  Thanks
+  Thanks again
+  Thank you
+  Cheers
+  Sincerely
+  Yours sincerely
+  Yours faithfully
+  Yours truly
+  Respectfully
+  Take care
+  Saludos
+  Saludos cordiales
+  Un saludo
+  Un cordial saludo
+  Cordiales saludos
+  Atentamente
+  Cordialmente
+  Gracias
+  Muchas gracias
+  Un abrazo
+  Abrazos
+`);
+// Lines are trimmed at the end, and no two space runs sit side by side: `[ \t]*[,.]?[ \t]*` rereads a long run from each of its positions.
+const CLOSING_LINE_RE = new RegExp(String.raw`^(?:${CLOSING})(?:[ \t]*[,.!])?$`, 'u');
+/** A closing and the name on one line: `Un saludo, Wenceslao Tamames, Ayuntamiento`. */
+const CLOSING_NAME_RE = new RegExp(String.raw`^(?:${CLOSING})[ \t]*,[ \t]*(?<name>${cueRun(4)})(?=[ \t]*(?:[,.]|$))`, 'du');
+/** A line that is only a name, as a sign-off writes it. */
+const NAME_LINE_RE = new RegExp(String.raw`^(?<name>${cueRun(4)})(?:[ \t]*[.,])?$`, 'du');
+
+const PERSON_LABEL_RE = new RegExp(
+  String.raw`^(?:${phrases(`
+    Name
+    Full name
+    Patient
+    Customer
+    Client
+    Contact
+    Contact person
+    Attn
+    Attention
+    Nombre
+    Nombre completo
+    Paciente
+    Cliente
+    Contacto
+    Persona de contacto
+  `)})[ \t]*[:.][ \t]*(?<name>${cueRun(4)})(?=[ \t]*(?:[,;|(]|$))`,
+  'du',
+);
+const ORG_LABEL_RE = new RegExp(String.raw`^(?:${phrases(`
+  Company
+  Company name
+  Organisation
+  Organization
+  Employer
+  Empresa
+  Razón social
+  Razon social
+`)})[ \t]*:[ \t]*`, 'u');
+
+/** A legal suffix as a company writes it, in its own case. */
+const LEGAL = String.raw`(?:Ltd\.?|LTD\.?|LLC|LLP|Inc\.?|INC\.?|GmbH|GMBH|PLC|Plc|Corp\.?|CORP\.?|Co\.|S\.L\.U\.?|S\.L\.?|S\.A\.U\.?|S\.A\.?|SLU|SL|SAU|SA|B\.V\.?|BV)`;
+/** A word of a company name: capitalised, all capitals, or written with digits or an ampersand (`H&M`). */
+const ORG_TOKEN = String.raw`\p{Lu}[\p{L}\p{M}\p{N}'’&\-]*`;
+const ORG_JOIN = String.raw`(?:&|and|y|e|de|del|la|las|los|of|the|for|el)`;
+const orgRun = (most: number): string => String.raw`${ORG_TOKEN}(?:[ \t]+(?:${ORG_JOIN}[ \t]+){0,2}${ORG_TOKEN}){0,${most - 1}}`;
+/** The gap before a legal suffix: spaces, a comma, or both (`Acme, Inc.`), read one way only. */
+const LEGAL_GAP = String.raw`(?:[ \t]+(?:,[ \t]*)?|,[ \t]*)`;
+/** A capitalised run that ends in a legal suffix, anywhere in the text. */
+const LEGAL_RUN_RE = new RegExp(String.raw`(?<![\p{L}\p{N}\p{M}_&'’\-])(?<run>${orgRun(6)})${LEGAL_GAP}${LEGAL}(?![\p{L}\p{N}\p{M}_])`, 'gdu');
+/** A line that is only a company name: capitalised words, joining words, maybe a legal suffix. */
+const ORG_LINE_RE = new RegExp(String.raw`^(?<run>${orgRun(6)}(?:${LEGAL_GAP}${LEGAL})?)$`, 'du');
+const LEGAL_END_RE = new RegExp(String.raw`(?:^|[ \t,])${LEGAL}$`, 'u');
+
+/**
+ * Words that are not a name where a name is expected: role and group words
+ * (`Hi team`, `Dear Customer`, a sign-off of `Accounts`), function words,
+ * greetings and sentence openers. Folded, lower case. Built on first use: the
+ * stop lists it reads are defined further down.
+ */
+let notNameWords: Set<string> | undefined;
+const foldWord = (w: string): string => skeleton(foldLookalikes(w)).text.replace(/[.'’]+$/u, '');
+function notName(word: string): boolean {
+  notNameWords ??= new Set([
+    ...ROLE_WORDS, ...FUNCTION_WORDS.en, ...FUNCTION_WORDS.es, ...NAME_STOP, ...PARTICLES,
+    ...`
+      all everyone everybody team teams there folks guys sir sirs madam madame mam customer customers client clients
+      colleague colleagues friend friends member members user users partner partners valued subscriber subscribers
+      reader readers patient patients parent parents resident residents neighbour neighbours neighbor neighbors
+      student students applicant applicants candidate hiring manager managers department committee board staff world
+      both you again people ladies gentlemen gents mum mom dad
+      todos todas equipo cliente clientes amigo amigos amiga amigas companero companeros companera companeras socio
+      socios senores senoras usuario usuarios vecino vecinos familia
+      sent enviado iphone android mobile movil
+      accounts reception recepcion front desk administracion comercial operations director directora purchasing
+      compras ventas service services care departamento atencion
+      unknown none pending same yes tbd
+      regarding attached attaching invoice invoices quote quotes contact call email pay paid send
+      payment payments supplier company account order ref reference total amount due also
+      sobre segun adjunto adjuntamos factura facturas presupuesto proveedor empresa pago llama contacta importe
+      via per
+    `.trim().split(/\s+/),
+  ].map(foldWord));
+  return notNameWords.has(foldWord(word));
+}
+
+/** The words of a run, with their offsets in the run. */
+const runWords = (run: string): Array<{ word: string; at: number }> => [...run.matchAll(/\S+/gu)].map((m) => ({ word: m[0], at: m.index }));
+const JOIN_WORD = new RegExp(String.raw`^${ORG_JOIN}$`, 'u');
+const LEGAL_WORD = new RegExp(String.raw`^${LEGAL}$`, 'u');
+const isJoin = (w: string): boolean => JOIN_WORD.test(w) || PARTICLES.has(w);
+const isLegal = (w: string): boolean => LEGAL_WORD.test(w);
+
+/** Whether `run`, a capitalised run where a name is expected, reads as a person: no role, group or common word in it. */
+function personRun(run: string): boolean {
+  return runWords(run).every(({ word }) => CUE_PARTICLE_WORD.test(word) || !notName(word));
+}
+const CUE_PARTICLE_WORD = /^(?:de|del|la|las|los|van|von|da|di|der|den)$/u;
+
+/**
+ * Whether `run` reads as a company: a company word or a legal suffix, and at
+ * least one word that is neither, so `Support Team` and `Dental Clinic` are not one.
+ */
+function orgRunOk(run: string): boolean {
+  if (!ORG_WORD.test(run) && !LEGAL_END_RE.test(run)) return false;
+  return runWords(run).some(({ word }) => !isJoin(word) && !isLegal(word) && !ORG_WORD.test(word) && !notName(word));
+}
+
+const lineSpans = (text: string): Array<{ start: number; content: string; at: number }> => {
+  const out: Array<{ start: number; content: string; at: number }> = [];
+  let start = 0;
+  for (const raw of text.split('\n')) {
+    const line = raw.replace(/\r$/, '');
+    const lead = LINE_LEAD.exec(line)?.[0].length ?? 0;
+    // `trimEnd` and not a pattern: `/[ \t]+$/` rereads a long run of spaces from each of its positions.
+    out.push({ start, content: line.slice(lead).trimEnd(), at: start + lead });
+    start += raw.length + 1;
+  }
+  return out;
+};
+
+/**
+ * Names where ordinary mail puts them. At the start of a line, a greeting
+ * before one to three capitalised words (`Dear Margaret,`, `Hola Belén:`) and
+ * a label before a name (`Patient: Priya Raman`) or a company
+ * (`Company: Finchley Dental Ltd`). The line after a closing (`Kind regards,`)
+ * holding only one to four capitalised words is a person, or a company when
+ * they carry a company word, and the first of the next three lines holding
+ * only a company name is a company, unless a blank line comes first. Anywhere in the text, a capitalised run
+ * before a legal suffix (`Moorcroft Joinery Ltd.`) is a company, without the
+ * common words that open its sentence (`Regarding`). Group, role and common
+ * words keep a greeting, sign-off or label from counting (`Hi team`,
+ * `Dear Customer`, `Regards,` then `Accounts`).
+ */
+export const cueDetector: Detector = {
+  name: 'cues',
+  detect(text) {
+    const out: Span[] = [];
+    const add = (start: number, run: string, kind: 'person' | 'org'): void => {
+      if (run.length < 2) return;
+      out.push({ start, end: start + run.length, kind, priority: PRIORITY.cue });
+    };
+    /** A capitalised run where a name is expected: a person, a company, or nothing. */
+    const named = (start: number, run: string): void => {
+      if (ORG_WORD.test(run) || LEGAL_END_RE.test(run)) {
+        if (orgRunOk(run)) add(start, run, 'org');
+      } else if (personRun(run)) add(start, run, 'person');
+    };
+    const lines = lineSpans(text);
+    lines.forEach((line, i) => {
+      const c = line.content;
+      if (c === '') return;
+      for (const re of [GREETING_RE, PERSON_LABEL_RE, CLOSING_NAME_RE]) {
+        const m = re.exec(c);
+        if (!m) continue;
+        const [s] = m.indices!.groups!.name as [number, number];
+        // A greeting may name several people: `Hi Ana, Luis and Marta,`.
+        for (const r of (m.groups!.name as string).matchAll(CUE_RUN_RE)) {
+          // A title opens a name the context detector already reads (`Dear Dr. Tate`).
+          if (TITLE_FIRST.test(r[0])) continue;
+          named(line.at + s + r.index, r[0]);
+        }
+      }
+      const org = ORG_LABEL_RE.exec(c);
+      if (org) {
+        const rest = c.slice(org[0].length);
+        const m = ORG_LINE_RE.exec(rest.replace(/[.,;]$/, (p) => (LEGAL_END_RE.test(rest) ? p : '')));
+        if (m && runWords(m.groups!.run as string).some(({ word }) => !isJoin(word) && !isLegal(word) && !notName(word))) {
+          add(line.at + org[0].length, m.groups!.run as string, 'org');
+        }
+      }
+      if (!CLOSING_LINE_RE.test(c)) return;
+      const next = lines[i + 1];
+      const who = next && NAME_LINE_RE.exec(next.content);
+      if (!next || !who) return;
+      named(next.at, who.groups!.name as string);
+      for (const after of lines.slice(i + 2, i + 5)) {
+        if (after.content === '') break;
+        const m = ORG_LINE_RE.exec(after.content);
+        if (m && orgRunOk(m.groups!.run as string)) {
+          add(after.at, m.groups!.run as string, 'org');
+          break;
+        }
+      }
+    });
+    // The words the text writes in lower case, addresses aside, so `finchley` in a host does not make `Finchley` an ordinary word.
+    let lower: Set<string> | undefined;
+    for (const m of text.matchAll(LEGAL_RUN_RE)) {
+      const [s] = m.indices!.groups!.run as [number, number];
+      const words = runWords(m.groups!.run as string).map((w) => ({ ...w, at: w.at + s }));
+      // "Microsoft Corp and Google LLC": a suffix inside the run ends one company and starts the next.
+      let from = 0;
+      words.forEach((w, k) => {
+        if (k === words.length - 1 || !isLegal(w.word)) return;
+        legalRun(words.slice(from, k + 1), w.at + w.word.length);
+        from = k + 1;
+      });
+      legalRun(words.slice(from), m.index + m[0].length);
+    }
+    /** One company before a legal suffix: `words` the run before `end`, the suffix included or not. */
+    function legalRun(words: Array<{ word: string; at: number }>, end: number): void {
+      // "Priya Raman of Finchley Dental Ltd": a joining word with two words or more after it starts the company.
+      for (let k = words.length - 3; k > 0; k--) {
+        if (/^(?:of|de|del|for)$/u.test((words[k] as { word: string }).word)) {
+          words = words.slice(k + 1);
+          break;
+        }
+      }
+      // The words that open the sentence, not the name: "Regarding", "Thanks", "Our", or a word that starts
+      // the sentence and that the text also writes in lower case.
+      while (words.length > 1) {
+        const w = words[0] as { word: string; at: number };
+        if (!isJoin(w.word) && !notName(w.word) && !(opensSentence(text, w.at) && (lower ??= lowerWords(text)).has(w.word.toLowerCase()))) break;
+        words = words.slice(1);
+      }
+      while (words.length && isJoin((words[0] as { word: string }).word)) words = words.slice(1);
+      if (words.length === 0) return;
+      const start = (words[0] as { at: number }).at;
+      const run = text.slice(start, end);
+      if (!runWords(run).some(({ word }) => !isJoin(word) && !isLegal(word) && !notName(word))) return;
+      add(start, run, 'org');
+    }
+    return out;
+  },
+};
+
+/** The words `text` writes all in lower case, outside its emails and URLs. */
+function lowerWords(text: string): Set<string> {
+  const prose = text.replace(EMAIL_RE, ' ').replace(URL_RE, ' ');
+  return new Set((prose.match(/[\p{L}\p{M}\p{N}_]+/gu) ?? []).filter((w) => w === w.toLowerCase()));
+}
+
+/** Whether the word at `at` starts the text, a line or a sentence: only spaces, quote markers or opening marks before it. */
+function opensSentence(text: string, at: number): boolean {
+  let i = at - 1;
+  while (i >= 0 && /[ \t>"“«(¿¡*•\-]/u.test(text[i] as string)) i--;
+  return i < 0 || /[\n.!?:]/u.test(text[i] as string);
+}
+
 export const builtinDetectors: Detector[] = [
   urlDetector, emailDetector, ibanDetector, typedIdDetector, phoneDetector, amountDetector, dateDetector,
-  contextDetector, idDetector,
+  contextDetector, idDetector, cueDetector,
 ];
 
 // ---------------------------------------------------------------- known values
@@ -738,18 +1056,25 @@ export function callerDetector(d: Detector): Detector {
 
 /**
  * The spans `blind` replaces in each text of one call: every detector, overlaps
- * resolved, then bare hosts and mentions of any person found anywhere in the call.
+ * resolved, then bare hosts, the names private addresses give away (see
+ * `addressNames`), and mentions of any person found anywhere in the call.
  */
 export function findSpans(texts: string[], ctx: DetectContext, detectors: Detector[]): Span[][] {
-  const firstPass = privateHosts(texts, texts.map((t) => {
+  const detected = privateHosts(texts, texts.map((t) => {
     const raw = detectors.flatMap((d) => d.detect(t, ctx)).filter((s) => {
       if ((s.kind === 'amount' || s.kind === 'date') && !s.meta) return false;
       return s.start >= 0 && s.end <= t.length;
     });
     return resolveSpans(raw);
   }), ctx);
-  // "Pilar Gómez <pilar@...>" in one text covers a later "Hola Pilar" in any text of the call.
-  const tokens = nameTokens(firstPass.flatMap((spans, ti) => spans.filter((s) => s.kind === 'person').map((s) => (texts[ti] as string).slice(s.start, s.end))));
+  const addressed = addressNames(texts, detected, ctx);
+  const firstPass = detected.map((spans, ti) => (addressed.orgs[ti]?.length ? resolveSpans([...spans, ...(addressed.orgs[ti] as Span[])]) : spans));
+  // "Pilar Gómez <pilar@...>" in one text covers a later "Hola Pilar" in any text of the call,
+  // and so does "margaret.holloway@finchley-dental.example" a later "Margaret".
+  const tokens = [
+    ...nameTokens(firstPass.flatMap((spans, ti) => spans.filter((s) => s.kind === 'person').map((s) => (texts[ti] as string).slice(s.start, s.end)))),
+    ...addressed.people,
+  ];
   // So is a short or stop-word part of a known full name ("Li" of "Li Na", "O" of "O Li", "Al" of "Al Brenner"),
   // as written or in capitals, even where the text also writes it in lower case.
   const parts = knownParts(ctx.known ?? []);
@@ -771,6 +1096,66 @@ export function findSpans(texts: string[], ctx: DetectContext, detectors: Detect
     const more = bareMentions(texts[ti] as string, lower, spans, PRIORITY.mention, true, (form, start) => !twoLetterStop(form, lang.at(ti, start)));
     return more.length ? resolveSpans([...spans, ...more]) : spans;
   });
+}
+
+const LOCAL_PART = new RegExp(String.raw`^(.*?)${AT_SRC}`, 'i');
+const LEGAL_AFTER = new RegExp(String.raw`^${LEGAL_GAP}${LEGAL}(?![\p{L}\p{N}\p{M}_])`, 'u');
+
+/**
+ * What the private addresses of the call say about names. The words of a
+ * private host (`finchley-dental`), written as capitalised words in a text
+ * (`Finchley Dental`, `Finchley Dental Ltd`), are a company there. The words of
+ * the local part of a private address (`margaret` and `holloway` of
+ * `margaret.holloway@...`), three letters or more and not role or host words,
+ * are name tokens, found again the way a name found once is.
+ */
+function addressNames(texts: string[], found: Span[][], ctx: DetectContext): { orgs: Span[][]; people: string[] } {
+  const hostWords: string[][] = [];
+  const labelWords = new Set<string>();
+  for (const host of hostsOf(texts, found, ctx)) {
+    for (const label of host.split('.').slice(0, -1)) {
+      if (COMMON_LABELS.has(label)) continue;
+      const parts = label.split('-');
+      for (const p of parts) labelWords.add(p);
+      // A company name in a host is a few words: `finchley-dental`, not a label of hundreds. A label is at most
+      // 63 characters in DNS, which also keeps each pattern short enough to match all hosts in one pass.
+      if (label.length <= 63 && parts.length >= 2 && parts.length <= 6 && parts.every((p) => /^\p{L}{2,}$/u.test(p))) hostWords.push(parts);
+    }
+  }
+  const people = new Set<string>();
+  found.forEach((spans, ti) => {
+    for (const s of spans) {
+      if (s.kind !== 'email') continue;
+      const value = (texts[ti] as string).slice(s.start, s.end);
+      // Only a whole address with a dotted host: a part of one a caller's detector marked (`ana%40zqh`) would
+      // make its local part a name, and a later copy of that part would be replaced inside the address.
+      const host = emailHost(value).toLowerCase();
+      if (!host.includes('.') || ctx.isAllowedHost(host)) continue;
+      for (const w of (LOCAL_PART.exec(value)?.[1] ?? '').toLowerCase().split(/[._+\-]+/)) {
+        if (/^\p{L}{3,}$/u.test(w) && !labelWords.has(w) && !notName(w)) people.add(w);
+      }
+    }
+  });
+  // Each host's words with a space run or a hyphen between them, longest first, once each.
+  const alts = [...new Map(hostWords.map((parts) => [parts.join('-'), parts])).values()]
+    .sort((x, y) => y.join('-').length - x.join('-').length)
+    .map((parts) => parts.flatMap((p, i) => [...(i ? [String.raw`(?:[ \t]+|-)`] : []), ...literalAtoms(p)]));
+  const orgs = texts.map((text, ti) => {
+    if (alts.length === 0) return [];
+    const sk = skeleton(text);
+    const held = coverage((found[ti] as Span[]).filter((s) => s.kind === 'email' || s.kind === 'url'), text.length);
+    const out: Span[] = [];
+    for (const [ms, me] of matchAlternatives(sk.text, alts, BEFORE, AFTER, 'u')) {
+      const start = sk.from[ms] as number;
+      let end = pastMarks(text, (sk.from[me - 1] as number) + 1);
+      if (covered(held, start, end)) continue;
+      if (!text.slice(start, end).split(/[ \t-]+/).every((w) => /^\p{Lu}/u.test(w))) continue;
+      end += LEGAL_AFTER.exec(text.slice(end))?.[0].length ?? 0;
+      out.push({ start, end, kind: 'org', priority: PRIORITY.cue });
+    }
+    return out;
+  });
+  return { orgs, people: [...people] };
 }
 
 /** Other places where one of `names` is written exactly, whole word, outside `taken`. */

@@ -1,8 +1,8 @@
 {
   "bare": {
     "recall": {
-      "person": 67,
-      "org": 29,
+      "person": 85,
+      "org": 98,
       "place": 0,
       "email": 100,
       "url": 100,
@@ -28,8 +28,8 @@
   },
   "known": {
     "recall": {
-      "person": 98,
-      "org": 51,
+      "person": 99,
+      "org": 99,
       "place": 0,
       "email": 100,
       "url": 100,
