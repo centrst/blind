@@ -129,7 +129,8 @@ function prepare(all: Original[], deny: string[]): Prepared {
     const exact = o.known === true && (stopWordValue(o.value) || (o.kind === 'person' && oneLetterPart(o.value))) ? o.value.trim() : undefined;
     // A capitalised two-letter name part ("Mo") and the same letters found in lower case ("mo") are checked under different rules.
     const namePart = o.kind === 'person' && shortNamePart(o.value.trim());
-    const k = `${o.kind}|${o.known ? 'known|' : ''}${namePart ? 'part|' : ''}${exact ?? norm(o.value)}`;
+    const folded = norm(o.value);
+    const k = `${o.kind}|${o.known ? 'known|' : ''}${namePart ? 'part|' : ''}${exact ?? folded}`;
     if (seen.has(k)) {
       // The same part found in the text and given in `known` is one value, under the wider rule.
       const had = seen.get(k);
@@ -152,7 +153,7 @@ function prepare(all: Original[], deny: string[]): Prepared {
       // A known id with fewer than two ASCII letters and digits ("日本", "Ä-") is searched as text below.
       if (o.known !== true) continue;
     }
-    const n = norm(o.value).trim();
+    const n = folded.trim();
     const short = [...n].length < 3;
     // A short value is checked when it is in a script without word spaces, or when it
     // is a two-letter name part ("Li" of "Li Na"), which only counts written capitalised.

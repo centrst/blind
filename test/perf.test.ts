@@ -1,6 +1,8 @@
 import { spawnSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
 import { blind, createUnblinder, unblind } from '../src/index.js';
+import { everyKnownDetector } from '../src/detect.js';
+import type { KnownValue } from '../src/types.js';
 import { loadCorpus, ROOT } from './support/corpus.js';
 
 it('C41: a known organization with a long whitespace run finishes within the process deadline', () => {
@@ -104,5 +106,34 @@ describe.skipIf(process.env.BLIND_SKIP_PERF)('time against text length', () => {
     expect(stream()).toBe(unblind(large, mapping).text);
     const streamed = best(stream);
     expect(streamed, `one-shot ${oneLarge.toFixed(3)} s, streamed ${streamed.toFixed(3)} s`).toBeLessThanOrEqual(1.5 * oneLarge);
+  });
+});
+
+/**
+ * A known list the text does not contain. Each entry used to cost its own
+ * compiled pattern and a scan of the text on every call. The reference here is
+ * that work alone: the matcher that tries every entry, on the same text, after
+ * `blind`, so neither run finds patterns the engine compiled before.
+ */
+describe.skipIf(process.env.BLIND_SKIP_PERF)('time against the size of known', () => {
+  const once = (fn: () => unknown): number => {
+    const before = process.cpuUsage();
+    fn();
+    const d = process.cpuUsage(before);
+    return (d.user + d.system) / 1e6;
+  };
+  const text = 'Hello Corvina Lestrade, see you at nine.';
+  /** `n` invented people and companies the text does not write, under a prefix of their own so no other test compiled them. */
+  const absent = (prefix: string, n: number): KnownValue[] =>
+    Array.from({ length: n }, (_, i) => (i % 4 === 3 ? { kind: 'org', value: `${prefix}${i} Vandermeer Logistics` } : { kind: 'person', value: `${prefix}${i} Vandermeer${i}` }));
+
+  it('C55: with 8,000 known entries the text does not contain, blind on a short text takes at most a quarter of the CPU time of compiling and running one pattern per entry', () => {
+    const known = absent('Ostrava', 8000);
+    blind([text], { known: absent('Warmup', 200), seed: 'perf' });
+    let out: ReturnType<typeof blind> | undefined;
+    const fast = once(() => (out = blind([text], { known, seed: 'perf' })));
+    expect(out?.texts[0]).toBe(text);
+    const every = once(() => everyKnownDetector(known).detect(text, { dateOrder: 'dmy', isAllowedHost: () => false }));
+    expect(fast, `blind ${fast.toFixed(3)} s, one pattern per entry ${every.toFixed(3)} s`).toBeLessThanOrEqual(every / 4);
   });
 });

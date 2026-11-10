@@ -18,6 +18,7 @@ const LOOKALIKES: Record<string, string> = {
 export const INVISIBLE = /[\u200b-\u200f\u2060\ufeff\u202a-\u202e]/g;
 
 const NU = '\u03bd';
+const NON_ASCII = /[^\0-\x7f]/;
 const GREEK_LETTER = /^(?=\p{L})\p{scx=Greek}$/u;
 
 /**
@@ -33,6 +34,8 @@ const plainGreek = (ch: string | undefined): boolean => ch !== undefined && GREE
  * `\u03bdisa` reads as `visa` and the nu of a Greek word is kept.
  */
 export function foldLookalikes(text: string): string {
+  // No ASCII character is folded.
+  if (!NON_ASCII.test(text)) return text;
   const chars = [...text];
   let out = '';
   chars.forEach((ch, i) => {
@@ -114,8 +117,15 @@ export function skeleton(text: string): Skeleton {
   for (const ch of text) {
     const at = i;
     i += ch.length;
-    if (INVISIBLE_CH.test(ch)) continue;
     const cp = ch.codePointAt(0) as number;
+    // ASCII is never invisible, a mark, Hangul or in `LOWER_KEY`: it only closes a syllable and is lower-cased.
+    if (cp < 0x80) {
+      close();
+      out += cp >= 0x41 && cp <= 0x5a ? String.fromCharCode(cp + 32) : ch;
+      from.push(at);
+      continue;
+    }
+    if (INVISIBLE_CH.test(ch)) continue;
     if (open && isVowel(cp) && open.cp < SYLLABLE_FIRST) {
       open.cp = SYLLABLE_FIRST + ((open.cp - 0x1100) * 21 + (cp - 0x1161)) * 28;
       continue;

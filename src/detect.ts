@@ -4,6 +4,7 @@ import { foldLookalikes, skeleton } from './fold.js';
 import { detectIds } from './ids.js';
 import { alternativesMatcher, esc, flexAtoms, literalAtoms, matchAlternatives, spacedAtoms } from './match.js';
 import { AFTER, BEFORE, edged, hangulAtWordStartOnly, unspaced } from './script.js';
+import { literalIndex } from './literal-index.js';
 import { TextLanguage } from './language.js';
 import { AT_SRC, COMMON_LABELS, COUNTRY_CODES, FUNCTION_WORDS, IBAN_LENGTHS, ORG_SUFFIX, PARTICLES, ROLE_WORDS, type Lang } from './names.js';
 import type { DetectContext, Detector, KnownKind, KnownValue, Span, UnenforcedKnown } from './types.js';
@@ -708,6 +709,8 @@ function knownForms(k: KnownValue): { forms: string[]; digits?: boolean } {
   }
 }
 
+const HANGUL_ANY = /\p{scx=Hangul}/u;
+
 /** Kinds with a fake for a value of one letter of a script without word spaces. */
 const ONE_LETTER_KINDS: ReadonlySet<string> = new Set<KnownKind>(['person', 'org', 'place', 'domain']);
 
@@ -767,7 +770,8 @@ export function checkKnown(known: KnownValue[]): UnenforcedKnown[] {
     if (stopWordValue(k.value)) unenforced.push({ kind: k.kind, index: i, reason: 'stop-word' });
     else if (kind === 'person' && toks.length > 1 && toks.some(oneLetterPart)) unenforced.push({ kind: k.kind, index: i, reason: 'one-letter-part' });
     else if (kind === 'person' && toks.length > 1 && toks.some((t) => knownPart(t) && stopWordValue(t))) unenforced.push({ kind: k.kind, index: i, reason: 'stop-word-part' });
-    else if (knownForms(k).forms.some((f) => hangulAtWordStartOnly(skeleton(foldLookalikes(f)).text.trim()))) unenforced.push({ kind: k.kind, index: i, reason: 'hangul-inside-word' });
+    // Only a value with a Hangul letter can have a form whose skeleton starts in Hangul.
+    else if (HANGUL_ANY.test(k.value) && knownForms(k).forms.some((f) => hangulAtWordStartOnly(skeleton(foldLookalikes(f)).text.trim()))) unenforced.push({ kind: k.kind, index: i, reason: 'hangul-inside-word' });
   });
   return unenforced;
 }
@@ -795,51 +799,150 @@ function pastMarks(text: string, end: number): number {
  * see `checkKnown`.
  */
 export function knownDetector(known: KnownValue[]): Detector {
-  checkKnown(known);
-  const textual = new Set(['person', 'org', 'place']);
-  const compiled = known
-    .map((k) => {
-      const skel = textual.has(k.kind);
-      if (k.kind === 'phone') {
-        const digits = k.value.replace(/\D/g, '');
-        const alts = [flexDigits(digits)];
-        for (let n = 3; n >= 1; n--) {
-          if (COUNTRY_CODES.has(digits.slice(0, n)) && digits.length - n >= 7) {
-            alts.push(flexDigits(digits.slice(n)));
-            break;
-          }
-        }
-        // `(?:(?:\+|00)[ ]?)?(?:a1|a2)`, written out in the order the engine tries it.
-        const lead = String.raw`(?:\+|00)`;
-        const withLead = (prefix: string): string[][] => alts.map((a) => [prefix, ...a]);
-        return { kind: k.kind, skel, exact: undefined, find: alternativesMatcher([...withLead(`${lead}[ ]`), ...withLead(lead), ...alts], String.raw`(?<![\d])`, String.raw`(?![\d])`, 'iu') };
+  return knownMatcher(known, true);
+}
+
+/**
+ * `knownDetector` that compiles and runs every entry's pattern on every text,
+ * as it did before the prefilter. Kept so a test can show the two find the
+ * same spans; blind never uses it.
+ */
+export function everyKnownDetector(known: KnownValue[]): Detector {
+  return knownMatcher(known, false);
+}
+
+/**
+ * Where a known entry's prefilter keys are looked for: the skeleton of the text
+ * (names, orgs, places, matched there with the `u` flag), the text with ASCII
+ * letters in lower case (`asciiKeyText`, for values matched with `iu`), or the
+ * digits of the text with phone separators taken out.
+ */
+type KeySpace = 'skel' | 'ascii' | 'digits';
+
+interface KnownEntry {
+  kind: KnownKind;
+  skel: boolean;
+  exact: string | undefined;
+  /** The entry's matcher, compiled on first use. */
+  find: () => (text: string) => Array<[number, number]>;
+  space: KeySpace;
+  /** Strings one of which every match contains, in `space`; null when the entry has none and is tried on every text. */
+  keys: string[] | null;
+}
+
+const PHONE_SEP = /[\s.\-()]/g;
+
+/**
+ * `text` with each ASCII letter in lower case, the two other letters a pattern
+ * with the `iu` flags matches to an ASCII letter (long s, Kelvin sign) as that
+ * letter, and every other non-ASCII code unit as U+FFFF, which no key holds.
+ * Same length as `text`. Where an ASCII run of a value matches with `iu`, its
+ * lower case is written here.
+ */
+export function asciiKeyText(text: string): string {
+  let out = '';
+  for (let i = 0; i < text.length; i++) {
+    const c = text.charCodeAt(i);
+    if (c < 0x80) out += c >= 0x41 && c <= 0x5a ? String.fromCharCode(c + 32) : text[i];
+    else out += c === 0x17f ? 's' : c === 0x212a ? 'k' : '\uffff';
+  }
+  return out;
+}
+
+/** The longest of `pieces`, or null when they are all empty. */
+const longest = (pieces: string[]): string | null => pieces.reduce<string | null>((a, p) => (p && (!a || p.length > a.length) ? p : a), null);
+
+function knownEntry(k: KnownValue): KnownEntry {
+  const textual = k.kind === 'person' || k.kind === 'org' || k.kind === 'place';
+  const lazy = (make: () => (text: string) => Array<[number, number]>): (() => (text: string) => Array<[number, number]>) => {
+    let m: ((text: string) => Array<[number, number]>) | undefined;
+    return () => (m ??= make());
+  };
+  if (k.kind === 'phone') {
+    const digits = k.value.replace(/\D/g, '');
+    const keys = [digits];
+    for (let n = 3; n >= 1; n--) {
+      if (COUNTRY_CODES.has(digits.slice(0, n)) && digits.length - n >= 7) {
+        keys.push(digits.slice(n));
+        break;
       }
-      const forms = knownForms(k)
-        .forms.slice()
-        .sort((a, b) => b.length - a.length)
-        .map((f) => {
-          // The text is read folded (see `foldLookalikes`), so the value is folded the same way.
-          const v = skel ? skeleton(foldLookalikes(f)).text : foldLookalikes(f);
-          return v ? edged(v, spacedAtoms(v)) : [];
-        });
-      const exact = stopWordValue(k.value) ? k.value : undefined;
-      return { kind: k.kind, skel, exact, find: alternativesMatcher(forms, '', '', skel ? 'u' : 'iu') };
+    }
+    const find = lazy(() => {
+      const alts = keys.map(flexDigits);
+      // `(?:(?:\+|00)[ ]?)?(?:a1|a2)`, written out in the order the engine tries it.
+      const lead = String.raw`(?:\+|00)`;
+      const withLead = (prefix: string): string[][] => alts.map((a) => [prefix, ...a]);
+      return alternativesMatcher([...withLead(`${lead}[ ]`), ...withLead(lead), ...alts], String.raw`(?<![\d])`, String.raw`(?![\d])`, 'iu');
     });
+    // Every match writes the digits of one alternative with only separators between them.
+    return { kind: k.kind, skel: false, exact: undefined, find, space: 'digits', keys };
+  }
+  // The text is read folded (see `foldLookalikes`), so the value is folded the same way.
+  const values = knownForms(k)
+    .forms.slice()
+    .sort((a, b) => b.length - a.length)
+    .map((f) => (textual ? skeleton(foldLookalikes(f)).text : foldLookalikes(f)));
+  const find = lazy(() => alternativesMatcher(values.map((v) => (v ? edged(v, spacedAtoms(v)) : [])), '', '', textual ? 'u' : 'iu'));
+  const exact = stopWordValue(k.value) ? k.value : undefined;
+  // `spacedAtoms` matches every character but whitespace as written, so each match holds every
+  // run of the value without whitespace. With `iu`, only its runs of ASCII are compared, in lower case.
+  const keys: string[] = [];
+  for (const v of values.filter(Boolean)) {
+    const runs = v.split(/\s+/);
+    const key = textual ? longest(runs) : longest(runs.flatMap((r) => r.split(/[^\0-\x7f]+/)).map((r) => r.toLowerCase()));
+    if (key === null) return { kind: k.kind, skel: textual, exact, find, space: textual ? 'skel' : 'ascii', keys: null };
+    keys.push(key);
+  }
+  return { kind: k.kind, skel: textual, exact, find, space: textual ? 'skel' : 'ascii', keys };
+}
+
+function knownMatcher(known: KnownValue[], filtered: boolean): Detector {
+  checkKnown(known);
+  const entries = known.map(knownEntry);
+  /** Per key space, the entries with keys there and a finder over all their keys. */
+  let index: Map<KeySpace, { owners: number[]; find: (text: string) => Map<number, number[]> }> | undefined;
+  const always = entries.flatMap((e, i) => (e.keys ? [] : [i]));
+  const candidates = (text: string, sk: string | undefined): number[] => {
+    if (!filtered) return entries.map((_, i) => i);
+    if (!index) {
+      index = new Map();
+      for (const space of ['skel', 'ascii', 'digits'] as const) {
+        const owners: number[] = [];
+        const keys: string[] = [];
+        entries.forEach((e, i) => {
+          if (e.space !== space || !e.keys) return;
+          for (const key of e.keys) {
+            owners.push(i);
+            keys.push(key);
+          }
+        });
+        if (keys.length) index.set(space, { owners, find: literalIndex(keys) });
+      }
+    }
+    const hit = new Set(always);
+    for (const [space, { owners, find }] of index) {
+      const t = space === 'skel' ? (sk as string) : space === 'ascii' ? asciiKeyText(text) : text.replace(PHONE_SEP, '');
+      for (const key of find(t).keys()) hit.add(owners[key] as number);
+    }
+    // In the order of `known`, as the spans were pushed when every entry was tried.
+    return [...hit].sort((a, b) => a - b);
+  };
   return {
     name: 'known',
     detect(text) {
       const out: Span[] = [];
-      const sk = compiled.some((c) => c.skel) ? skeleton(text) : null;
-      for (const c of compiled) {
+      const sk = entries.some((c) => c.skel) ? skeleton(text) : null;
+      for (const i of candidates(text, sk?.text)) {
+        const c = entries[i] as KnownEntry;
         if (c.skel && sk) {
-          for (const [s, e] of c.find(sk.text)) {
+          for (const [s, e] of c.find()(sk.text)) {
             const start = sk.from[s] as number;
             const end = pastMarks(text, (sk.from[e - 1] as number) + 1);
             if (c.exact !== undefined && !writtenAs(text.slice(start, end), c.exact)) continue;
             out.push({ start, end, kind: c.kind, priority: PRIORITY.known });
           }
         } else {
-          for (const [start, end] of c.find(text)) {
+          for (const [start, end] of c.find()(text)) {
             if (c.exact !== undefined && !writtenAs(text.slice(start, end), c.exact)) continue;
             out.push({ start, end, kind: c.kind, priority: PRIORITY.known });
           }
