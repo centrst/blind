@@ -1,6 +1,6 @@
 import { AmountPlan, amountKey, detectPercents, freeAmountFake, parseNumber, type AmountOcc } from './amounts.js';
 import { dateKey, freeDateFake, shiftOcc, type DateOcc } from './dates.js';
-import { builtinDetectors, callerDetector, checkKnown, emailHost, findSpans, knownDetector, knownPart, lowerCasePart, oneLetterPart, personTokens, stopWordValue, urlHost } from './detect.js';
+import { afterSurnameTitle, builtinDetectors, callerDetector, checkKnown, emailHost, findSpans, knownDetector, knownPart, lowerCasePart, oneLetterPart, personTokens, stopWordValue, urlHost } from './detect.js';
 import { foldLookalikes, skeleton, stripInvisible } from './fold.js';
 import type { IdMeta } from './ids.js';
 import { TextLanguage, type Lang } from './language.js';
@@ -204,6 +204,15 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   const random = new RandomFakes(root.fork('random'), mode === 'random' ? (prev?.pairs ?? []) : [], dateOrder, log);
   if (mode !== 'placeholder') {
     if (prev) sur.restore(prev.pairs);
+    // One word after a title is a surname ("Mr Holloway"), wherever the text first writes it bare and
+    // whoever found it. This comes before the known people get their fakes, so a known "Holloway" is one too.
+    spansByText.forEach((spans, ti) => {
+      const text = folded[ti] as string;
+      for (const s of spans) {
+        const word = stripInvisible(text.slice(s.start, s.end));
+        if (s.kind === 'person' && !/\s/.test(word) && afterSurnameTitle(text, s.start)) sur.registerPerson(word, lang.at(ti, s.start), true);
+      }
+    });
     // Known people get their fakes up front, so slugs and email locals can use them,
     // in the language around the first name of theirs the text writes.
     const firstSeen = (value: string): Lang => {
@@ -218,16 +227,6 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
       return lang.call;
     };
     for (const k of known) if (k.kind === 'person') sur.prime(k.value, firstSeen(k.value));
-  }
-
-  // One word after a title is a surname ("Mr Holloway"), wherever the text first writes it bare.
-  if (mode !== 'placeholder') {
-    spansByText.forEach((spans, ti) => {
-      for (const s of spans) {
-        if (s.kind !== 'person' || (s.meta as { surname?: unknown } | undefined)?.surname !== true) continue;
-        sur.registerPerson(stripInvisible((folded[ti] as string).slice(s.start, s.end)), lang.at(ti, s.start), true);
-      }
-    });
   }
 
   // Generate in a fixed kind order so related fakes (names, then emails) line up.

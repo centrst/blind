@@ -530,6 +530,23 @@ describe('amount spellings', () => {
     expect(grown).toBeGreaterThan(0);
   });
 
+  it('C1: the largest amount blind scales comes back when its fake is a digit longer, in every spelling', () => {
+    for (const text of ['Fondo 999 999 999 999 999 € hoy.', 'Fondo 999.999.999.999.999 € hoy.', 'Fondo 999999999999999 € hoy.', 'Fondo 9 999 999 999 999,99 € hoy.']) {
+      let grew = 0;
+      for (let i = 0; i < 12; i++) {
+        const res = blind([text], { seed: `c1-digits-${i}`, now: NOW });
+        if (res.mapping.factor > 1) grew++;
+        expect(res.replaced).toEqual({ amount: 1 });
+        expect(unblind(res.texts[0] as string, res.mapping).text, `${text} ${res.mapping.factor}`).toBe(text);
+      }
+      expect(grew).toBeGreaterThan(0);
+    }
+    // One digit more is not an amount blind scales: its fake could not be an exact number.
+    expect(blind(['Fondo 9999999999999999 € hoy.'], { seed: 'c1-digits', now: NOW }).replaced.amount).toBeUndefined();
+    // Digits an amount holds are not a phone number, however they are grouped.
+    for (const text of ['Son 650.000.000 € en total.', 'Son 850 000 000 EUR en total.']) expect(blind([text], { seed: 'c1-digits', now: NOW }).replaced).toEqual({ amount: 1 });
+  });
+
   it('C4: a four-digit number before a spaced amount is not taken as its thousands', () => {
     expect(detectAmounts('Factura 2026 500 € y 12 34 €').map((a) => a.raw)).toEqual(['500', '34']);
     expect(detectAmounts('USD 1 234.56 o 1 240 800 EUR').map((a) => [a.raw, a.minor, a.decimals])).toEqual([['1 234.56', 123456, 2], ['1 240 800', 1240800, 0]]);
@@ -624,6 +641,9 @@ describe('a name after a title', () => {
       expect(surnames.has(fakeOf('Mr Holloway and Mrs. Raman met Ms Okafor.', 'Holloway', seed).toLowerCase())).toBe(true);
       expect(surnames.has(fakeOf('Mr Holloway and Mrs. Raman met Ms Okafor.', 'Raman', seed).toLowerCase())).toBe(true);
       expect(surnames.has(fakeOf('Holloway called. Then Mr Holloway wrote.', 'Holloway', seed).toLowerCase())).toBe(true);
+      // A known value found after a title is a surname too.
+      const known = blind(['Mr Holloway wrote. Holloway agreed.'], { seed, now: NOW, known: [{ kind: 'person', value: 'Holloway' }] });
+      expect(surnames.has(known.mapping.pairs.find((p) => p.real === 'Holloway')!.fake.toLowerCase())).toBe(true);
       expect(surnames.has(fakeOf('La Sra. Quintela llamó.', 'Quintela', seed).toLowerCase())).toBe(true);
       // After a title a given name follows, and for a word on the first-name lists, the fake is a first name.
       expect(surnames.has(fakeOf('Hablé con Don Evaristo ayer.', 'Evaristo', seed).toLowerCase())).toBe(false);

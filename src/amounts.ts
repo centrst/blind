@@ -24,7 +24,9 @@ export interface AmountOcc extends ParsedNumber {
   raw: string;
 }
 
-const NUM = String.raw`\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{1,2})?|\d{1,3}(?:${GROUP_SPACE}\d{3})+(?:[.,]\d{1,2})?|\d+(?:[.,]\d{1,2})?`;
+// At most five spaced groups after the first: the sixteen digits the fake of the largest amount may have. An open
+// count would read a long run of three-digit groups with no currency again from each group, time that grows with its square.
+const NUM = String.raw`\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{1,2})?|\d{1,3}(?:${GROUP_SPACE}\d{3}){1,5}(?:[.,]\d{1,2})?|\d+(?:[.,]\d{1,2})?`;
 const SYM = String.raw`[€$£¥]`;
 const CODE = String.raw`(?:EUR|USD|GBP|CHF|MXN|CAD|AUD|JPY|COP|ARS|CLP|BRL)`;
 const WORD = String.raw`(?:euros?|d[óo]lares|dollars?|pounds?|libras)`;
@@ -49,8 +51,9 @@ export function parseNumber(raw: string): ParsedNumber | null {
     // Groups of three split by spaces: the one dot or comma left, if any, is the decimal mark.
     const [intPart = '', frac = '', ...more] = raw.replace(GROUP_SPACE_RE, '').split(/[.,]/);
     if (more.length > 0 || !/^\d+$/.test(intPart) || (frac && !/^\d+$/.test(frac))) return null;
-    if (intPart.length + frac.length > 15) return null;
-    return { minor: Number(intPart + frac), decimals: frac.length, dec: frac ? (hasDot ? '.' : ',') : null, thou: space };
+    const minor = Number(intPart + frac);
+    if (!Number.isSafeInteger(minor)) return null;
+    return { minor, decimals: frac.length, dec: frac ? (hasDot ? '.' : ',') : null, thou: space };
   }
   if (hasDot && hasComma) {
     if (raw.lastIndexOf('.') > raw.lastIndexOf(',')) {
@@ -72,8 +75,11 @@ export function parseNumber(raw: string): ParsedNumber | null {
   const noThou = thou ? raw.split(thou).join('') : raw;
   const [intPart, frac = ''] = dec ? noThou.split(dec) : [noThou, ''];
   if (!/^\d+$/.test(intPart as string) || (frac && !/^\d+$/.test(frac))) return null;
-  if ((intPart as string).length + frac.length > 15) return null;
-  return { minor: Number((intPart as string) + frac), decimals: frac.length, dec, thou };
+  // Any whole number of units a double holds exactly. `blind` takes amounts up to `MAX_AMOUNT_DIGITS`, so the
+  // fake of the largest one, a digit longer under a factor above 1, still reads back here.
+  const minor = Number((intPart as string) + frac);
+  if (!Number.isSafeInteger(minor)) return null;
+  return { minor, decimals: frac.length, dec, thou };
 }
 
 export function formatNumber(
@@ -88,6 +94,9 @@ export function formatNumber(
   if (thou) int = int.replace(/\B(?=(\d{3})+(?!\d))/g, thou);
   return decimals ? `${int}${dec ?? '.'}${frac}` : int;
 }
+
+/** The most digits an amount `blind` scales may have: its fake, at most 1.6 times as large, is still an exact number. */
+export const MAX_AMOUNT_DIGITS = 15;
 
 export function detectAmounts(text: string): AmountOcc[] {
   const out: AmountOcc[] = [];

@@ -11,3 +11,5 @@ An amount whose thousands are grouped with a space (`1 240,80 €`, also with a 
 A phone, IBAN or id fake that the model writes in another layout (`+447700900692`, a card number with dashes) is restored in that layout when it has eight letters and digits or more. It used to stay in the answer as a fake, unreported.
 
 One word after a title that takes a surname (`Mr Holloway`, `Sra. Ruiz`) gets a surname as its fake instead of a first name, and a titled name ends at a full stop (`Dr. Okafor. Thanks` is one name and a new sentence).
+
+An amount of fifteen digits comes back when its fake is a digit longer. `unblind` used to leave that fake in the answer. Digits an amount holds are no longer read as a phone number, so `650.000.000 €` and `850 000 000 EUR` are scaled as amounts.

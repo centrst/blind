@@ -6,6 +6,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { AmountPlan, amountKey, detectAmounts, detectPercents, formatNumber, freeAmountFake, parseNumber, type ParsedNumber } from '../src/amounts.js';
+import { amountDetector } from '../src/detect.js';
 import { dateKey, detectDates, freeDateFake, renderDate, shiftOcc, shiftYmd, type DateOcc } from '../src/dates.js';
 import { foldLookalikes, skeleton, stripInvisible, visibleOffsets } from '../src/fold.js';
 import { flexAtoms, literalAtoms, matchAlternatives } from '../src/match.js';
@@ -344,8 +345,11 @@ describe('amounts', () => {
     expect(parseNumber('1.000.000,50')).toEqual({ minor: 100000050, decimals: 2, dec: ',', thou: '.' });
     expect(parseNumber('42')).toEqual({ minor: 42, decimals: 0, dec: null, thou: null });
     expect(parseNumber('123456789012345')?.minor).toBe(123456789012345);
-    expect(parseNumber('1234567890123456')).toBeNull();
-    expect(parseNumber('12345678901234.56')).toBeNull();
+    // Sixteen digits read back while a double holds them exactly, so the fake of a fifteen-digit amount does. `blind` scales fifteen at most.
+    expect(parseNumber('1234567890123456')?.minor).toBe(1234567890123456);
+    expect(parseNumber('12345678901234.56')).toEqual({ minor: 1234567890123456, decimals: 2, dec: '.', thou: null });
+    expect(parseNumber('9007199254740992')).toBeNull();
+    expect(parseNumber(`10${' 000'.repeat(5)}`)).toBeNull();
     expect(parseNumber('12,3x')).toBeNull();
     expect(parseNumber('x12')).toBeNull();
   });
@@ -502,7 +506,8 @@ describe('amount spellings', () => {
     expect(parseNumber('12a')).toBeNull();
     expect(parseNumber('12,3a')).toBeNull();
     expect(formatNumber(1234567, 0, null, '.')).toBe('1.234.567');
-    expect(detectAmounts('EUR 1234567890123456')).toEqual([]);
+    expect(detectAmounts('EUR 9999999999999999')).toEqual([]);
+    expect(amountDetector.detect('EUR 1234567890123456 y EUR 123456789012345', { dateOrder: 'dmy', isAllowedHost: () => false }).map((a) => a.end - a.start)).toEqual([15]);
   });
 
   it('writes a fake in the full-width habit of the spelling, digits and separators each in turn', () => {
