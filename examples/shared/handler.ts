@@ -227,6 +227,9 @@ export function createBlindHandler(opts: BlindHandlerOptions): (request: Request
       } catch (e) {
         return json({ error: 'mapping', message: e instanceof Error ? e.message : 'invalid mapping' }, 400);
       }
+      // This handler never makes a mapping that keeps kinds as written. One from a caller would switch
+      // replacement off for those kinds while the receipt still says the leak check passed.
+      if (body.mapping.keep !== undefined) return json({ error: 'mapping', message: 'blind: the mapping is not valid (keep)' }, 400);
     }
 
     // A continued conversation keeps its mapping's mode, so the operator default only applies to a new one.
