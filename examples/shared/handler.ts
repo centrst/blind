@@ -218,6 +218,10 @@ export function createBlindHandler(opts: BlindHandlerOptions): (request: Request
     }
   };
 
+  /**
+   * Checks a caller's mapping, blinds the texts, refuses on a leak, forwards the blind copy and
+   * restores the answer. Error bodies name a field, a kind or an index, never a value.
+   */
   async function handle(body: BlindRequestBody, request: Request): Promise<Response> {
     if (body.mapping !== undefined) {
       // A mapping from the caller must keep blind's invariants, or a crafted one (factor 1, no shift)
