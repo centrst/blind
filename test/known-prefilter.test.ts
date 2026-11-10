@@ -174,7 +174,7 @@ describe('C55: the known-value prefilter', () => {
       const ch = String.fromCharCode(c);
       for (let d = 0; d < 0x80; d++) {
         const other = String.fromCharCode(d);
-        if (new RegExp(`^[${ch.replace(/[\\\]^-]/, '\\$&')}]$`, 'iu').test(other)) expect(asciiKeyText(other)).toBe(asciiKeyText(ch));
+        if (new RegExp(`^[${ch.replace(/[\\\]^-]/g, '\\$&')}]$`, 'iu').test(other)) expect(asciiKeyText(other)).toBe(asciiKeyText(ch));
       }
     }
     expect(asciiKeyText('Abé\u{1f600}')).toBe('ab￿￿￿');
