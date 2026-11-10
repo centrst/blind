@@ -286,3 +286,69 @@ export function literalFinder(fakes: readonly string[], before: string, after: s
     return out;
   };
 }
+
+// ------------------------------------------------- a fake in another layout
+
+const ALNUM = /[A-Za-z0-9]/;
+const WORD_CHAR = /[\p{L}\p{N}]/u;
+/** What a model puts between the groups of a number it writes its own way: a space, dot, dash, slash or bracket. */
+const GROUP_GAP = /^[ \t\u00a0.\-/()]{1,2}$/;
+/** Shorter keys are left alone: six digits written `12.03.26` would read as a six-digit fake by chance. */
+export const FLEX_MIN = 8;
+
+/** The ASCII letters and digits of `value`, in capitals: what stays of a number when its layout changes. */
+export const flexKey = (value: string): string => value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+
+/**
+ * Where one of `keys` (see `flexKey`, each at least `FLEX_MIN` long) is written
+ * in `text` in any layout: its letters and digits in order, in groups split by
+ * one or two separators (`+447700900692`, `4111-1165-8508-7705`). A match starts
+ * where a group starts and ends where one ends, with no letter or digit of any
+ * script beside it, so a key is never found inside a longer number. The longest key at a place wins. The work grows with the
+ * text, not with the text times the keys: each group is joined with the next
+ * ones only up to the longest key and looked up by its letters and digits.
+ */
+export function flexFinder(keys: readonly string[]): (text: string) => Array<[number, number, string]> {
+  const known = new Set(keys.filter((k) => k.length >= FLEX_MIN));
+  const longest = [...known].reduce((n, k) => Math.max(n, k.length), 0);
+  if (known.size === 0) return () => [];
+  return (text) => {
+    // The groups of the text: runs of ASCII letters and digits.
+    const groups: Array<[number, number]> = [];
+    for (let i = 0; i < text.length; i++) {
+      if (!ALNUM.test(text[i] as string)) continue;
+      let e = i + 1;
+      while (e < text.length && ALNUM.test(text[e] as string)) e++;
+      groups.push([i, e]);
+      i = e;
+    }
+    const out: Array<[number, number, string]> = [];
+    for (let g = 0; g < groups.length; g++) {
+      let joined = '';
+      let best: [number, string] | null = null;
+      for (let h = g; h < groups.length; h++) {
+        const [s, e] = groups[h] as [number, number];
+        if (h > g && !GROUP_GAP.test(text.slice((groups[h - 1] as [number, number])[1], s))) break;
+        joined += text.slice(s, e).toUpperCase();
+        if (joined.length > longest) break;
+        if (known.has(joined)) best = [h, joined];
+      }
+      if (!best) continue;
+      const start = (groups[g] as [number, number])[0];
+      const end = (groups[best[0]] as [number, number])[1];
+      // A full-width digit or a letter of another script glued on makes it another, longer value.
+      if (WORD_CHAR.test(text[start - 1] ?? '') || WORD_CHAR.test(text[end] ?? '')) continue;
+      out.push([start, end, best[1]]);
+      g = best[0];
+    }
+    return out;
+  };
+}
+
+/** `written`, a fake found in another layout, with its letters and digits replaced in order by those of `real`, or `real` as written when they differ in number. */
+export function flexRestore(written: string, real: string): string {
+  const chars = [...real].filter((c) => ALNUM.test(c));
+  if (chars.length !== flexKey(written).length) return real;
+  let i = 0;
+  return written.replace(/[A-Za-z0-9]/g, () => chars[i++] as string);
+}

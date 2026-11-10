@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { detectAmounts } from '../src/amounts.js';
 import { detectDates } from '../src/dates.js';
-import { assertNoLeaks, blind, BlindError, checkMapping, createUnblinder, LeakError, unblind, type Detector, type Kind, type KnownValue, type Mapping } from '../src/index.js';
+import { assertNoLeaks, blind, BlindError, checkMapping, createUnblinder, LeakError, prepareUnblinder, unblind, type Detector, type Kind, type KnownValue, type Mapping } from '../src/index.js';
 import { foldLookalikes } from '../src/fold.js';
 import { checkLeaks } from '../src/leaks.js';
 import { FEMALE_FIRST, LAST_NAMES } from '../src/names.js';
@@ -493,6 +493,7 @@ describe('amount spellings', () => {
     'Total 1.234,56 € and １.２３４,５６ € and 1234,56 €.',
     'Pay $1,234.56 or $１,２３４.５６ by Friday.',
     'Fee £１20.00 then £120.00 again.',
+    'Total 1 240,80 € and 1.240,80 € and 1\u202f240,80 € and 1\u00a0240,80 €.',
   ];
   it.each(texts)('C43: each spelling of one amount gets its own fake and comes back as written: %s', (text) => {
     for (const seed of ['c43-a', 'c43-b', 'c43-c']) {
@@ -504,6 +505,51 @@ describe('amount spellings', () => {
       expect(back.text).toBe(text);
       expect(back.collisions).toEqual([]);
     }
+  });
+
+  it('C4: an amount grouped with spaces is scaled whole, keeps its separator, and its sum still adds up', () => {
+    const value = (t: string): number => Number(t.replace(/[^\d,]/g, '').replace(',', '.'));
+    let grown = 0;
+    for (let i = 0; i < 40; i++) {
+      for (const sp of [' ', '\u00a0', '\u202f', '\u2009']) {
+        const text = `Base 3${sp}250,00 € plus 1${sp}000,50 € makes 4${sp}250,50 €.`;
+        const res = blind([text], { seed: `c4-space-${i}`, now: NOW });
+        const out = res.texts[0] as string;
+        const [a, b, c] = [...out.matchAll(/(\d[\d \u00a0\u202f\u2009]*,\d\d) €/g)].map((m) => value(m[1] as string)) as [number, number, number];
+        // The whole number moved by the factor, not only its last group.
+        expect(Math.abs(a - 3250 * res.mapping.factor), out).toBeLessThanOrEqual(0.02);
+        expect(Math.round((a + b) * 100), out).toBe(Math.round(c * 100));
+        expect(out).not.toMatch(/\b[134] (?:250|000),/);
+        if (c >= 1000) {
+          expect(out, 'the separator the text groups with').toContain(`${Math.floor(c / 1000)}${sp}`);
+          grown++;
+        }
+        expect(unblind(out, res.mapping).text).toBe(text);
+      }
+    }
+    expect(grown).toBeGreaterThan(0);
+  });
+
+  it('C1: the largest amount blind scales comes back when its fake is a digit longer, in every spelling', () => {
+    for (const text of ['Fondo 999 999 999 999 999 € hoy.', 'Fondo 999.999.999.999.999 € hoy.', 'Fondo 999999999999999 € hoy.', 'Fondo 9 999 999 999 999,99 € hoy.']) {
+      let grew = 0;
+      for (let i = 0; i < 12; i++) {
+        const res = blind([text], { seed: `c1-digits-${i}`, now: NOW });
+        if (res.mapping.factor > 1) grew++;
+        expect(res.replaced).toEqual({ amount: 1 });
+        expect(unblind(res.texts[0] as string, res.mapping).text, `${text} ${res.mapping.factor}`).toBe(text);
+      }
+      expect(grew).toBeGreaterThan(0);
+    }
+    // One digit more is not an amount blind scales: its fake could not be an exact number.
+    expect(blind(['Fondo 9999999999999999 € hoy.'], { seed: 'c1-digits', now: NOW }).replaced.amount).toBeUndefined();
+    // Digits an amount holds are not a phone number, however they are grouped.
+    for (const text of ['Son 650.000.000 € en total.', 'Son 850 000 000 EUR en total.']) expect(blind([text], { seed: 'c1-digits', now: NOW }).replaced).toEqual({ amount: 1 });
+  });
+
+  it('C4: a four-digit number before a spaced amount is not taken as its thousands', () => {
+    expect(detectAmounts('Factura 2026 500 € y 12 34 €').map((a) => a.raw)).toEqual(['500', '34']);
+    expect(detectAmounts('USD 1 234.56 o 1 240 800 EUR').map((a) => [a.raw, a.minor, a.decimals])).toEqual([['1 234.56', 123456, 2], ['1 240 800', 1240800, 0]]);
   });
 
   it('C43: spellings that would scale to one string get the same value written another way', () => {
@@ -586,16 +632,86 @@ describe('mapping checks at the edges', () => {
   });
 });
 
-describe('text size limit', () => {
-  const kindOf = (fn: () => unknown): string => {
-    try {
-      fn();
-    } catch (e) {
-      return `${(e as { kind: string }).kind}: ${(e as Error).message}`;
-    }
-    return 'ok';
-  };
+describe('a name after a title', () => {
+  const surnames = new Set(LAST_NAMES.map((n) => n.toLowerCase()));
+  const fakeOf = (text: string, real: string, seed: string): string => blind([text], { seed, now: NOW }).mapping.pairs.find((p) => p.real === real)!.fake;
 
+  it('one word after a title that takes a surname gets a surname, wherever the text first writes it', () => {
+    for (const seed of ['t1', 't2', 't3', 't4']) {
+      expect(surnames.has(fakeOf('Mr Holloway and Mrs. Raman met Ms Okafor.', 'Holloway', seed).toLowerCase())).toBe(true);
+      expect(surnames.has(fakeOf('Mr Holloway and Mrs. Raman met Ms Okafor.', 'Raman', seed).toLowerCase())).toBe(true);
+      expect(surnames.has(fakeOf('Holloway called. Then Mr Holloway wrote.', 'Holloway', seed).toLowerCase())).toBe(true);
+      // A known value found after a title is a surname too.
+      const known = blind(['Mr Holloway wrote. Holloway agreed.'], { seed, now: NOW, known: [{ kind: 'person', value: 'Holloway' }] });
+      expect(surnames.has(known.mapping.pairs.find((p) => p.real === 'Holloway')!.fake.toLowerCase())).toBe(true);
+      expect(surnames.has(fakeOf('La Sra. Quintela llamó.', 'Quintela', seed).toLowerCase())).toBe(true);
+      // After a title a given name follows, and for a word on the first-name lists, the fake is a first name.
+      expect(surnames.has(fakeOf('Hablé con Don Evaristo ayer.', 'Evaristo', seed).toLowerCase())).toBe(false);
+      expect(surnames.has(fakeOf('La Sra. Lucía llamó.', 'Lucía', seed).toLowerCase())).toBe(false);
+    }
+  });
+
+  it('ends at a full stop after a word, and keeps an initial', () => {
+    const spans = (text: string): string[] => {
+      const res = blind([text], { seed: 't', now: NOW, replaceWith: 'placeholder' });
+      return res.mapping.pairs.filter((p) => p.kind === 'person').map((p) => p.real);
+    };
+    expect(spans('We met Dr. Okafor. Thanks for coming.')).toEqual(['Okafor']);
+    expect(spans('We met Dr. J. Orvane yesterday.')).toEqual(['J. Orvane']);
+  });
+});
+
+/** The kind and message of the error `fn` throws, or `ok`. */
+function kindOf(fn: () => unknown): string {
+  try {
+    fn();
+  } catch (e) {
+    return `${(e as { kind: string }).kind}: ${(e as Error).message}`;
+  }
+  return 'ok';
+}
+
+describe('a call blind cannot read as meant', () => {
+  const secret = 'Orvane Kelpstrom';
+  const options = 'known, deny, seed, now, dateOrder, allowDomains, detectors, paranoid, allow, replaceWith, mapping, maxTextLength';
+
+  it('refuses texts that are not an array of strings, naming the index and never the text', () => {
+    expect(kindOf(() => blind(secret as unknown as string[]))).toBe('invalid-option: blind: texts must be an array of strings; pass one text as [text]');
+    expect(kindOf(() => blind(undefined as unknown as string[]))).toBe('invalid-option: blind: texts must be an array of strings');
+    expect(kindOf(() => blind({ 0: secret } as unknown as string[]))).toBe('invalid-option: blind: texts must be an array of strings');
+    expect(kindOf(() => blind(['Hola', [secret]] as unknown as string[]))).toBe('invalid-option: blind: text 1 is not a string');
+    expect(kindOf(() => blind([]))).toBe('ok');
+  });
+
+  it('refuses an option it does not know, so a misspelt known list is never ignored, and never quotes the key', () => {
+    const typo = { knwon: [{ kind: 'person', value: secret }] } as never;
+    const message = kindOf(() => blind([`Hello ${secret}`], typo));
+    expect(message).toBe(`invalid-option: blind: options has a key blind does not know; the options are ${options}`);
+    expect(message).not.toContain('knwon');
+    expect(kindOf(() => blind(['x'], { [secret]: true } as never))).not.toContain(secret);
+    expect(kindOf(() => blind(['x'], null as never))).toBe('invalid-option: blind: options must be an object');
+    expect(kindOf(() => blind(['x'], [] as never))).toBe('invalid-option: blind: options must be an object');
+    expect(kindOf(() => blind(['x'], undefined))).toBe('ok');
+  });
+
+  it('refuses a list option of the wrong type, naming the option and the index and never the entry', () => {
+    expect(kindOf(() => blind(['x'], { known: { kind: 'person', value: secret } as never }))).toBe('invalid-known: blind: known must be an array of { kind, value }');
+    expect(kindOf(() => blind(['x'], { deny: secret as never }))).toBe('invalid-option: blind: deny must be an array of strings');
+    expect(kindOf(() => blind(['x'], { deny: ['a', 7] as never }))).toBe('invalid-option: blind: deny entry 1 is not a string');
+    expect(kindOf(() => blind(['x'], { allowDomains: secret as never }))).toBe('invalid-option: blind: allowDomains must be an array of strings');
+    expect(kindOf(() => blind(['x'], { detectors: {} as never }))).toBe('invalid-option: blind: detectors must be an array');
+  });
+
+  it('refuses a seed, date order or now that would make a mapping unblind and the next turn cannot read', () => {
+    for (const seed of [7, '', null, {}]) expect(kindOf(() => blind(['x'], { seed: seed as never })), String(seed)).toBe('invalid-option: blind: seed must be a string that is not empty');
+    expect(kindOf(() => blind(['x'], { dateOrder: 'ymd' as never }))).toBe('invalid-option: blind: dateOrder must be dmy or mdy');
+    for (const now of [new Date(Number.NaN), '2026-03-03', 0]) expect(kindOf(() => blind(['x'], { now: now as never })), String(now)).toBe('invalid-option: blind: now must be a valid Date');
+    const r = blind(['Paga 1.240,50 € a marta@brisanorte.example'], { seed: '7', dateOrder: 'mdy', now: new Date('2026-03-03T00:00:00Z') });
+    expect(() => checkMapping(r.mapping)).not.toThrow();
+  });
+});
+
+describe('text size limit', () => {
   it('accepts a text at the limit and refuses one past it, and refuses a limit that is not a positive number', () => {
     expect(kindOf(() => blind(['abcd'], { seed: 's', maxTextLength: 4 }))).toBe('ok');
     expect(kindOf(() => blind(['abcd'], { seed: 's', maxTextLength: 3 }))).toMatch(/^input-too-large: /);
@@ -683,12 +799,58 @@ describe('unblind against a hand-made mapping', () => {
     expect(unblind('Son 120,00 € y 36,00 € el 17 de marzo de 2026 y el 31 de marzo de 2026.', rnd).text).toBe('Son 100,00 € y 36,00 € el 3 de marzo de 2026 y el 31 de marzo de 2026.');
   });
 
-  it('a mapping it cannot read is an internal error that names the stage, one-shot and streaming', () => {
-    const bad = { pairs: null } as unknown as Mapping;
-    for (const fn of [() => unblind('x', bad), () => createUnblinder(bad)]) {
-      expect(fn).toThrow(BlindError);
-      expect(fn).toThrow(/^unblind: internal error while reading the mapping$/);
+  it('a mapping that is not valid is refused as invalid-mapping with the field, one-shot, prepared and streaming', () => {
+    const cases: Array<[unknown, string]> = [
+      [null, 'shape'],
+      [{ pairs: null }, 'version'],
+      [{ ...m, pairs: null }, 'pairs'],
+      // A factor of 0 would write `Infinity` into the answer, and a shift that is not a number an invalid date.
+      [{ ...m, factor: 0 }, 'factor'],
+      [{ ...m, dayShift: Number.NaN }, 'dayShift'],
+      [{ ...m, pairs: [{ kind: 'person', real: 'Ana', fake: 7 }] }, 'pairs[0]'],
+    ];
+    for (const [bad, field] of cases) {
+      for (const fn of [() => unblind('Son 120,00 €', bad as Mapping), () => createUnblinder(bad as Mapping), () => prepareUnblinder(bad as Mapping)]) {
+        expect(kindOf(fn), field).toBe(`invalid-mapping: blind: the mapping is not valid (${field})`);
+      }
     }
+  });
+
+  it('a phone, card, IBAN or id fake the model writes in another layout comes back in that layout, one-shot and streamed', () => {
+    const text = 'Call +44 7700 900123. Card 4111 1111 1111 1111. IBAN ES91 2100 0418 4502 0005 1332. SSN 536-90-4399.';
+    const res = blind([text], { seed: 'layout', now: NOW });
+    const fake = (real: string): string => res.mapping.pairs.find((p) => p.real === real)!.fake;
+    const [phone, card, iban, ssn] = ['+44 7700 900123', '4111 1111 1111 1111', 'ES91 2100 0418 4502 0005 1332', '536-90-4399'].map(fake) as [string, string, string, string];
+    const answer = `Phone ${phone.replace(/ /g, '')} or ${phone.replace(/ /g, '-')}. Card ${card.replace(/ /g, '-')} / ${card.replace(/ /g, '')}. IBAN ${iban.replace(/ /g, '')}. SSN ${ssn.replace(/-/g, ' ')}.`;
+    const want = 'Phone +447700900123 or +44-7700-900123. Card 4111-1111-1111-1111 / 4111111111111111. IBAN ES9121000418450200051332. SSN 536 90 4399.';
+    expect(unblind(answer, res.mapping)).toEqual({ text: want, invented: [], collisions: [] });
+    for (const size of [1, 3, 7, 50]) {
+      const u = createUnblinder(res.mapping);
+      let out = '';
+      for (let i = 0; i < answer.length; i += size) out += u.push(answer.slice(i, i + size));
+      expect(out + u.end().text, `chunks of ${size}`).toBe(want);
+    }
+    // Inside a longer number, or with other digits glued on, it is another number and stays.
+    const glued = `x${card.replace(/ /g, '')}9 and ${card.replace(/ /g, '')}00 and 1 ${card}`;
+    expect(unblind(glued, res.mapping).text).toBe(`x${card.replace(/ /g, '')}9 and ${card.replace(/ /g, '')}00 and 1 4111 1111 1111 1111`);
+    // A fake under eight letters and digits is matched only as written: `12.03.26` is not the id 120326.
+    const six: Mapping = { ...m, pairs: [...m.pairs, { kind: 'id', real: '654321', fake: '120326' }] };
+    expect(unblind('El 12.03.26 y 12 03 26, ref 120326.', six).text).toBe('El 12.03.26 y 12 03 26, ref 654321.');
+    // An IP address keeps its dots: another grouping of its digits is another address.
+    const ip: Mapping = { ...m, pairs: [...m.pairs, { kind: 'id', real: '10.23.45.67', fake: '192.0.2.123' }] };
+    expect(unblind('Hosts 192.0.2.123 and 192.0.21.23.', ip).text).toBe('Hosts 10.23.45.67 and 192.0.21.23.');
+    // A full-width digit glued on makes it a longer number, and two values that share letters and digits are matched only as written.
+    const wide: Mapping = { ...m, pairs: [...m.pairs, { kind: 'id', real: '65432109', fake: '12345678' }] };
+    expect(unblind('９12-34-56-78９ and 12-34-56-78', wide).text).toBe('９12-34-56-78９ and 65-43-21-09');
+    const twins: Mapping = { ...m, pairs: [...m.pairs, { kind: 'id', real: '65432109', fake: '12345678' }, { kind: 'id', real: '9988-7766', fake: '1234-5678' }] };
+    expect(unblind('12 34 56 78, 12345678, 1234-5678', twins).text).toBe('12 34 56 78, 65432109, 9988-7766');
+  });
+
+  it('an answer or chunk that is not a string is refused by name', () => {
+    const message = 'invalid-option: unblind: the text must be a string';
+    expect(kindOf(() => unblind(7 as unknown as string, m))).toBe(message);
+    expect(kindOf(() => prepareUnblinder(m).unblind(undefined as unknown as string))).toBe(message);
+    expect(kindOf(() => createUnblinder(m).push(null as unknown as string))).toBe(message);
   });
 
   it('checks the answer length, one-shot and over every chunk of a stream, and refuses a limit that is not a positive number', () => {

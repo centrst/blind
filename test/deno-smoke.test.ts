@@ -29,7 +29,7 @@ describe('D1: Deno smoke test', () => {
         `import { blind, unblind } from ${JSON.stringify(pathToFileURL(ENTRY).href)};
 const input = ${JSON.stringify(INPUT)};
 const r = blind([input], {
-  seed: 7,
+  seed: '7',
   known: [{ kind: 'person', value: 'Marta Quintero' }, { kind: 'org', value: 'Talleres Brisa del Norte S.L.' }],
 });
 const back = unblind(r.texts[0], r.mapping).text;

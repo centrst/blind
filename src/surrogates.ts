@@ -250,9 +250,11 @@ export class Surrogates {
   /**
    * Notes each word of a name as a first name or a surname, and the language
    * of its fake: the word's own, else that of the rest of the name, else
-   * `around`. The first time a word is seen decides both.
+   * `around`. The first time a word is seen decides both. With `surname`, a
+   * name of one word is a surname (`Holloway` of `Mr Holloway`), unless it is
+   * on the first-name lists (`Sra. Lucía`).
    */
-  registerPerson(text: string, around?: Lang): void {
+  registerPerson(text: string, around?: Lang, surname = false): void {
     const toks = [...text.matchAll(TOKEN_RE)].map((m) => m[0]).filter((t) => this.nameWord(t) && !this.particle(t));
     const comma = text.indexOf(',');
     const langs = nameLanguages(toks);
@@ -262,6 +264,7 @@ export class Surrogates {
       if (this.tokenRole.has(key)) return;
       let role: 'first' | 'last' = i === 0 ? 'first' : 'last';
       if (comma >= 0) role = text.indexOf(t) > comma ? 'first' : 'last';
+      if (surname && toks.length === 1 && !FIRST_NAMES.has(asciiLower(t))) role = 'last';
       this.tokenRole.set(key, role);
     });
   }
@@ -776,6 +779,8 @@ export class Surrogates {
 
   /** Letters seen as first names, used to spot invented names in a reply. */
   static firstNameSet(): Set<string> {
-    return new Set([...N.FEMALE_FIRST, ...N.MALE_FIRST].map(asciiLower));
+    return FIRST_NAMES;
   }
 }
+
+const FIRST_NAMES = new Set([...N.FEMALE_FIRST, ...N.MALE_FIRST].map(asciiLower));

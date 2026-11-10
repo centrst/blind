@@ -19,6 +19,22 @@ it('C41: a known organization with a long whitespace run finishes within the pro
   expect(result.stdout).toBe('["Unrelated text."]');
 });
 
+it('C41: a megabyte of three-digit groups split by spaces, with no currency, finishes within the process deadline', () => {
+  // An open count of spaced groups would be read again from every group: time that grows with the square of the run.
+  const script = `
+    import { blind } from './dist/index.js';
+    const text = '1' + ' 234'.repeat(260_000) + ' end, then 1 240,80 €';
+    const result = blind([text], { seed: 'spaced-perf' });
+    process.stdout.write(JSON.stringify([result.replaced, result.texts[0].startsWith('1 234 234')]));
+  `;
+  const result = spawnSync(process.execPath, ['--input-type=module', '-e', script], {
+    cwd: ROOT, encoding: 'utf8', timeout: 10_000,
+  });
+  expect(result.error?.message).toBeUndefined();
+  expect(result.status).toBe(0);
+  expect(result.stdout).toBe('[{"amount":1},true]');
+});
+
 /**
  * Time grows about linearly with the text. CPU time, not wall time, so other
  * work on the machine counts less, and a bound of 1.5 times linear so a loaded
