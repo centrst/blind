@@ -217,15 +217,78 @@ export const phoneDetector: Detector = {
 const ID_DIGITS_RE = /(?<![\p{L}\p{N}_])\d{6,}(?![\p{L}\p{N}_])/gu;
 const ID_ALNUM_RE = /(?<![\p{L}\p{N}_])[A-Za-z0-9]+(?:[-/][A-Za-z0-9]+)*(?![\p{L}\p{N}_])/gu;
 
+/** A git object name: lower-case hex of an abbreviated or full SHA-1 or SHA-256, with a letter that has digits on both sides. */
+const GIT_SHA_RE = /^(?=[0-9a-f]*[0-9][a-f]+[0-9])(?:[0-9a-f]{7,40}|[0-9a-f]{64})$/u;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
+/** A hex colour after its `#`, with a hex letter, so `#123456` stays an order number. */
+const HEX_COLOUR_RE = /^(?=[0-9]*[a-f])(?:[0-9a-f]{6}|[0-9a-f]{8})$/iu;
+const SKU_BEFORE_RE = /(?<![\p{L}\p{N}])SKU[ 	]*[:#]?[ 	]*$/iu;
+const SKU_PREFIX_RE = /^SKU[-/]/iu;
+const WORD_SEG = /^[a-z]+$/u;
+/** A version piece (`4o`, `70b`, `v3`, `rc1`, `x86`) or a word with a short number (`parser1234`, `v2024`). */
+const SMALL_SEG = /^(?:[a-z]*\d{1,3}[a-z]*|[a-z]+\d{1,4})$/u;
+const validDay = (y: string, mo: string, d: string): boolean => {
+  const month = Number(mo), day = Number(d);
+  return Number(y) >= 1900 && Number(y) <= 2199 && month >= 1 && month <= 12 && day >= 1 && day <= 31;
+};
+/** A time after a date in an identifier: `T0315`, `T031500Z`. */
+const TIME_TAIL = /^(\d{2})(?:T\d{4}(?:\d{2})?Z?)?$/u;
+
+/**
+ * Whether a lower-case name made of pieces joined by `-` or `/` is technical:
+ * a word of three letters or more, and every other piece a word, a version
+ * piece or part of a date (`gpt-4o-2024-08-06`, `claude-3-5-sonnet-20241022`,
+ * `release-2026-01-15`, `src/v2024/parser1234`). A piece of four digits or
+ * more that is not a date keeps it an id (`ord-2026-88412`).
+ */
+function technicalName(token: string): boolean {
+  if (/[A-SU-Y]/u.test(token)) return false;
+  const segs = token.split(/[-/]/u);
+  if (segs.length < 2 || !segs.some((g) => g.length >= 3 && WORD_SEG.test(g))) return false;
+  for (let k = 0; k < segs.length; k++) {
+    const g = segs[k] as string;
+    if (WORD_SEG.test(g) || SMALL_SEG.test(g)) continue;
+    const ymd = /^(\d{4})(\d{2})(\d{2})$/u.exec(g);
+    if (ymd && validDay(ymd[1]!, ymd[2]!, ymd[3]!)) continue;
+    const day = TIME_TAIL.exec(segs[k + 2] ?? '');
+    if (/^\d{4}$/u.test(g) && day && validDay(g, segs[k + 1] ?? '', day[1]!)) {
+      k += 2;
+      continue;
+    }
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Whether the letters and digits at `start` to `end` are technical text rather
+ * than a private id: a git SHA, a UUID, a hex colour, a lower-case model,
+ * release or file name, or a value marked as a SKU. A label such as `DNI` or
+ * `account no.` still makes it an id through the context detector, and typed
+ * ids (cards, DNI, NIE, CIF, VAT) are found by their own rules.
+ */
+function technical(text: string, start: number, end: number): boolean {
+  const t = text.slice(start, end);
+  if (GIT_SHA_RE.test(t) || UUID_RE.test(t) || technicalName(t)) return true;
+  if (text[start - 1] === '#' && HEX_COLOUR_RE.test(t)) return true;
+  return SKU_PREFIX_RE.test(t) || SKU_BEFORE_RE.test(text.slice(Math.max(0, start - 8), start));
+}
+
 export const idDetector: Detector = {
   name: 'id',
   detect(text) {
     const out: Span[] = [];
+    // A run of digits inside technical text is part of it: the date of `claude-3-5-sonnet-20241022`.
+    const tech: Array<[number, number]> = [];
+    for (const m of text.matchAll(ID_ALNUM_RE)) if (/\d/.test(m[0]) && technical(text, m.index, m.index + m[0].length)) tech.push([m.index, m.index + m[0].length]);
+    const inTech = (s: number, e: number): boolean => tech.some(([a, b]) => a <= s && e <= b);
     for (const m of text.matchAll(ID_DIGITS_RE)) {
+      if (inTech(m.index, m.index + m[0].length)) continue;
       out.push({ start: m.index!, end: m.index! + m[0].length, kind: 'id', priority: PRIORITY.id });
     }
     for (const m of text.matchAll(ID_ALNUM_RE)) {
       const t = m[0];
+      if (inTech(m.index, m.index + t.length)) continue;
       const digits = (t.match(/\d/g) ?? []).length;
       const letters = (t.match(/[A-Za-z]/g) ?? []).length;
       if (t.length < 6 || letters < 1 || digits < 4) continue;
@@ -410,8 +473,10 @@ const CLOSING = phrases(`
 const CLOSING_LINE_RE = new RegExp(String.raw`^(?:${CLOSING})(?:[ \t]*[,.!])?$`, 'u');
 /** A closing and the name on one line: `Un saludo, Wenceslao Tamames, Ayuntamiento`. */
 const CLOSING_NAME_RE = new RegExp(String.raw`^(?:${CLOSING})[ \t]*,[ \t]*(?<name>${cueRun(4)})(?=[ \t]*(?:[,.]|$))`, 'du');
-/** A line that is only a name, as a sign-off writes it. */
-const NAME_LINE_RE = new RegExp(String.raw`^(?<name>${cueRun(4)})(?:[ \t]*[.,])?$`, 'du');
+/** A job title after a sign-off name and a comma: `CEO`, `Head of Sales`, `Directora Financiera`, `Responsable de Administración`. */
+const SIGN_TITLE = String.raw`\p{Lu}[\p{L}\p{M}&/.'’\-]*(?:[ \t]+[\p{L}][\p{L}\p{M}&/.'’\-]*){0,5}`;
+/** A line that is only a name, as a sign-off writes it, maybe with a job title after a comma (`Odette Ashworth, CEO`). */
+const NAME_LINE_RE = new RegExp(String.raw`^(?<name>${cueRun(4)})(?:[ \t]*[.,]|[ \t]*,[ \t]*${SIGN_TITLE})?$`, 'du');
 
 const PERSON_LABEL_RE = new RegExp(
   String.raw`^(?:${phrases(`
@@ -529,8 +594,9 @@ const lineSpans = (text: string): Array<{ start: number; content: string; at: nu
  * Names where ordinary mail puts them. At the start of a line, a greeting
  * before one to three capitalised words (`Dear Margaret,`, `Hola Belén:`) and
  * a label before a name (`Patient: Priya Raman`) or a company
- * (`Company: Finchley Dental Ltd`). The line after a closing (`Kind regards,`)
- * holding only one to four capitalised words is a person, or a company when
+ * (`Company: Finchley Dental Ltd`). The line after a closing (`Kind regards,`),
+ * or the line after that when the first is blank, holding only one to four
+ * capitalised words, maybe with a job title after a comma (`Odette Ashworth, CEO`), is a person, or a company when
  * they carry a company word, and the first of the next three lines holding
  * only a company name is a company, unless a blank line comes first. Anywhere in the text, a capitalised run
  * before a legal suffix (`Moorcroft Joinery Ltd.`) is a company, without the
@@ -576,11 +642,13 @@ export const cueDetector: Detector = {
         }
       }
       if (!CLOSING_LINE_RE.test(c)) return;
-      const next = lines[i + 1];
+      // The name sits on the next line, or after one blank line (`Kind regards,`, a blank line, `Priya Raman`).
+      const n = lines[i + 1]?.content === '' ? i + 2 : i + 1;
+      const next = lines[n];
       const who = next && NAME_LINE_RE.exec(next.content);
       if (!next || !who) return;
       named(next.at, who.groups!.name as string);
-      for (const after of lines.slice(i + 2, i + 5)) {
+      for (const after of lines.slice(n + 1, n + 4)) {
         if (after.content === '') break;
         const m = ORG_LINE_RE.exec(after.content);
         if (m && orgRunOk(m.groups!.run as string)) {
