@@ -883,3 +883,99 @@ describe('unblind against a hand-made mapping', () => {
     expect(kind).toBe('stream-closed');
   });
 });
+
+describe('addresses that draw one fake', () => {
+  // Every address below is invented.
+  const SEEDS = ['alder', 'birch', 'cedar', 'dogwood', 'elm', 'fir'];
+  const fakeOf = (mapping: Mapping, real: string): string => mapping.pairs.find((p) => p.kind === 'email' && p.real === real)!.fake;
+  const fakes = (mapping: Mapping): Set<string> => new Set(mapping.pairs.filter((p) => p.kind === 'email').map((p) => p.fake.toLowerCase()));
+  const lines = (some: string[]): string => some.map((address) => `Copy to ${address}.`).join('\n');
+  const written = (fake: string): string[] => [
+    fake,
+    fake.toLowerCase(),
+    fake.toUpperCase(),
+    fake.toLowerCase().replace(/(^|[@.-])([a-z])/g, (_m, a: string, b: string) => a + b.toUpperCase()),
+  ];
+
+  it('C21: a second address at a host an earlier call mapped gets a fake of its own, and each comes back in any letter case', () => {
+    const couples = [
+      ['maple@quietbrook.example', 'oak@quietbrook.example'],
+      ['team48213@quietbrook.example', 'team97356@quietbrook.example'],
+    ] as const;
+    for (const [one, two] of couples) {
+      for (const seed of SEEDS) {
+        const first = blind([`Mail from ${one} arrived.`], { seed, now: NOW });
+        const next = blind([`Then ${two} replied.`], { mapping: first.mapping, now: NOW });
+        const a = fakeOf(next.mapping, one);
+        const b = fakeOf(next.mapping, two);
+        // Unblind reads every letter case of a fake as its first pair, so two values must never hold two cases of one fake.
+        expect(b.toLowerCase(), seed).not.toBe(a.toLowerCase());
+        const u = prepareUnblinder(next.mapping);
+        for (const w of written(a)) expect(u.unblind(`Reply to ${w} today.`).text, seed).toBe(`Reply to ${one} today.`);
+        for (const w of written(b)) expect(u.unblind(`Reply to ${w} today.`).text, seed).toBe(`Reply to ${two} today.`);
+      }
+    }
+  });
+
+  it('C21: many addresses at one host get a fake each, in one call and over several', () => {
+    const locals = ['bra', 'cle', 'dri', 'fro', 'gla', 'hem', 'jor', 'kel'].flatMap((a) => ['ban', 'dor', 'fen', 'gim', 'hul', 'jax', 'kov', 'lun'].map((b) => a + b));
+    const addresses = locals.map((local) => `${local}@quietbrook.example`);
+
+    const once = blind([lines(addresses)], { seed: 'alder', now: NOW });
+    expect(fakes(once.mapping).size).toBe(addresses.length);
+
+    // Eight calls of eight: each call starts its draws over, so every one of them meets the fakes of the calls before.
+    let mapping: Mapping | undefined;
+    for (let i = 0; i < addresses.length; i += 8) {
+      mapping = blind([lines(addresses.slice(i, i + 8))], mapping ? { mapping, now: NOW } : { seed: 'alder', now: NOW }).mapping;
+    }
+    expect(fakes(mapping!).size).toBe(addresses.length);
+    const u = prepareUnblinder(mapping!);
+    for (const address of addresses) expect(u.unblind(fakeOf(mapping!, address).toUpperCase()).text).toBe(address);
+  });
+
+  it('C21: more addresses at one host than there are words to draw still get a fake each, some of them numbered', () => {
+    const syllables = ['ba', 'ce', 'di', 'fo', 'gu', 'ha', 'je', 'ki', 'lo', 'mu'];
+    const addresses = syllables.flatMap((a) => syllables.flatMap((b) => syllables.map((c) => `${a}${b}${c}x@quietbrook.example`))).slice(0, 800);
+    const text = lines(addresses);
+    const once = blind([text], { seed: 'alder', now: NOW });
+    expect(fakes(once.mapping).size).toBe(addresses.length);
+    expect([...fakes(once.mapping)].some((fake) => /\d@/.test(fake))).toBe(true);
+    expect(once.leaks.ok).toBe(true);
+    expect(prepareUnblinder(once.mapping).unblind(once.texts[0]!).text).toBe(text);
+  });
+
+  it('C1: one address in full-width letters and in capitals keeps one fake in three spellings', () => {
+    const wide = [...'maple'].map((c) => String.fromCharCode(c.charCodeAt(0) + 0xfee0)).join('');
+    const text = `From maple@quietbrook.example, also ${wide}@quietbrook.example, then MAPLE@QUIETBROOK.EXAMPLE.`;
+    for (const seed of SEEDS) {
+      const once = blind([text], { seed, now: NOW });
+      const emails = once.mapping.pairs.filter((p) => p.kind === 'email');
+      expect(emails.length, seed).toBe(3);
+      expect(fakes(once.mapping).size, seed).toBe(1);
+      expect(prepareUnblinder(once.mapping).unblind(once.texts[0]!).text, seed).toBe(text);
+    }
+  });
+
+  it('C21: an address that draws again leaves the fake of its words alone for the addresses after it', () => {
+    const local = (fake: string): string => fake.slice(0, fake.indexOf('@'));
+    for (const seed of SEEDS) {
+      const first = blind(['Mail from maple@quietbrook.example arrived.'], { seed, now: NOW });
+      // `oak` draws what `maple` drew, since a call starts its draws over: at another host it stands, at the same host it draws again.
+      const next = blind(['Copy to oak.fern@stonegate.example, to oak@quietbrook.example and to oak.fern3@hillfort.example.'], { mapping: first.mapping, now: NOW });
+      const before = local(fakeOf(next.mapping, 'oak.fern@stonegate.example'));
+      const after = local(fakeOf(next.mapping, 'oak.fern3@hillfort.example'));
+      expect(fakeOf(next.mapping, 'oak@quietbrook.example').toLowerCase(), seed).not.toBe(fakeOf(next.mapping, 'maple@quietbrook.example').toLowerCase());
+      expect(before.split('.')[0], seed).toBe(local(fakeOf(next.mapping, 'maple@quietbrook.example')));
+      expect(after.slice(0, before.length), seed).toBe(before);
+    }
+  });
+
+  it('C1: one address in two letter cases still gets two cases of one fake', () => {
+    const first = blind(['Mail from maple@quietbrook.example arrived.'], { seed: 'alder', now: NOW });
+    const next = blind(['MAPLE@QUIETBROOK.EXAMPLE replied.'], { mapping: first.mapping, now: NOW });
+    const a = fakeOf(next.mapping, 'maple@quietbrook.example');
+    expect(fakeOf(next.mapping, 'MAPLE@QUIETBROOK.EXAMPLE')).toBe(a.toUpperCase());
+    expect(prepareUnblinder(next.mapping).unblind(next.texts[0]!).text).toBe('MAPLE@QUIETBROOK.EXAMPLE replied.');
+  });
+});
