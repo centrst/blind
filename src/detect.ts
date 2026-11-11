@@ -217,15 +217,121 @@ export const phoneDetector: Detector = {
 const ID_DIGITS_RE = /(?<![\p{L}\p{N}_])\d{6,}(?![\p{L}\p{N}_])/gu;
 const ID_ALNUM_RE = /(?<![\p{L}\p{N}_])[A-Za-z0-9]+(?:[-/][A-Za-z0-9]+)*(?![\p{L}\p{N}_])/gu;
 
+/** A git object name: lower-case hex of an abbreviated or full SHA-1 or SHA-256, with a letter that has digits on both sides. */
+const GIT_SHA_RE = /^(?=[0-9a-f]*[0-9][a-f]+[0-9])(?:[0-9a-f]{7,40}|[0-9a-f]{64})$/u;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
+/** A hex colour after its `#`, with a hex letter, so `#123456` stays an order number. */
+const HEX_COLOUR_RE = /^(?=[0-9]*[a-f])(?:[0-9a-f]{6}|[0-9a-f]{8})$/iu;
+const SKU_BEFORE_RE = /(?<![\p{L}\p{N}])SKU[ 	]*[:#]?[ 	]*$/iu;
+const SKU_PREFIX_RE = /^SKU[-/]/iu;
+const WORD_SEG = /^[a-z]+$/u;
+/** A version piece (`4o`, `70b`, `v3`, `rc1`, `x86`) or a word with a short number (`parser1234`, `v2024`). */
+const SMALL_SEG = /^(?:[a-z]*\d{1,3}[a-z]*|[a-z]+\d{1,4})$/u;
+const validDay = (y: string, mo: string, d: string): boolean => {
+  const month = Number(mo), day = Number(d);
+  return Number(y) >= 1900 && Number(y) <= 2199 && month >= 1 && month <= 12 && day >= 1 && day <= 31;
+};
+/** A time after a date in an identifier: `T0315`, `T031500Z`. */
+const TIME_TAIL = /^(\d{2})(?:T\d{4}(?:\d{2})?Z?)?$/u;
+
+/**
+ * Whether a lower-case name made of pieces joined by `-` or `/` is technical:
+ * a word of three letters or more, and every other piece a word, a version
+ * piece or part of a date (`gpt-4o-2024-08-06`, `claude-3-5-sonnet-20241022`,
+ * `release-2026-01-15`, `src/v2024/parser1234`). A piece of four digits or
+ * more that is not a date keeps it an id (`ord-2026-88412`).
+ */
+function technicalName(token: string): boolean {
+  if (/[A-SU-Y]/u.test(token)) return false;
+  const segs = token.split(/[-/]/u);
+  if (segs.length < 2 || !segs.some((g) => g.length >= 3 && WORD_SEG.test(g))) return false;
+  for (let k = 0; k < segs.length; k++) {
+    const g = segs[k] as string;
+    if (WORD_SEG.test(g) || SMALL_SEG.test(g)) continue;
+    const ymd = /^(\d{4})(\d{2})(\d{2})$/u.exec(g);
+    if (ymd && validDay(ymd[1]!, ymd[2]!, ymd[3]!)) continue;
+    const day = TIME_TAIL.exec(segs[k + 2] ?? '');
+    if (/^\d{4}$/u.test(g) && day && validDay(g, segs[k + 1] ?? '', day[1]!)) {
+      k += 2;
+      continue;
+    }
+    return false;
+  }
+  return true;
+}
+
+/** The longest value taken as a SKU. Longer, it is read as an id, and the typed ids inside are looked for in a short value only. */
+const SKU_MAX = 24;
+
+/** Whether the token at `start` to `end` is marked as a SKU (`SKU-4417-BLK`, `SKU: 100234`) and short enough to be one. */
+const skuAt = (text: string, start: number, end: number): boolean =>
+  end - start <= SKU_MAX && (SKU_PREFIX_RE.test(text.slice(start, end)) || SKU_BEFORE_RE.test(text.slice(Math.max(0, start - 8), start)));
+
+/**
+ * Whether the letters and digits at `start` to `end` are technical text rather
+ * than a private id: a git SHA, a UUID, a hex colour, a lower-case model,
+ * release or file name, or a value marked as a SKU. A label such as `DNI` or
+ * `account no.` still makes it an id through the context detector. Only a SKU
+ * can hold a typed id: the other shapes are hex of a fixed length or hold no
+ * piece of four digits or more that is not a date.
+ */
+function technical(text: string, start: number, end: number): boolean {
+  const t = text.slice(start, end);
+  return GIT_SHA_RE.test(t) || UUID_RE.test(t) || technicalName(t) || (text[start - 1] === '#' && HEX_COLOUR_RE.test(t)) || skuAt(text, start, end);
+}
+
+/**
+ * The typed ids inside a SKU, which their own patterns do not read after a
+ * hyphen or slash (`SKU-12345678Z`, `SKU-552-83-7741`): each part from a
+ * separator on is read with its own separators, so the id keeps a fake that
+ * passes its check and matches the fake of the same id elsewhere.
+ */
+function typedInSku(text: string, start: number, end: number): Span[] {
+  const t = text.slice(start, end);
+  const out: Span[] = [];
+  let covered = 0;
+  const from = [0, ...[...t.matchAll(/[-/]/gu)].map((m) => m.index + 1)];
+  for (const i of from) {
+    for (const m of detectIds(t.slice(i))) {
+      if (i + m.start < covered) continue;
+      out.push({ start: start + i + m.start, end: start + i + m.end, kind: 'id', priority: PRIORITY.typedId, meta: { scheme: m.scheme } });
+      covered = i + m.end;
+    }
+  }
+  return out;
+}
+
+/** Whether each span, asked in order of start, lies inside one of `ranges`, which are in order and do not overlap. */
+function insideOf(ranges: Array<[number, number]>): (s: number, e: number) => boolean {
+  let k = 0;
+  return (s, e) => {
+    while (k < ranges.length && (ranges[k] as [number, number])[1] <= s) k++;
+    const r = ranges[k];
+    return r !== undefined && r[0] <= s && e <= r[1];
+  };
+}
+
 export const idDetector: Detector = {
   name: 'id',
   detect(text) {
     const out: Span[] = [];
+    // A run of digits inside technical text is part of it: the date of `claude-3-5-sonnet-20241022`.
+    const tech: Array<[number, number]> = [];
+    for (const m of text.matchAll(ID_ALNUM_RE)) {
+      const [s, e] = [m.index, m.index + m[0].length];
+      if (!/\d/.test(m[0]) || !technical(text, s, e)) continue;
+      tech.push([s, e]);
+      if (skuAt(text, s, e)) out.push(...typedInSku(text, s, e));
+    }
+    const digitsInTech = insideOf(tech);
     for (const m of text.matchAll(ID_DIGITS_RE)) {
+      if (digitsInTech(m.index, m.index + m[0].length)) continue;
       out.push({ start: m.index!, end: m.index! + m[0].length, kind: 'id', priority: PRIORITY.id });
     }
+    const alnumInTech = insideOf(tech);
     for (const m of text.matchAll(ID_ALNUM_RE)) {
       const t = m[0];
+      if (alnumInTech(m.index, m.index + t.length)) continue;
       const digits = (t.match(/\d/g) ?? []).length;
       const letters = (t.match(/[A-Za-z]/g) ?? []).length;
       if (t.length < 6 || letters < 1 || digits < 4) continue;
@@ -298,9 +404,24 @@ export const contextDetector: Detector = {
       out.push({ start: s, end: s + name.length, kind: 'person', priority: PRIORITY.honorific });
     }
     const re = new RegExp(LABELLED_ID_RE.source, LABELLED_ID_RE.flags);
+    const tokenTail = /(?:[A-Za-z0-9]|[\-./](?=[A-Za-z0-9]))*/y;
+    let fewDigitsUntil = 0;
     for (let m = re.exec(text); m; m = re.exec(text)) {
-      const [s, e] = m.indices!.groups!.value as [number, number];
+      const [s, windowEnd] = m.indices!.groups!.value as [number, number];
+      // Later matches wholly inside a range with fewer than three digits cannot be ids.
+      // Keep the regex bounded so retries at nested labels do not rescan a long suffix.
+      if (windowEnd <= fewDigitsUntil) {
+        re.lastIndex = s;
+        continue;
+      }
+      tokenTail.lastIndex = windowEnd;
+      const e = windowEnd + (tokenTail.exec(text)?.[0].length ?? 0);
       const value = text.slice(s, e);
+      if ((value.match(/\d/g) ?? []).length < 3) {
+        fewDigitsUntil = e;
+        re.lastIndex = s;
+        continue;
+      }
       // A value has digits: "DNI 12345678" yes, "DNI del titular" no. Words after a short number stay out.
       const tail = /^(\S*\d\S*(?:[ ](?=\S*\d)\S+)*)/.exec(value)?.[1] ?? '';
       if ((tail.match(/\d/g) ?? []).length < 3) {
@@ -309,6 +430,7 @@ export const contextDetector: Detector = {
         continue;
       }
       out.push({ start: s, end: s + tail.length, kind: 'id', priority: PRIORITY.labelledId });
+      re.lastIndex = e;
     }
     return out;
   },
@@ -410,8 +532,10 @@ const CLOSING = phrases(`
 const CLOSING_LINE_RE = new RegExp(String.raw`^(?:${CLOSING})(?:[ \t]*[,.!])?$`, 'u');
 /** A closing and the name on one line: `Un saludo, Wenceslao Tamames, Ayuntamiento`. */
 const CLOSING_NAME_RE = new RegExp(String.raw`^(?:${CLOSING})[ \t]*,[ \t]*(?<name>${cueRun(4)})(?=[ \t]*(?:[,.]|$))`, 'du');
-/** A line that is only a name, as a sign-off writes it. */
-const NAME_LINE_RE = new RegExp(String.raw`^(?<name>${cueRun(4)})(?:[ \t]*[.,])?$`, 'du');
+/** A job title after a sign-off name and a comma: `CEO`, `Head of Sales`, `Directora Financiera`, `Responsable de Administración`. */
+const SIGN_TITLE = String.raw`\p{Lu}[\p{L}\p{M}&/.'’\-]*(?:[ \t]+[\p{L}][\p{L}\p{M}&/.'’\-]*){0,5}`;
+/** A line that is only a name, as a sign-off writes it, maybe with a job title after a comma (`Odette Ashworth, CEO`). */
+const NAME_LINE_RE = new RegExp(String.raw`^(?<name>${cueRun(4)})(?:[ \t]*[.,]|[ \t]*,[ \t]*${SIGN_TITLE})?$`, 'du');
 
 const PERSON_LABEL_RE = new RegExp(
   String.raw`^(?:${phrases(`
@@ -529,8 +653,9 @@ const lineSpans = (text: string): Array<{ start: number; content: string; at: nu
  * Names where ordinary mail puts them. At the start of a line, a greeting
  * before one to three capitalised words (`Dear Margaret,`, `Hola Belén:`) and
  * a label before a name (`Patient: Priya Raman`) or a company
- * (`Company: Finchley Dental Ltd`). The line after a closing (`Kind regards,`)
- * holding only one to four capitalised words is a person, or a company when
+ * (`Company: Finchley Dental Ltd`). The line after a closing (`Kind regards,`),
+ * or the line after that when the first is blank, holding only one to four
+ * capitalised words, maybe with a job title after a comma (`Odette Ashworth, CEO`), is a person, or a company when
  * they carry a company word, and the first of the next three lines holding
  * only a company name is a company, unless a blank line comes first. Anywhere in the text, a capitalised run
  * before a legal suffix (`Moorcroft Joinery Ltd.`) is a company, without the
@@ -576,11 +701,13 @@ export const cueDetector: Detector = {
         }
       }
       if (!CLOSING_LINE_RE.test(c)) return;
-      const next = lines[i + 1];
+      // The name sits on the next line, or after one blank line (`Kind regards,`, a blank line, `Priya Raman`).
+      const n = lines[i + 1]?.content === '' ? i + 2 : i + 1;
+      const next = lines[n];
       const who = next && NAME_LINE_RE.exec(next.content);
       if (!next || !who) return;
       named(next.at, who.groups!.name as string);
-      for (const after of lines.slice(i + 2, i + 5)) {
+      for (const after of lines.slice(n + 1, n + 4)) {
         if (after.content === '') break;
         const m = ORG_LINE_RE.exec(after.content);
         if (m && orgRunOk(m.groups!.run as string)) {

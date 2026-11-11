@@ -25,7 +25,7 @@ The corpus has 164 Spanish files. Presidio uses its fair configuration with orga
 | Gretel | Presidio | 42.9% | 50.1% | 83.7% |
 | Gretel | LLM Guard | 35.5% | 18.5% | 85.5% |
 
-Blind core person recall is 82.6% in Spanish and 87.9% in English. GLiNER raises it to 99.8%, the same as on English. On Gretel, GLiNER finds 68.6% of Spanish labels against 94.1% on English. Of 40 sampled Spanish person labels in Gretel, 18 were not names.
+Blind core person recall is 82.6% in Spanish and 88.0% in English. GLiNER raises it to 99.8%, the same as on English. On Gretel, GLiNER finds 68.6% of Spanish labels against 94.1% on English. Of 40 sampled Spanish person labels in Gretel, 18 were not names.
 
 LLM Guard ran its English setup on Spanish. Its measured configuration supports English and Chinese. On the corpus, Blind core found more people and organizations than Presidio, and Presidio found more places. On Gretel, Presidio found more of all three. Presidio found 28.2% of corpus dates and 13.0% of ids. Its date patterns are English, and the Spanish spaCy model has no date label. Only 4 of 34 NIF-shaped ids had valid check letters, partly explaining the gap.
 

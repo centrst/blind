@@ -57,6 +57,28 @@ describe('names where ordinary mail puts them', () => {
     expect(find('Thanks,\nJ. Orvane')).toEqual([['person:J. Orvane']]);
   });
 
+  it('C54: a sign-off a blank line below its closing is a person, and the company line under it an org', () => {
+    expect(find('Thanks for the call.\n\nKind regards,\n\nPriya Raman')).toEqual([['person:Priya Raman']]);
+    expect(find('Best regards,\n\nOdette Ashworth\nDorsal Partners LLC')).toEqual([['person:Odette Ashworth', 'org:Dorsal Partners LLC']]);
+    expect(find('Un saludo,\n\nMaría José Ferrán Gil')).toEqual([['person:María José Ferrán Gil']]);
+    // One blank line only: two make the name line part of something else.
+    expect(find('Kind regards,\n\n\nPriya Raman')).toEqual([[]]);
+  });
+
+  it('C54: a job title after a comma keeps the sign-off a person, and the company line under it an org', () => {
+    expect(find('Regards,\nOdette Ashworth, CEO\nDorsal Partners')).toEqual([['person:Odette Ashworth', 'org:Dorsal Partners']]);
+    expect(find('Thanks,\nTobias Wren, Head of Sales\nWren & Marlow Ltd')).toEqual([['person:Tobias Wren', 'org:Wren & Marlow Ltd']]);
+    expect(find('Kind regards,\n\nPriya Raman, Practice Manager')).toEqual([['person:Priya Raman']]);
+    expect(find('Atentamente,\nMaría José Ferrán Gil, Directora Financiera\nFerrán Asesores S.L.')).toEqual([['person:María José Ferrán Gil', 'org:Ferrán Asesores S.L.']]);
+  });
+
+  it('C54: a title line after a closing is no person, and lower case after the comma is a sentence', () => {
+    for (const text of [
+      'Regards,\nAccounts, Finchley', 'Thanks,\n\nThe Board', 'Kind regards,\nOdette Ashworth, thanks again for everything',
+      'Thanks,\n\nI will call you tomorrow.', 'Gracias,\n\nEquipo de Soporte',
+    ]) expect(find(text), text).toEqual([[]]);
+  });
+
   it('C54: a closing before a role, a team, a phone signature or a sentence names no one', () => {
     for (const text of [
       'Thanks,\nSent from my iPhone', 'Best regards,\nThe Support Team\nCustomer Service', 'Kind regards,\nAccounts Department',

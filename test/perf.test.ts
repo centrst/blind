@@ -37,6 +37,23 @@ it('C41: a megabyte of three-digit groups split by spaces, with no currency, fin
   expect(result.stdout).toBe('[{"amount":1},true]');
 });
 
+it('C41/C57: repeated digitless ID labels finish within the process deadline and do not hide a following ID', () => {
+  const script = `
+    import { blind } from './dist/index.js';
+    const prefix = 'DNI.'.repeat(50_000) + 'foo';
+    const plain = blind([prefix], { seed: 'label-perf' });
+    const labelled = blind([prefix + ' Account no. 6f1c2b9e-4d3a-4e8f-9b7c-123456789012 is closed.'], { seed: 'label-perf' });
+    const nested = blind(['DNI.'.repeat(50_000) + 'NHC: 4512.'], { seed: 'label-perf' });
+    process.stdout.write(JSON.stringify([plain.texts[0] === prefix, labelled.texts[0].includes('123456789012'), nested.texts[0].includes('4512')]));
+  `;
+  const result = spawnSync(process.execPath, ['--input-type=module', '-e', script], {
+    cwd: ROOT, encoding: 'utf8', timeout: 5000,
+  });
+  expect(result.error?.message).toBeUndefined();
+  expect(result.status).toBe(0);
+  expect(result.stdout).toBe('[true,false,false]');
+});
+
 it('C55: a text that repeats a key 1,000 known entries share runs in a 64 MB heap', () => {
   // Every occurrence of every entry's key was kept, one copy per entry: about 22 million offsets here.
   const script = `
