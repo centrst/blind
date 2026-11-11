@@ -386,8 +386,10 @@ const ID_LABEL = [
   String.raw`(?:número|numero)[ \t]+de[ \t]+(?:cliente|socio|póliza|poliza|cuenta|afiliación|afiliacion|expediente|historia)`,
   String.raw`póliza|poliza|NHC|historia[ \t]+clínica|expediente`,
 ].join('|');
+// Keep the bounded window for spaced values, but finish its last unbroken token.
+// A technical token after an explicit label is private in full, including a long UUID or SHA.
 const LABELLED_ID_RE = new RegExp(
-  String.raw`(?<![\p{L}\p{N}])(?:${ID_LABEL})[ \t]*(?:n[º°o]\.?|#)?[ \t]*[:.#]?[ \t]*(?<value>[A-Za-z0-9](?:[A-Za-z0-9]|[ \-./](?=[A-Za-z0-9])){2,23})`,
+  String.raw`(?<![\p{L}\p{N}])(?:${ID_LABEL})[ \t]*(?:n[º°o]\.?|#)?[ \t]*[:.#]?[ \t]*(?<value>[A-Za-z0-9](?:[A-Za-z0-9]|[ \-./](?=[A-Za-z0-9])){2,23}(?:[A-Za-z0-9]|[\-./](?=[A-Za-z0-9]))*)`,
   'giud',
 );
 

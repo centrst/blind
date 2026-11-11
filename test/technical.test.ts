@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { builtinDetectors, findSpans } from '../src/detect.js';
-import { blind } from '../src/index.js';
+import { blind, unblind } from '../src/index.js';
 import type { DetectContext } from '../src/types.js';
 
 // Every name, number and reference is invented.
@@ -75,6 +75,25 @@ describe('technical text', () => {
       const out = blind([`${text} Build gpt-4o-2024-08-06, commit 3f9a2c7.`], { seed: 's' }).texts[0] as string;
       expect(out, what).not.toContain(value);
       expect(out, what).toContain('gpt-4o-2024-08-06, commit 3f9a2c7.');
+    }
+  });
+
+  it('C57: an explicit id label replaces the whole technical token beyond the 24-character label window', () => {
+    const values = [
+      '6f1c2b9e-4d3a-4e8f-9b7c-123456789012',
+      '9b1e4c2d'.repeat(8),
+      'summariser-release-2026-01-15',
+    ];
+    for (const value of values) {
+      const text = `Account no. ${value} is closed.`;
+      expect(ids(text), value).toEqual([value]);
+      const result = blind([text], { seed: 'labelled-technical' });
+      expect(result.mapping.pairs.some((p) => p.kind === 'id' && p.real === value), value).toBe(true);
+      expect(result.texts[0], value).not.toContain(value.slice(24));
+      expect(result.texts[0], value).toMatch(/ is closed\.$/u);
+      expect(result.leaks.ok, value).toBe(true);
+      expect(unblind(result.texts[0]!, result.mapping).text, value).toBe(text);
+      expect(ids(`See ${value} for details.`), value).toEqual([]);
     }
   });
 

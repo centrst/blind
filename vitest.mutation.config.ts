@@ -7,7 +7,7 @@ import { defineConfig } from 'vitest/config';
  */
 export default defineConfig({
   test: {
-    include: ['test/blind.test.ts', 'test/detect.test.ts', 'test/corpus.test.ts', 'test/adversarial.test.ts', 'test/properties/*.test.ts', 'test/replace.test.ts', 'test/cli.test.ts', 'test/safety.test.ts', 'test/receipt.test.ts', 'test/roundtrip.test.ts', 'test/pairlog.test.ts', 'test/surrogates.test.ts', 'test/language.test.ts'],
+    include: ['test/blind.test.ts', 'test/technical.test.ts', 'test/detect.test.ts', 'test/corpus.test.ts', 'test/adversarial.test.ts', 'test/properties/*.test.ts', 'test/replace.test.ts', 'test/cli.test.ts', 'test/safety.test.ts', 'test/receipt.test.ts', 'test/roundtrip.test.ts', 'test/pairlog.test.ts', 'test/surrogates.test.ts', 'test/language.test.ts'],
     testTimeout: 120_000,
     env: { MUTATION: '1', NUM_RUNS: '60', SEED: '20261008' },
   },
