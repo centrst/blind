@@ -32,7 +32,7 @@ const back = unblind(answer, res.mapping).text;
 
 `blindWithNer` runs the model first, because `blind` finds spans synchronously and a model call is async, then calls `blind` with the detector in `detectors`. To keep control of the call, use `createNerDetector(model).prepare(texts)`, which returns a plain `Detector`.
 
-Options: `threshold` (default 0.3), `labels`, `priority` (default 50, below every pattern detector and `known`), `propagate` (default true, marks later bare mentions of a name already found).
+Options: `threshold` (default 0.3), `labels` and `priority` (default 50, below every pattern detector and `known`). A later bare mention of a person already found, such as the first name alone after the full name, is always replaced with the same person's fake.
 
 Loading the model takes about 3.2 GB of memory at its peak, and the weights stay resident in your process.
 

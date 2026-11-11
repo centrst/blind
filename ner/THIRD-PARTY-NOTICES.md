@@ -19,7 +19,7 @@
 - Version: 1.31.1, with its dependency `onnxruntime-common` 1.31.1.
 - Licence: MIT, from the npm registry entry, https://registry.npmjs.org/onnxruntime-node/1.31.1
 - Upstream: https://github.com/microsoft/onnxruntime
-- Used for: running the ONNX model in process, on CPU. The package bundles prebuilt native binaries for its supported platforms. Its install script fetches CUDA and TensorRT providers on linux/x64, which blind-ner never loads; `ONNXRUNTIME_NODE_INSTALL=skip` in the environment of the install skips it, and this repository blocks it in `pnpm-workspace.yaml`. That script's own dependencies, `adm-zip` 0.6.1 (MIT) and `global-agent` 4.1.3 (BSD-3-Clause), are installed but not loaded by blind-ner.
+- Used for: running the ONNX model in process, on CPU. The package bundles prebuilt native binaries for its supported platforms. Its install script fetches CUDA and TensorRT providers on linux/x64, which blind-ner never loads; `ONNXRUNTIME_NODE_INSTALL=skip` in the environment of the install skips it, and this repository blocks it in `pnpm-workspace.yaml`. That script's own dependencies, `adm-zip` (MIT) and `global-agent` (BSD-3-Clause), are installed but not loaded by blind-ner. onnxruntime-node 1.31.1 names them by the ranges `^0.6.0` and `^4.1.3`, so npm installs the newest matching versions: at the time of writing, 0.6.1 and 4.1.3 in this repository's lockfile, and a newer patch such as `global-agent` 4.1.7 in a fresh install. Only the two runtime libraries above and `onnxruntime-common` are pinned to exact versions.
 
 ## @huggingface/tokenizers
 

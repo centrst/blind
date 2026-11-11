@@ -64,7 +64,7 @@ The gate checks only what the package ships, in about 12 minutes. It covers secr
 
 Review the generated `CLAIMS.md`, `reports/evidence.html` and the tarball contents. Source maps contain source text and need disclosure review too. The pack tests install the tarball offline and run the library and both commands. Retain the reports and record the exact source commit in the release PR or release record. Regenerated claims can be committed through that PR; do not copy evidence from another source revision.
 
-After merge, check out the selected commit on `main` and run `pnpm verify` there before dispatching. The workflow's `verified_sha` input records the maintainer's statement that this local run passed. Matching a SHA does not prove the local run happened. The environment reviewer must review that evidence. The Release workflow's prepare job repeats typecheck, lint, tests and build on the actual version being packed, including the temporary prerelease version. The heavy suites remain local.
+After merge, check out the selected commit on `main` and run `pnpm verify` there before dispatching. The workflow's `verified_sha` input records the maintainer's statement that this local run passed. Matching a SHA does not prove the local run happened. The environment reviewer must review that evidence. On the actual version being packed, including the temporary prerelease version, the Release workflow's prepare job builds and packs, and its gate job repeats typecheck, lint and tests. The heavy suites remain local.
 
 ## Publish a prerelease
 
@@ -134,7 +134,18 @@ Run `pnpm verify --full` on the commit, with the model present (`pnpm ner:downlo
 
 ### Once, before the first release
 
-1. npm shows a package's settings only once the package exists, so the first version is a placeholder a maintainer publishes by hand with 2FA. The core's was `0.0.0-stage`, described as a temporary placeholder for staged publishing. Do the same for `@centrst/blind-ner`.
+1. npm shows a package's settings only once the package exists, so the first version is a placeholder a maintainer publishes by hand with 2FA. The core's was `0.0.0-stage`, described as `Temporary package placeholder for staged publishing`. Do the same for `@centrst/blind-ner`, from an empty folder outside the repository, never inside `ner/`, where `npm publish` would ship the real package with its `workspace:` peer range:
+
+   ```sh
+   mkdir /tmp/blind-ner-placeholder && cd /tmp/blind-ner-placeholder
+   cat > package.json <<'JSON'
+   { "name": "@centrst/blind-ner", "version": "0.0.0-stage",
+     "description": "Temporary package placeholder for staged publishing", "license": "MIT" }
+   JSON
+   npm publish --access public
+   ```
+
+   The placeholder has no code and no dependencies. npm gives it the `latest` tag, since it is the only version.
 2. In that package's npm settings, add a GitHub Actions trusted publisher with organization `centrst`, repository `blind`, workflow filename `release.yml` and environment `release`, with **Allow `npm publish`** and **Allow `npm dist-tag`** unchecked, as for the core. After the first workflow publish, select **Require two-factor authentication and disallow tokens**.
 3. In the first release PR, rename `## Unreleased` in `ner/CHANGELOG.md` to the version. Also change the status wording, which stops being true once the version is approved: `ner/README.md` ships in the tarball and says the package is not on npm, and the B3 test in `test/readme.test.ts` requires that sentence in every file that reports NER numbers. Change the test and those files together.
 
@@ -146,6 +157,17 @@ gh workflow run release.yml --ref main \
 ```
 
 Use `channel=stable` for a stable version. Approve the `release` environment, then the staged version, as for the core: `npm stage list @centrst/blind-ner`.
+
+The publish job checks the NER tarball against the digest the prepare job recorded, as for the core. Instead of the core's "no dependencies" check, it requires exactly two runtime dependencies, `@huggingface/tokenizers` and `onnxruntime-node`, each pinned to an exact version, no optional dependencies, the core as the only peer dependency with a plain version range, the `blind-ner-download` command entry, and no `preinstall`, `install` or `postinstall` script of the package's own. `onnxruntime-node` still runs its own install script in a user's install, as [ner/README.md](ner/README.md#install) explains.
+
+After the first `next` version is approved, `latest` still points at the placeholder, so a plain `npm install @centrst/blind-ner` would install an empty package. The core handled the same case by pointing `latest` at its first prerelease until a stable version replaced it. A maintainer does the same with 2FA, since the trusted publisher may not move tags, and marks the placeholder as not for use:
+
+```sh
+npm dist-tag add @centrst/blind-ner@<version> latest
+npm deprecate @centrst/blind-ner@0.0.0-stage "Placeholder for staged publishing, not a usable build. Install @centrst/blind-ner@next."
+```
+
+The core's `0.0.0-stage` is not deprecated on npm.
 
 Then `npm view @centrst/blind-ner@X.Y.Z version dependencies peerDependencies bin` shows the version, the two pinned libraries, the core range and the `blind-ner-download` command. In an empty folder, `npm install @centrst/blind @centrst/blind-ner@X.Y.Z` and `npx blind-ner-download ./models/gliner_multi-v2.1` fetch the pair and the model, and `node -e "import('@centrst/blind-ner').then(async (m) => console.log(typeof (await m.GlinerModel.load('./models/gliner_multi-v2.1')).predict))"` prints `function`.
 
