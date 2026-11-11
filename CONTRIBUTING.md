@@ -12,7 +12,7 @@ You need Node 22 or newer and pnpm (the version is pinned in `package.json` unde
 pnpm install --frozen-lockfile
 ```
 
-Tests use synthetic data only, and a test that needs a live phone prefix writes only the prefix and draws the rest at run time. Generated test inputs use the same reserved phone ranges and unownable mailboxes as the fixtures. Cards, IBANs, ids and IP addresses have no reserved range, so generated ones may be live, but they are never printed. A failing property reports its seed and the kind and length of each input. See [TESTING.md](TESTING.md) for the rest of the commands.
+Tests use synthetic data only, and a test that needs a live phone prefix writes only the prefix and draws the rest at run time. A test that needs a mailbox someone could own at a public provider builds it at run time from blind's own fake name lists. Generated test inputs use the same reserved phone ranges and unownable mailboxes as the fixtures. Cards, IBANs, ids and IP addresses have no reserved range, so generated ones may be live, but they are never printed. A failing property reports its seed and the kind and length of each input. See [TESTING.md](TESTING.md) for the rest of the commands.
 
 ### Python dependency audit
 

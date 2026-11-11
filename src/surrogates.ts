@@ -504,6 +504,37 @@ export class Surrogates {
     return out;
   }
 
+  /**
+   * The fake of the address `local` `at` `host`. A private host gets its fake
+   * host. A public provider's host stays when the address does (`info@gmail.com`)
+   * or when the provider can never issue the fake mailbox (`ana_ruiz` at
+   * Gmail). Any other fake mailbox at the provider could belong to someone,
+   * so it goes to the provider's name under `.example` (`gmail.example`),
+   * which RFC 2606 reserves and no mail server answers for.
+   */
+  private address(local: string, at: string, host: string, lang: Lang): string {
+    const fakeLocal = this.localFake(local, lang);
+    if (!this.opts.isAllowedHost(host.toLowerCase())) return `${fakeLocal}${at}${this.domain(host, lang)}`;
+    const keep = fakeLocal === local || N.unownableMailbox(fakeLocal, host.replace(/\.$/, ''));
+    return `${fakeLocal}${at}${keep ? host : this.providerHost(host)}`;
+  }
+
+  /** `mail.gmail.com` as `mail.gmail.example`, numbered when another value holds that host already. */
+  private providerHost(host: string): string {
+    const h = host.toLowerCase().replace(/\.$/, '');
+    const key = `pub|${h}`;
+    let out = this.memo.get(key);
+    if (!out) {
+      const { prefix, reg } = this.splitHost(h);
+      const name = `${prefix ? `${prefix}.` : ''}${reg.split('.')[0] as string}`;
+      out = `${name}.example`;
+      for (let i = 2; !this.free(out); i++) out = `${name}${i}.example`;
+      this.take(out);
+      this.memo.set(key, out);
+    }
+    return out;
+  }
+
   /** A host written on its own in the text. */
   domainSpan(host: string, orig: string = host, around?: Lang): string {
     return this.claimPlain('domain', orig, this.domain(host, around));
@@ -517,7 +548,7 @@ export class Surrogates {
       if (!at) return text;
       const host = text.slice(at.index + at[0].length);
       const lang = addressLanguage(text, this.opts.isAllowedHost(host.toLowerCase())) ?? this.around(around);
-      fake = `${this.localFake(text.slice(0, at.index), lang)}${at[0]}${this.domain(host, lang)}`;
+      fake = this.address(text.slice(0, at.index), at[0], host, lang);
       this.memo.set(key, fake);
     }
     return this.claimPlain('email', orig, fake);
@@ -544,7 +575,7 @@ export class Surrogates {
     if (!s) return s;
     return s.replace(URL_TOKEN, (tok, local?: string, at?: string, dom?: string) => {
       if (local !== undefined && at !== undefined && dom !== undefined) {
-        return `${this.localFake(local, lang)}${at}${this.domain(dom, lang)}`;
+        return this.address(local, at, dom, lang);
       }
       if (/\d/.test(tok) && /^[A-Za-z0-9]+$/.test(tok)) return this.digitsLike(tok, false);
       const mapped = this.tokenFake.get(nameKey(tok));
@@ -573,24 +604,39 @@ export class Surrogates {
   }
 
   /**
+   * The key a national number's fake is kept under. The same digits with and
+   * without the country code share one (`+34 612 ...` and `612 ...`), but
+   * not across countries, whose rules differ: a UK fake can be a digit
+   * longer, which a Spanish number of the same digits must not take.
+   */
+  private static natKey(cc: string, national: string): string {
+    const plan = cc === '' && /^[6-9]\d{8}$/.test(national) ? '34' : cc === '' && /^[1-9]\d{9}$/.test(national) ? '1' : cc;
+    return `nat|${plan}|${national}`;
+  }
+
+  /**
    * A fake national number that keeps what kind of line it is, in a range no
    * subscriber holds where the country has one. A Spanish mobile (6, or 7 and
    * a digit other than 0) becomes 75 to 79, which the plan keeps in reserve for
-   * mobiles and has not attributed. A UK mobile becomes 7700 900000 to 900999
-   * and a North American number NXX-555-0100 to 0199, the ranges Ofcom and
-   * NANPA keep for fiction. These have no such range and keep live digits: a
-   * Spanish landline (81 to 88 or 91 to 98), a special-rate number (70x, 800,
-   * 900, 902, which keeps its three digits), any other UK number (its two
-   * leading digits, after the 0 when written nationally), and any other
-   * country (a leading 0 and the digit after it, and with a country code its
-   * first digit).
+   * mobiles and has not attributed. Every UK number becomes one of the ranges
+   * Ofcom keeps for drama and never allocates ("Telephone numbers for use in TV
+   * and radio drama programmes", ofcom.org.uk/phones-and-broadband/phone-numbers/numbers-for-drama),
+   * chosen by its leading digits (see `ukDrama`). A North American number,
+   * any ten digits after +1 or written as a ten-digit number without a country
+   * code, becomes NXX-555-0100 to 0199, the range NANPA keeps for fiction in
+   * every area code. These have no such range and keep live digits: a Spanish
+   * landline (81 to 88 or 91 to 98), a Spanish special-rate number (70x, 800,
+   * 900, 902, which keeps its three digits), a ten-digit national number
+   * with a leading 0 that is not 01 or 080 (its first three digits stay), and
+   * any other country (a leading 0 and the digit after it, and with a country
+   * code its first digit).
    */
   private phoneNational(cc: string, national: string): string {
     const r = this.rng.digits;
     const any = (): string => String(r.digit());
     const from = (digits: string): string => digits[r.int(digits.length)] as string;
-    const rest = (out: string): string => {
-      while (out.length < national.length) out += any();
+    const rest = (out: string, length = national.length): string => {
+      while (out.length < length) out += any();
       return out;
     };
     for (let attempt = 0; attempt < 50; attempt++) {
@@ -599,11 +645,20 @@ export class Surrogates {
         const first = national[0] as string;
         if (first !== '6' && national[1] === '0') out = rest(national.slice(0, 3));
         else out = rest(first === '6' || first === '7' ? `7${from('56789')}` : first + from('12345678'));
-      } else if (cc === '44' && /^[1-9]\d{8,9}$/.test(national)) {
-        out = national[0] === '7' && national.length === 10 ? rest('7700900') : rest(national.slice(0, 2));
-      } else if (cc === '' && /^0\d{9,10}$/.test(national)) {
-        out = national[1] === '7' && national.length === 11 ? rest('07700900') : rest(national.slice(0, 3));
-      } else if ((cc === '1' || cc === '') && /^[2-9]\d{2}[2-9]\d{6}$/.test(national)) {
+      } else if (cc === '44' && /^[1-9]\d{6,9}$/.test(national)) {
+        // A UK number of seven to nine digits (some 0800 and small-town lines) has no drama range of its length, so its fake has ten.
+        out = rest(Surrogates.ukDrama(national), 10);
+      } else if (cc === '44' && /^0[1-9]\d{6,9}$/.test(national)) {
+        // `+44 (0) 20 ...`: the 0 a reader drops when dialling from abroad stays where it is written.
+        out = rest(`0${Surrogates.ukDrama(national.slice(1))}`, 11);
+      } else if (cc === '' && (/^0[1-9]\d{9}$/.test(national) || /^0(?:1\d{8}|80[08]\d{4,6})$/.test(national))) {
+        // A shorter UK number written with its 0 (`0800 157000`, `0800 1570`) gets a fake of eleven digits, like the one above.
+        // Without a country code only the shapes that are British count: 01 and nine digits (Dublin is 01 and seven) and
+        // freephone 0800 or 0808 (other countries use 080 too).
+        out = rest(`0${Surrogates.ukDrama(national.slice(1))}`, 11);
+      } else if (cc === '' && /^0\d{9}$/.test(national)) {
+        out = rest(national.slice(0, 3));
+      } else if ((cc === '1' && national.length === 10) || (cc === '' && /^[1-9]\d{9}$/.test(national))) {
         // An NXX area code, never N11 and never a 9 in the middle, then 555-01XX.
         let area: string;
         do area = from('23456789') + from('012345678') + any();
@@ -618,10 +673,32 @@ export class Surrogates {
     return this.digitsLike(national, false);
   }
 
+  /**
+   * The first seven digits of the Ofcom drama range for a UK national number
+   * written without its 0, leaving three digits to draw: the area's own range
+   * for London (020 7946 0xxx), Leeds to Reading (0113 to 0118 496 0xxx),
+   * Birmingham, Edinburgh, Glasgow, Liverpool and Manchester (0121 to 0161 496
+   * 0xxx), Tyneside (0191 498 0xxx) and Cardiff (029 2018 0xxx), mobiles 07700
+   * 900xxx, UK-wide 0306 999 0xxx, freephone 0808 157 0xxx, premium rate 0909
+   * 879 0xxx, and for any other number the range with no area, 01632 960xxx.
+   * Northern Ireland goes to 01632 too, because sources disagree on its range.
+   */
+  private static ukDrama(national: string): string {
+    if (/^7/.test(national)) return '7700900';
+    if (/^20/.test(national)) return '2079460';
+    if (/^(?:11[3-8]|1[2-6]1)/.test(national)) return `${national.slice(0, 3)}4960`;
+    if (/^191/.test(national)) return '1914980';
+    if (/^29/.test(national)) return '2920180';
+    if (/^3/.test(national)) return '3069990';
+    if (/^80/.test(national)) return '8081570';
+    if (/^9/.test(national)) return '9098790';
+    return '1632960';
+  }
+
   phone(raw: string, orig: string = raw): string {
     const { lead, cc, national } = Surrogates.phoneParts(raw);
     return this.claimDigits('phone', orig, (n) => {
-      const fakeNat = this.memoized(`nat|${national}`, n, () => this.phoneNational(cc, national));
+      const fakeNat = this.memoized(Surrogates.natKey(cc, national), n, () => this.phoneNational(cc, national));
       let seen = 0;
       let used = 0;
       let out = '';
@@ -637,7 +714,8 @@ export class Surrogates {
           out += fakeNat[used++] ?? ch;
         }
       }
-      return out;
+      // A fake longer than the number it stands for (a nine-digit UK number) writes its last digits after the rest.
+      return out + fakeNat.slice(used);
     });
   }
 
@@ -751,7 +829,8 @@ export class Surrogates {
         case 'phone': {
           const r = Surrogates.phoneParts(real);
           const f = Surrogates.phoneParts(fake);
-          if (r.national.length === f.national.length && !this.memo.has(`nat|${r.national}`)) this.memo.set(`nat|${r.national}`, f.national);
+          const key = Surrogates.natKey(r.cc, r.national);
+          if (f.national.length >= r.national.length && !this.memo.has(key)) this.memo.set(key, f.national);
           break;
         }
         case 'iban': {
