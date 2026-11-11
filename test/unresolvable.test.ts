@@ -67,6 +67,22 @@ describe('C58: phone fakes', () => {
     expect(/^0808 157\d{4}$/.test(fake), 'it becomes 0808 157 0xxx').toBe(true);
   });
 
+  it('C58/unit: a short 01 number written without a country code is not taken for a UK one', () => {
+    // Dublin numbers are 01 and seven digits; UK 01 numbers are never that short.
+    const phone = `01 ${digits(3)} ${digits(4)}`;
+    const { fake } = fakeOf(`Ring ${phone} today.`, phone, 'phone', true);
+    expect(fake.replace(/\D/g, '').length === 9 && !UK_DRAMA.test(ukNational(fake)), 'it keeps its length and is not moved to a UK range').toBe(true);
+  });
+
+  it('C58/unit: a seven- or eight-digit UK number, as some helplines have, gets a drama number too', () => {
+    for (const n of [4, 5]) {
+      for (const phone of [`0800 ${digits(n)}`, `+44 800 ${digits(n)}`]) {
+        const { fake } = fakeOf(`Freephone ${phone} today.`, phone, 'phone', true);
+        expect(UK_DRAMA.test(ukNational(fake)) && ukNational(fake).startsWith('8081570'), `a short ${phone.startsWith('+') ? 'international' : 'national'} number lands in 0808 157 0xxx`).toBe(true);
+      }
+    }
+  });
+
   it('C58/unit: the same digits after another country code keep their own country\'s fake, in either order and across turns', () => {
     const d = digits(6);
     const [ukNum, esNum] = [`+44 800 ${d}`, `+34 800 ${d}`];

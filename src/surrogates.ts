@@ -645,14 +645,16 @@ export class Surrogates {
         const first = national[0] as string;
         if (first !== '6' && national[1] === '0') out = rest(national.slice(0, 3));
         else out = rest(first === '6' || first === '7' ? `7${from('56789')}` : first + from('12345678'));
-      } else if (cc === '44' && /^[1-9]\d{8,9}$/.test(national)) {
-        // A nine-digit UK number (some 0800 and small-town lines) has no drama range of its length, so its fake has ten.
+      } else if (cc === '44' && /^[1-9]\d{6,9}$/.test(national)) {
+        // A UK number of seven to nine digits (some 0800 and small-town lines) has no drama range of its length, so its fake has ten.
         out = rest(Surrogates.ukDrama(national), 10);
-      } else if (cc === '44' && /^0[1-9]\d{8,9}$/.test(national)) {
+      } else if (cc === '44' && /^0[1-9]\d{6,9}$/.test(national)) {
         // `+44 (0) 20 ...`: the 0 a reader drops when dialling from abroad stays where it is written.
         out = rest(`0${Surrogates.ukDrama(national.slice(1))}`, 11);
-      } else if (cc === '' && (/^0[1-9]\d{9}$/.test(national) || /^0(?:1\d{8}|80\d{7})$/.test(national))) {
-        // A nine-digit UK number written with its 0 (`0800 157000`) gets a fake of eleven digits, like the one above.
+      } else if (cc === '' && (/^0[1-9]\d{9}$/.test(national) || /^0(?:1\d{8}|80[08]\d{4,6})$/.test(national))) {
+        // A shorter UK number written with its 0 (`0800 157000`, `0800 1570`) gets a fake of eleven digits, like the one above.
+        // Without a country code only the shapes that are British count: 01 and nine digits (Dublin is 01 and seven) and
+        // freephone 0800 or 0808 (other countries use 080 too).
         out = rest(`0${Surrogates.ukDrama(national.slice(1))}`, 11);
       } else if (cc === '' && /^0\d{9}$/.test(national)) {
         out = rest(national.slice(0, 3));
