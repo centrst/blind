@@ -6,7 +6,7 @@ LLM Guard's columns on this corpus, and a second run of all three tools on a sam
 
 ## Rerun of the blind columns on 2026-11-11
 
-The blind columns were rerun on 2026-11-11 at commit `5369e57`, which carries core `0.2.0`: greetings, signatures, labels, legal suffixes and private addresses now anchor names, and long known lists match without a pattern per entry. The corpus is now 381 files, with the Hebrew and Arabic handwritten cases, which have no annotation in these kinds. The command was `scripts/bench/score.ts` as `pnpm bench:presidio` runs it, without Presidio's raw output, so it scored only the blind columns. Presidio was not rerun: every Presidio number, and every table and paragraph below this section, is from the 2026-10-24 run on 379 files. The + GLiNER columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The blind columns were rerun on 2026-11-11 at commit `5369e57`, which carries core `0.2.0`: greetings, signatures, labels, legal suffixes and private addresses now anchor names, and long known lists match without a pattern per entry. The corpus is now 381 files. The two added handwritten cases, one in Hebrew and one in Arabic, add 4 person, 3 org, 4 email, 2 amount and 2 date annotations, so the counts differ from the October tables by those numbers. The command was `scripts/bench/score.ts` as `pnpm bench:presidio` runs it, without Presidio's raw output, so it scored only the blind columns. Presidio was not rerun: every Presidio number, and every table and paragraph below this section, is from the 2026-10-24 run on 379 files. The + GLiNER columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
 
 Strict recall, all 381 files:
 

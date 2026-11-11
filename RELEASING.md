@@ -142,10 +142,10 @@ Run `pnpm verify --full` on the commit, with the model present (`pnpm ner:downlo
    { "name": "@centrst/blind-ner", "version": "0.0.0-stage",
      "description": "Temporary package placeholder for staged publishing", "license": "MIT" }
    JSON
-   npm publish --access public
+   npm publish --access public --tag latest
    ```
 
-   The placeholder has no code and no dependencies. npm gives it the `latest` tag, since it is the only version.
+   The placeholder has no code and no dependencies. npm 11 refuses to publish a prerelease version such as `0.0.0-stage` without `--tag`, so the command names `latest`.
 2. In that package's npm settings, add a GitHub Actions trusted publisher with organization `centrst`, repository `blind`, workflow filename `release.yml` and environment `release`, with **Allow `npm publish`** and **Allow `npm dist-tag`** unchecked, as for the core. After the first workflow publish, select **Require two-factor authentication and disallow tokens**.
 3. In the first release PR, rename `## Unreleased` in `ner/CHANGELOG.md` to the version. Also change the status wording, which stops being true once the version is approved: `ner/README.md` ships in the tarball and says the package is not on npm, and the B3 test in `test/readme.test.ts` requires that sentence in every file that reports NER numbers. Change the test and those files together.
 
