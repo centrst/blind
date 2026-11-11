@@ -229,7 +229,7 @@ importers:
   ner:
     dependencies:
       '@centrst/blind':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:..
       '@huggingface/tokenizers':
         specifier: 0.2.0

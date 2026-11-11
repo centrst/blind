@@ -119,17 +119,17 @@ In known mode both variants also round trip 379 of 379, with org recall 100 agai
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | LLM Guard default | 38.2 | 82.3 | 6.0 | n/a | 8.4 | n/a | 888/888 |
 | LLM Guard all | 40.9 | 82.3 | 24.4 | 88.3 | 91.0 | 58.4 | 888/888 |
-| blind bare | 3.6 | 76.3 | 0.5 | n/a | 2.1 | n/a | 888/888 |
-| blind + GLiNER 0.3 | 79.5 | 40.1 | 98.7 | 29.4 | 98.6 | 47.3 | 888/888 |
-| blind + GLiNER 0.5 | 78.3 | 44.9 | 98.3 | 34.5 | 94.9 | 51.9 | 888/888 |
+| blind bare | 22.0 | 88.3 | 30.4 | 88.3 | 2.1 | n/a | 888/888 |
+| blind + GLiNER 0.3 | 79.7 | 39.8 | 99.8 | 29.4 | 98.6 | 47.4 | 888/888 |
+| blind + GLiNER 0.5 | 78.5 | 44.4 | 99.3 | 34.5 | 94.9 | 51.9 | 888/888 |
 | blind + DeBERTa fp32 (in-domain) | 78.2 | 75.9 | 86.4 | 71.2 | 93.2 | 89.5 | 888/888 |
 | blind + DeBERTa int8 (in-domain) | 78.2 | 76.1 | 86.4 | 70.9 | 93.5 | 89.5 | 888/888 |
 | blind + DeBERTa 0.5 (in-domain) | 75.4 | 84.6 | 84.3 | 75.4 | 91.7 | 91.3 | 888/888 |
 | blind + DeBERTa no-Gretel (out-of-domain) | 70.5 | 90.2 | 54.2 | 72.8 | 92.9 | 62.4 | 888/888 |
 
-The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm. The blind bare and GLiNER rows on Gretel were measured again on 11 November 2026 with core 0.2.0; the other rows are from the October runs. GLiNER person precision was 40.1 at 0.3 and 44.9 at 0.5 in October. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's.
 
-By language, English then Spanish: DeBERTa person 90.2 R and 89.5 P, then 69.2 R and 66.8 P. GLiNER 94.1 R and 34.4 P, then 68.6 R and 48.4 P. No-Gretel 88.1 R and 88.8 P, then 57.5 R and 91.8 P. LLM Guard `all` 48.2 R and 94.0 P, then 35.5 R and 73.1 P. Gretel's Spanish person labels are noisy (RESULTS-llmguard-gretel.md found 18 of 40 sampled ones were not names), which caps every tool's Spanish row.
+By language, English then Spanish: DeBERTa person 90.2 R and 89.5 P, then 69.2 R and 66.8 P. GLiNER, measured again on 11 November 2026, 94.1 R and 34.0 P, then 69.0 R and 48.2 P (34.4 and 48.4 P in October). No-Gretel 88.1 R and 88.8 P, then 57.5 R and 91.8 P. LLM Guard `all` 48.2 R and 94.0 P, then 35.5 R and 73.1 P. Gretel's Spanish person labels are noisy (RESULTS-llmguard-gretel.md found 18 of 40 sampled ones were not names), which caps every tool's Spanish row.
 
 ### Neutral held-out set, urchade/synthetic-pii-ner-mistral-v1, 1,000 files
 
@@ -171,7 +171,7 @@ Privy has only 50 org labels. Every blind and LLM Guard column round trips 1,000
 **Wins.**
 
 - **Role words.** Counted on the model's raw spans over the Gretel sample, GLiNER at 0.3 tags 1,291 person or org spans whose whole text is a role word (`company` 134, `borrower` 124, `lender` 90, `customer` 81, `empresa` 70). DeBERTa tags 16 (`empresa` 10) and no-Gretel 5. That is the precision problem this work set out to fix, and it is fixed. It also holds for a model that never saw Gretel's data.
-- **Precision on finance documents and forms.** On Gretel, in-domain, person precision goes from 40.1% to 75.9%, org from 29.4% to 71.2% and place from 47.3% to 89.5%, for 1.3 points of person recall. Out-of-domain, the no-Gretel model reaches 90.2% person precision at 70.5% recall, against LLM Guard's 82.3% at 40.9%, so it beats LLM Guard on both counts for persons. On privy, person precision is 81% against GLiNER's 16%.
+- **Precision on finance documents and forms.** On Gretel, in-domain, person precision goes from GLiNER's 40.1% to 75.9%, org from 29.4% to 71.2% and place from 47.3% to 89.5%, for 1.3 points of person recall, against the October GLiNER run these models were measured beside. With core 0.2.0, on 11 November 2026, GLiNER's person precision is 39.8%. Out-of-domain, the no-Gretel model reaches 90.2% person precision at 70.5% recall, against LLM Guard's 82.3% at 40.9%, so it beats LLM Guard on both counts for persons. On privy, person precision is 81% against GLiNER's 16%.
 - **Org precision on the neutral set**: 70.1% against 48.7%, and 81.7% for no-Gretel.
 - **Speed and size**, below.
 
@@ -360,14 +360,14 @@ By language, round one then round two: Spanish org recall 79.9 then 83.1, Spanis
 | tool | person R | person P | org R | org P | place R | place P | round trip |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | LLM Guard all | 40.9 | 82.3 | 24.4 | 88.3 | 91.0 | 58.4 | 888/888 |
-| blind + GLiNER 0.3 | 79.5 | 40.1 | 98.7 | 29.4 | 98.6 | 47.3 | 888/888 |
-| blind + GLiNER 0.5 | 78.3 | 44.9 | 98.3 | 34.5 | 94.9 | 51.9 | 888/888 |
+| blind + GLiNER 0.3 | 79.7 | 39.8 | 99.8 | 29.4 | 98.6 | 47.4 | 888/888 |
+| blind + GLiNER 0.5 | 78.5 | 44.4 | 99.3 | 34.5 | 94.9 | 51.9 | 888/888 |
 | DeBERTa round one | 78.2 | 75.9 | 86.4 | 71.2 | 93.2 | 89.5 | 888/888 |
 | **DeBERTa round two** | **78.2** | **76.9** | **88.4** | **69.3** | **93.2** | **87.0** | 888/888 |
 | DeBERTa round two int8 | 78.2 | 76.9 | 88.5 | 70.4 | 93.2 | 87.0 | 888/888 |
 | DeBERTa round two 0.5 | 76.0 | 83.8 | 84.7 | 76.1 | 92.9 | 89.8 | 888/888 |
 
-The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm. The blind bare and GLiNER rows on Gretel were measured again on 11 November 2026 with core 0.2.0; the other rows are from the October runs. GLiNER person precision was 40.1 at 0.3 and 44.9 at 0.5 in October. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's.
 
 **Corpus, 379 files (home ground).**
 

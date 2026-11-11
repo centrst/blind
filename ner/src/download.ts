@@ -1,20 +1,19 @@
 /**
- * The one place this package touches the network, and only when you run it.
- *   tsx scripts/download-model.ts [target dir]
+ * The model download behind the `blind-ner-download` command: the one place
+ * this package touches the network, and only when that command runs.
  * Fetches onnx-community/gliner_multi-v2.1 at a pinned revision, checks every
- * file against a SHA-256, and writes it to models/gliner_multi-v2.1. Beside
+ * file against a SHA-256, and writes it to the target directory. Beside
  * the weights it keeps the export's model card and the upstream
  * urchade/gliner_multi-v2.1 card (in upstream/), which is where the
  * Apache-2.0 licence is stated. Neither repository ships a LICENSE file, so
- * the script copies the Apache-2.0 text tracked in ner/licenses/ to LICENSE
- * and writes PROVENANCE.md, which lists every file, its source, revision and
- * hash, and the files recorded absent. The detector never imports this file.
+ * it copies the Apache-2.0 text shipped in licenses/ to LICENSE and writes
+ * PROVENANCE.md, which lists every file, its source, revision and hash, and
+ * the files recorded absent. The package entry never imports this file.
  * After the download, inference is offline.
  */
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 
 const EXPORT = { repo: 'onnx-community/gliner_multi-v2.1', revision: '6ddaeb9413b0e71ad8457da1aab378a165b24058' };
 const UPSTREAM = { repo: 'urchade/gliner_multi-v2.1', revision: '443d26d654e0324125a96bebd8e796c14ff2efe6' };
@@ -130,7 +129,7 @@ export function provenance(records: FileRecord[], claim: string): string {
   const lines = [
     '# Provenance',
     '',
-    'Written by `pnpm ner:download` (`ner/scripts/download-model.ts` in @centrst/blind). Every file below was checked against the SHA-256 pinned in that script.',
+    'Written by `blind-ner-download` of @centrst/blind-ner (`ner/src/download.ts` in its repository). Every file below was checked against the SHA-256 pinned in that file.',
     '',
     '## Licence',
     '',
@@ -166,9 +165,4 @@ export async function download(fetcher: Fetcher, target: string, manifest: Entry
   writeFileSync(join(target, 'PROVENANCE.md'), provenance(records, claim));
   log('wrote    PROVENANCE.md');
   return records;
-}
-
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const target = process.argv[2] ?? join(import.meta.dirname, '..', 'models', 'gliner_multi-v2.1');
-  await download(fetch, target, MANIFEST, (line) => console.log(line));
 }

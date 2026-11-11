@@ -1,34 +1,40 @@
 # @centrst/blind-ner
 
-An optional multilingual NER detector for `@centrst/blind`. It finds people, organizations and places that the pattern detectors cannot, using GLiNER (`gliner_multi-v2.1`) on ONNX Runtime, in process. Inference is fully local. The only network use is the one-time model download, which is a separate script.
+An optional multilingual NER detector for `@centrst/blind`. It finds people, organizations and places that the pattern detectors cannot, using GLiNER (`gliner_multi-v2.1`) on ONNX Runtime, in process. Inference is fully local. The only network use is the one-time model download, which is a separate command.
 
-The core `@centrst/blind` is [available on npm](../README.md#install). This package is a private prototype, built from this repository, not on npm. The core library stays at zero runtime dependencies.
+The core `@centrst/blind` is [available on npm](https://www.npmjs.com/package/@centrst/blind). This package is a prototype, built from this repository, not on npm. It is packaged for npm and waits for its first release, which [RELEASING.md](https://github.com/centrst/blind/blob/main/RELEASING.md#the-ner-package) describes. The core library stays at zero runtime dependencies.
+
+## Install
+
+After the first release:
+
+```sh
+npm install @centrst/blind @centrst/blind-ner
+npx blind-ner-download ./models/gliner_multi-v2.1   # 1.1 GB, pinned revision, SHA-256 checked, once
+```
+
+The core is a peer dependency, so the detector uses the copy of `@centrst/blind` your project installs. Each version of this package names the core version it was built and tested with, as a caret range. The download command writes the weights, both model cards, the Apache-2.0 licence text and a `PROVENANCE.md` into the directory you name, and a second run keeps the files that are already there and correct. Nothing else in the package uses the network.
+
+`onnxruntime-node` has an install script. On Linux x64 it downloads the CUDA and TensorRT providers, which this package never loads, since it runs the model on the CPU. Set `ONNXRUNTIME_NODE_INSTALL=skip` in the environment of `npm install` to skip that download. The CPU runtime ships inside the npm package on every supported platform.
+
+Until the first release, build it in this repository: `pnpm install`, `pnpm ner:download` (the same command, writing to `ner/models/gliner_multi-v2.1`), then `pnpm build && pnpm build:ner`.
 
 ## Use
-
-```sh
-pnpm install
-pnpm ner:download          # 1.1 GB, pinned revision, SHA-256 checked, once
-```
-
-The package has no published build. Inside this workspace, build the core and then the package, and import from it:
-
-```sh
-pnpm build && pnpm build:ner
-```
 
 ```ts
 import { GlinerModel, blindWithNer } from '@centrst/blind-ner';
 import { unblind } from '@centrst/blind';
 
-const model = await GlinerModel.load('ner/models/gliner_multi-v2.1');
+const model = await GlinerModel.load('./models/gliner_multi-v2.1');
 const res = await blindWithNer(model, [email], { known, seed });
 const back = unblind(answer, res.mapping).text;
 ```
 
 `blindWithNer` runs the model first, because `blind` finds spans synchronously and a model call is async, then calls `blind` with the detector in `detectors`. To keep control of the call, use `createNerDetector(model).prepare(texts)`, which returns a plain `Detector`.
 
-Options: `threshold` (default 0.3), `labels`, `priority` (default 50, below every pattern detector and `known`), `propagate` (default true, marks later bare mentions of a name already found).
+Options: `threshold` (default 0.3), `labels` and `priority` (default 50, below every pattern detector and `known`). A later bare mention of a person already found, such as the first name alone after the full name, is replaced with the same person's fake, unless the text also writes that word in lower case, as with `Rose` beside `rose`: then it may be an ordinary word, and the bare mention stays as written. Pass such a name in `known` when it must go.
+
+Loading the model takes about 3.2 GB of memory at its peak, and the weights stay resident in your process.
 
 ## Platforms
 
@@ -38,24 +44,32 @@ The model runs on onnxruntime-node 1.31.1, whose npm package ships native binari
 
 Prototype numbers: this package is built from this repository and is not on npm.
 
-Synthetic corpus, 379 files, strict recall (the annotated value is gone from the output) and same-kind precision, threshold 0.3, `gliner_multi-v2.1` fp32. Before is `blind` alone. Method and caveats are in [TESTING.md](../TESTING.md) section 9. Reproduce with `pnpm ner:eval`.
+Measured on 11 November 2026 against core `0.2.0`, at commit `5369e57`. Synthetic corpus, 381 files, strict recall (the annotated value is gone from the output) and same-kind precision, threshold 0.3, `gliner_multi-v2.1` fp32. Before is `@centrst/blind` 0.2.0 alone. Method and caveats are in [TESTING.md](https://github.com/centrst/blind/blob/main/TESTING.md) section 9. Reproduce with `pnpm ner:eval`.
 
 | Kind | Bare recall | Bare precision | Known recall | Known precision |
 | --- | --- | --- | --- | --- |
-| person | 67.3 to 98.7 | 95.5 to 96.6 | 98.7 to 99.9 | 96.9 to 96.6 |
-| org | 29.9 to 97.7 | 97.8 to 92.7 | 51.8 to 99.7 | 98.8 to 93.0 |
-| place | 0 to 99.4 | 100 to 88.6 | 0.6 to 99.4 | 100 to 89.1 |
+| person | 85.1 to 99.6 | 97.1 to 96.7 | 99.3 to 99.9 | 97.1 to 96.7 |
+| org | 98.2 to 98.9 | 99.2 to 93.1 | 99.7 to 100 | 99.2 to 93.2 |
+| place | 0 to 99.4 | 100 to 90.2 | 0.6 to 99.4 | 100 to 90.8 |
 | other kinds | unchanged | unchanged | unchanged | unchanged |
-| all kinds | 82.1 to 99.4 | 98.4 to 97.9 | 91.7 to 99.9 | 98.6 to 97.9 |
+| all kinds | 93.5 to 99.8 | 98.6 to 97.9 | 97.0 to 99.95 | 98.6 to 97.9 |
 
-Round trips: 379 of 379 exact in both modes. In bare mode the detector brings English person recall to 98.4, Spanish to 99.0 and mixed to 98.7. Spanish is a little lower on org (96.8 against 100 for English) and place (98.7 against 100). The all-kinds precision row comes from the same scorer in `pnpm bench:presidio`.
+Round trips: 381 of 381 exact in both modes. The all-kinds precision row comes from the same scorer in `pnpm bench:presidio`.
 
-Speed depends on the machine and the model file, and each number below names its setup, as the [main README](../README.md#measured) does. The fp32 model on the native ONNX Runtime addon, on CPU, took 47 ms per email on an Apple M4 Max with onnxruntime-node 1.30.0, where the process peaks at about 3.2 GB while it loads ([docs/BROWSER-NER.md](../docs/BROWSER-NER.md)); 49 ms per corpus email and 107 ms per Gretel document on the arm64 Mac that ran the benchmarks, chip not recorded ([RESULTS-llmguard-gretel.md](../scripts/bench/RESULTS-llmguard-gretel.md)); and 175 ms per email in the first measurement, on an older M-series Mac whose chip was not recorded. The core alone takes under a millisecond.
+What the detector adds on top of core 0.2.0. On emails the core already finds most people and nearly every company from greetings, signatures, labels, titles and legal suffixes, so the detector adds mostly places, which the core has no detector for, and the people the core misses: in bare mode person recall goes from 85.1 to 99.6, org from 98.2 to 98.9 and place from 0 to 99.4. It costs 6.1 points of org precision and 0.4 of person precision. By language in bare mode, English person recall goes from 87.9 to 99.8 and Spanish from 82.6 to 99.8. English org is 99.5 to 100 and Spanish 98.2 to 98.9. Place is 0 to 100 in English and 0 to 98.7 in Spanish.
 
-The default file is `onnx/model.onnx` (fp32). The published int8 export finds almost nothing on WASM and loses org and place recall on native ONNX Runtime. A re-quantized variant that keeps fp32 recall is described in [docs/BROWSER-NER.md](../docs/BROWSER-NER.md).
+On documents the core has little to anchor on, and the detector finds most names. On the Gretel sample of 888 synthetic finance documents, 444 English and 444 Spanish, rerun on 11 November 2026 with the blind columns of `pnpm bench:gretel`, the core alone finds 22.0% of person labels, 30.4% of companies and 2.1% of addresses. With the detector it finds 79.7%, 99.8% and 98.6%. English person recall goes from 27.8% to 94.1%.
+
+Spanish names on Gretel are a known limit. With the detector, Spanish person recall there is 69.0%, against 94.1% in English (the core alone: 17.7% and 27.8%). Part of the gap is Gretel's labelling: many of its Spanish `name` labels are not names, such as greetings, table headings and placeholders like `[Nombre del Empleado]`. On the synthetic emails Spanish and English person recall are both 99.8%.
+
+Precision is the cost on documents. On 11 November 2026, 39.8% of the detector's person spans (1342 of 3374) and 29.4% of its org spans landed on a Gretel label of that kind, against 40.1% and 29.4% in the 24 October run; 34.0% in English and 48.2% in Spanish for persons. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's. Gretel labels only some entities, so these numbers are a floor. Orgs fully covered are 94.8%, against 97.8% in October, for the same reason. The full tables are in [RESULTS-llmguard-gretel.md](https://github.com/centrst/blind/blob/main/scripts/bench/RESULTS-llmguard-gretel.md).
+
+Speed depends on the machine and the model file, and each number below names its setup, as the [main README](https://github.com/centrst/blind/blob/main/README.md#measured) does. The fp32 model on the native ONNX Runtime addon, on CPU, took 47 ms per email on an Apple M4 Max with onnxruntime-node 1.30.0, where the process peaks at about 3.2 GB while it loads ([docs/BROWSER-NER.md](https://github.com/centrst/blind/blob/main/docs/BROWSER-NER.md)); 49 ms per corpus email and 107 ms per Gretel document on the arm64 Mac that ran the benchmarks, chip not recorded ([RESULTS-llmguard-gretel.md](https://github.com/centrst/blind/blob/main/scripts/bench/RESULTS-llmguard-gretel.md)); and 175 ms per email in the first measurement, on an older M-series Mac whose chip was not recorded. The core alone takes under a millisecond.
+
+The default file is `onnx/model.onnx` (fp32). The published int8 export finds almost nothing on WASM and loses org and place recall on native ONNX Runtime. A re-quantized variant that keeps fp32 recall is described in [docs/BROWSER-NER.md](https://github.com/centrst/blind/blob/main/docs/BROWSER-NER.md).
 
 ## Model and license
 
-`gliner_multi-v2.1` by Urchade Zaratiana, Apache 2.0, in the ONNX export published by `onnx-community`. The download script pins revision `6ddaeb94` of that export and checks every file against a SHA-256. The weights are not part of this repository and are not redistributed; `models/` is ignored by git. This package's own code is MIT, like the core.
+`gliner_multi-v2.1` by Urchade Zaratiana, Apache 2.0, in the ONNX export published by `onnx-community`. The download command pins revision `6ddaeb94` of that export and checks every file against a SHA-256. The weights are not part of this package or its repository and are not redistributed: the command fetches them from Hugging Face into the directory you name. This package's own code is MIT, like the core.
 
-The licence is per release, so check it before you swap models. `gliner_multi-v2.1` is Apache-2.0 on its [upstream card](https://huggingface.co/urchade/gliner_multi-v2.1). The older `urchade/gliner_multi` release is CC-BY-NC-4.0 on [its card](https://huggingface.co/urchade/gliner_multi) and must not be swapped in for commercial use. The `onnx-community` export carries no licence field of its own: its [card at the pinned revision](https://huggingface.co/onnx-community/gliner_multi-v2.1/blob/6ddaeb9413b0e71ad8457da1aab378a165b24058/README.md) names `urchade/gliner_multi-v2.1` as its base model, so it is distributed as a conversion of the Apache-2.0 upstream. Neither repository has a `LICENSE` file at the pinned revisions. The download script saves the export's card as `models/gliner_multi-v2.1/README.md` and the upstream card, revision `443d26d6`, as `models/gliner_multi-v2.1/upstream/README.md`, checks both against a SHA-256 like the weights, and reports the two missing `LICENSE` files as absent. Because neither repository ships the licence text, the script then copies the Apache-2.0 text tracked in [licenses/APACHE-2.0.txt](licenses/APACHE-2.0.txt) (checked against its SHA-256) to `models/gliner_multi-v2.1/LICENSE`, and writes `models/gliner_multi-v2.1/PROVENANCE.md`, which lists every file with its source URL, revision and hash, records the absent `LICENSE` files, and quotes the upstream card's `license: apache-2.0` line as the source of the licence claim. Every third-party component is listed in [THIRD-PARTY-NOTICES.md](../THIRD-PARTY-NOTICES.md).
+The licence is per release, so check it before you swap models. `gliner_multi-v2.1` is Apache-2.0 on its [upstream card](https://huggingface.co/urchade/gliner_multi-v2.1). The older `urchade/gliner_multi` release is CC-BY-NC-4.0 on [its card](https://huggingface.co/urchade/gliner_multi) and must not be swapped in for commercial use. The `onnx-community` export carries no licence field of its own: its [card at the pinned revision](https://huggingface.co/onnx-community/gliner_multi-v2.1/blob/6ddaeb9413b0e71ad8457da1aab378a165b24058/README.md) names `urchade/gliner_multi-v2.1` as its base model, so it is distributed as a conversion of the Apache-2.0 upstream. Neither repository has a `LICENSE` file at the pinned revisions. In the model directory, the download command saves the export's card as `README.md` and the upstream card, revision `443d26d6`, as `upstream/README.md`, checks both against a SHA-256 like the weights, and reports the two missing `LICENSE` files as absent. Because neither repository ships the licence text, the command then copies the Apache-2.0 text this package ships in [licenses/APACHE-2.0.txt](https://github.com/centrst/blind/blob/main/ner/licenses/APACHE-2.0.txt) (checked against its SHA-256) to `LICENSE` there, and writes `PROVENANCE.md`, which lists every file with its source URL, revision and hash, records the absent `LICENSE` files, and quotes the upstream card's `license: apache-2.0` line as the source of the licence claim. Every third-party component is listed in [THIRD-PARTY-NOTICES.md](https://github.com/centrst/blind/blob/main/ner/THIRD-PARTY-NOTICES.md).

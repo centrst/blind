@@ -4,6 +4,31 @@
 
 Run on 2026-10-24 at commit `4f5183f` on `fix/round-trip`, with `src` matching the commit (`srcDirty: false`). That commit adds the round-trip fixes from PR #13 to the code of the previous run at `2febde1`, and a second GLiNER threshold to the scorers. This file has two parts. Part 1 adds LLM Guard's Anonymize scanner to the corpus benchmark in [RESULTS.md](RESULTS.md). Part 2 scores Presidio, LLM Guard and blind on a sample of Gretel's synthetic finance documents. All numbers come from `reports/presidio-bench.json` and `reports/gretel-bench.json`, printed by `scripts/bench/score.ts` and `scripts/bench/score-gretel.ts`. The Presidio and blind numbers on the corpus are the same as in RESULTS.md, to the span.
 
+## Rerun of the blind columns on 2026-11-11
+
+The blind columns were rerun on 2026-11-11 at commit `5369e57`, which carries core `0.2.0`. On blind's corpus the rerun is in [RESULTS.md](RESULTS.md). On Gretel the sample is the same 888 files, drawn by `gretel_sample.py` from the same pinned parquet file, and `score-gretel.ts` scored only the blind columns, since no Presidio or LLM Guard raw output was present. Presidio and LLM Guard were not rerun: their numbers, and every table and paragraph below this section, are from the 2026-10-24 run. The + GLiNER columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+
+Strict recall on Gretel, 888 files, then the 444 English and the 444 Spanish files:
+
+| kind | blind bare | blind bare + GLiNER | blind bare + GLiNER 0.5 | en bare | en + GLiNER | es bare | es + GLiNER |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| person | 22.0% | 79.7% | 78.5% | 27.8% | 94.1% | 17.7% | 69.0% |
+| org | 30.4% | 99.8% | 99.3% | 31.3% | 99.8% | 29.1% | 99.7% |
+| place | 2.1% | 98.6% | 94.9% | 1.5% | 99.2% | 2.7% | 97.9% |
+| email | 95.2% | 96.5% | 95.6% | 97.1% | 98.5% | 92.3% | 93.4% |
+| phone | 88.5% | 88.5% | 88.5% | 90.9% | 90.9% | 85.9% | 85.9% |
+| iban | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
+| id | 82.3% | 83.8% | 83.8% | 86.5% | 88.7% | 77.9% | 78.6% |
+| date | 49.8% | 50.1% | 50.0% | 43.5% | 43.8% | 60.8% | 61.2% |
+
+The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+
+At 0.5 English person recall is 92.7% and Spanish 68.0%. Spanish names stay the weak spot with the detector, and part of that is Gretel's labelling: many Spanish `name` labels are greetings, table headings or placeholders such as `[Nombre del Empleado]`.
+
+The core alone now reads greetings, signatures and labels, and on Gretel its person precision is 88.3% (551 of 624) and its org precision 88.3% (250 of 283), against 76.3% (87 of 114) and none replaced in October. Its precision on the other kinds is unchanged: email 97.3%, phone 57.2%, iban 56.4%, id 11.2%, date 75.9%. Any kind is 36.6% and any labelled kind 52.7%. Calendar date recall is 97.5%. Every blind column round trips 888 of 888.
+
+Precision with the detector, 11 November 2026, at 0.3 and then at 0.5: person 39.8% (1342/3374) and 44.4% (1334/3006), against 40.1% and 44.9% in October; org 29.4% (854/2906) and 34.5% (845/2452); place 47.4% (1265/2669) and 51.9% (1193/2297); any kind 35.7% (5095/14279) and 38.1% (4989/13085); any labelled kind 41.1% (5085/12356) and 44.6% (4979/11162). Person precision at 0.3 is 34.0% (679/1998) on the English files and 48.2% (663/1376) on the Spanish ones. Fully covered with the detector, at 0.3 and 0.5: person 80.8% and 79.8%, org 94.8% and 93.8% against 97.8% and 96.8% in October, place 92.0% and 82.7%. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's. The tables below keep the October values. The + GLiNER figures come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+
 ## What changed since the previous run
 
 PR #13 says recall, precision and amount usability did not move. For blind that holds to the span on both datasets. On the corpus every blind count is the same as at `2febde1`. On Gretel every recall, precision, coverage and unscored-label count for blind bare and blind with GLiNER is the same, and only the round trip changed, from 879/888 to 888/888 bare and from 798/888 to 888/888 with GLiNER.

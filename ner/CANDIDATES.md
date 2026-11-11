@@ -127,8 +127,8 @@ With `address` the PII models find Gretel's street addresses again, at much high
 
 No default change is proposed, because no candidate is better on both datasets.
 
-- `gliner_multi_pii-v1` and `gliner-multi-pii-domains-v1` have no ONNX files on the Hub. Using either would mean hosting the exported files somewhere and pointing `ner/scripts/download-model.ts` at that host, with the hashes below. Apache 2.0 allows redistribution with the licence and notices.
-- `knowledgator/gliner-pii-base-v1.0` has ONNX on the Hub and loads in the existing runner unchanged. Trying it as the download would be these three constants in `ner/scripts/download-model.ts`, plus the default directory name there and in `ner/test/support.ts`, `scripts/verify.ts`, `scripts/bench/lib.ts` and `package.json`. Before that, ask the authors what `full_pii.json` contains, and test on a second dataset that is neither blind's nor Gretel's.
+- `gliner_multi_pii-v1` and `gliner-multi-pii-domains-v1` have no ONNX files on the Hub. Using either would mean hosting the exported files somewhere and pointing `ner/src/download.ts` at that host, with the hashes below. Apache 2.0 allows redistribution with the licence and notices.
+- `knowledgator/gliner-pii-base-v1.0` has ONNX on the Hub and loads in the existing runner unchanged. Trying it as the download would be these three constants in `ner/src/download.ts`, plus the default directory name there and in `ner/test/support.ts`, `scripts/verify.ts`, `scripts/bench/lib.ts` and `package.json`. Before that, ask the authors what `full_pii.json` contains, and test on a second dataset that is neither blind's nor Gretel's.
 
 ```ts
 const REPO = 'knowledgator/gliner-pii-base-v1.0';
@@ -174,7 +174,7 @@ d01939fccaae497a146e3783cf338197309c794ba8c77f86739f5776d5ff380a  gliner_config.
 b27c4e7217e1d3de4989cff859472f765ddd9f44caff18de3eaa332026ef2d0a  tokenizer_config.json
 ```
 
-The knowledgator files are the Hub's, with the hashes in the block above. The baseline's are in `ner/scripts/download-model.ts`.
+The knowledgator files are the Hub's, with the hashes in the block above. The baseline's are in `ner/src/download.ts`.
 
 ## Reproduce
 
