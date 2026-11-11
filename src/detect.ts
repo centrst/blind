@@ -260,20 +260,45 @@ function technicalName(token: string): boolean {
   return true;
 }
 
+/** The longest value taken as a SKU. Longer, it is read as an id, and the typed ids inside are looked for in a short value only. */
+const SKU_MAX = 24;
+
+/** Whether the token at `start` to `end` is marked as a SKU (`SKU-4417-BLK`, `SKU: 100234`) and short enough to be one. */
+const skuAt = (text: string, start: number, end: number): boolean =>
+  end - start <= SKU_MAX && (SKU_PREFIX_RE.test(text.slice(start, end)) || SKU_BEFORE_RE.test(text.slice(Math.max(0, start - 8), start)));
+
 /**
  * Whether the letters and digits at `start` to `end` are technical text rather
  * than a private id: a git SHA, a UUID, a hex colour, a lower-case model,
  * release or file name, or a value marked as a SKU. A label such as `DNI` or
- * `account no.` still makes it an id through the context detector, and typed
- * ids (cards, DNI, NIE, CIF, VAT) are found by their own rules.
+ * `account no.` still makes it an id through the context detector. Only a SKU
+ * can hold a typed id: the other shapes are hex of a fixed length or hold no
+ * piece of four digits or more that is not a date.
  */
 function technical(text: string, start: number, end: number): boolean {
   const t = text.slice(start, end);
-  const shaped =
-    GIT_SHA_RE.test(t) || UUID_RE.test(t) || technicalName(t) || (text[start - 1] === '#' && HEX_COLOUR_RE.test(t)) ||
-    SKU_PREFIX_RE.test(t) || SKU_BEFORE_RE.test(text.slice(Math.max(0, start - 8), start));
-  // A typed id inside keeps the whole an id: `SKU-12345678Z` holds a DNI, which its own pattern does not read after a hyphen.
-  return shaped && detectIds(t.replace(/[-/]/gu, ' ')).length === 0;
+  return GIT_SHA_RE.test(t) || UUID_RE.test(t) || technicalName(t) || (text[start - 1] === '#' && HEX_COLOUR_RE.test(t)) || skuAt(text, start, end);
+}
+
+/**
+ * The typed ids inside a SKU, which their own patterns do not read after a
+ * hyphen or slash (`SKU-12345678Z`, `SKU-552-83-7741`): each part from a
+ * separator on is read with its own separators, so the id keeps a fake that
+ * passes its check and matches the fake of the same id elsewhere.
+ */
+function typedInSku(text: string, start: number, end: number): Span[] {
+  const t = text.slice(start, end);
+  const out: Span[] = [];
+  let covered = 0;
+  const from = [0, ...[...t.matchAll(/[-/]/gu)].map((m) => m.index + 1)];
+  for (const i of from) {
+    for (const m of detectIds(t.slice(i))) {
+      if (i + m.start < covered) continue;
+      out.push({ start: start + i + m.start, end: start + i + m.end, kind: 'id', priority: PRIORITY.typedId, meta: { scheme: m.scheme } });
+      covered = i + m.end;
+    }
+  }
+  return out;
 }
 
 /** Whether each span, asked in order of start, lies inside one of `ranges`, which are in order and do not overlap. */
@@ -292,7 +317,12 @@ export const idDetector: Detector = {
     const out: Span[] = [];
     // A run of digits inside technical text is part of it: the date of `claude-3-5-sonnet-20241022`.
     const tech: Array<[number, number]> = [];
-    for (const m of text.matchAll(ID_ALNUM_RE)) if (/\d/.test(m[0]) && technical(text, m.index, m.index + m[0].length)) tech.push([m.index, m.index + m[0].length]);
+    for (const m of text.matchAll(ID_ALNUM_RE)) {
+      const [s, e] = [m.index, m.index + m[0].length];
+      if (!/\d/.test(m[0]) || !technical(text, s, e)) continue;
+      tech.push([s, e]);
+      if (skuAt(text, s, e)) out.push(...typedInSku(text, s, e));
+    }
     const digitsInTech = insideOf(tech);
     for (const m of text.matchAll(ID_DIGITS_RE)) {
       if (digitsInTech(m.index, m.index + m[0].length)) continue;

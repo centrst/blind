@@ -66,12 +66,33 @@ describe('technical text', () => {
       ['DNI behind a SKU mark', 'Pack SKU-12345678Z for the client.', '12345678Z'],
       ['card behind a SKU mark', 'Pack SKU-4111111111111111 for the client.', '4111111111111111'],
       ['NIE in a lower-case name', 'Saved as alta-x1234567l.pdf today.', 'x1234567l'],
+      ['SSN behind a SKU mark', 'Pack SKU-552-83-7741 for the client.', '552-83-7741'],
+      ['DNI deeper in a SKU', 'Pack SKU-AB-12345678Z for the client.', '12345678Z'],
+      ['SSN in a lower-case name', 'Saved as release-552-83-7741 today.', '552-83-7741'],
+      ['card in a lower-case name', 'Saved as build-4111-1111-1111-1111 today.', '4111-1111-1111-1111'],
     ];
     for (const [what, text, value] of cases) {
       const out = blind([`${text} Build gpt-4o-2024-08-06, commit 3f9a2c7.`], { seed: 's' }).texts[0] as string;
       expect(out, what).not.toContain(value);
       expect(out, what).toContain('gpt-4o-2024-08-06, commit 3f9a2c7.');
     }
+  });
+
+  it('C57: a typed id inside a SKU keeps the fake it gets alone, which passes its check', () => {
+    const out = blind(['Pack SKU-12345678Z, and DNI 12345678Z.'], { seed: 's' }).texts[0] as string;
+    const [inSku, alone] = [/SKU-(\d{8}[A-Z])/.exec(out)?.[1], /DNI (\d{8}[A-Z])/.exec(out)?.[1]];
+    expect(inSku).toBeDefined();
+    expect(inSku).toBe(alone);
+    expect(inSku).not.toBe('12345678Z');
+    expect(inSku![8]).toBe('TRWAGMYFPDXBNJZSQVHLCKE'[Number(inSku!.slice(0, 8)) % 23]);
+  });
+
+  it('C41/C57: a long token marked as a SKU and full of typed ids stays linear and leaves none behind', () => {
+    const text = `SKU-${'12345678Z-'.repeat(50_000)}12345678Z`;
+    const start = performance.now();
+    const out = blind([text], { seed: 's' }).texts[0] as string;
+    expect(performance.now() - start).toBeLessThan(3000);
+    expect(out).not.toContain('12345678Z');
   });
 
   it('C41/C57: thousands of technical tokens and digit runs between them stay linear', () => {
