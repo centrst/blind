@@ -2,6 +2,12 @@
 
 All notable changes to this project are written down here. Changesets writes each version's entry from the notes in `.changeset`, grouped as major, minor and patch changes. The project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.2.1
+
+### Patch Changes
+
+- c15d891: Two different addresses no longer get two letter cases of one fake. A second address at a host that already had a fake, met in a later call or drawing the same word by chance, used to get the first address's fake in capitals. A reader took the two for one mailbox, and a reply that wrote the fake in another case came back as the wrong address. Each address now gets a fake of its own, numbered when a host has more addresses than there are words to draw. One address written in two letter cases still gets two cases of one fake.
+
 ## 0.2.0
 
 Upgrading from 0.1.0: a call blind cannot read as meant now throws `invalid-option` (texts that are not an array of strings, an unknown option, a numeric `seed`), and a damaged mapping throws `invalid-mapping`. blind also finds names and companies it used to leave as written, so the same seed gives a different blind copy than 0.1.0 did. A mapping from 0.1.0 still unblinds and continues a conversation, unless it was made with a numeric `seed`, which the types never allowed: set `mapping.seed = String(mapping.seed)` first.
