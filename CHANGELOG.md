@@ -4,6 +4,10 @@ All notable changes to this project are written down here. Changesets writes eac
 
 ## 0.2.1
 
+Upgrading from 0.2.0 does not repair existing mappings. Inspect the `email` entries in `mapping.pairs`, grouping them by `fake.toLowerCase()`. A group assigned to different original addresses, rather than alternate spellings of the same address, is affected. Such mappings can still restore a case-changed reply to the wrong address without reporting a collision.
+
+For an affected mapping, start a new conversation with a fresh mapping and the original source text. Do not apply the new mapping to old substituted text or replies. Check addresses in previously restored replies against the original mail and correct any misattributions before using them.
+
 ### Patch Changes
 
 - c15d891: Two different addresses no longer get two letter cases of one fake. A second address at a host that already had a fake, met in a later call or drawing the same word by chance, used to get the first address's fake in capitals. A reader took the two for one mailbox, and a reply that wrote the fake in another case came back as the wrong address. Each address now gets a fake of its own, numbered when a host has more addresses than there are words to draw. One address written in two letter cases still gets two cases of one fake.
