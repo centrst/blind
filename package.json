@@ -1,6 +1,6 @@
 {
   "name": "@centrst/blind",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Rewrite private text into a blind copy with consistent realistic fakes, then map answers back locally",
   "license": "MIT",
   "author": "Centrst",

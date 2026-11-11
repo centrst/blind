@@ -61,7 +61,7 @@ A mapping that comes back from a caller is checked before use: the factor must b
 | Field | Meaning |
 | --- | --- |
 | `v` | Format version, 2. Version 1 had no `requestId` and hashed the real answer in `returned`. `verifyReceipt` accepts version 2 only. |
-| `lib` | The library and version that blinded the text, `@centrst/blind@0.1.0`. |
+| `lib` | The library and version that blinded the text, `@centrst/blind@0.2.0`. |
 | `runtime` | What the operator says is running. Use the SHA-256 of the deployed bundle. |
 | `issuedAt` | ISO 8601 time. |
 | `requestId` | The caller's `requestId`, or 32 random hex characters from Web Crypto when the caller sent none. |

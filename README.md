@@ -519,7 +519,7 @@ The core uses standard JavaScript, Web Crypto, `TextEncoder`, `atob` and `btoa`.
 When blind runs inside a service that other callers use, the service can sign a receipt for each answer:
 
 ```json
-{ "body": { "v": 2, "lib": "@centrst/blind@0.1.0", "runtime": "sha256:<bundle>", "issuedAt": "...", "requestId": "...",
+{ "body": { "v": 2, "lib": "@centrst/blind@0.2.0", "runtime": "sha256:<bundle>", "issuedAt": "...", "requestId": "...",
             "sent": "<sha256 of the blind texts>", "returned": "<sha256 of the blind answer>",
             "leaksOk": true, "replaced": { "person": 3, "amount": 2, "date": 1 } },
   "keyId": "1bb8f2e1aee64bba", "sig": "<Ed25519, base64url>" }
