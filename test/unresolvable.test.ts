@@ -130,6 +130,15 @@ describe('C58: address fakes', () => {
     }
   });
 
+  it('C58/unit: a quoted local part with two dots in a row can be delivered, so its fake leaves the provider', () => {
+    const [first, last] = words('es');
+    // Built at run time: quoted, `..` is a valid local part someone could hold.
+    const email = [`"${first}..${last}"`, 'outlook.com'].join('@');
+    const fake = fakeOf(`Escríbeme a ${email} hoy.`, email, 'email', true).fake;
+    expect(fake.endsWith('@outlook.example'), 'the fake goes under outlook.example').toBe(true);
+    expect(unownableMailbox(fake.slice(0, fake.lastIndexOf('@')), 'outlook.com'), 'the quoted fake is not taken for unownable').toBe(false);
+  });
+
   it('C58/unit: an address in a link goes under .example too, and a reply that writes its fake in capitals comes back, one-shot and streamed', () => {
     const [first, last] = words('en');
     const email = `${first}.${last}@gmail.com`;

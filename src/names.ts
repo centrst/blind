@@ -326,10 +326,11 @@ export const GMAIL = new Set(['gmail.com', 'googlemail.com']);
  * with an underscore or a dash before any `+tag` (Google's username rules
  * allow only letters, digits and dots, support.google.com/mail/answer/9211434),
  * or, at any other host, two dots in a row, which RFC 5322 section 3.4.1 does
- * not allow in an unquoted local part.
+ * not allow in an unquoted local part. A quoted local part may hold them, so
+ * one with a quote does not count.
  */
 export function unownableMailbox(local: string, host: string): boolean {
   const h = host.toLowerCase();
   if (RESERVED_HOST.test(h)) return true;
-  return GMAIL.has(h) ? /[_-]/.test(local.split('+')[0] as string) : local.includes('..');
+  return GMAIL.has(h) ? /[_-]/.test(local.split('+')[0] as string) : !local.includes('"') && local.includes('..');
 }
