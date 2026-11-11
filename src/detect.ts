@@ -269,9 +269,21 @@ function technicalName(token: string): boolean {
  */
 function technical(text: string, start: number, end: number): boolean {
   const t = text.slice(start, end);
-  if (GIT_SHA_RE.test(t) || UUID_RE.test(t) || technicalName(t)) return true;
-  if (text[start - 1] === '#' && HEX_COLOUR_RE.test(t)) return true;
-  return SKU_PREFIX_RE.test(t) || SKU_BEFORE_RE.test(text.slice(Math.max(0, start - 8), start));
+  const shaped =
+    GIT_SHA_RE.test(t) || UUID_RE.test(t) || technicalName(t) || (text[start - 1] === '#' && HEX_COLOUR_RE.test(t)) ||
+    SKU_PREFIX_RE.test(t) || SKU_BEFORE_RE.test(text.slice(Math.max(0, start - 8), start));
+  // A typed id inside keeps the whole an id: `SKU-12345678Z` holds a DNI, which its own pattern does not read after a hyphen.
+  return shaped && detectIds(t.replace(/[-/]/gu, ' ')).length === 0;
+}
+
+/** Whether each span, asked in order of start, lies inside one of `ranges`, which are in order and do not overlap. */
+function insideOf(ranges: Array<[number, number]>): (s: number, e: number) => boolean {
+  let k = 0;
+  return (s, e) => {
+    while (k < ranges.length && (ranges[k] as [number, number])[1] <= s) k++;
+    const r = ranges[k];
+    return r !== undefined && r[0] <= s && e <= r[1];
+  };
 }
 
 export const idDetector: Detector = {
@@ -281,14 +293,15 @@ export const idDetector: Detector = {
     // A run of digits inside technical text is part of it: the date of `claude-3-5-sonnet-20241022`.
     const tech: Array<[number, number]> = [];
     for (const m of text.matchAll(ID_ALNUM_RE)) if (/\d/.test(m[0]) && technical(text, m.index, m.index + m[0].length)) tech.push([m.index, m.index + m[0].length]);
-    const inTech = (s: number, e: number): boolean => tech.some(([a, b]) => a <= s && e <= b);
+    const digitsInTech = insideOf(tech);
     for (const m of text.matchAll(ID_DIGITS_RE)) {
-      if (inTech(m.index, m.index + m[0].length)) continue;
+      if (digitsInTech(m.index, m.index + m[0].length)) continue;
       out.push({ start: m.index!, end: m.index! + m[0].length, kind: 'id', priority: PRIORITY.id });
     }
+    const alnumInTech = insideOf(tech);
     for (const m of text.matchAll(ID_ALNUM_RE)) {
       const t = m[0];
-      if (inTech(m.index, m.index + t.length)) continue;
+      if (alnumInTech(m.index, m.index + t.length)) continue;
       const digits = (t.match(/\d/g) ?? []).length;
       const letters = (t.match(/[A-Za-z]/g) ?? []).length;
       if (t.length < 6 || letters < 1 || digits < 4) continue;

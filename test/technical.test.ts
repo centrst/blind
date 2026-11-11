@@ -63,11 +63,22 @@ describe('technical text', () => {
       ['NIE', 'NIE X1234567L en vigor.', 'X1234567L'],
       ['CIF', 'CIF B81866723 de la empresa.', 'B81866723'],
       ['VAT', 'VAT ESB81866723 on the invoice.', 'ESB81866723'],
+      ['DNI behind a SKU mark', 'Pack SKU-12345678Z for the client.', '12345678Z'],
+      ['card behind a SKU mark', 'Pack SKU-4111111111111111 for the client.', '4111111111111111'],
+      ['NIE in a lower-case name', 'Saved as alta-x1234567l.pdf today.', 'x1234567l'],
     ];
     for (const [what, text, value] of cases) {
       const out = blind([`${text} Build gpt-4o-2024-08-06, commit 3f9a2c7.`], { seed: 's' }).texts[0] as string;
       expect(out, what).not.toContain(value);
       expect(out, what).toContain('gpt-4o-2024-08-06, commit 3f9a2c7.');
     }
+  });
+
+  it('C41/C57: thousands of technical tokens and digit runs between them stay linear', () => {
+    const text = 'release-2026-01-15 3f9a2c7 4815162342 '.repeat(30_000);
+    const start = performance.now();
+    const found = ids(text);
+    expect(performance.now() - start).toBeLessThan(3000);
+    expect(found).toHaveLength(30_000);
   });
 });
