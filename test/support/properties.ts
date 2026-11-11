@@ -1,5 +1,5 @@
 /**
- * The property suite P1 to P20. Each property is a function so the same checks
+ * The property suite P1 to P22. Each property is a function so the same checks
  * run in the normal suite and again under the no-network patches (N1). The
  * six files in test/properties/ hold them in groups of about equal running
  * time, so Vitest spreads them over its workers: in a single file they ran one
@@ -11,11 +11,11 @@ import { detectAmounts } from '../../src/amounts.js';
 import { detectDates, EN_MONTHS, ES_MONTHS, shiftYmd } from '../../src/dates.js';
 import { stopWordValue } from '../../src/detect.js';
 import { assertNoLeaks, blind, checkMapping, createUnblinder, LeakError, unblind } from '../../src/index.js';
-import { FAKES, PARTICLES, type Lang } from '../../src/names.js';
+import { DEFAULT_ALLOW_DOMAINS, FAKES, PARTICLES, unownableMailbox, type Lang } from '../../src/names.js';
 import { containsWord } from './corpus.js';
 import { emailCase, relationCase, seedArb, shapeCase, srcFrom, toCase, type Case } from './gen.js';
 import { CATEGORIES, genEmail } from './templates.js';
-import { chance, digitString, FIRST_EN, FIRST_ES, ibanValid, LAST_EN, LAST_ES, makeEmail, makeOrg, makePerson, makePhone, pick, plain, range, renderAmount } from './values.js';
+import { chance, digitString, FIRST_EN, FIRST_ES, ibanValid, LAST_EN, LAST_ES, makeEmail, makeOrg, makePerson, makePhone, NANP_FICTION, pick, plain, range, renderAmount, UK_DRAMA } from './values.js';
 import { idCase } from './ids-gen.js';
 import { compact, validId } from '../../src/ids.js';
 import type { Detector, KnownValue, Mapping, Pair, ReplaceWith, Span } from '../../src/types.js';
@@ -1167,6 +1167,109 @@ export function p20MobileShape(): void {
       if (!mc.mobile.test(mc.national(fake))) throw new Error(`${mc.country} mobile got a fake outside the mobile ranges`);
       const back = unblind(res.texts[0] as string, res.mapping);
       if (back.text !== `Call me on ${mc.phone} today.`) throw new Error('the text did not round trip');
+    }),
+  );
+}
+
+// ------------------------------------------------------------------- P22
+
+/** The first seven national digits of each UK drama range, one per kind of line Ofcom keeps one for. */
+const UK_RANGES = ['7700900', '2079460', '1134960', '1144960', '1154960', '1164960', '1174960', '1184960', '1214960', '1314960', '1414960', '1514960', '1614960', '1914980', '2920180', '1632960', '3069990', '8081570', '9098790'];
+
+/**
+ * UK and North American numbers in every layout blind reads, each in its
+ * country's fiction range so no generated number is anyone's. The fake
+ * generator picks a range by the leading digits alone, so a drama number
+ * takes the same path as a live one with those digits. A UK number blind
+ * does not find on its own (a landline written with a 0) is passed in `known`.
+ */
+const contactPhone: fc.Arbitrary<{ phone: string; known: boolean; country: 'uk' | 'us'; national: (p: string) => string }> = fc.oneof(
+  fc.tuple(fc.constantFrom(...UK_RANGES), digitsArb(3), fc.integer({ min: 0, max: 4 })).map(([r, d, layout]) => {
+    const n = r + d;
+    const phone = [`+44 ${n.slice(0, 4)} ${n.slice(4)}`, `+44${n}`, `0044 ${n.slice(0, 3)} ${n.slice(3, 6)} ${n.slice(6)}`, `0${n.slice(0, 4)} ${n.slice(4)}`, `+44 (0) ${n.slice(0, 2)} ${n.slice(2, 6)} ${n.slice(6)}`][layout] as string;
+    return { phone, known: layout === 3 && r !== '7700900', country: 'uk' as const, national: (p: string) => p.replace(/\D/g, '').replace(/^(?:0044|44)0?|^0/, '') };
+  }),
+  fc.tuple(nxx, digitsArb(2), fc.integer({ min: 0, max: 4 })).map(([a, d, layout]) => ({
+    phone: [`(${a}) 555-01${d}`, `${a}-555-01${d}`, `${a}.555.01${d}`, `+1 ${a} 555 01${d}`, `+1 (${a}) 555-01${d}`][layout] as string,
+    known: false,
+    country: 'us' as const,
+    national: (p: string) => p.replace(/\D/g, '').replace(/^1(?=\d{10}$)/, ''),
+  })),
+);
+
+/**
+ * An address at a public provider, made of name words, whose real local part
+ * is over the 64 octets RFC 5321 section 4.5.3.1.1 allows, so no one owns it
+ * while its fake, built from one fake word per run, is short enough to be a
+ * mailbox someone holds. Or an address at a private host under `.example`.
+ */
+const contactEmail: fc.Arbitrary<{ email: string; provider: string | null }> = fc.oneof(
+  fc.tuple(fc.array(fc.constantFrom(...FIRST_EN, ...LAST_EN).map(plain), { minLength: 2, maxLength: 4 }), fc.constantFrom('.', '', '-'), fc.constantFrom(...DEFAULT_ALLOW_DOMAINS)).map(([words, sep, provider]) => {
+    let local = words.map((w) => w.toLowerCase().replace(/[^a-z]/g, '')).filter(Boolean).join(sep);
+    while (local.length <= 64) local += local[0];
+    return { email: `${local}@${provider}`, provider };
+  }),
+  fc.tuple(fc.constantFrom(...FIRST_EN).map(plain), fc.constantFrom(...LAST_EN).map(plain), fc.constantFrom('bramble-dental', 'harlow-joinery', 'oakmere-legal')).map(([f, l, host]) => ({
+    email: `${f.toLowerCase().replace(/[^a-z]/g, '')}.${l.toLowerCase().replace(/[^a-z]/g, '')}@${host}.example`,
+    provider: null,
+  })),
+);
+
+const contacts = fc.array(fc.tuple(contactEmail, contactPhone), { minLength: 1, maxLength: 4 });
+const contactText = (cs: ReadonlyArray<readonly [{ email: string }, { phone: string }]>): string => cs.map(([e, p]) => `Write to ${e.email} or call ${p.phone}.`).join('\n');
+const contactKnown = (cs: ReadonlyArray<readonly [unknown, { phone: string; known: boolean }]>): KnownValue[] => cs.filter(([, p]) => p.known).map(([, p]) => ({ kind: 'phone', value: p.phone }));
+
+/** Each email and phone pair of `pairs`: every fake address is one no one can own, every fake number is in its country's fiction range. */
+function unresolvable(pairs: readonly Pair[], cs: ReadonlyArray<readonly [{ email: string; provider: string | null }, { phone: string; country: 'uk' | 'us'; national: (p: string) => string }]>): void {
+  for (const [i, [e, p]] of cs.entries()) {
+    const email = pairs.find((x) => x.kind === 'email' && x.real === e.email);
+    if (!email) throw new Error(`address ${i} got no pair`);
+    const at = email.fake.lastIndexOf('@');
+    if (!unownableMailbox(email.fake.slice(0, at), email.fake.slice(at + 1))) throw new Error(`address ${i} got a fake mailbox someone could own`);
+    // The provider stays when it can never issue the fake mailbox (a dash at Gmail), else its name goes under `.example`.
+    // A fake another address holds already comes in another letter case.
+    const host = email.fake.slice(at + 1).toLowerCase();
+    if (e.provider && host !== e.provider && host !== `${e.provider.split('.')[0] as string}.example`) throw new Error(`address ${i} lost its provider's name`);
+    const phone = pairs.find((x) => x.kind === 'phone' && x.real === p.phone);
+    if (!phone) throw new Error(`${p.country} phone ${i} got no pair`);
+    const fake = p.national(phone.fake);
+    if (p.country === 'uk' && !(UK_DRAMA.test(fake) && fake.slice(0, 7) === p.national(p.phone).slice(0, 7))) throw new Error(`uk phone ${i} left its drama range`);
+    if (p.country === 'us' && !NANP_FICTION.test(fake)) throw new Error(`us phone ${i} left 555-01XX`);
+  }
+}
+
+/**
+ * No fake email or phone can reach anyone. An address at a public provider
+ * goes to the provider's name under `.example`, a private one to a fake host
+ * under `.example`, a UK number to the drama range of its kind of line and a
+ * North American one to NXX-555-01XX. The text round trips one-shot and
+ * streamed, and a second turn with the mapping gives the first turn's values
+ * their fakes again and new values fakes of the same kind.
+ */
+export function p22UnresolvableContacts(): void {
+  check(
+    fc.property(contacts, contacts, seedArb, fc.array(fc.integer({ min: 1, max: 40 }), { minLength: 1, maxLength: 50 }), (first, second, seed, sizes) => {
+      const text = contactText(first);
+      const res = blind([text], { known: contactKnown(first), seed, now: NOW });
+      unresolvable(res.mapping.pairs, first);
+      if (unblind(res.texts[0] as string, res.mapping).text !== text) throw new Error('the text did not round trip');
+      const u = createUnblinder(res.mapping);
+      let streamed = '';
+      let at = 0;
+      for (let i = 0; at < (res.texts[0] as string).length; i++) {
+        const n = sizes[i % sizes.length] as number;
+        streamed += u.push((res.texts[0] as string).slice(at, at + n));
+        at += n;
+      }
+      if (streamed + u.end().text !== text) throw new Error('the streamed text did not round trip');
+      const both = [...first, ...second];
+      const text2 = contactText(both);
+      const next = blind([text2], { known: contactKnown(both), mapping: res.mapping });
+      unresolvable(next.mapping.pairs, both);
+      for (const p of res.mapping.pairs) {
+        if (next.mapping.pairs.find((q) => q.kind === p.kind && q.real === p.real)?.fake !== p.fake) throw new Error(`a ${p.kind} got another fake in the second turn`);
+      }
+      if (unblind(next.texts[0] as string, next.mapping).text !== text2) throw new Error('the second turn did not round trip');
     }),
   );
 }

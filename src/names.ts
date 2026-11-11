@@ -316,3 +316,20 @@ export const ORG_SUFFIX = /(?<!\s)\s+(?:S\.?L\.?U?\.?|S\.?A\.?|S\.?L\.?P\.?|Inc\
 
 /** The at sign, or the ways mail gets it encoded: %40 and HTML entities. */
 export const AT_SRC = String.raw`(?:@|%40|&#0*64;|&#x0*40;|&commat;)`;
+
+/** Host names RFC 2606 and RFC 6761 reserve: `.example`, `.test`, `.invalid`, `.localhost`, `example.com/.net/.org`. */
+export const RESERVED_HOST = /(?:^|\.)(?:example|test|invalid|localhost)$|^example\.(?:com|net|org)$/;
+export const GMAIL = new Set(['gmail.com', 'googlemail.com']);
+
+/**
+ * True when no one can own `local@host`: a reserved host, a Gmail mailbox
+ * with an underscore or a dash before any `+tag` (Google's username rules
+ * allow only letters, digits and dots, support.google.com/mail/answer/9211434),
+ * or, at any other host, two dots in a row, which RFC 5322 section 3.4.1 does
+ * not allow in an unquoted local part.
+ */
+export function unownableMailbox(local: string, host: string): boolean {
+  const h = host.toLowerCase();
+  if (RESERVED_HOST.test(h)) return true;
+  return GMAIL.has(h) ? /[_-]/.test(local.split('+')[0] as string) : local.includes('..');
+}

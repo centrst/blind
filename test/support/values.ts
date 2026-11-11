@@ -3,7 +3,9 @@
  * `Src`, so the same code feeds fast-check (through `fc.gen`) and the
  * deterministic corpus generator (through its own seeded CorpusRng).
  */
-import { IBAN_LENGTHS } from '../../src/names.js';
+import { GMAIL, IBAN_LENGTHS, RESERVED_HOST, unownableMailbox } from '../../src/names.js';
+
+export { unownableMailbox };
 
 export interface Src {
   /** Uniform integer in [0, n). n >= 1. */
@@ -113,28 +115,11 @@ export function makePlace(s: Src, lang: Lang): string {
 
 // ----------------------------------------------------------------- contact
 
-// Fixture mailboxes nobody can own. An address under a reserved name (RFC 2606
-// and RFC 6761: .example, .test, .invalid, .localhost, example.com/.net/.org)
-// is safe as it is. An address at a real provider keeps the provider, since
-// blind treats consumer mail differently from company mail, but gets a local
-// part the provider can never issue:
-// - Gmail (gmail.com, googlemail.com): an underscore or a dash. Google's
-//   username rules say a Gmail username can't contain an underscore (_) or a
-//   dash (-) (support.google.com/mail/answer/9211434). Gmail ignores dots, so
-//   a doubled dot is not used there.
-// - Any other host: two dots in a row. RFC 5322 section 3.4.1 allows a dot in
-//   an unquoted local part only between two other characters, so no provider
-//   can hand out `ana..ruiz`.
-
-const RESERVED_HOST = /(?:^|\.)(?:example|test|invalid|localhost)$|^example\.(?:com|net|org)$/;
-const GMAIL = new Set(['gmail.com', 'googlemail.com']);
-
-/** True when no one can own `local@host`. */
-export function unownableMailbox(local: string, host: string): boolean {
-  const h = host.toLowerCase();
-  if (RESERVED_HOST.test(h)) return true;
-  return GMAIL.has(h) ? /[_-]/.test(local) : local.includes('..');
-}
+// Fixture mailboxes nobody can own (see `unownableMailbox` in src/names.ts).
+// An address at a real provider keeps the provider, since blind treats
+// consumer mail differently from company mail, but gets a local part the
+// provider can never issue: an underscore or a dash at Gmail, two dots in a
+// row anywhere else.
 
 export function makeEmail(s: Src, p: Person, host: string): string {
   const f = plain(p.first).replace(/-/g, '');
@@ -151,8 +136,9 @@ export function makeEmail(s: Src, p: Person, host: string): string {
 
 // Fixture phones sit in ranges no subscriber can hold:
 // - North America: NXX-555-0100 to 0199, reserved for fictional use (NANPA).
-// - UK: 07700 900000 to 900999, and the landline drama ranges 020 7946 0xxx,
-//   011x 496 0xxx and 01x1 496 0xxx (Ofcom, numbers for TV and radio drama).
+// - UK: 07700 900000 to 900999, and the drama ranges 020 7946 0xxx, 011x 496
+//   0xxx, 01x1 496 0xxx, 0191 498 0xxx, 029 2018 0xxx, 01632 960xxx, 0306 999
+//   0xxx, 0808 157 0xxx and 0909 879 0xxx (Ofcom, numbers for TV and radio drama).
 // - Spain: 75 to 79 as the first two digits. The ministerial resolution that
 //   opened the 7 range to mobiles (BOE-A-2010-5251) attributes 71 to 74 and
 //   keeps 7X with X from 5 to 9 in reserve, so no line holds one. Spain has no
@@ -160,12 +146,17 @@ export function makeEmail(s: Src, p: Person, host: string): string {
 // - Germany: +49 171 39200 00 to 99, numbers the Bundesnetzagentur lists for
 //   use in media ("Drama Numbers").
 
+/** The national digits, without the 0, of every UK drama range above. */
+export const UK_DRAMA = /^(?:7700900|2079460|11[3-8]4960|1[2-6]14960|1914980|2920180|1632960|3069990|8081570|9098790)\d{3}$/;
+/** The national digits of a North American number in NXX-555-0100 to 0199. */
+export const NANP_FICTION = /^[2-9]\d{2}55501\d{2}$/;
+
 /** True when `raw`, a phone as written, is in one of the ranges above. */
 export function reservedPhone(raw: string): boolean {
   const d = raw.replace(/\D/g, '').replace(/^00/, '');
   return (
-    /^1?[2-9]\d{2}55501\d{2}$/.test(d) ||
-    /^(?:44|0)(?:7700900\d{3}|2079460\d{3}|11[3-8]4960\d{3}|1[2-6]14960\d{3})$/.test(d) ||
+    NANP_FICTION.test(d.replace(/^1(?=\d{10}$)/, '')) ||
+    UK_DRAMA.test(d.replace(/^(?:44|0)/, '')) ||
     /^(?:34)?7[5-9]\d{7}$/.test(d) ||
     /^(?:49|0)17139200\d{2}$/.test(d)
   );

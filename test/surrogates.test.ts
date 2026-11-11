@@ -193,8 +193,9 @@ describe('numbers', () => {
     expect(a !== live, 'fake differs').toBe(true);
     expect(sur.phone(digits) === a.replace(/^\+34 /, '').replace(/ /g, ''), 'bare digits get the same fake').toBe(true);
     const drama = '0044 20 7946 0000';
-    expect(sur.phone(drama)).toMatch(/^0044 \d{2} \d{4} \d{4}$/);
-    expect(sur.phone(drama).startsWith(drama.slice(0, -5))).toBe(false);
+    // A London number, drama range or not, gets another number in London's drama range.
+    expect(sur.phone(drama)).toMatch(/^0044 20 7946 0\d{3}$/);
+    expect(sur.phone(drama)).not.toBe(drama);
     // Country code 999 is unassigned; the digits after it are only a layout.
     expect(sur.phone(['+999', '123', '456'].join(' '))).toMatch(/^\+99\d \d{3} \d{3}$/);
     expect(sur.phone('(615)555-0142')).toMatch(/^\(\d{3}\)555-01\d{2}$/);
