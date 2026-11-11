@@ -386,10 +386,8 @@ const ID_LABEL = [
   String.raw`(?:número|numero)[ \t]+de[ \t]+(?:cliente|socio|póliza|poliza|cuenta|afiliación|afiliacion|expediente|historia)`,
   String.raw`póliza|poliza|NHC|historia[ \t]+clínica|expediente`,
 ].join('|');
-// Keep the bounded window for spaced values, but finish its last unbroken token.
-// A technical token after an explicit label is private in full, including a long UUID or SHA.
 const LABELLED_ID_RE = new RegExp(
-  String.raw`(?<![\p{L}\p{N}])(?:${ID_LABEL})[ \t]*(?:n[º°o]\.?|#)?[ \t]*[:.#]?[ \t]*(?<value>[A-Za-z0-9](?:[A-Za-z0-9]|[ \-./](?=[A-Za-z0-9])){2,23}(?:[A-Za-z0-9]|[\-./](?=[A-Za-z0-9]))*)`,
+  String.raw`(?<![\p{L}\p{N}])(?:${ID_LABEL})[ \t]*(?:n[º°o]\.?|#)?[ \t]*[:.#]?[ \t]*(?<value>[A-Za-z0-9](?:[A-Za-z0-9]|[ \-./](?=[A-Za-z0-9])){2,23})`,
   'giud',
 );
 
@@ -406,9 +404,24 @@ export const contextDetector: Detector = {
       out.push({ start: s, end: s + name.length, kind: 'person', priority: PRIORITY.honorific });
     }
     const re = new RegExp(LABELLED_ID_RE.source, LABELLED_ID_RE.flags);
+    const tokenTail = /(?:[A-Za-z0-9]|[\-./](?=[A-Za-z0-9]))*/y;
+    let fewDigitsUntil = 0;
     for (let m = re.exec(text); m; m = re.exec(text)) {
-      const [s, e] = m.indices!.groups!.value as [number, number];
+      const [s, windowEnd] = m.indices!.groups!.value as [number, number];
+      // Later matches wholly inside a range with fewer than three digits cannot be ids.
+      // Keep the regex bounded so retries at nested labels do not rescan a long suffix.
+      if (windowEnd <= fewDigitsUntil) {
+        re.lastIndex = s;
+        continue;
+      }
+      tokenTail.lastIndex = windowEnd;
+      const e = windowEnd + (tokenTail.exec(text)?.[0].length ?? 0);
       const value = text.slice(s, e);
+      if ((value.match(/\d/g) ?? []).length < 3) {
+        fewDigitsUntil = e;
+        re.lastIndex = s;
+        continue;
+      }
       // A value has digits: "DNI 12345678" yes, "DNI del titular" no. Words after a short number stay out.
       const tail = /^(\S*\d\S*(?:[ ](?=\S*\d)\S+)*)/.exec(value)?.[1] ?? '';
       if ((tail.match(/\d/g) ?? []).length < 3) {
@@ -417,6 +430,7 @@ export const contextDetector: Detector = {
         continue;
       }
       out.push({ start: s, end: s + tail.length, kind: 'id', priority: PRIORITY.labelledId });
+      re.lastIndex = e;
     }
     return out;
   },

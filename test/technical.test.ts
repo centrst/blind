@@ -83,6 +83,7 @@ describe('technical text', () => {
       '6f1c2b9e-4d3a-4e8f-9b7c-123456789012',
       '9b1e4c2d'.repeat(8),
       'summariser-release-2026-01-15',
+      'documentation-release-channel-2026-01-15',
     ];
     for (const value of values) {
       const text = `Account no. ${value} is closed.`;
