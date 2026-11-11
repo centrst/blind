@@ -157,11 +157,22 @@ export class Surrogates {
     return noFreeFake(kind);
   }
 
-  /** The fake for an address or link written `orig`: `fake`, or another letter case of it when that one is taken. */
-  private claimPlain(kind: Kind, orig: string, fake: string): string {
+  /**
+   * The fake for an address or link written `orig`: `fake`, or another letter
+   * case of it when `orig` is another letter case of the value that holds it.
+   * Unblind reads every letter case of a fake as its first pair, so a fake
+   * another value holds is not shared in any case: `fresh` makes a new one.
+   */
+  private claimPlain(kind: Kind, orig: string, fake: string, fresh?: (round: number) => string): string {
     const had = this.log.fakeOf(kind, orig);
     if (had !== undefined) return had;
-    for (const f of caseVariants(fake)) if (this.log.claim(kind, orig, f)) return f;
+    let own = fake;
+    for (let round = 0; fresh && round < 20; round++) {
+      const first = this.log.firstOwnerOf(own);
+      if (first === undefined || first.toLowerCase() === orig.toLowerCase()) break;
+      own = fresh(round);
+    }
+    for (const f of caseVariants(own)) if (this.log.claim(kind, orig, f)) return f;
     return noFreeFake(kind);
   }
 
@@ -215,8 +226,7 @@ export class Surrogates {
     return this.take(`${this.syllables()}${this.used.size}`);
   }
 
-  private digitsLike(shape: string, keepFirst: boolean): string {
-    const r = this.rng.digits;
+  private digitsLike(shape: string, keepFirst: boolean, r: Rng = this.rng.digits): string {
     for (let attempt = 0; attempt < 50; attempt++) {
       let out = '';
       let firstDigit = true;
@@ -417,9 +427,10 @@ export class Surrogates {
     return this.take(`${this.syllables().toLowerCase()}-${this.used.size}.example`);
   }
 
-  private localWord(run: string, lang: Lang): string {
+  /** The fake for one word of a local part or host label. With `again`, a word that is drawn is drawn anew from that stream. */
+  private localWord(run: string, lang: Lang, again?: Rng): string {
     const key = `lw|${run}`;
-    let f = this.memo.get(key);
+    let f = again ? undefined : this.memo.get(key);
     if (!f) {
       const mapped = this.tokenFake.get(nameKey(run));
       if (mapped) f = asciiLower(mapped);
@@ -427,7 +438,7 @@ export class Surrogates {
         const dec = this.decompose(run);
         if (dec) f = dec;
         else {
-          const r = this.rng.local;
+          const r = again ?? this.rng.local;
           const lists = N.FAKES[lang];
           const pool = [...lists.female, ...lists.male, ...lists.last];
           for (let i = 0; i < 200; i++) {
@@ -461,20 +472,20 @@ export class Surrogates {
     return null;
   }
 
-  private localFake(local: string, lang: Lang): string {
+  private localFake(local: string, lang: Lang, again?: Rng): string {
     return local.replace(/[A-Za-z]+|\d+/g, (run) => {
       if (/\d/.test(run)) {
         const key = `dg|${run}`;
-        let f = this.memo.get(key);
+        let f = again ? undefined : this.memo.get(key);
         if (!f) {
-          f = this.digitsLike(run, false);
+          f = this.digitsLike(run, false, again);
           this.memo.set(key, f);
         }
         return f;
       }
       const l = run.toLowerCase();
       if (N.ROLE_WORDS.has(l) || l.length <= 2) return run;
-      return this.localWord(l, lang);
+      return this.localWord(l, lang, again);
     });
   }
 
@@ -511,16 +522,32 @@ export class Surrogates {
 
   email(text: string, orig: string = text, around?: Lang): string {
     const key = `email|${text.toLowerCase()}`;
-    let fake = this.memo.get(key);
-    if (!fake) {
-      const at = AT_RE.exec(text);
-      if (!at) return text;
-      const host = text.slice(at.index + at[0].length);
-      const lang = addressLanguage(text, this.opts.isAllowedHost(host.toLowerCase())) ?? this.around(around);
-      fake = `${this.localFake(text.slice(0, at.index), lang)}${at[0]}${this.domain(host, lang)}`;
-      this.memo.set(key, fake);
-    }
-    return this.claimPlain('email', orig, fake);
+    const at = AT_RE.exec(text);
+    const had = this.memo.get(key);
+    if (!at) return had ? this.claimPlain('email', orig, had) : text;
+    const local = text.slice(0, at.index);
+    const host = text.slice(at.index + at[0].length);
+    const lang = addressLanguage(text, this.opts.isAllowedHost(host.toLowerCase())) ?? this.around(around);
+    const build = (again?: Rng, tail = ''): string => `${this.localFake(local, lang, again)}${tail}${at[0]}${this.domain(host, lang)}`;
+    const fake = had ?? build();
+    this.memo.set(key, fake);
+    // Two addresses can draw one fake: draws repeat by chance, and a continued mapping starts them over.
+    // The second draws again from a stream of its own, so it never walks the draws of the addresses before it.
+    let again: Rng | undefined;
+    let numbered = false;
+    return this.claimPlain('email', orig, fake, (round) => {
+      again ??= this.rng.local.fork(`again|${text.toLowerCase()}`);
+      let next = numbered ? '' : build(again);
+      // A local part with nothing drawn in it, names and role words alone, comes out the same: it is numbered.
+      // So is one still taken after a dozen draws, at a host with more addresses than there are words, with a
+      // number from a range that grows each round.
+      if (numbered || round >= 12 || next.toLowerCase() === fake.toLowerCase()) {
+        numbered = true;
+        next = build(undefined, String(round < 12 ? round + 2 : 100 + again.int(10 ** (round - 10))));
+      }
+      this.memo.set(key, next);
+      return next;
+    });
   }
 
   // ----------------------------------------------------------------------- url
