@@ -576,13 +576,13 @@ Recall and precision on the Gretel sample, with nothing passed in `known`. The P
 | LLM Guard | 40.9% / 82.3% | 24.4% / 88.3% | 91.0% / 58.4% | 68.0% / 6.8% | 97.7% |
 | blind core | 22.0% / 88.3% | 30.4% / 88.3% | 2.1% / n/a | 82.3% / 11.2% | 97.5% |
 
-What a model can still use, on blind's corpus, and whether answers map back on both datasets.
+What a model can still use, on blind's corpus, and whether answers map back on both datasets. The blind core row was measured again on 11 November 2026 with core 0.2.0, on the 381-file corpus.
 
 | | ids replaced | amounts scaled and usable | dates shifted and usable | answers that map back |
 | --- | --- | --- | --- | --- |
 | Presidio | 33.9% | 0% | 0% | not with its default operators, which keep no mapping |
 | LLM Guard | 16.3% | 0% | 0% | 379 of 379, 888 of 888 |
-| blind core | 100% | 100% | 99.9% | 379 of 379, 888 of 888 |
+| blind core | 100% | 99.9% | 100% | 381 of 381, 888 of 888 |
 
 blind's core took 0.3 ms per file. Presidio took about 20 to 30 ms, and LLM Guard 44 to 79 ms on a GPU and 75 to 117 ms on a CPU. Every number, configuration and caveat is in [RESULTS.md](scripts/bench/RESULTS.md) and [RESULTS-llmguard-gretel.md](scripts/bench/RESULTS-llmguard-gretel.md), and in a clone of the repository `pnpm bench:presidio` and `pnpm bench:gretel` rerun the supported comparisons. LLM Guard execution has been retired because its archived release pins vulnerable dependencies; its source and historical results remain available.
 

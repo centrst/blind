@@ -46,7 +46,7 @@ Gretel has no amount labels. Its date labels include durations, frequencies, yea
 
 The `Blind + GLiNER` rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
 
-The Blind corpus is home ground. Gretel is synthetic and its labels are incomplete. Replaced but unlabelled values count against precision, so its precision is a floor. On Gretel, in the October run, Blind with GLiNER had 48.4% Spanish person precision. Spanish person labels are noisy too.
+The Blind corpus is home ground. Gretel is synthetic and its labels are incomplete. Replaced but unlabelled values count against precision, so its precision is a floor. On Gretel, measured on 11 November 2026, Blind with GLiNER has 48.2% Spanish person precision, against 48.4% in October. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's. Spanish person labels are noisy too.
 
 ## Example
 
@@ -74,4 +74,4 @@ The fake total equals the fake cuota plus 20%. DNI and IBAN fakes pass their che
 
 ## Benchmark limits
 
-Reports ran on 2026-10-24 at commit `4f5183f`. The Blind recall rows were measured again with core 0.2.0, after greetings, signatures, labels, legal suffixes and address words were added: the person, organization and place rows of the corpus on 2026-11-10, the rest of the Blind rows on 2026-11-11 at commit `5369e57`. The person precision figure is from the October run. The other tools were not rerun. Blind's corpus is home ground. Gretel is synthetic, outside the corpus and not neutral truth. Its incomplete labels make precision a floor. Blind round tripped 381 corpus and 888 Gretel files. See [RESULTS.md](../../scripts/bench/RESULTS.md) and [RESULTS-llmguard-gretel.md](../../scripts/bench/RESULTS-llmguard-gretel.md).
+Reports ran on 2026-10-24 at commit `4f5183f`. The Blind recall rows were measured again with core 0.2.0, after greetings, signatures, labels, legal suffixes and address words were added: the person, organization and place rows of the corpus on 2026-11-10, the rest of the Blind rows on 2026-11-11 at commit `5369e57`. The other tools were not rerun. Blind's corpus is home ground. Gretel is synthetic, outside the corpus and not neutral truth. Its incomplete labels make precision a floor. Blind round tripped 381 corpus and 888 Gretel files. See [RESULTS.md](../../scripts/bench/RESULTS.md) and [RESULTS-llmguard-gretel.md](../../scripts/bench/RESULTS-llmguard-gretel.md).

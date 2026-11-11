@@ -40,7 +40,7 @@ The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from th
 
 The other kinds have the same precision as before in every blind column: email 96.6%, url, phone, iban, id and date 100.0%, amount 99.9%. Every blind run round trips 381 of 381 files. With core 0.2.0 the core alone now beats every Presidio configuration of the October run on persons and orgs, so the "Where Presidio wins" section below describes the October core. GLiNER now adds mostly places and the last people, at a cost of 6.1 points of org precision in bare mode.
 
-The amounts and dates table below is still the October run.
+Amounts and dates, 11 November 2026, in every blind column: amounts replaced 100.0%, usable 99.9% (738 of 739), replaced and usable 99.9%; dates replaced, usable, and replaced and usable 100.0%. The one amount is `45 euros` in `handwritten/005-booking-es`: the call's factor is 1.437 and the fake is the whole 65, which the scorer's 0.5% tolerance does not accept. The table below keeps the October values. On Gretel, the + GLiNER person precision is 39.8% at 0.3 and 44.4% at 0.5, against 40.1% and 44.9% in October. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's.
 
 ## What changed since the previous run
 
