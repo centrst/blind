@@ -1,5 +1,5 @@
 import { adaptCase, caseLike, caseVariants, habit, title, uniformToTitle } from './case.js';
-import { foldLookalikes, skeleton, visibleOffsets } from './fold.js';
+import { foldLookalikes, skeleton, stripInvisible, visibleOffsets } from './fold.js';
 import { compact, detectIds, fakeId, parseIpv6, renderLike as renderLikeId, type IdScheme } from './ids.js';
 import { addressLanguage, hostLanguage, nameLanguages, orgLanguage, placeLanguage, type Lang } from './language.js';
 import { fakeFinder } from './match.js';
@@ -162,15 +162,25 @@ export class Surrogates {
    * case of it when `orig` is another letter case of the value that holds it.
    * Unblind reads every letter case of a fake as its first pair, so a fake
    * another value holds is not shared in any case: `fresh` makes a new one.
+   * `same` tells a spelling of this value from another value.
    */
-  private claimPlain(kind: Kind, orig: string, fake: string, fresh?: (round: number) => string): string {
+  private claimPlain(
+    kind: Kind,
+    orig: string,
+    fake: string,
+    fresh?: (round: number) => string,
+    same: (first: string) => boolean = (first) => first.toLowerCase() === orig.toLowerCase(),
+  ): string {
     const had = this.log.fakeOf(kind, orig);
     if (had !== undefined) return had;
     let own = fake;
-    for (let round = 0; fresh && round < 20; round++) {
-      const first = this.log.firstOwnerOf(own);
-      if (first === undefined || first.toLowerCase() === orig.toLowerCase()) break;
-      own = fresh(round);
+    if (fresh) {
+      const held = (f: string): boolean => {
+        const first = this.log.firstOwnerOf(f);
+        return first !== undefined && !same(first);
+      };
+      for (let round = 0; round < 20 && held(own); round++) own = fresh(round);
+      if (held(own)) return noFreeFake(kind);
     }
     for (const f of caseVariants(own)) if (this.log.claim(kind, orig, f)) return f;
     return noFreeFake(kind);
@@ -427,7 +437,11 @@ export class Surrogates {
     return this.take(`${this.syllables().toLowerCase()}-${this.used.size}.example`);
   }
 
-  /** The fake for one word of a local part or host label. With `again`, a word that is drawn is drawn anew from that stream. */
+  /**
+   * The fake for one word of a local part or host label. With `again`, a word
+   * that is drawn is drawn anew from that stream, for this one address: the
+   * word keeps its fake everywhere else.
+   */
   private localWord(run: string, lang: Lang, again?: Rng): string {
     const key = `lw|${run}`;
     let f = again ? undefined : this.memo.get(key);
@@ -451,7 +465,7 @@ export class Surrogates {
           f ??= asciiLower(this.syllables());
         }
       }
-      this.memo.set(key, f);
+      if (!again) this.memo.set(key, f);
     }
     return f;
   }
@@ -479,7 +493,7 @@ export class Surrogates {
         let f = again ? undefined : this.memo.get(key);
         if (!f) {
           f = this.digitsLike(run, false, again);
-          this.memo.set(key, f);
+          if (!again) this.memo.set(key, f);
         }
         return f;
       }
@@ -535,7 +549,9 @@ export class Surrogates {
     // The second draws again from a stream of its own, so it never walks the draws of the addresses before it.
     let again: Rng | undefined;
     let numbered = false;
-    return this.claimPlain('email', orig, fake, (round) => {
+    // `orig` is the address as written, look-alike letters and all, and `text` is the one value those spellings fold to.
+    const same = (first: string): boolean => stripInvisible(foldLookalikes(first)).toLowerCase() === text.toLowerCase();
+    const fresh = (round: number): string => {
       again ??= this.rng.local.fork(`again|${text.toLowerCase()}`);
       let next = numbered ? '' : build(again);
       // A local part with nothing drawn in it, names and role words alone, comes out the same: it is numbered.
@@ -547,7 +563,8 @@ export class Surrogates {
       }
       this.memo.set(key, next);
       return next;
-    });
+    };
+    return this.claimPlain('email', orig, fake, fresh, same);
   }
 
   // ----------------------------------------------------------------------- url

@@ -945,6 +945,32 @@ describe('addresses that draw one fake', () => {
     expect(prepareUnblinder(once.mapping).unblind(once.texts[0]!).text).toBe(text);
   });
 
+  it('C1: one address in full-width letters and in capitals keeps one fake in three spellings', () => {
+    const wide = [...'maple'].map((c) => String.fromCharCode(c.charCodeAt(0) + 0xfee0)).join('');
+    const text = `From maple@quietbrook.example, also ${wide}@quietbrook.example, then MAPLE@QUIETBROOK.EXAMPLE.`;
+    for (const seed of SEEDS) {
+      const once = blind([text], { seed, now: NOW });
+      const emails = once.mapping.pairs.filter((p) => p.kind === 'email');
+      expect(emails.length, seed).toBe(3);
+      expect(fakes(once.mapping).size, seed).toBe(1);
+      expect(prepareUnblinder(once.mapping).unblind(once.texts[0]!).text, seed).toBe(text);
+    }
+  });
+
+  it('C21: an address that draws again leaves the fake of its words alone for the addresses after it', () => {
+    const local = (fake: string): string => fake.slice(0, fake.indexOf('@'));
+    for (const seed of SEEDS) {
+      const first = blind(['Mail from maple@quietbrook.example arrived.'], { seed, now: NOW });
+      // `oak` draws what `maple` drew, since a call starts its draws over: at another host it stands, at the same host it draws again.
+      const next = blind(['Copy to oak.fern@stonegate.example, to oak@quietbrook.example and to oak.fern3@hillfort.example.'], { mapping: first.mapping, now: NOW });
+      const before = local(fakeOf(next.mapping, 'oak.fern@stonegate.example'));
+      const after = local(fakeOf(next.mapping, 'oak.fern3@hillfort.example'));
+      expect(fakeOf(next.mapping, 'oak@quietbrook.example').toLowerCase(), seed).not.toBe(fakeOf(next.mapping, 'maple@quietbrook.example').toLowerCase());
+      expect(before.split('.')[0], seed).toBe(local(fakeOf(next.mapping, 'maple@quietbrook.example')));
+      expect(after.slice(0, before.length), seed).toBe(before);
+    }
+  });
+
   it('C1: one address in two letter cases still gets two cases of one fake', () => {
     const first = blind(['Mail from maple@quietbrook.example arrived.'], { seed: 'alder', now: NOW });
     const next = blind(['MAPLE@QUIETBROOK.EXAMPLE replied.'], { mapping: first.mapping, now: NOW });
