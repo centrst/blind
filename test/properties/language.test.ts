@@ -7,5 +7,5 @@ describe(`properties: language and seeds (${numRuns()} cases, seed ${seedOf()})`
   it('C31/P18: names, companies, places and hosts in English text get English fakes, in Spanish text Spanish ones, and each part of a two-language thread its own', () => p18LanguageFollows(), LONG);
   it('C31/P19: a woman\'s or man\'s English or Spanish first name gets a fake of the same gender and language, names not ending in "a" included', () => p19Gender(), LONG);
   it('C31/P20: a UK, Spanish or North American mobile stays a mobile of its country in the same layout, and round trips', () => p20MobileShape(), LONG);
-  it('C56/P22: every fake address is a mailbox no one can own and every fake UK or North American number is in its fiction range, one-shot, streamed and in a second turn', () => p22UnresolvableContacts(), LONG);
+  it('C58/P22: every fake address is a mailbox no one can own and every fake UK or North American number is in its fiction range, one-shot, streamed and in a second turn', () => p22UnresolvableContacts(), LONG);
 });

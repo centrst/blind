@@ -1,5 +1,5 @@
 /**
- * C56: a fake address or phone number reaches no one. The inputs here are
+ * C58: a fake address or phone number reaches no one. The inputs here are
  * live-range numbers and ownable mailboxes on purpose, since the point is
  * that their fakes are not. Only a prefix or a list name is written in the
  * source; the rest is drawn at run time, and the checks are booleans so a
@@ -13,12 +13,12 @@ import type { Mapping } from '../src/types.js';
 import { NANP_FICTION, UK_DRAMA } from './support/values.js';
 
 const NOW = new Date('2026-06-01T00:00:00Z');
-const rng = new Rng('C56 live inputs');
+const rng = new Rng('C58 live inputs');
 const digits = (n: number): string => Array.from({ length: n }, () => rng.int(10)).join('');
 
 /** The fake `blind` gives `value` in `text`, found through its pair. */
 function fakeOf(text: string, value: string, kind: 'phone' | 'email', known = false): { fake: string; mapping: Mapping; blindText: string } {
-  const res = blind([text], { seed: 'C56', now: NOW, known: known ? [{ kind, value }] : [] });
+  const res = blind([text], { seed: 'C58', now: NOW, known: known ? [{ kind, value }] : [] });
   const fake = res.mapping.pairs.find((p) => p.kind === kind && p.real === value)?.fake;
   expect(fake !== undefined, `the ${kind} got a pair`).toBe(true);
   expect(unblind(res.texts[0] as string, res.mapping).text === text, 'the text round trips').toBe(true);
@@ -28,7 +28,7 @@ function fakeOf(text: string, value: string, kind: 'phone' | 'email', known = fa
 /** The national digits of a UK number written with +44, 0044, +44 (0) or 0. */
 const ukNational = (p: string): string => p.replace(/\D/g, '').replace(/^(?:0044|44)0?|^0/, '');
 
-describe('C56: phone fakes', () => {
+describe('C58: phone fakes', () => {
   // Leading digits of live UK lines, and the drama range each must land in.
   const uk: Array<[string, string]> = [
     ['203', '2079460'], ['207', '2079460'], ['113', '1134960'], ['118', '1184960'], ['121', '1214960'], ['161', '1614960'],
@@ -36,7 +36,7 @@ describe('C56: phone fakes', () => {
     ['800', '8081570'], ['808', '8081570'], ['845', '1632960'], ['909', '9098790'], ['7911', '7700900'], ['7700', '7700900'],
   ];
 
-  it('C56/unit: every UK number becomes a number in the Ofcom drama range of its kind of line, in each layout', () => {
+  it('C58/unit: every UK number becomes a number in the Ofcom drama range of its kind of line, in each layout', () => {
     for (const [lead, range] of uk) {
       const n = lead + digits(10 - lead.length);
       const layouts = [`+44 ${n.slice(0, 4)} ${n.slice(4)}`, `+44${n}`, `0044 ${n.slice(0, 3)} ${n.slice(3, 6)} ${n.slice(6)}`, `+44 (0) ${n.slice(0, 2)} ${n.slice(2, 6)} ${n.slice(6)}`, `0${n.slice(0, 4)} ${n.slice(4)}`];
@@ -50,7 +50,7 @@ describe('C56: phone fakes', () => {
     }
   });
 
-  it('C56/unit: a nine-digit UK number gets a ten-digit drama number, and a second turn gives it the same fake', () => {
+  it('C58/unit: a nine-digit UK number gets a ten-digit drama number, and a second turn gives it the same fake', () => {
     const phone = `+44 800 ${digits(6)}`;
     const text = `Freephone ${phone} today.`;
     const { fake, mapping } = fakeOf(text, phone, 'phone');
@@ -61,13 +61,13 @@ describe('C56: phone fakes', () => {
     expect(unblind(next.texts[0] as string, next.mapping).text === `${text} Again: ${phone}.`, 'the second turn round trips').toBe(true);
   });
 
-  it('C56/unit: a nine-digit UK number written with its 0 gets an eleven-digit drama number', () => {
+  it('C58/unit: a nine-digit UK number written with its 0 gets an eleven-digit drama number', () => {
     const phone = `0800 ${digits(6)}`;
     const { fake } = fakeOf(`Freephone ${phone} today.`, phone, 'phone', true);
     expect(/^0808 157\d{4}$/.test(fake), 'it becomes 0808 157 0xxx').toBe(true);
   });
 
-  it('C56/unit: the same digits after another country code keep their own country\'s fake, in either order and across turns', () => {
+  it('C58/unit: the same digits after another country code keep their own country\'s fake, in either order and across turns', () => {
     const d = digits(6);
     const [ukNum, esNum] = [`+44 800 ${d}`, `+34 800 ${d}`];
     for (const [a, b] of [[ukNum, esNum], [esNum, ukNum]] as const) {
@@ -80,7 +80,7 @@ describe('C56: phone fakes', () => {
     }
   });
 
-  it('C56/unit: every ten-digit North American number becomes NXX-555-01XX, in each layout', () => {
+  it('C58/unit: every ten-digit North American number becomes NXX-555-01XX, in each layout', () => {
     for (const area of ['212', '415', '800', '155']) {
       const n = `${area}${String(2 + rng.int(8))}${digits(6)}`;
       for (const phone of [`(${n.slice(0, 3)}) ${n.slice(3, 6)}-${n.slice(6)}`, `${n.slice(0, 3)}-${n.slice(3, 6)}-${n.slice(6)}`, `+1 ${n.slice(0, 3)} ${n.slice(3, 6)} ${n.slice(6)}`, `+1 (${n.slice(0, 3)}) ${n.slice(3, 6)}-${n.slice(6)}`]) {
@@ -91,14 +91,14 @@ describe('C56: phone fakes', () => {
   });
 });
 
-describe('C56: address fakes', () => {
+describe('C58: address fakes', () => {
   const words = (lang: 'en' | 'es'): [string, string] => {
     const f = FAKES[lang];
     const plain = (s: string): string => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
     return [plain(f.female[rng.int(f.female.length)] as string), plain(f.last[rng.int(f.last.length)] as string)];
   };
 
-  it('C56/unit: a fake mailbox at a public provider goes to the provider\'s name under .example, in English and Spanish text', () => {
+  it('C58/unit: a fake mailbox at a public provider goes to the provider\'s name under .example, in English and Spanish text', () => {
     const cases: Array<[string, string, string]> = [
       ['en', 'gmail.com', 'Please write to {} today.'], ['en', 'outlook.com', 'Please write to {} today.'], ['en', 'icloud.com', 'Please write to {} today.'],
       ['es', 'gmail.com', 'Escríbeme a {} hoy.'], ['es', 'hotmail.com', 'Escríbeme a {} hoy.'], ['es', 'yahoo.com', 'Escríbeme a {} hoy.'],
@@ -115,7 +115,7 @@ describe('C56: address fakes', () => {
     }
   });
 
-  it('C56/unit: a public provider stays when the address stays or the provider can never issue the fake, and a private host goes under .example', () => {
+  it('C58/unit: a public provider stays when the address stays or the provider can never issue the fake, and a private host goes under .example', () => {
     // A role word stays as written, so the address is the real one and keeps its host. It is built here so no literal names a mailbox someone could own.
     const role = ['info', 'gmail.com'].join('@');
     expect(fakeOf(`Write to ${role} today.`, role, 'email', true).fake === role, 'a role address stays').toBe(true);
@@ -130,11 +130,11 @@ describe('C56: address fakes', () => {
     }
   });
 
-  it('C56/unit: an address in a link goes under .example too, and a reply that writes its fake in capitals comes back, one-shot and streamed', () => {
+  it('C58/unit: an address in a link goes under .example too, and a reply that writes its fake in capitals comes back, one-shot and streamed', () => {
     const [first, last] = words('en');
     const email = `${first}.${last}@gmail.com`;
     const text = `Open https://booking.ward-bookkeeping.example/x?to=${email} or write to ${email}.`;
-    const res = blind([text], { seed: 'C56', now: NOW });
+    const res = blind([text], { seed: 'C58', now: NOW });
     expect(res.texts[0]!.includes('@gmail.com'), 'no fake mailbox at gmail.com').toBe(false);
     expect((res.texts[0]!.match(/@gmail\.example/g) ?? []).length === 2, 'both addresses go under gmail.example').toBe(true);
     const fake = res.mapping.pairs.find((p) => p.kind === 'email' && p.real === email)?.fake as string;
@@ -148,13 +148,13 @@ describe('C56: address fakes', () => {
   });
 });
 
-describe('C56: a mapping from 0.2.0', () => {
-  it('C56/unit: pairs whose fakes were made before this rule keep their fakes in a later turn and come back, and new values get unresolvable fakes', () => {
+describe('C58: a mapping from 0.2.0', () => {
+  it('C58/unit: pairs whose fakes were made before this rule keep their fakes in a later turn and come back, and new values get unresolvable fakes', () => {
     const [first, last] = [FAKES.en.female[0] as string, FAKES.en.last[0] as string].map((s) => s.toLowerCase()) as [string, string];
     const email = `${first}.${last}@gmail.com`;
     const phone = `+44 20 3${digits(7)}`;
     const text = `Write to ${email} or call ${phone}.`;
-    const res = blind([text], { seed: 'C56 old', now: NOW });
+    const res = blind([text], { seed: 'C58 old', now: NOW });
     // Rewrite the pairs the way 0.2.0 made them: the provider kept, a London number with live digits.
     const oldEmail = `${FAKES.en.male[0]!.toLowerCase()}.${FAKES.en.last[1]!.toLowerCase()}@gmail.com`;
     const oldPhone = `+44 20 7${digits(7)}`;
