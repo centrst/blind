@@ -20,12 +20,12 @@ The corpus has 164 Spanish files. Presidio uses its fair configuration with orga
 | Blind corpus | Blind + GLiNER | 99.8% | 98.9% | 98.7% |
 | Blind corpus | Presidio | 48.1% | 45.2% | 89.5% |
 | Blind corpus | LLM Guard | 77.4% | 18.5% | 100% |
-| Gretel | Blind core | 3.0% | 0.9% | 2.7% |
-| Gretel | Blind + GLiNER | 68.6% | 99.2% | 97.9% |
+| Gretel | Blind core | 17.7% | 29.1% | 2.7% |
+| Gretel | Blind + GLiNER | 69.0% | 99.7% | 97.9% |
 | Gretel | Presidio | 42.9% | 50.1% | 83.7% |
 | Gretel | LLM Guard | 35.5% | 18.5% | 85.5% |
 
-Blind core person recall is 82.6% in Spanish and 87.9% in English. GLiNER raises it to 99.8%, the same as on English. On Gretel, GLiNER finds 68.6% of Spanish labels against 94.1% on English. Of 40 sampled Spanish person labels in Gretel, 18 were not names.
+Blind core person recall is 82.6% in Spanish and 87.9% in English. GLiNER raises it to 99.8%, the same as on English. On Gretel, GLiNER finds 69.0% of Spanish person labels against 94.1% on English. This is the known limit of the NER package in Spanish. Of 40 sampled Spanish person labels in Gretel, 18 were not names.
 
 LLM Guard ran its English setup on Spanish. Its measured configuration supports English and Chinese. On the corpus, Blind core found more people and organizations than Presidio, and Presidio found more places. On Gretel, Presidio found more of all three. Presidio found 28.2% of corpus dates and 13.0% of ids. Its date patterns are English, and the Spanish spaCy model has no date label. Only 4 of 34 NIF-shaped ids had valid check letters, partly explaining the gap.
 
@@ -35,18 +35,18 @@ Gretel has no amount labels. Its date labels include durations, frequencies, yea
 
 | Dataset | Tool | ID | Date | Amount | Phone | IBAN |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Blind corpus | Blind core | 100% | 99.8% | 100% | 100% | 100% |
-| Blind corpus | Blind + GLiNER | 100% | 99.8% | 100% | 100% | 100% |
+| Blind corpus | Blind core | 100% | 100% | 100% | 100% | 100% |
+| Blind corpus | Blind + GLiNER | 100% | 100% | 100% | 100% | 100% |
 | Blind corpus | Presidio | 13.0% | 28.2% | 0% | 53.4% | 87.2% |
 | Blind corpus | LLM Guard | 16.2% | 100% | 0% | 86.4% | 100% |
-| Gretel | Blind core | 77.9% | 60.6% | not labeled | 85.9% | 100% |
-| Gretel | Blind + GLiNER | 78.6% | 61.0% | not labeled | 85.9% | 100% |
+| Gretel | Blind core | 77.9% | 60.8% | not labeled | 85.9% | 100% |
+| Gretel | Blind + GLiNER | 78.6% | 61.2% | not labeled | 85.9% | 100% |
 | Gretel | Presidio | 32.1% | 40.9% | not labeled | 77.5% | 100% |
 | Gretel | LLM Guard | 68.7% | 62.7% | not labeled | 94.4% | 100% |
 
 The `Blind + GLiNER` rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
 
-The Blind corpus is home ground. Gretel is synthetic and its labels are incomplete. Replaced but unlabelled values count against precision, so its precision is a floor. On Gretel, Blind with GLiNER has 48.4% Spanish person precision. Spanish person labels are noisy too.
+The Blind corpus is home ground. Gretel is synthetic and its labels are incomplete. Replaced but unlabelled values count against precision, so its precision is a floor. On Gretel, in the October run, Blind with GLiNER had 48.4% Spanish person precision. Spanish person labels are noisy too.
 
 ## Example
 
@@ -74,4 +74,4 @@ The fake total equals the fake cuota plus 20%. DNI and IBAN fakes pass their che
 
 ## Benchmark limits
 
-Reports ran on 2026-10-24 at commit `4f5183f`, except the two Blind corpus rows above, measured again on 2026-11-10 after greetings, signatures, labels, legal suffixes and address words were added. The other tools were not rerun. Blind's corpus is home ground. Gretel is synthetic, outside the corpus and not neutral truth. Its incomplete labels make precision a floor. Blind round tripped 379 corpus and 888 Gretel files. See [RESULTS.md](../../scripts/bench/RESULTS.md) and [RESULTS-llmguard-gretel.md](../../scripts/bench/RESULTS-llmguard-gretel.md).
+Reports ran on 2026-10-24 at commit `4f5183f`. The Blind recall rows were measured again with core 0.2.0, after greetings, signatures, labels, legal suffixes and address words were added: the person, organization and place rows of the corpus on 2026-11-10, the rest of the Blind rows on 2026-11-11 at commit `5369e57`. The person precision figure is from the October run. The other tools were not rerun. Blind's corpus is home ground. Gretel is synthetic, outside the corpus and not neutral truth. Its incomplete labels make precision a floor. Blind round tripped 381 corpus and 888 Gretel files. See [RESULTS.md](../../scripts/bench/RESULTS.md) and [RESULTS-llmguard-gretel.md](../../scripts/bench/RESULTS-llmguard-gretel.md).

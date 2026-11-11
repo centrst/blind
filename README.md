@@ -29,7 +29,7 @@ Contents: [Install](#install) · [Quick start](#quick-start) · [What it looks l
 npm install @centrst/blind
 ```
 
-Node 22 or newer. Before 1.0, a minor version can change the API or the mapping format, and the changelog says when it does. `npm install @centrst/blind@next` installs the newest prerelease instead.
+Node 22 or newer. Before 1.0, a minor version can change the API or the mapping format, and the changelog says when it does. `npm install @centrst/blind@next` installs the `next` prerelease channel instead. That channel moves only when a prerelease is published, so after a stable release it can be older than the default install; `npm view @centrst/blind dist-tags` shows both.
 
 This README describes the source revision you are reading. Each published version bundles its own copy.
 
@@ -495,12 +495,12 @@ Built-in detection is deterministic: known values, patterns with checksums, and 
 
 blind's built-in fakes and formats cover English and Spanish. Each fake follows the language of the value it replaces, read from the name lists, accents, company suffixes, country domains and spelling. A value that says nothing follows its paragraph, then the whole text, and is English when nothing says (C31). Spanish-specific handling includes checked DNI, NIE and CIF numbers, Spanish date and amount formats, and titles such as `Sra.` Spanish company words such as `S.L.`, `Asesores` and `Clínica` help identify sender organizations, and Spanish greetings, closings and labels (`Hola`, `Estimada`, `Un saludo`, `Paciente:`) are read like the English ones. Mixed English and Spanish text was also measured. Other languages are not covered by these built-in lists or tested in these benchmarks. A Korean `known` value is found and leak-checked where a word starts, with a particle or another word glued on after it (`김민수는`, `김민수회사`), and a value of three syllables or more also inside a word; a two-syllable value is not found inside a word and is listed in `leaks.unenforced` with reason `hangul-inside-word`, and a one-syllable one is refused. A Korean name is not split into parts, so the given name alone (`민수`) is found only when it is passed in `known` too.
 
-Strict recall with nothing passed in `known`. The corpus columns were measured on 2026-11-10 on the 381-file corpus (the Hebrew and Arabic cases are in no row). The Gretel column is from the 24 October 2026 benchmark run, before greetings, signatures, labels, legal suffixes and address words were read, and has not been rerun since. The corpus is home ground. The Gretel finance sample is not. Round trip means exact restoration.
+Strict recall with nothing passed in `known`. The corpus columns were measured on 2026-11-10 on the 381-file corpus (the Hebrew and Arabic cases are in no row). The Gretel column was rerun on 2026-11-11 with core 0.2.0. The corpus is home ground. The Gretel finance sample is not. Round trip means exact restoration.
 
-| Language | Corpus files | Person recall | Company recall | ID / date recall | Round trip | Gretel person recall, 24 October |
+| Language | Corpus files | Person recall | Company recall | ID / date recall | Round trip | Gretel person recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| English | 116 | 87.9% | 99.5% | 100% / 100% | 116/116 | 4.5% |
-| Spanish | 164 | 82.6% | 98.2% | 100% / 100% | 164/164 | 3.0% |
+| English | 116 | 87.9% | 99.5% | 100% / 100% | 116/116 | 27.8% |
+| Spanish | 164 | 82.6% | 98.2% | 100% / 100% | 164/164 | 17.7% |
 | Mixed | 99 | 86.9% | 98.3% | 100% / 100% | 99/99 | not measured |
 
 Gretel has 444 English and 444 Spanish documents. They rarely carry sender lines or titles, which is why the core finds so few of their names. Its Spanish person labels are noisy. See the [Spanish language page](docs/languages/spanish.md), the [corpus benchmark](scripts/bench/RESULTS.md) and the [LLM Guard and Gretel benchmark](scripts/bench/RESULTS-llmguard-gretel.md) for methods and caveats.
@@ -568,13 +568,13 @@ Sources: rehydra's [README on npm](https://www.npmjs.com/package/rehydra) (versi
 
 Presidio and LLM Guard ran next to blind on two datasets. blind's own corpus had 379 synthetic emails in English and Spanish when these numbers were measured (two handwritten cases in Hebrew and Arabic were added later), all written by blind's authors, so treat it as home ground. The Gretel sample is 888 synthetic finance documents in English and Spanish that nobody here wrote. Gretel labels only some entities, so precision there is a floor.
 
-Recall and precision on the Gretel sample, with nothing passed in `known`, from the 24 October 2026 run. blind's row predates its reading of greetings, signatures, labels, legal suffixes and address words, and has not been rerun.
+Recall and precision on the Gretel sample, with nothing passed in `known`. The Presidio and LLM Guard rows are from the 24 October 2026 run. The blind core row was rerun on 11 November 2026 with core 0.2.0, which reads greetings, signatures, labels, legal suffixes and address words.
 
 | | names | companies | places | ids | calendar dates, recall |
 | --- | --- | --- | --- | --- | --- |
 | Presidio | 54.5% / 54.3% | 54.3% / 17.6% | 83.8% / 31.3% | 48.9% / 14.3% | 84.9% |
 | LLM Guard | 40.9% / 82.3% | 24.4% / 88.3% | 91.0% / 58.4% | 68.0% / 6.8% | 97.7% |
-| blind core | 3.6% / 76.3% | 0.5% / n/a | 2.1% / n/a | 82.3% / 11.2% | 97.0% |
+| blind core | 22.0% / 88.3% | 30.4% / 88.3% | 2.1% / n/a | 82.3% / 11.2% | 97.5% |
 
 What a model can still use, on blind's corpus, and whether answers map back on both datasets.
 

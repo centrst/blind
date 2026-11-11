@@ -4,6 +4,44 @@ Run on 2026-10-24 at commit `4f5183f` on `fix/round-trip`, with `src` matching t
 
 LLM Guard's columns on this corpus, and a second run of all three tools on a sample of Gretel's synthetic finance documents, are in [RESULTS-llmguard-gretel.md](RESULTS-llmguard-gretel.md). Before the round-trip fix, the Gretel run found round-trip failures in blind that this corpus does not show. After it, blind round trips every file on both datasets.
 
+## Rerun of the blind columns on 2026-11-11
+
+The blind columns were rerun on 2026-11-11 at commit `5369e57`, which carries core `0.2.0`: greetings, signatures, labels, legal suffixes and private addresses now anchor names, and long known lists match without a pattern per entry. The corpus is now 381 files, with the Hebrew and Arabic handwritten cases, which have no annotation in these kinds. The command was `scripts/bench/score.ts` as `pnpm bench:presidio` runs it, without Presidio's raw output, so it scored only the blind columns. Presidio was not rerun: every Presidio number, and every table and paragraph below this section, is from the 2026-10-24 run on 379 files. The + GLiNER columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+
+Strict recall, all 381 files:
+
+| kind | annotated | blind bare | blind known | blind bare + GLiNER | blind bare + GLiNER 0.5 | blind known + GLiNER |
+| --- | --- | --- | --- | --- | --- | --- |
+| person | 1426 | 85.1% | 99.3% | 99.6% | 99.6% | 99.9% |
+| org | 659 | 98.2% | 99.7% | 98.9% | 98.9% | 100.0% |
+| place | 174 | 0.0% | 0.6% | 99.4% | 96.0% | 99.4% |
+| email | 1105 | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
+| url | 265 | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
+| phone | 406 | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
+| iban | 106 | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
+| id | 363 | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
+| amount | 739 | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
+| date | 909 | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
+
+The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+
+Person, org and place recall by language, bare mode, core alone then with GLiNER at 0.3: English (116 files) 87.9% to 99.8%, 99.5% to 100.0% and 0.0% to 100.0%. Spanish (164 files) 82.6% to 99.8%, 98.2% to 98.9% and 0.0% to 98.7%. Mixed (99 files) 86.9% to 100.0%, 98.3% to 98.9% and 0.0% to 100.0%.
+
+Precision, all 381 files, correct of replaced:
+
+| kind | blind bare | blind known | blind bare + GLiNER | blind bare + GLiNER 0.5 | blind known + GLiNER |
+| --- | --- | --- | --- | --- | --- |
+| person | 97.1% (1512/1557) | 97.1% (1485/1530) | 96.7% (1422/1470) | 96.9% (1422/1468) | 96.7% (1426/1475) |
+| org | 99.2% (644/649) | 99.2% (654/659) | 93.1% (651/699) | 93.8% (651/694) | 93.2% (657/705) |
+| place | n/a (0/0) | 100.0% (1/1) | 90.2% (157/174) | 92.7% (152/164) | 90.8% (157/173) |
+| any kind | 98.6% (6054/6139) | 98.6% (6038/6123) | 97.9% (6143/6276) | 98.0% (6135/6259) | 97.9% (6153/6286) |
+
+The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+
+The other kinds have the same precision as before in every blind column: email 96.6%, url, phone, iban, id and date 100.0%, amount 99.9%. Every blind run round trips 381 of 381 files. With core 0.2.0 the core alone now beats every Presidio configuration of the October run on persons and orgs, so the "Where Presidio wins" section below describes the October core. GLiNER now adds mostly places and the last people, at a cost of 6.1 points of org precision in bare mode.
+
+The amounts and dates table below is still the October run.
+
 ## What changed since the previous run
 
 PR #13 claims that recall, precision and amount usability did not move. On this corpus that holds to the span. Every recall, precision, coverage and usability count for the four blind runs is the same as in the run at `dbcb94c`, and the round trip was 379/379 before and after. Presidio's three columns are also the same to the span. The only new numbers are the `blind bare + GLiNER 0.5` column and the timings below.
@@ -152,7 +190,7 @@ On Gretel the gain is real. Wrong person, org and place spans drop from 5,460 to
 
 - blind's authors wrote this corpus. It is mostly bookings, invoices, tax and social-security mail and newsletters in Spanish and English, the mail blind was built for. Its formats for amounts, dates, phones and ids are the ones blind's detectors were written against. Read it as a home-ground test. A neutral corpus, or Presidio's own evaluation data, would likely narrow the structured-value gap.
 - The names in the corpus are invented and often unusual, such as Cordelia Haverford or Remedios Quiroga. Both NER models may behave differently on real names like García or Smith. TESTING.md already warns that the GLiNER numbers are a ceiling for this reason. GLiNER's default threshold was picked after a sweep on this corpus, and its name propagation was built against it. Presidio ran untuned, so the + GLiNER columns have a home advantage of their own.
-- The same holds for blind's core on persons and orgs. Its rules for repeated names, company senders and names before an address were written while looking at this kind of mail. The core starts from a name it found once, in a header, a sender line, a title, the known list or a detector, and then finds it again. Text with no such anchor, such as a pasted paragraph with no headers, gives it less to start from, and its person recall there is likely lower than 67.3%.
+- The same holds for blind's core on persons and orgs. Its rules for repeated names, company senders and names before an address were written while looking at this kind of mail. The core starts from a name it found once, in a header, a sender line, a title, the known list or a detector, and then finds it again. Text with no such anchor, such as a pasted paragraph with no headers, gives it less to start from, and its person recall there is likely lower than on this corpus (67.3% in October, 85.1% with core 0.2.0).
 - The corpus changed during this work. Two org annotations were added to From lines in `004-booking-en` and `005-booking-es`, by the same team that changed the detectors. Both are company sender names, a hotel and a dental clinic, that had no label before.
 - Presidio's results depend on the NLP model. Transformer models, or Presidio's own GLiNER and Stanza integrations, would change the person, org and place rows. Only the spaCy large models were measured. Presidio with a GLiNER recognizer would be the closest like-for-like comparison to blind + GLiNER, and it was not run.
 - The corpus does not annotate clock times, phrases like "this month", or street names. Most of Presidio's date false positives are times such as `15:00` and phrases such as "this month". A privacy tool can defend hiding those. Most of its place and person false positives are not defensible, for example "Tel", "Saludos", "Forwarded", "Subject", "Quedamos" and "Atentamente". A few corpus labels are missing, for example an unannotated "Cordelia's" in one subject line, which slightly understates the precision of every tool.

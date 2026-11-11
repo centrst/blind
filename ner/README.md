@@ -44,17 +44,25 @@ The model runs on onnxruntime-node 1.31.1, whose npm package ships native binari
 
 Prototype numbers: this package is built from this repository and is not on npm.
 
-Synthetic corpus, 379 files, strict recall (the annotated value is gone from the output) and same-kind precision, threshold 0.3, `gliner_multi-v2.1` fp32. Before is `blind` alone. Method and caveats are in [TESTING.md](https://github.com/centrst/blind/blob/main/TESTING.md) section 9. Reproduce with `pnpm ner:eval`.
+Measured on 11 November 2026 against core `0.2.0`, at commit `5369e57`. Synthetic corpus, 381 files, strict recall (the annotated value is gone from the output) and same-kind precision, threshold 0.3, `gliner_multi-v2.1` fp32. Before is `@centrst/blind` 0.2.0 alone. Method and caveats are in [TESTING.md](https://github.com/centrst/blind/blob/main/TESTING.md) section 9. Reproduce with `pnpm ner:eval`.
 
 | Kind | Bare recall | Bare precision | Known recall | Known precision |
 | --- | --- | --- | --- | --- |
-| person | 67.3 to 98.7 | 95.5 to 96.6 | 98.7 to 99.9 | 96.9 to 96.6 |
-| org | 29.9 to 97.7 | 97.8 to 92.7 | 51.8 to 99.7 | 98.8 to 93.0 |
-| place | 0 to 99.4 | 100 to 88.6 | 0.6 to 99.4 | 100 to 89.1 |
+| person | 85.1 to 99.6 | 97.1 to 96.7 | 99.3 to 99.9 | 97.1 to 96.7 |
+| org | 98.2 to 98.9 | 99.2 to 93.1 | 99.7 to 100 | 99.2 to 93.2 |
+| place | 0 to 99.4 | 100 to 90.2 | 0.6 to 99.4 | 100 to 90.8 |
 | other kinds | unchanged | unchanged | unchanged | unchanged |
-| all kinds | 82.1 to 99.4 | 98.4 to 97.9 | 91.7 to 99.9 | 98.6 to 97.9 |
+| all kinds | 93.5 to 99.8 | 98.6 to 97.9 | 97.0 to 99.95 | 98.6 to 97.9 |
 
-Round trips: 379 of 379 exact in both modes. In bare mode the detector brings English person recall to 98.4, Spanish to 99.0 and mixed to 98.7. Spanish is a little lower on org (96.8 against 100 for English) and place (98.7 against 100). The all-kinds precision row comes from the same scorer in `pnpm bench:presidio`.
+Round trips: 381 of 381 exact in both modes. The all-kinds precision row comes from the same scorer in `pnpm bench:presidio`.
+
+What the detector adds on top of core 0.2.0. On emails the core already finds most people and nearly every company from greetings, signatures, labels, titles and legal suffixes, so the detector adds mostly places, which the core has no detector for, and the people the core misses: in bare mode person recall goes from 85.1 to 99.6, org from 98.2 to 98.9 and place from 0 to 99.4. It costs 6.1 points of org precision and 0.4 of person precision. By language in bare mode, English person recall goes from 87.9 to 99.8 and Spanish from 82.6 to 99.8. English org is 99.5 to 100 and Spanish 98.2 to 98.9. Place is 0 to 100 in English and 0 to 98.7 in Spanish.
+
+On documents the core has little to anchor on, and the detector finds most names. On the Gretel sample of 888 synthetic finance documents, 444 English and 444 Spanish, rerun on 11 November 2026 with the blind columns of `pnpm bench:gretel`, the core alone finds 22.0% of person labels, 30.4% of companies and 2.1% of addresses. With the detector it finds 79.7%, 99.8% and 98.6%. English person recall goes from 27.8% to 94.1%.
+
+Spanish names on Gretel are a known limit. With the detector, Spanish person recall there is 69.0%, against 94.1% in English (the core alone: 17.7% and 27.8%). Part of the gap is Gretel's labelling: many of its Spanish `name` labels are not names, such as greetings, table headings and placeholders like `[Nombre del Empleado]`. On the synthetic emails Spanish and English person recall are both 99.8%.
+
+Precision is the cost on documents. In the 24 October 2026 Gretel run, 40.1% of the detector's person spans and 29.4% of its org spans landed on a Gretel label of that kind. Gretel labels only some entities, so these numbers are a floor. The full tables are in [RESULTS-llmguard-gretel.md](https://github.com/centrst/blind/blob/main/scripts/bench/RESULTS-llmguard-gretel.md).
 
 Speed depends on the machine and the model file, and each number below names its setup, as the [main README](https://github.com/centrst/blind/blob/main/README.md#measured) does. The fp32 model on the native ONNX Runtime addon, on CPU, took 47 ms per email on an Apple M4 Max with onnxruntime-node 1.30.0, where the process peaks at about 3.2 GB while it loads ([docs/BROWSER-NER.md](https://github.com/centrst/blind/blob/main/docs/BROWSER-NER.md)); 49 ms per corpus email and 107 ms per Gretel document on the arm64 Mac that ran the benchmarks, chip not recorded ([RESULTS-llmguard-gretel.md](https://github.com/centrst/blind/blob/main/scripts/bench/RESULTS-llmguard-gretel.md)); and 175 ms per email in the first measurement, on an older M-series Mac whose chip was not recorded. The core alone takes under a millisecond.
 
