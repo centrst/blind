@@ -208,8 +208,7 @@
       "Priya",
       "Raman"
     ],
-    "expect": "silent",
-    "why": "A sign-off counts only on the line right after the closing. With a blank line between them the name is a line of capitalised words like a heading, and nothing else in the text names it.",
+    "expect": "replaced",
     "seed": "adv"
   },
   {
@@ -232,8 +231,7 @@
       "Ashworth",
       "Dorsal"
     ],
-    "expect": "silent",
-    "why": "A sign-off counts only when the line right after the closing holds nothing but capitalised words. A title after a comma makes it a line of prose, so neither the name nor the company below it is taken.",
+    "expect": "replaced",
     "seed": "adv"
   },
   {
@@ -245,6 +243,29 @@
     ],
     "expect": "silent",
     "why": "Only a host label of two to six hyphenated words marks a company in the text. A one-word label is too often an ordinary word to take as a name.",
+    "seed": "adv"
+  },
+  {
+    "id": "X18",
+    "title": "sign-off a blank line below its closing, with a job title and a company line",
+    "text": "Thanks again.\n\nBest regards,\n\nTobias Wren, Head of Sales\nMarlowe Partners",
+    "secrets": [
+      "Tobias",
+      "Wren",
+      "Marlowe"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "X19",
+    "title": "Spanish sign-off a blank line below its closing, with a job title and a company line",
+    "text": "Quedo a la espera.\n\nAtentamente,\n\nMaría José Ferrán Gil, Directora Financiera\nFerrán Asesores S.L.",
+    "secrets": [
+      "María José",
+      "Ferrán"
+    ],
+    "expect": "replaced",
     "seed": "adv"
   }
 ]

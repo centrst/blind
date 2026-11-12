@@ -85,11 +85,11 @@ describe.skipIf(!HAS_TC || !HAS_ORT)('token-classification runner with the train
   });
 
   for (const file of ['onnx/model.onnx', 'onnx/model_int8.onnx']) {
-    it(`all 381 corpus files round trip exactly in bare and known mode with ${file} plugged in`, async () => {
+    it(`all 382 corpus files round trip exactly in bare and known mode with ${file} plugged in`, async () => {
       if (!existsSync(join(TC_DIR, file))) return;
       const m = file === 'onnx/model.onnx' ? model : await TokenClassifierModel.load(TC_DIR, { file });
       const ner = createNerDetector(m);
-      expect(files.length).toBe(381);
+      expect(files.length).toBe(382);
       const failures: string[] = [];
       for (const f of files) {
         const det = await ner.prepare([f.parsed.text]);

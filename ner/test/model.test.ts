@@ -22,8 +22,8 @@ describe.skipIf(!HAS_MODEL || !HAS_ORT)('NER detector with the GLiNER model', ()
     for (const f of files) prepared.set(f.name, await ner.prepare([f.parsed.text]));
   });
 
-  it('C15/corpus: all 381 corpus files round trip exactly in bare and known mode with the detector on', () => {
-    expect(files.length).toBe(381);
+  it('C15/corpus: all 382 corpus files round trip exactly in bare and known mode with the detector on', () => {
+    expect(files.length).toBe(382);
     const failures: string[] = [];
     for (const mode of ['bare', 'known'] as const) {
       for (const f of files) {
