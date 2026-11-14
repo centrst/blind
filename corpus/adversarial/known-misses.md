@@ -2,7 +2,7 @@
 
 Generated from `corpus/adversarial/*.json` by `pnpm known-misses`. Do not edit by hand.
 
-28 inputs slip through silently. 57 more in the same set are caught, either replaced or reported by the leak check. Each miss below has a test marked expected-to-fail, so the build notices the day one starts working and this list gets shorter.
+26 inputs slip through silently. 63 more in the same set are caught, either replaced or reported by the leak check. Each miss below has a test marked expected-to-fail, so the build notices the day one starts working and this list gets shorter.
 
 A miss is silent when the value stays in the blind text and the leak check has nothing recorded to look for. When the leak check can see the value it reports it and the CLI exits 2, which counts as caught.
 
@@ -11,9 +11,7 @@ A miss is silent when the value stays in the blind text and the leak check has n
 | X6 | context | `"Usuario: ana_ruiz en la plataforma"` | An underscore counts as a word character, so the name is not a whole word. The leak check applies the same rule. |
 | X7 | context | `"Handle: @AnaRuiz_Design"` | Camel case glues the two names into one word, which the whole-word rule skips. |
 | X8 | context | `"Gracias #anaruiz por todo"` | Joined lower-case names are one token, not a known form. |
-| X14 | context | `"Thanks for the call.\n\nKind regards,\n\nPriya Raman"` | A sign-off counts only on the line right after the closing. With a blank line between them the name is a line of capitalised words like a heading, and nothing else in the text names it. |
 | X15 | context | `"The retainer for Strand & Partners is due on Friday."` | In prose only a legal suffix marks a company. A company word alone (Partners, Group, Studio) is too common in ordinary sentences to count, so a known list or a NER detector finds it. |
-| X16 | context | `"Thanks for the call.\n\nRegards,\nOdette Ashworth, CEO\nDorsal Partners"` | A sign-off counts only when the line right after the closing holds nothing but capitalised words. A title after a comma makes it a line of prose, so neither the name nor the company below it is taken. |
 | X17 | context | `"From: ana@dorsal.example\n\nThe Dorsal team will call."` | Only a host label of two to six hyphenated words marks a company in the text. A one-word label is too often an ordinary word to take as a name. |
 | E2 | encodings | `"Hola Ana R=\nuiz, adjunto."` | The soft break splits the surname, so the known name pattern fails on it. The first name is still replaced. |
 | E3 | encodings | `"From: =?UTF-8?Q?Mar=C3=ADa_Garc=C3=ADa?= says hi"` | The encoded-word form hides the name from every pattern and from the leak check. |

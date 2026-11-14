@@ -114,6 +114,26 @@ describe('C58: address fakes', () => {
     return [plain(f.female[rng.int(f.female.length)] as string), plain(f.last[rng.int(f.last.length)] as string)];
   };
 
+  it('C21/C58: different addresses at one public provider stay distinct and unownable across calls', () => {
+    for (const host of ['gmail.com', 'outlook.com']) {
+      for (const seed of ['alder', 'birch', 'cedar', 'dogwood', 'elm', 'fir']) {
+        const one = `maple@${host}`;
+        const two = `oak@${host}`;
+        const first = blind([`Copy to ${one}.`], { seed, now: NOW });
+        const next = blind([`Copy to ${two}.`], { mapping: first.mapping, now: NOW });
+        const pair = (real: string) => next.mapping.pairs.find((p) => p.kind === 'email' && p.real === real);
+        const a = pair(one)?.fake ?? '';
+        const b = pair(two)?.fake ?? '';
+        expect(a !== '' && b !== '' && a.toLowerCase() !== b.toLowerCase(), 'distinct mailboxes have distinct fakes').toBe(true);
+        for (const [real, fake] of [[one, a], [two, b]] as const) {
+          const at = fake.lastIndexOf('@');
+          expect(unownableMailbox(fake.slice(0, at), fake.slice(at + 1)), 'collision retries keep the fake unownable').toBe(true);
+          expect(unblind(fake.toUpperCase(), next.mapping).text === real, 'each fake restores the correct mailbox in another case').toBe(true);
+        }
+      }
+    }
+  });
+
   it('C58/unit: a fake mailbox at a public provider goes to the provider\'s name under .example, in English and Spanish text', () => {
     const cases: Array<[string, string, string]> = [
       ['en', 'gmail.com', 'Please write to {} today.'], ['en', 'outlook.com', 'Please write to {} today.'], ['en', 'icloud.com', 'Please write to {} today.'],

@@ -175,5 +175,30 @@
     "expect": "silent",
     "why": "The amount pattern reads a sign before the currency or the number, not between a currency code and the number, so EUR -100 is not an amount to blind. It goes out unscaled, and a computed EUR -74 in an answer comes back unchanged without being listed in invented. -100 €, -€100.00 and -$1,234.56 are scaled.",
     "seed": "adv"
+  },
+  {
+    "id": "F18",
+    "title": "private ids written beside a model name, a commit and a UUID",
+    "text": "Order ord-2026-88412 and ref #123456 failed on gpt-4o-2024-08-06 at commit 3f9a2c7, request 6f1c2b9e-4d3a-4e8f-9b7c-2a1d5e6f7c80, card 4111 1111 1111 1111.",
+    "secrets": [
+      "ord-2026-88412",
+      "123456",
+      "4111 1111 1111 1111"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
+  },
+  {
+    "id": "F19",
+    "title": "Spanish ids written beside a model name and a commit",
+    "text": "El cliente con DNI 12345678Z, NIE X1234567L, CIF B81866723 e IBAN ES91 2100 0418 4502 0005 1332 lo vio en gpt-4o-2024-08-06, commit 3f9a2c7.",
+    "secrets": [
+      "12345678Z",
+      "X1234567L",
+      "B81866723",
+      "ES91 2100 0418 4502 0005 1332"
+    ],
+    "expect": "replaced",
+    "seed": "adv"
   }
 ]

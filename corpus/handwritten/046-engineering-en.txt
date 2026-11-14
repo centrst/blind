@@ -1,0 +1,16 @@
+From: {{person:Odile Brackenridge}} <{{email:odile@larkspur-analytics.example}}>
+To: {{person:Tomasz Vellacott}} <{{email:tomasz@larkspur-analytics.example}}>
+Subject: Summariser regression
+
+Hi {{person:Tomasz}},
+
+The regression came in with commit 3f9a2c7, full hash 9b1e4c2d7a6f80513e2d4b9c7a1f0e3d5c8b2a64. We had moved the summariser to gpt-4o-2024-08-06 the day before, and claude-3-5-sonnet-20241022 does not show it. The failing request id was 6f1c2b9e-4d3a-4e8f-9b7c-2a1d5e6f7c80.
+
+The fix is in src/v2024/parser1234.ts, and ./build/output-20241102.log has the trace. It ships in release-2026-01-15, which takes the client from 2.14.3 to v3.0.0-rc.1. The badge colour stays #1f6feb. The replacement sensor is SKU-4417-BLK.
+
+The customer noticed it on order {{id:ORD-2026-88412}}, account number {{id:48151623}}, and asked for a refund of {{amount:£240.00}} by {{date:20 November 2026}}.
+
+Kind regards,
+
+{{person:Odile Brackenridge}}, Head of Data
+{{org:Larkspur Analytics Ltd}}
