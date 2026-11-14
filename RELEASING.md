@@ -120,11 +120,11 @@ Changesets ignores this package, so `pnpm changeset` notes are for the core only
 
 ### The core range
 
-`ner/package.json` names the core as a peer dependency with `workspace:^`. pnpm links the workspace copy and, when it packs, writes a caret range on the core's version in this tree: `^0.2.0` while the core is `0.2.0`. So each NER version names the core it was built and tested with, and nobody edits the range. The tarball is made with `pnpm pack`, never `npm pack`, which would ship the `workspace:` text. The publish job refuses a tarball whose peer range is not a plain version range.
+`ner/package.json` names the core as a peer dependency with `workspace:^`. pnpm links the workspace copy and, when it packs, writes a caret range on the core's version in this tree: `^0.3.0` while the core is `0.3.0`. So each NER version names the core it was built and tested with, and nobody edits the range. The tarball is made with `pnpm pack`, never `npm pack`, which would ship the `workspace:` text. The publish job refuses a tarball whose peer range is not a plain version range.
 
 That makes the order fixed: the core first. The workflow refuses an NER release, on either channel, while changesets are pending or while npm does not have the core version in `package.json`. Otherwise the NER tarball would name a core nobody can install, or would have been tested against core source that npm does not have.
 
-The first NER release follows core `0.2.0`, so its range is `^0.2.0`. Before 1.0 a caret range stops at the next minor, so after each core minor, release the NER package again, even with no changes of its own.
+The first NER release follows a verified, published core release, and its peer range names that core version. Before 1.0 a caret range stops at the next minor, so after each core minor, release the NER package again, even with no changes of its own.
 
 ### Gate
 

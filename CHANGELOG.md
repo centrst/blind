@@ -2,6 +2,24 @@
 
 All notable changes to this project are written down here. Changesets writes each version's entry from the notes in `.changeset`, grouped as major, minor and patch changes. The project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.0
+
+Upgrading from 0.2.0 does not repair existing mappings. Inspect the `email` entries in `mapping.pairs`, grouping them by `fake.toLowerCase()`. A group assigned to different original addresses, rather than alternate spellings of the same address, is affected. Such mappings can still restore a case-changed reply to the wrong address without reporting a collision.
+
+For an affected mapping, start a new conversation with a fresh mapping and the original source text. Do not apply the new mapping to old substituted text or replies. Check addresses in previously restored replies against the original mail and correct any misattributions before using them.
+
+### Minor Changes
+
+- 37829a2: A sign-off name is found one blank line below its closing (`Kind regards,`, a blank line, `Priya Raman`) and with a job title after a comma (`Odette Ashworth, CEO`), and the company line under it is found as before. Both used to go out as written.
+
+  Technical text is no longer replaced as an id. A lower-case git SHA, a UUID, a hex colour after `#`, a value of up to 24 characters marked as a SKU (`SKU-4417-BLK`), and a lower-case model, release or file name made of words, version pieces and dates (`gpt-4o-2024-08-06`, `claude-3-5-sonnet-20241022`, `release-2026-01-15`, `src/v2024/parser1234.ts`) now stay as written. They used to become look-alikes such as `tci-7a-2283-14-27`. Order references in capitals, a lower-case one whose number is not a date, digits after `#`, product codes without the SKU mark and every typed id (cards, SSN, IBAN, DNI, NIE, CIF, VAT) are replaced as before, a typed id inside a SKU included (`SKU-12345678Z` keeps its mark and gets the DNI's fake).
+
+  An explicit private-id label replaces the whole value even when it looks like a long technical token, so a UUID's numeric suffix cannot escape replacement.
+
+### Patch Changes
+
+- c15d891: Two different addresses no longer get two letter cases of one fake. A second address at a host that already had a fake, met in a later call or drawing the same word by chance, used to get the first address's fake in capitals. A reader took the two for one mailbox, and a reply that wrote the fake in another case came back as the wrong address. Each address now gets a fake of its own, numbered when a host has more addresses than there are words to draw. One address written in two letter cases still gets two cases of one fake.
+
 ## 0.2.0
 
 Upgrading from 0.1.0: a call blind cannot read as meant now throws `invalid-option` (texts that are not an array of strings, an unknown option, a numeric `seed`), and a damaged mapping throws `invalid-mapping`. blind also finds names and companies it used to leave as written, so the same seed gives a different blind copy than 0.1.0 did. A mapping from 0.1.0 still unblinds and continues a conversation, unless it was made with a numeric `seed`, which the types never allowed: set `mapping.seed = String(mapping.seed)` first.
