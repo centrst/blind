@@ -8,8 +8,7 @@
       "Brookhaven",
       "97399"
     ],
-    "expect": "silent",
-    "why": "No built-in detector looks for postal addresses, and a place is found only from `known`. The name above the street is replaced because the greeting names it, which makes the block look redacted. Issue #52.",
+    "expect": "replaced",
     "seed": "adv"
   },
   {
@@ -21,8 +20,7 @@
       "Brookhaven",
       "97399"
     ],
-    "expect": "silent",
-    "why": "No built-in detector looks for street addresses. The house number has too few digits to be an id and the ZIP code is a bare five-digit number.",
+    "expect": "replaced",
     "seed": "adv"
   },
   {
@@ -34,8 +32,7 @@
       "Ashcombe Vale",
       "ZZ1 4QX"
     ],
-    "expect": "silent",
-    "why": "No built-in detector looks for street addresses or UK postcodes.",
+    "expect": "replaced",
     "seed": "adv"
   },
   {
@@ -47,8 +44,7 @@
       "52990",
       "Torrebruna"
     ],
-    "expect": "silent",
-    "why": "No built-in detector looks for street addresses or postal codes, and `Dirección:` is not a label any detector reads.",
+    "expect": "replaced",
     "seed": "adv"
   },
   {
@@ -58,8 +54,7 @@
     "secrets": [
       "ZZ1 4QX"
     ],
-    "expect": "silent",
-    "why": "No built-in detector looks for postal codes, and a UK postcode has too few digits to be an id.",
+    "expect": "replaced",
     "seed": "adv"
   },
   {
@@ -81,8 +76,7 @@
     "secrets": [
       "Odalys Brenwick"
     ],
-    "expect": "silent",
-    "why": "A name is found after a greeting, a closing, a title or a person label such as `Name:`. An address label is none of these, so a name the text writes nowhere else goes through.",
+    "expect": "replaced",
     "seed": "adv"
   },
   {
@@ -273,6 +267,86 @@
     ],
     "expect": "silent",
     "why": "The titles that mark a name are English and Spanish. `Frau`, `Herr`, `M.` and `Mme` are not among them.",
+    "seed": "adv"
+  },
+  {
+    "id": "G25",
+    "title": "street without a house number",
+    "text": "She lives on Larkspur Hollow Rd near the school.",
+    "secrets": [
+      "Larkspur Hollow"
+    ],
+    "expect": "silent",
+    "why": "A street line needs a house number before its name. Without one, a name and a suffix read like any capitalised phrase.",
+    "seed": "adv"
+  },
+  {
+    "id": "G26",
+    "title": "German address layout",
+    "text": "Lieferadresse: Tannenweg 12, 99998 Kleinhausen",
+    "secrets": [
+      "Tannenweg",
+      "99998",
+      "Kleinhausen"
+    ],
+    "expect": "silent",
+    "why": "The street patterns read English and Spanish layouts. A German street written as one word with the number after it is neither, and `Lieferadresse` is not a block label.",
+    "seed": "adv"
+  },
+  {
+    "id": "G27",
+    "title": "town, state and ZIP code in a sentence",
+    "text": "Our office in Brookhaven, OR 97399 opens on Monday.",
+    "secrets": [
+      "Brookhaven",
+      "97399"
+    ],
+    "expect": "silent",
+    "why": "A town, region and postal code count after a street, on a line of their own or after a postal label. In a sentence with no street before them, the town's first word cannot be told from the words that open the sentence.",
+    "seed": "adv"
+  },
+  {
+    "id": "G28",
+    "title": "flat number on its own line above the street",
+    "text": "Flat 3\n12 Quillon Road\nAshcombe Vale\nZZ1 4QX",
+    "secrets": [
+      "Flat 3"
+    ],
+    "expect": "silent",
+    "why": "The lines after a street line count as its locality. A unit on the line before it, outside a labelled block, is not read. The street, town and postcode are replaced.",
+    "seed": "adv"
+  },
+  {
+    "id": "G29",
+    "title": "town after a street, then the rest of the sentence",
+    "text": "Please send it to 4417 Larkspur Hollow Rd, Brookhaven by Friday.",
+    "secrets": [
+      "Brookhaven"
+    ],
+    "expect": "silent",
+    "why": "A town alone after a street counts only up to a comma, a stop or the end of its line. Followed by more of the sentence, its words cannot be told from the start of a new clause (`Rd, Please call`). The street is replaced.",
+    "seed": "adv"
+  },
+  {
+    "id": "G30",
+    "title": "town alone on the line below a street",
+    "text": "4417 Larkspur Hollow Rd\nBrookhaven",
+    "secrets": [
+      "Brookhaven"
+    ],
+    "expect": "silent",
+    "why": "Outside a labelled block, a line below a street counts when it holds a postal code, or is a town with a postal code line after it. A capitalised line alone could be the next sentence, so it is not read. The street is replaced.",
+    "seed": "adv"
+  },
+  {
+    "id": "G31",
+    "title": "long note above a lower-case street in a block",
+    "text": "Ship to\nPlease leave the parcel with the neighbour at the back door\n4417 larkspur hollow rd",
+    "secrets": [
+      "larkspur hollow"
+    ],
+    "expect": "silent",
+    "why": "A block passes over up to two lines of six words or fewer above the street. A longer line ends it, so a sentence below a label is not read as an address, and a street in lower case is found only inside a block.",
     "seed": "adv"
   }
 ]

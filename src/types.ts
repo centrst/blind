@@ -140,7 +140,7 @@ export interface LeakReport {
   /**
    * True when nothing survived and, in paranoid mode, nothing looks private. `unenforced` never makes it false.
    * "Nothing survived" covers only the values blind found and the ones given in `known` and `deny`. A value of a
-   * kind blind has no detector for, such as a postal address, is never found, so without paranoid mode it never
+   * kind blind has no detector for, such as a town named only in a sentence, is never found, so without paranoid mode it never
    * makes `ok` false unless it was given in `known` or `deny`. The README's "What it does not find" lists those kinds.
    */
   ok: boolean;

@@ -1,3 +1,4 @@
+import { detectAddresses } from './address.js';
 import { detectAmounts, MAX_AMOUNT_DIGITS } from './amounts.js';
 import { detectDates } from './dates.js';
 import { foldLookalikes, skeleton } from './fold.js';
@@ -18,6 +19,8 @@ export const PRIORITY = {
   phone: 85,
   amount: 80,
   date: 78,
+  /** Above `known`, so a known town inside an address does not leave the rest of it behind. */
+  address: 72,
   known: 70,
   displayName: 65,
   honorific: 63,
@@ -196,6 +199,8 @@ const PHONE_RES: RegExp[] = [
   /(?<![\p{L}\p{N}+])(?<![\d][.,])07\d{3}[ .\-]?\d{3}[ .\-]?\d{3}(?!\d)/gu,
 ];
 
+const ZIP4 = /^\d{5}-\d{4}$/u;
+
 export const phoneDetector: Detector = {
   name: 'phone',
   detect(text) {
@@ -210,7 +215,11 @@ export const phoneDetector: Detector = {
     if (out.length === 0) return out;
     // Digits an amount holds are that amount: `650.000.000 €` and `850 000 000 EUR` are not phone numbers.
     const amounts = coverage(detectAmounts(text), text.length);
-    return out.filter((s) => !covered(amounts, s.start, s.end));
+    // A ZIP+4 code inside an address is its postal code, not a phone: `97399-1234` of `Brookhaven, OR 97399-1234`.
+    // Any other phone stays one, a phone line in a labelled address block included.
+    const zips = new Set(out.filter((s) => ZIP4.test(text.slice(s.start, s.end))));
+    const places = zips.size ? coverage(detectAddresses(text).places.map(([start, end]) => ({ start, end })), text.length) : undefined;
+    return out.filter((s) => !covered(amounts, s.start, s.end) && !(places && zips.has(s) && everyCovered(places, s.start, s.end)));
   },
 };
 
@@ -663,6 +672,12 @@ const lineSpans = (text: string): Array<{ start: number; content: string; at: nu
  * words keep a greeting, sign-off or label from counting (`Hi team`,
  * `Dear Customer`, `Regards,` then `Accounts`).
  */
+/** What a capitalised run where a name is expected is: a person, a company, or nothing. */
+function namedKind(run: string): 'person' | 'org' | null {
+  if (ORG_WORD.test(run) || LEGAL_END_RE.test(run)) return orgRunOk(run) ? 'org' : null;
+  return personRun(run) ? 'person' : null;
+}
+
 export const cueDetector: Detector = {
   name: 'cues',
   detect(text) {
@@ -671,11 +686,9 @@ export const cueDetector: Detector = {
       if (run.length < 2) return;
       out.push({ start, end: start + run.length, kind, priority: PRIORITY.cue });
     };
-    /** A capitalised run where a name is expected: a person, a company, or nothing. */
     const named = (start: number, run: string): void => {
-      if (ORG_WORD.test(run) || LEGAL_END_RE.test(run)) {
-        if (orgRunOk(run)) add(start, run, 'org');
-      } else if (personRun(run)) add(start, run, 'person');
+      const kind = namedKind(run);
+      if (kind) add(start, run, kind);
     };
     const lines = lineSpans(text);
     lines.forEach((line, i) => {
@@ -770,9 +783,26 @@ function opensSentence(text: string, at: number): boolean {
   return i < 0 || /[\n.!?:]/u.test(text[i] as string);
 }
 
+/**
+ * Postal addresses as `place` spans (see `detectAddresses`), and the line above
+ * the street of a labelled block (`Ship to`) as the person or company it names.
+ */
+export const addressDetector: Detector = {
+  name: 'address',
+  detect(text) {
+    const { places, recipients } = detectAddresses(text);
+    const out: Span[] = places.map(([start, end]) => ({ start, end, kind: 'place', priority: PRIORITY.address }));
+    for (const [start, end] of recipients) {
+      const kind = namedKind(text.slice(start, end));
+      if (kind && end - start >= 2) out.push({ start, end, kind, priority: PRIORITY.cue });
+    }
+    return out;
+  },
+};
+
 export const builtinDetectors: Detector[] = [
   urlDetector, emailDetector, ibanDetector, typedIdDetector, phoneDetector, amountDetector, dateDetector,
-  contextDetector, idDetector, cueDetector,
+  contextDetector, idDetector, cueDetector, addressDetector,
 ];
 
 // ---------------------------------------------------------------- known values
@@ -1105,6 +1135,12 @@ function coverage(spans: ReadonlyArray<{ start: number; end: number }>, length: 
   const c = new Uint8Array(length);
   for (const s of spans) c.fill(1, Math.max(0, s.start), Math.min(length, s.end));
   return c;
+}
+
+/** Whether every offset in `[start, end)` is covered. */
+function everyCovered(c: Uint8Array, start: number, end: number): boolean {
+  for (let i = Math.max(0, start), e = Math.min(c.length, end); i < e; i++) if (!c[i]) return false;
+  return end > start;
 }
 
 /** Whether any offset in `[start, end)` is covered. */

@@ -1,3 +1,4 @@
+import { detectAddresses } from './address.js';
 import { detectAmounts } from './amounts.js';
 import { dateKey, detectDates } from './dates.js';
 import { oneLetterPart, shortNamePart, stopWordValue, twoLetterStop, writtenAs } from './detect.js';
@@ -29,6 +30,14 @@ export interface LeakInput {
   dateOrder: DateOrder;
   /** The `known` entries enforced only in part, from `checkKnown`. They go into the report as given and never make it fail. */
   unenforced?: UnenforcedKnown[];
+  /**
+   * Report an address left in an output: a street, locality or postal code the
+   * address patterns read whose house number or postal code lies outside every
+   * range the engine wrote. False when `place` is kept.
+   */
+  addresses?: boolean;
+  /** Per output text, the ranges of spans of a kept kind, written as they stand. The address sweep does not report digits inside them. */
+  kept?: Array<Array<[number, number]>>;
 }
 
 const norm = (s: string): string => skeleton(foldLookalikes(s)).text;
@@ -238,6 +247,26 @@ function scan(input: LeakInput, prep: Prepared): LeakReport {
     }
     for (const d of detectDates(out, input.dateOrder)) {
       if (input.dateKeys.has(dateKey(d.occ)) && !overlaps(d.start, d.end, ranges)) push('date', d.start);
+    }
+    if (input.addresses) {
+      // A fake address is inside a range the engine wrote. One whose numbers are not is still the real one, or part of it.
+      let wrote: Uint8Array | undefined;
+      // Detection read the folded text, so the sweep does too: a full-width house number (`４４１７`) is a number.
+      // The fold keeps every length, so its offsets are the output's.
+      const folded = foldLookalikes(out);
+      for (const [s, e] of detectAddresses(folded).places) {
+        if (!wrote) {
+          wrote = new Uint8Array(out.length);
+          for (const [a, b] of ranges) wrote.fill(1, a, b);
+          for (const [a, b] of input.kept?.[textIndex] ?? []) wrote.fill(1, a, b);
+        }
+        for (let i = s; i < e; i++) {
+          if (!wrote[i] && /\d/u.test(folded[i] as string)) {
+            push('place', s);
+            break;
+          }
+        }
+      }
     }
 
     for (const e of prep.deny) {

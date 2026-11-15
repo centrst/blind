@@ -3,7 +3,7 @@
     "recall": {
       "person": 85,
       "org": 98,
-      "place": 0,
+      "place": 1,
       "email": 100,
       "url": 100,
       "phone": 100,
@@ -30,7 +30,7 @@
     "recall": {
       "person": 99,
       "org": 99,
-      "place": 0,
+      "place": 2,
       "email": 100,
       "url": 100,
       "phone": 100,

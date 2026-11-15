@@ -2,7 +2,7 @@
 
 Generated from `corpus/adversarial/*.json` by `pnpm known-misses`. Do not edit by hand.
 
-50 inputs slip through silently. 63 more in the same set are caught, either replaced or reported by the leak check. Each miss below has a test marked expected-to-fail, so the build notices the day one starts working and this list gets shorter.
+51 inputs slip through silently. 69 more in the same set are caught, either replaced or reported by the leak check. Each miss below has a test marked expected-to-fail, so the build notices the day one starts working and this list gets shorter.
 
 A miss is silent when the value stays in the blind text and the leak check has nothing recorded to look for. When the leak check can see the value it reports it and the CLI exits 2, which counts as caught.
 
@@ -20,13 +20,7 @@ A miss is silent when the value stays in the blind text and the leak check has n
 | F13 | formats | `"Patient Ana Ruiz was seen on Tuesday and sent home."` | A name in plain prose with no title, address or known list entry has nothing a pattern can hold on to. A NER detector (the optional @centrst/blind-ner package) or a known list finds it. |
 | F14 | formats | `"Reference 123 45 6789 is on the form."` | Three short digit groups separated by spaces look like many other numbers. Only the dashed form, or the spaced form after a label such as SSN, counts as an SSN. |
 | F17 | formats | `"A refund of EUR -100 was booked against the old order."` | The amount pattern reads a sign before the currency or the number, not between a currency code and the number, so EUR -100 is not an amount to blind. It goes out unscaled, and a computed EUR -74 in an answer comes back unchanged without being listed in invented. -100 €, -€100.00 and -$1,234.56 are scaled. |
-| G1 | gaps | `"Hello Jordan Pemberton,\n\nYou sent a payment of $47.88 USD to Example Indexer LLC on Mar 3, 2026.\n\nShipping address\nJordan Pemberton\n4417 Larkspur Hollow Rd Apt 2B\nBrookhaven, OR 97399\nUnited States\n\nTransaction ID: 7XK29384LM102938P"` | No built-in detector looks for postal addresses, and a place is found only from `known`. The name above the street is replaced because the greeting names it, which makes the block look redacted. Issue #52. |
-| G2 | gaps | `"Please send it to 4417 Larkspur Hollow Rd, Brookhaven, OR 97399 by Friday."` | No built-in detector looks for street addresses. The house number has too few digits to be an id and the ZIP code is a bare five-digit number. |
-| G3 | gaps | `"Deliver to Flat 3, 12 Quillon Road, Ashcombe Vale ZZ1 4QX."` | No built-in detector looks for street addresses or UK postcodes. |
-| G4 | gaps | `"Dirección: Calle de los Tilos Altos 14, 3º B, 52990 Torrebruna."` | No built-in detector looks for street addresses or postal codes, and `Dirección:` is not a label any detector reads. |
-| G5 | gaps | `"Postcode: ZZ1 4QX"` | No built-in detector looks for postal codes, and a UK postcode has too few digits to be an id. |
 | G6 | gaps | `"We met in Torrebruna last week and again in Ashcombe Vale."` | A place is found only from `known` or a detector the caller adds. Nothing in the core marks a capitalised word as a town. |
-| G7 | gaps | `"Ship to\nOdalys Brenwick\n\nThank you for your order."` | A name is found after a greeting, a closing, a title or a person label such as `Name:`. An address label is none of these, so a name the text writes nowhere else goes through. |
 | G8 | gaps | `"The pickup point is 41.0213, -31.4472 behind the shop."` | No built-in detector looks for coordinates. Each half is a decimal number without a currency, which is not an amount. |
 | G9 | gaps | `"Card ending 4242, CVV 381, expires 04/29."` | A three-digit code is too short to be an id, `CVV` is not an id label, and a month and two-digit year is not a date to blind. |
 | G10 | gaps | `"The van was ZZ71 QXJ, parked outside."` | No built-in detector looks for plates. With two digits it is too weak to be an id. |
@@ -44,6 +38,13 @@ A miss is silent when the value stays in the blind text and the leak check has n
 | G22 | gaps | `"Rufen Sie (030) 123 45 67 an."` | A bracketed area code with a leading 0 and groups of three, two and two digits matches none of the phone layouts. |
 | G23 | gaps | `"Rendez-vous le 7 avril 2026 au cabinet."` | The date patterns read English and Spanish month names, not French ones. |
 | G24 | gaps | `"Sehr geehrte Frau Brenwick, anbei die Rechnung."` | The titles that mark a name are English and Spanish. `Frau`, `Herr`, `M.` and `Mme` are not among them. |
+| G25 | gaps | `"She lives on Larkspur Hollow Rd near the school."` | A street line needs a house number before its name. Without one, a name and a suffix read like any capitalised phrase. |
+| G26 | gaps | `"Lieferadresse: Tannenweg 12, 99998 Kleinhausen"` | The street patterns read English and Spanish layouts. A German street written as one word with the number after it is neither, and `Lieferadresse` is not a block label. |
+| G27 | gaps | `"Our office in Brookhaven, OR 97399 opens on Monday."` | A town, region and postal code count after a street, on a line of their own or after a postal label. In a sentence with no street before them, the town's first word cannot be told from the words that open the sentence. |
+| G28 | gaps | `"Flat 3\n12 Quillon Road\nAshcombe Vale\nZZ1 4QX"` | The lines after a street line count as its locality. A unit on the line before it, outside a labelled block, is not read. The street, town and postcode are replaced. |
+| G29 | gaps | `"Please send it to 4417 Larkspur Hollow Rd, Brookhaven by Friday."` | A town alone after a street counts only up to a comma, a stop or the end of its line. Followed by more of the sentence, its words cannot be told from the start of a new clause (`Rd, Please call`). The street is replaced. |
+| G30 | gaps | `"4417 Larkspur Hollow Rd\nBrookhaven"` | Outside a labelled block, a line below a street counts when it holds a postal code, or is a town with a postal code line after it. A capitalised line alone could be the next sentence, so it is not read. The street is replaced. |
+| G31 | gaps | `"Ship to\nPlease leave the parcel with the neighbour at the back door\n4417 larkspur hollow rd"` | A block passes over up to two lines of six words or fewer above the street. A longer line ends it, so a sentence below a label is not read as an address, and a street in lower case is found only inside a block. |
 | O1 | obfuscated | `"Write to ana at gestoria dot example before Friday."` | Spelled-out "at" and "dot" are prose, not an address. The known domain never appears in its dotted form, so neither the detectors nor the leak check see it. |
 | O3 | obfuscated | `"Write to ana@gestoria .example before Friday."` | A space inside the domain breaks the address pattern and the known domain pattern. The local part is caught through the known name only. |
 | O4 | obfuscated | `"Contact: ana [at] gestoria [dot] example"` | Bracketed "at" and "dot" words are not an address, and the known domain is not written out. |
