@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
-  assertStableVersion, checkRelease, nextVersion, pendingChangesets, releaseTag, setVersion, syncVersion,
+  assertStableVersion, changelogHas, checkRelease, nextVersion, packageDir, pendingChangesets, releaseTag, setVersion, syncVersion,
   type ReleaseCheck,
 } from '../scripts/lib/release.js';
 import { ROOT } from './support/corpus.js';
@@ -104,6 +104,13 @@ describe('release checks', () => {
     expect(checkRelease({ ...base, pendingNotes: true })).toBe('next');
   });
 
+  it('refuses the NER package on either channel while the core in the tree is not the one on npm', () => {
+    for (const channel of ['next', 'stable']) {
+      expect(() => checkRelease({ ...base, channel, coreUnreleased: true })).toThrow(/Release the core first/);
+      expect(checkRelease({ ...base, channel, coreUnreleased: false })).toBe(channel);
+    }
+  });
+
   it('counts only unconsumed notes as pending changesets', () => {
     const dir = temp();
     writeFileSync(join(dir, 'README.md'), 'Changesets readme\n');
@@ -112,6 +119,22 @@ describe('release checks', () => {
     writeFileSync(join(dir, 'invented-note.md'), '---\n"@centrst/blind": patch\n---\n\nFix an invented case.\n');
     expect(pendingChangesets(dir)).toBe(true);
     expect(() => pendingChangesets(join(dir, 'missing'))).toThrow();
+  });
+
+  it('finds each package by the workflow input, the core by default, and refuses any other name', () => {
+    expect(packageDir('/repo')).toBe(join('/repo', '.'));
+    expect(packageDir('/repo', 'blind')).toBe(packageDir('/repo'));
+    expect(packageDir('/repo', 'blind-ner')).toBe(join('/repo', 'ner'));
+    for (const name of ['', 'ner', '@centrst/blind-ner', '../x', 'toString', '__proto__']) expect(() => packageDir('/repo', name), name).toThrow(/Unknown release package/);
+  });
+
+  it('takes a hand-written changelog as release notes only when it has a heading for the exact version', () => {
+    const file = join(temp(), 'CHANGELOG.md');
+    writeFileSync(file, '# Changelog\n\n## 0.4.0 - 2026-08-12\n\n- An invented entry about 0.4.1.\n\n## 0.3.0\n');
+    expect(changelogHas(file, '0.4.0')).toBe(true);
+    expect(changelogHas(file, '0.3.0')).toBe(true);
+    for (const version of ['0.4.1', '0.4', '0.3.00', '0.4.0-next.20260812.1']) expect(changelogHas(file, version), version).toBe(false);
+    expect(() => changelogHas(join(file, 'missing'), '0.4.0')).toThrow();
   });
 });
 
@@ -128,7 +151,17 @@ describe('release versioning', () => {
     expect(() => syncVersion(root)).toThrow(/Unsupported/);
   });
 
-  it('versions the workspace root with the real Changesets CLI, above the newest entry, and keeps NER private', () => {
+  it('sets the version of a package with no version.ts, as the NER package, and leaves the rest of its manifest as it was', () => {
+    const dir = temp();
+    const manifest = { name: '@centrst/blind-ner', version: '0.4.0', peerDependencies: { '@centrst/blind': 'workspace:^' } };
+    writeFileSync(join(dir, 'package.json'), `${JSON.stringify(manifest, null, 2)}\n`);
+    setVersion(dir, '0.4.0-next.20260812.1');
+    expect(JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))).toEqual({ ...manifest, version: '0.4.0-next.20260812.1' });
+    expect(existsSync(join(dir, 'src'))).toBe(false);
+    expect(() => setVersion(dir, '0.4.0-rc.1')).toThrow(/Unsupported/);
+  });
+
+  it('versions the workspace root with the real Changesets CLI, above the newest entry, and leaves the NER package to its own versioning', () => {
     const root = temp();
     mkdirSync(join(root, '.changeset'));
     mkdirSync(join(root, 'src'));
@@ -137,7 +170,7 @@ describe('release versioning', () => {
       cpSync(join(ROOT, file), join(root, file));
     }
     const rootPkg = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')) as { packageManager: string; scripts: Record<string, string> };
-    const nerVersion = (JSON.parse(readFileSync(join(ROOT, 'ner', 'package.json'), 'utf8')) as { version: string }).version;
+    const nerManifest = readFileSync(join(ROOT, 'ner', 'package.json'), 'utf8');
     writeFileSync(join(root, 'package.json'), JSON.stringify({ name: '@centrst/blind', version: '0.4.0', packageManager: rootPkg.packageManager }));
     writeFileSync(join(root, 'CHANGELOG.md'), '# Changelog\n\nInvented intro.\n\n## 0.4.0\n\n- An invented earlier entry.\n');
     writeFileSync(join(root, '.changeset', 'invented-note.md'), '---\n"@centrst/blind": patch\n---\n\nFix an invented parsing case.\n');
@@ -152,7 +185,8 @@ describe('release versioning', () => {
     expect(changelog.indexOf('## 0.4.1')).toBeLessThan(changelog.indexOf('## 0.4.0'));
     expect(existsSync(join(root, '.changeset', 'invented-note.md'))).toBe(false);
     expect(existsSync(join(root, '.changeset', 'README.md'))).toBe(true);
-    expect(JSON.parse(readFileSync(join(root, 'ner', 'package.json'), 'utf8')).version).toBe(nerVersion);
+    expect(readFileSync(join(root, 'ner', 'package.json'), 'utf8')).toBe(nerManifest);
+    expect(existsSync(join(root, 'ner', 'CHANGELOG.md'))).toBe(false);
     expect(rootPkg.scripts['version:release']).toContain('pnpm version:sync');
 
     setVersion(root, '0.4.1-next.20260812.1');

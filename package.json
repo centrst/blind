@@ -54,7 +54,7 @@
     "lint": "eslint src test scripts examples ner/src ner/test ner/scripts",
     "corpus": "tsx scripts/corpus.ts",
     "corpus:generate": "tsx scripts/gen-corpus.ts",
-    "ner:download": "tsx ner/scripts/download-model.ts",
+    "ner:download": "tsx ner/src/cli/download.ts ner/models/gliner_multi-v2.1",
     "ner:eval": "tsx --tsconfig ner/tsconfig.json ner/scripts/eval.ts --out reports/ner-corpus.json",
     "ner:train:setup": "python3.12 -m venv .local/train-venv && .local/train-venv/bin/pip install -r ner/train/requirements.txt && .local/train-venv/bin/python -I ner/train/sources.py",
     "known-misses": "tsx scripts/known-misses.ts",

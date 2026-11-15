@@ -68,6 +68,8 @@ describe('what the docs say about the NER package status', () => {
     'RELEASING.md', // states the prototype status in its own words
     'THIRD-PARTY-NOTICES.md', // model licence
     'corpus/adversarial/known-misses.md', // generated from adversarial case reasons
+    'ner/CHANGELOG.md', // what the package holds
+    'ner/THIRD-PARTY-NOTICES.md', // model and library licences
   ];
   const read = (path: string) => readFileSync(join(ROOT, path), 'utf8');
   const tracked = execFileSync('git', ['ls-files', '-z', '--', '*.md'], { cwd: ROOT, encoding: 'utf8' })

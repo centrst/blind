@@ -1,6 +1,7 @@
 name: Release
 
-# Stages @centrst/blind on npm through trusted publishing (GitHub OIDC, no token).
+# Stages @centrst/blind or @centrst/blind-ner on npm through trusted publishing
+# (GitHub OIDC, no token), one package per run.
 # A maintainer approves the staged version with 2FA before it is public.
 # Runs only by manual dispatch of the maintainer-verified head of main. RELEASING.md
 # describes the channels, the one-time npm and environment setup, and the gate a
@@ -9,6 +10,12 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
+      package:
+        description: Package to release
+        type: choice
+        options: [blind, blind-ner]
+        default: blind
+        required: true
       channel:
         description: Release channel
         type: choice
@@ -25,9 +32,11 @@ permissions:
 
 env:
   npm_config_registry: https://registry.npmjs.org
+  # The release scripts read this to find the package: the workspace root or ner/.
+  RELEASE_PACKAGE: ${{ inputs.package }}
 
-# One release run at a time, across both channels, so a preview cannot be allocated
-# while a stable release of the same base waits for approval. A newer dispatch
+# One release run at a time, across both packages and channels, so a preview cannot be
+# allocated while a stable release of the same base waits for approval. A newer dispatch
 # replaces a pending run, which then shows as cancelled.
 concurrency:
   group: npm-release
@@ -39,6 +48,7 @@ jobs:
     timeout-minutes: 30
     outputs:
       source: ${{ github.sha }}
+      name: ${{ steps.check.outputs.name }}
       version: ${{ steps.pack.outputs.version }}
       tag: ${{ steps.check.outputs.tag }}
       filename: ${{ steps.pack.outputs.filename }}
@@ -68,23 +78,41 @@ jobs:
       # tests run in the gate job, so their dependencies never share a runner with
       # the job whose outputs the publish job trusts.
       - run: pnpm build
+      # The NER build reads the core's types from the dist the step above wrote.
+      - if: inputs.package == 'blind-ner'
+        run: pnpm build:ner
       - name: Pack the build
         id: pack
         env:
+          RELEASE_NAME: ${{ steps.check.outputs.name }}
           RELEASE_VERSION: ${{ steps.next.outputs.version || steps.check.outputs.version }}
           RELEASE_TAG: ${{ steps.check.outputs.tag }}
         run: |
           mkdir -p .local/release
-          npm pack --ignore-scripts --json --pack-destination .local/release > .local/pack.json
+          if [ "$RELEASE_PACKAGE" = blind-ner ]; then
+            # pnpm packs this one: it writes the peer range in place of the workspace one.
+            pnpm -C ner pack --json --pack-destination "$PWD/.local/release" > .local/pack.json
+          else
+            npm pack --ignore-scripts --json --pack-destination .local/release > .local/pack.json
+          fi
           node --input-type=module <<'JS'
+          import { createHash } from 'node:crypto';
           import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
-          const [pack] = JSON.parse(readFileSync('.local/pack.json', 'utf8'));
+          import { basename, join } from 'node:path';
+          // npm prints a list with the tarball's integrity, pnpm one object with a full path and no integrity.
+          const packed = JSON.parse(readFileSync('.local/pack.json', 'utf8'));
+          const pack = Array.isArray(packed) ? packed[0] : packed;
+          pack.filename = basename(pack.filename);
+          const integrity = `sha512-${createHash('sha512').update(readFileSync(join('.local/release', pack.filename))).digest('base64')}`;
+          if (pack.integrity !== undefined && pack.integrity !== integrity) throw new Error('The tarball differs from the integrity npm pack reported.');
+          pack.integrity = integrity;
+          if (pack.name !== process.env.RELEASE_NAME) throw new Error('Packed another package than the one selected.');
           if (pack.version !== process.env.RELEASE_VERSION) throw new Error('Packed version differs from release version.');
-          if (!/^sha512-[A-Za-z0-9+/]+=*$/.test(pack.integrity ?? '')) throw new Error('npm pack reported no sha512 integrity.');
-          const release = { version: pack.version, tag: process.env.RELEASE_TAG, source: process.env.GITHUB_SHA, filename: pack.filename, integrity: pack.integrity };
+          if (!/^sha512-[A-Za-z0-9+/]+=*$/.test(pack.integrity ?? '')) throw new Error('The tarball has no sha512 integrity.');
+          const release = { name: pack.name, version: pack.version, tag: process.env.RELEASE_TAG, source: process.env.GITHUB_SHA, filename: pack.filename, integrity: pack.integrity };
           writeFileSync('.local/release/release.json', JSON.stringify(release, null, 2) + '\n');
           appendFileSync(process.env.GITHUB_OUTPUT, `version=${pack.version}\nfilename=${pack.filename}\nintegrity=${pack.integrity}\n`);
-          appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Package ${release.version}\n\nTag ${release.tag}\n\nSource ${release.source}\n\nIntegrity ${release.integrity}\n`);
+          appendFileSync(process.env.GITHUB_STEP_SUMMARY, `Package ${release.name}@${release.version}\n\nTag ${release.tag}\n\nSource ${release.source}\n\nIntegrity ${release.integrity}\n`);
           JS
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -128,6 +156,10 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm lint
       - run: pnpm test
+      # The stub tests and the pack check. The model tests skip here: the runner has
+      # no weights, and the maintainer's `pnpm verify --full` is what ran them.
+      - if: inputs.package == 'blind-ner'
+        run: pnpm test:ner
 
   publish:
     needs: [prepare, gate]
@@ -151,6 +183,7 @@ jobs:
       - name: Check the tarball against the digest the prepare job recorded
         working-directory: ${{ runner.temp }}/release
         env:
+          RELEASE_NAME: ${{ needs.prepare.outputs.name }}
           FILENAME: ${{ needs.prepare.outputs.filename }}
           EXPECTED: ${{ needs.prepare.outputs.integrity }}
         run: |
@@ -160,10 +193,27 @@ jobs:
           node --input-type=module <<'JS'
           import { readFileSync } from 'node:fs';
           const p = JSON.parse(readFileSync('package/package.json', 'utf8'));
-          const deps = { ...p.dependencies, ...p.optionalDependencies, ...p.peerDependencies };
-          if (Object.keys(deps).length) throw new Error('The packed package declares dependencies.');
+          if (p.name !== process.env.RELEASE_NAME) throw new Error('The packed package is not the one selected.');
           for (const hook of ['preinstall', 'install', 'postinstall']) if (p.scripts?.[hook]) throw new Error(`The packed package has a ${hook} script.`);
-          if (!p.bin?.blind || !p.bin?.unblind) throw new Error('The packed package is missing a command entry.');
+          if (p.name === '@centrst/blind') {
+            const deps = { ...p.dependencies, ...p.optionalDependencies, ...p.peerDependencies };
+            if (Object.keys(deps).length) throw new Error('The packed package declares dependencies.');
+            if (!p.bin?.blind || !p.bin?.unblind) throw new Error('The packed package is missing a command entry.');
+          } else if (p.name === '@centrst/blind-ner') {
+            // Two runtime libraries at exact versions, and the core as a peer with a real range.
+            const exact = /^\d+\.\d+\.\d+$/;
+            const runtime = Object.keys(p.dependencies ?? {}).sort().join(' ');
+            if (runtime !== '@huggingface/tokenizers onnxruntime-node') throw new Error('The packed package declares other dependencies than its two runtime libraries.');
+            if (!Object.values(p.dependencies).every((v) => exact.test(v))) throw new Error('A runtime dependency is not pinned to an exact version.');
+            if (Object.keys(p.optionalDependencies ?? {}).length) throw new Error('The packed package declares optional dependencies.');
+            const peers = Object.keys(p.peerDependencies ?? {});
+            if (peers.length !== 1 || peers[0] !== '@centrst/blind') throw new Error('The only peer dependency must be the core.');
+            // `workspace:` here would mean npm packed it, and nobody could install the result.
+            if (!/^[\^~]?\d+\.\d+\.\d+( \|\| [\^~]?\d+\.\d+\.\d+)*$/.test(p.peerDependencies['@centrst/blind'])) throw new Error('The core peer range is not a version range.');
+            if (!p.bin?.['blind-ner-download']) throw new Error('The packed package is missing its command entry.');
+          } else {
+            throw new Error('Unknown package.');
+          }
           JS
       # The trusted publisher allows only `npm stage publish`. The staged version
       # goes live when a maintainer approves it with 2FA on npm, which OIDC cannot do.
@@ -171,6 +221,7 @@ jobs:
         id: stage
         working-directory: ${{ runner.temp }}/release
         env:
+          RELEASE_NAME: ${{ needs.prepare.outputs.name }}
           RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
           RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
           FILENAME: ${{ needs.prepare.outputs.filename }}
@@ -179,18 +230,18 @@ jobs:
         run: |
           if [ "$RELEASE_TAG" = next ]; then
             base="${RELEASE_VERSION%%-*}"
-            if [ -n "$(npm view "@centrst/blind@${base}" version 2>/dev/null || true)" ]; then
+            if [ -n "$(npm view "${RELEASE_NAME}@${base}" version 2>/dev/null || true)" ]; then
               echo "Stable ${base} is already published, so this preview would sort below it." >&2
               exit 1
             fi
           fi
-          existing="$(npm view "@centrst/blind@${RELEASE_VERSION}" dist.integrity 2>/dev/null || true)"
+          existing="$(npm view "${RELEASE_NAME}@${RELEASE_VERSION}" dist.integrity 2>/dev/null || true)"
           if [ -n "$existing" ]; then
             [ "$existing" = "$EXPECTED" ] || { echo 'This version is already on npm with a different tarball.' >&2; exit 1; }
             echo 'This exact tarball is already published. Skipping npm stage publish.'
             # A retry must not report success while the channel resolves to another
             # version. Do not move the tag here: it may point at a newer release.
-            tagged="$(npm view @centrst/blind "dist-tags.${RELEASE_TAG}" 2>/dev/null || true)"
+            tagged="$(npm view "$RELEASE_NAME" "dist-tags.${RELEASE_TAG}" 2>/dev/null || true)"
             if [ "$tagged" != "$RELEASE_VERSION" ]; then
               echo "${RELEASE_TAG} points at ${tagged:-nothing}, not ${RELEASE_VERSION}. Inspect the registry." >&2
               exit 1
@@ -205,24 +256,26 @@ jobs:
       - name: Say what the maintainer approves
         if: steps.stage.outputs.staged == 'true'
         env:
+          RELEASE_NAME: ${{ needs.prepare.outputs.name }}
           RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
           RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
           EXPECTED: ${{ needs.prepare.outputs.integrity }}
         run: |
           {
-            echo "### Staged @centrst/blind@${RELEASE_VERSION} on ${RELEASE_TAG}"
+            echo "### Staged ${RELEASE_NAME}@${RELEASE_VERSION} on ${RELEASE_TAG}"
             echo
             echo "Nothing is public until a maintainer approves it with 2FA. Check that the staged"
             echo "tarball has integrity \`${EXPECTED}\`, then approve it (RELEASING.md, Approve the staged version):"
             echo
             echo '```sh'
-            echo 'npm stage list @centrst/blind'
+            echo "npm stage list ${RELEASE_NAME}"
             echo 'npm stage approve <stage-id>'
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Say that the version is already public
         if: steps.stage.outputs.staged == 'false'
         env:
+          RELEASE_NAME: ${{ needs.prepare.outputs.name }}
           RELEASE_VERSION: ${{ needs.prepare.outputs.version }}
           RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
-        run: echo "### @centrst/blind@${RELEASE_VERSION} is already published on ${RELEASE_TAG} with the tested integrity" >> "$GITHUB_STEP_SUMMARY"
+        run: echo "### ${RELEASE_NAME}@${RELEASE_VERSION} is already published on ${RELEASE_TAG} with the tested integrity" >> "$GITHUB_STEP_SUMMARY"

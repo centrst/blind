@@ -15,11 +15,6 @@ export interface NerDetectorOptions {
   threshold?: number;
   /** Priority against other detectors. Default 50, below every pattern detector and below `known`. */
   priority?: number;
-  /**
-   * Also mark later bare mentions of a person the model or a header line already named,
-   * so "Pilar Gómez" in a header covers "Pilar" in the greeting. Default true.
-   */
-  propagate?: boolean;
 }
 
 export const DEFAULT_LABELS: Record<NerKind, string> = { person: 'person', org: 'organization', place: 'location' };
@@ -140,7 +135,6 @@ export function createNerDetector(backend: NerBackend, opts: NerDetectorOptions 
   const kindOf = new Map(kinds.map((k) => [labels[k], k] as const));
   const priority = opts.priority ?? 50;
   const threshold = opts.threshold ?? 0.3;
-  const propagate = opts.propagate ?? true;
 
   return {
     async prepare(texts) {
@@ -202,10 +196,11 @@ export function createNerDetector(backend: NerBackend, opts: NerDetectorOptions 
               out.push({ start: s, end: e, kind: h.kind, priority });
             }
           }
-          if (propagate) {
-            const named = [...out, ...pattern].filter((s) => s.kind === 'person');
-            out.push(...bareMentions(text, named, [...cuts, ...out.map((s): [number, number] => [s.start, s.end])], cuts, priority - 1));
-          }
+          // Later bare mentions of a person the model or a header line named, so "Pilar Gómez"
+          // in a header covers "Pilar" in the greeting. Always on: blind's own pass finds bare
+          // repeats of a detector's person too, so an option to turn this off would change nothing.
+          const named = [...out, ...pattern].filter((s) => s.kind === 'person');
+          out.push(...bareMentions(text, named, [...cuts, ...out.map((s): [number, number] => [s.start, s.end])], cuts, priority - 1));
           return out;
         },
       };

@@ -1,8 +1,8 @@
 {
   "bare": {
     "recall": {
-      "person": 98,
-      "org": 97,
+      "person": 99,
+      "org": 98,
       "place": 99,
       "email": 100,
       "url": 100,
@@ -10,12 +10,12 @@
       "iban": 100,
       "id": 100,
       "amount": 100,
-      "date": 99
+      "date": 100
     },
     "precision": {
       "person": 96,
-      "org": 92,
-      "place": 88,
+      "org": 93,
+      "place": 90,
       "email": 96,
       "url": 100,
       "phone": 100,
@@ -29,7 +29,7 @@
   "known": {
     "recall": {
       "person": 99,
-      "org": 99,
+      "org": 100,
       "place": 99,
       "email": 100,
       "url": 100,
@@ -37,12 +37,12 @@
       "iban": 100,
       "id": 100,
       "amount": 100,
-      "date": 99
+      "date": 100
     },
     "precision": {
       "person": 96,
-      "org": 92,
-      "place": 89,
+      "org": 93,
+      "place": 90,
       "email": 96,
       "url": 100,
       "phone": 100,

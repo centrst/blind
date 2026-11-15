@@ -1,9 +1,26 @@
 {
   "name": "@centrst/blind-ner",
   "version": "0.1.0",
-  "private": true,
   "description": "Optional local multilingual NER detector for @centrst/blind (GLiNER on ONNX Runtime, in process)",
   "license": "MIT",
+  "author": "Centrst",
+  "homepage": "https://github.com/centrst/blind/tree/main/ner#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/centrst/blind.git",
+    "directory": "ner"
+  },
+  "bugs": {
+    "url": "https://github.com/centrst/blind/issues"
+  },
+  "keywords": [
+    "privacy",
+    "pii",
+    "ner",
+    "gliner",
+    "onnx",
+    "pseudonymization"
+  ],
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -12,6 +29,18 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     }
+  },
+  "bin": {
+    "blind-ner-download": "dist/cli/download.js"
+  },
+  "files": [
+    "dist",
+    "licenses",
+    "README.md",
+    "THIRD-PARTY-NOTICES.md"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json"
@@ -24,6 +53,6 @@
     "onnxruntime-node": "1.31.1"
   },
   "peerDependencies": {
-    "@centrst/blind": "workspace:*"
+    "@centrst/blind": "workspace:^"
   }
 }

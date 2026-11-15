@@ -84,7 +84,7 @@ Scratch files go in `.local/`, which git ignores.
 
 For a package behavior change, run `pnpm changeset`, select `@centrst/blind` and describe what users will notice. Commit the generated note with the change. A maintainer's release PR, prepared with `pnpm version:release`, batches these notes into one version and changelog. Documentation and tooling changes without a package behavior change need no changeset.
 
-Merging a release PR does not publish. Both prerelease and stable publication require an explicit release action and a passing local `pnpm verify` gate. [RELEASING.md](RELEASING.md) covers the channels, approvals and npm trusted publishing. The optional NER package remains private.
+Merging a release PR does not publish. Both prerelease and stable publication require an explicit release action and a passing local `pnpm verify` gate. [RELEASING.md](RELEASING.md) covers the channels, approvals and npm trusted publishing. The optional NER package is packaged for npm and has not been released. It is versioned by hand, not with Changesets, as RELEASING.md describes.
 
 ## Pull requests
 
