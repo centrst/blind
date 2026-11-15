@@ -2,6 +2,14 @@
 
 All notable changes to this project are written down here. Changesets writes each version's entry from the notes in `.changeset`, grouped as major, minor and patch changes. The project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.1
+
+Upgrading from 0.3.0: the same input and seed can produce different fake addresses and phone numbers. Existing mappings keep earlier fakes, which may still be deliverable or dialable. Start a new mapping from the original text to use the safer fakes; do not pair it with old blind text or replies. The reserved phone ranges apply to `fake` mode; `random` mode is unchanged.
+
+### Patch Changes
+
+- f424ab0: Fake addresses and UK and North American numbers can no longer reach anyone. A fake mailbox at a public provider now moves to the provider's name under `.example` (`claire.hayes@gmail.example` instead of a Gmail address someone may hold), unless the address is unchanged or the provider could never issue it. Every UK number blind finds or is given in `known` now becomes a number in the Ofcom drama range for its kind of line, including landlines, freephone, premium-rate and `+44 (0)` numbers (a landline written with its 0, such as `020 7946 0958`, is not found on its own, so list it in `known`), and a UK number of seven to nine national digits gets a ten-digit fake. Every ten-digit North American number now becomes NXX-555-01XX. The mapping format is unchanged, and existing conversation mappings keep their earlier fakes in later turns. New values get safer fakes, so the blind text changes for the same input and seed.
+
 ## 0.3.0
 
 Upgrading from 0.2.0 does not repair existing mappings. Inspect the `email` entries in `mapping.pairs`, grouping them by `fake.toLowerCase()`. A group assigned to different original addresses, rather than alternate spellings of the same address, is affected. Such mappings can still restore a case-changed reply to the wrong address without reporting a collision.
