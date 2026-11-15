@@ -2,9 +2,15 @@
 
 All notable changes to this project are written down here. Changesets writes each version's entry from the notes in `.changeset`, grouped as major, minor and patch changes. The project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.3.1
+## 0.4.0
 
-Upgrading from 0.3.0: the same input and seed can produce different fake addresses and phone numbers. Existing mappings keep earlier fakes, which may still be deliverable or dialable. Start a new mapping from the original text to use the safer fakes; do not pair it with old blind text or replies. The reserved phone ranges apply to `fake` mode; `random` mode is unchanged.
+0.3.1 was prepared but never published, so 0.4.0 is the first version on npm after 0.3.0 and carries the 0.3.1 fix as well, listed under Patch Changes.
+
+Upgrading from 0.3.0: the same input and seed can produce a different blind copy. Postal addresses that used to go out as written are now replaced as places, and new fake addresses and phone numbers differ. Existing mappings keep their earlier fakes in later turns, and those may still be deliverable or dialable. Start a new mapping from the original text to use the safer fakes; do not pair it with old blind text or replies. The reserved phone ranges apply to `fake` mode; `random` mode is unchanged. The mapping format is unchanged.
+
+### Minor Changes
+
+- e57a40c: Postal addresses are found and replaced. A street line with a house number in English and Spanish layouts, the locality after it (a town, a US state or Canadian province with its ZIP or postal code, a UK postcode, or a five-digit postal code before a town), a postal code after its label, and the lines of a labelled block such as `Shipping address`, `Ship to` or `Dirección de envío` become `place` values, and the line above the street in such a block becomes the person or company it names. A receipt no longer comes back with its shipping address as written and `leaks.ok: true` (#52). In `fake` mode an address keeps its shape with new numbers and fake names, in `random` mode it becomes a fake town, and in `placeholder` mode `[REDACTED_PLACE_1]`. An address left in the blind text with its house number or postal code outside what blind wrote is now a `place` leak hit, unless `keep` holds `place`. The mapping format is unchanged. This is a minor release because the blind text changes for the same input and seed.
 
 ### Patch Changes
 
