@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { BlindError, blind, unblind, type Detector } from '@centrst/blind';
-import { blindWithNer, createNerDetector, greedyFlat, splitWords } from '../src/index.js';
+import { blindWithNer, createNerDetector, greedyFlat, splitWords, type NerDetectorOptions } from '../src/index.js';
 import { forbiddenIn } from '../../test/support/forbidden.js';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -120,6 +120,18 @@ describe('NER detector with a stub model', () => {
     const fakeFirst = (first as { fake: string }).fake;
     expect(out.split(fakeFirst).length - 1).toBeGreaterThanOrEqual(3);
     expect(back(r)).toBe(text);
+  });
+
+  it('C14/N6: a bare surname and a bare first name after the full name the model found are replaced, always', async () => {
+    const text = 'Yesterday Odalys Brennecke sent the draft. On Friday Brennecke said it was late, and later Odalys wanted changes.';
+    const b = stubBackend({ 'Odalys Brennecke': 'person' });
+    const r = await blindWithNer(b, [text], { seed: 's6', now: NOW });
+    const out = r.texts[0] as string;
+    expect(out).not.toMatch(/Odalys|Brennecke/);
+    expect(back(r)).toBe(text);
+    // There is no option to turn this off: the old `propagate: false` is not in the type and changes nothing.
+    const off = await blindWithNer(b, [text], { seed: 's6', now: NOW, ner: { propagate: false } as unknown as NerDetectorOptions });
+    expect(off.texts).toEqual(r.texts);
   });
 
   it('C14/N7: with the detector plugged in, round trips hold and no name survives for 40 seeds', async () => {

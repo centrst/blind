@@ -11,7 +11,7 @@ Open-source Centrst TypeScript library. Rewrites private text into a blind copy 
 - `pnpm secrets` scans the working tree, index and history with Gitleaks 8.30.1
 - `pnpm test` unit, properties (NUM_RUNS, default 2,000, SEED replays), corpus, adversarial, CLI, no-network, build checks
 - `pnpm build`, then `pnpm build:ner` for the NER package (it imports the built core)
-- `pnpm test:ner` the NER package: stub tests always, model tests when `ner/models/gliner_multi-v2.1` exists (`pnpm ner:download` fetches it once). `pnpm ner:eval` prints the scorecard with and without the detector
+- `pnpm test:ner` the NER package: stub tests and the pack check always, model tests when `ner/models/gliner_multi-v2.1` exists (`pnpm ner:download` fetches it once, through the package's `blind-ner-download` command). `pnpm ner:eval` prints the scorecard with and without the detector
 - `pnpm test:deep` properties at 20,000 cases
 - `pnpm corpus` scorecard against `corpus/floors.json` (`corpus:generate` rebuilds the generated files)
 - `pnpm mutation` Stryker against the floor in `stryker.config.json`
@@ -19,7 +19,7 @@ Open-source Centrst TypeScript library. Rewrites private text into a blind copy 
 - `pnpm evidence` writes `reports/evidence.html`
 - `pnpm known-misses` regenerates `corpus/adversarial/known-misses.md`
 - `pnpm verify` is the release gate for the published core, in CI order with `claims --strict`, about 12 minutes; `--fast` skips test:deep. `pnpm verify --full` adds the NER package, which needs the model, and mutation testing, which takes hours `mutation.yml` runs Stryker from Actions when a maintainer starts it.
-- `pnpm changeset` records a user-facing change for the batched release PR; documentation and tooling changes need no note unless package behavior changes
+- `pnpm changeset` records a user-facing change to the core for the batched release PR (the NER package is versioned by hand); documentation and tooling changes need no note unless package behavior changes
 - `pnpm version:release` consumes pending changesets and synchronizes the package, receipt version and lockfile; the release PR workflow runs it
 - `pnpm publish:next --dry-run` inspects a dated prerelease locally and never publishes; `--prepare` runs only in the release workflow. Normal publishing uses the Release workflow in RELEASING.md
 
@@ -55,7 +55,7 @@ The gate is `.pre-merge.yml` (secret scanning, typecheck, lint, test, build). Pu
 - `src/leaks.ts` leak check and `assertNoLeaks`. `src/suspects.ts` the paranoid sweep: what blind leaves as written that still looks private, by kind and input offsets. `src/errors.ts` `BlindError` and its kinds, `LeakError`, `InputTooLargeError`, the text limit and `guard`
 - `src/fold.ts` same-length folds (look-alikes, full-width) and the accent-free skeleton used for known names
 - `src/cli/` the `blind` and `unblind` commands. `blind.ts` and `unblind.ts` are the bins, `run-*.ts` hold the logic and take an injected `IO`, `store.ts` owns `$BLIND_HOME/runs`
-- `ner/` workspace package `@centrst/blind-ner`: GLiNER on onnxruntime-node, plugs in through `detectors`. Its dependencies stay here, never in the core. `corpus/floors-ner.json` holds its floors
+- `ner/` workspace package `@centrst/blind-ner`: GLiNER on onnxruntime-node, plugs in through `detectors`. Its dependencies stay here, never in the core. `corpus/floors-ner.json` holds its floors. `ner/src/download.ts` and `ner/src/cli/download.ts` are the model download and its `blind-ner-download` command, the only code that uses the network, which the package entry never imports. It is packed with `pnpm pack`, which writes the core's current version as its peer range, versioned by hand in `ner/package.json` and `ner/CHANGELOG.md`, and released through the same workflow as the core, after the core (RELEASING.md)
 - `test/properties/` the property suite in six files of about equal running time, so Vitest spreads them over its workers; the properties themselves are functions in `test/support/properties.ts`
 - `test/support/` value makers, email templates, fast-check arbitraries, corpus loader and scorer
 - `corpus/generated` (script output, do not edit), `corpus/handwritten`, `corpus/adversarial` (cases and known misses), `corpus/floors.json`

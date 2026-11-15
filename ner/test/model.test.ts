@@ -64,6 +64,49 @@ describe.skipIf(!HAS_MODEL || !HAS_ORT)('NER detector with the GLiNER model', ()
     expect(failures).toEqual([]);
   });
 
+  /**
+   * A long English report, well past one model window (about 250 words), with a name
+   * placed in plain prose after the first window, several windows apart. Filler and
+   * names are invented, and the core alone finds none of the names.
+   */
+  const LONG_NAMES = ['Corvin Ashgrove', 'Delphine Marwood', 'Tobias Quenby', 'Imelda Farrowcroft', 'Lucan Pettigrew'];
+  const FILLER = [
+    'the committee reviewed the quarterly figures and found the margins steady across every region.',
+    'shipping costs rose in the spring, so the team moved two suppliers to longer contracts.',
+    'the warehouse audit found no missing stock, and the next audit is planned for the autumn.',
+    'customer complaints fell after the new returns process went live in the second quarter.',
+    'the board asked for a short note on energy use and a plan to cut it over three years.',
+  ];
+  const longReport = (): string => {
+    const parts: string[] = [];
+    let words = 0;
+    let next = 0;
+    for (let i = 0; words < 3600; i++) {
+      const at = 500 + next * 700;
+      let sentence = `In section ${i + 1}, ${FILLER[i % FILLER.length]}`;
+      if (next < LONG_NAMES.length && words >= at) sentence = `In section ${i + 1}, the summary was written by ${LONG_NAMES[next++]}, who also checked the tables.`;
+      parts.push(sentence[0]!.toUpperCase() + sentence.slice(1));
+      words += sentence.split(/\s+/).length;
+    }
+    return parts.join(' ');
+  };
+
+  it('C15/windows: in a long document every name placed after the first model window is replaced, and the round trip is exact', async () => {
+    const text = longReport();
+    expect(text.split(/\s+/).length).toBeGreaterThan(3500);
+    for (const name of LONG_NAMES) {
+      expect(text.slice(0, text.indexOf(name)).split(/\s+/).length, name).toBeGreaterThan(400);
+      // The core alone leaves each name, so the model's later windows are what replace them.
+      expect(blind([text], { seed: 'long', now: FIXED_NOW }).texts[0], name).toContain(name);
+    }
+    const model = await GlinerModel.load(MODEL_DIR, { file: MODEL_FILE });
+    const det = await createNerDetector(model).prepare([text]);
+    const res = blind([text], { seed: 'long', now: FIXED_NOW, detectors: [det] });
+    const out = res.texts[0] as string;
+    for (const name of LONG_NAMES) for (const part of name.split(' ')) expect(out, part).not.toContain(part);
+    expect(unblind(out, res.mapping).text).toBe(text);
+  });
+
   it('C15/adversarial: every round-trip case of the adversarial set that blind catches still round trips with the detector on, in every mode', async () => {
     const model = await GlinerModel.load(MODEL_DIR, { file: MODEL_FILE });
     const ner = createNerDetector(model);

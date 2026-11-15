@@ -12,6 +12,7 @@ export default defineConfig({
   test: {
     root: here,
     include: ['test/**/*.test.ts'],
+    globalSetup: ['test/global-setup.ts'],
     testTimeout: 900_000,
     hookTimeout: 900_000,
     reporters: process.env.VITEST_NO_JSON ? ['default'] : ['default', 'json'],
