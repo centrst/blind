@@ -1,3 +1,4 @@
+import { addressPieces } from './address.js';
 import { adaptCase, caseLike, caseVariants, habit, title, uniformToTitle } from './case.js';
 import { foldLookalikes, skeleton, stripInvisible, visibleOffsets } from './fold.js';
 import { compact, detectIds, fakeId, parseIpv6, renderLike as renderLikeId, type IdScheme } from './ids.js';
@@ -91,7 +92,7 @@ export class Surrogates {
   private memo = new Map<string, string>();
   private pools = new Map<string, { list: string[]; at: number }>();
   /** One independent stream per kind of draw, so adding one kind of fake never shifts another. */
-  private readonly rng: { pool: Rng; misc: Rng; digits: Rng; local: Rng; typed: Rng };
+  private readonly rng: { pool: Rng; misc: Rng; digits: Rng; local: Rng; typed: Rng; address: Rng };
   private readonly log: PairLog;
   private lowerTexts: string[] | undefined;
 
@@ -99,7 +100,7 @@ export class Surrogates {
     root: Rng,
     private readonly opts: SurrogateOptions,
   ) {
-    this.rng = { pool: root.fork('pool'), misc: root.fork('misc'), digits: root.fork('digits'), local: root.fork('local'), typed: root.fork('typed') };
+    this.rng = { pool: root.fork('pool'), misc: root.fork('misc'), digits: root.fork('digits'), local: root.fork('local'), typed: root.fork('typed'), address: root.fork('address') };
     this.log = opts.log;
   }
 
@@ -401,8 +402,13 @@ export class Surrogates {
     return out;
   }
 
-  place(text: string, orig: string = text, around?: Lang): string {
+  /**
+   * A place's fake: an address (a value with a digit) gets one of its shape,
+   * unless `plain`, as in `random` mode, and anything else a town from the lists.
+   */
+  place(text: string, orig: string = text, around?: Lang, plain = false): string {
     const lang = placeLanguage(text) ?? this.around(around);
+    if (!plain && /\d/u.test(text)) return this.claimDigits('place', orig, () => this.addressFake(text, lang));
     const pick = (): string => this.pickFrom(`place|${lang}`, N.FAKES[lang].places);
     const key = `place|${asciiLower(text)}`;
     let fake = this.memo.get(key);
@@ -411,6 +417,44 @@ export class Surrogates {
       this.memo.set(key, fake);
     }
     return this.claimName('place', orig, fake, (b) => caseLike(text, b), pick);
+  }
+
+  /**
+   * An address of the same shape (see `addressPieces`): each run of name words
+   * becomes a fake town from the lists, the same one wherever this call writes
+   * that run, and each code gets new digits and letters in its layout, an
+   * ordinal its own suffix (`42nd` to `17th`). Suffixes, unit words, street
+   * types, particles and region codes stay as written.
+   */
+  private addressFake(text: string, lang: Lang): string {
+    const r = this.rng.address;
+    const letters = 'ABCDEFGHJKLMNPRSTUVWXYZ';
+    const code = (t: string): string => {
+      const ord = /^(\d+)(st|nd|rd|th)$/iu.exec(t);
+      if (ord) {
+        const n = r.range(2, 99);
+        const s = n % 100 >= 11 && n % 100 <= 13 ? 'th' : (['th', 'st', 'nd', 'rd'][n % 10] ?? 'th');
+        return `${n}${(ord[2] as string) === (ord[2] as string).toUpperCase() ? s.toUpperCase() : s}`;
+      }
+      return [...t].map((c, i) => {
+        if (/\d/u.test(c)) return String(i === 0 && c !== '0' ? r.range(1, 9) : r.digit());
+        if (/\p{Lu}/u.test(c)) return letters[r.int(letters.length)] as string;
+        if (/\p{Ll}/u.test(c)) return (letters[r.int(letters.length)] as string).toLowerCase();
+        return c;
+      }).join('');
+    };
+    return addressPieces(text).map((p) => {
+      if (p.kind === 'keep') return p.text;
+      if (p.kind === 'code') return code(p.text);
+      const key = `addressName|${lang}|${asciiLower(p.text)}`;
+      let fake = this.memo.get(key);
+      if (!fake) {
+        // One word, so a street keeps the length of a street name (`Calle Robledo 23`, not `Calle San Ginés del Monte 23`).
+        fake = this.pickFrom(`addressName|${lang}`, N.FAKES[lang].places.filter((x) => !x.includes(' ')));
+        this.memo.set(key, fake);
+      }
+      return caseLike(p.text, fake);
+    }).join('');
   }
 
   // ------------------------------------------------------------ domain / email

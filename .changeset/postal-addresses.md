@@ -1,0 +1,5 @@
+---
+"@centrst/blind": minor
+---
+
+Postal addresses are found and replaced. A street line with a house number in English and Spanish layouts, the locality after it (a town, a US state or Canadian province with its ZIP or postal code, a UK postcode, or a five-digit postal code before a town), a postal code after its label, and the lines of a labelled block such as `Shipping address`, `Ship to` or `Dirección de envío` become `place` values, and the line above the street in such a block becomes the person or company it names. A receipt no longer comes back with its shipping address as written and `leaks.ok: true` (#52). In `fake` mode an address keeps its shape with new numbers and fake names, in `random` mode it becomes a fake town, and in `placeholder` mode `[REDACTED_PLACE_1]`. An address left in the blind text with its house number or postal code outside what blind wrote is now a `place` leak hit, unless `keep` holds `place`. The mapping format is unchanged. This is a minor release because the blind text changes for the same input and seed.

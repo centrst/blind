@@ -44,6 +44,7 @@ The gate is `.pre-merge.yml` (secret scanning, typecheck, lint, test, build). Pu
 
 - `src/detect.ts` built-in detectors, context words (titles, id labels), known-value matching, span resolution, `findSpans` (the one detection pass `blind` and the scorer share, including names found again bare)
 - `src/script.ts` scripts without word spaces, Korean particles, Hebrew and Arabic glued prefixes, and the word-edge lookarounds. `src/match.ts` a value as atoms, the alternatives matcher that never throws, and the finder unblind uses for fakes
+- `src/address.ts` postal addresses: English and Spanish street lines, the locality after them, postal codes after a label and labelled blocks, and the pieces an address fake keeps or redraws. `addressDetector` in `src/detect.ts` makes them `place` spans and the line above the street a person or company
 - `src/ids.ts` typed ids: cards, SSN, DNI, NIE, CIF, EU VAT, IPv4, IPv6, with validators and checksum-valid fakes
 - `src/surrogates.ts` fake generators. `src/pairlog.ts` the real-to-fake pair log and the one rule unblind reads it by. `src/case.ts` letter-case habits and the other cases of a fake
 - `src/names.ts` the fake lists, word lists, and the patterns more than one module matches (`ORG_SUFFIX`, `AT_SRC`)

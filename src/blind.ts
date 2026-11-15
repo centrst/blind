@@ -342,7 +342,8 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
           addOriginal('org', real.replace(ORG_SUFFIX, '').trim());
           break;
         case 'place':
-          out = make(() => sur.place(real, orig, around));
+          // In random mode an address becomes a town with no shape kept, as every random value does.
+          out = make(() => sur.place(real, orig, around, mode === 'random'));
           addOriginal('place', real);
           break;
         case 'domain':
@@ -588,12 +589,19 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
 
   // Assemble.
   const replaced: Array<Array<[number, number]>> = [];
+  // Where each span of a kept kind sits in the output, written as it stands, so the address sweep does not report it.
+  const keptRanges: Array<Array<[number, number]>> = [];
   const counts: Partial<Record<Kind, number>> = {};
   const outTexts = texts.map((t, ti) => {
     let out = '';
     let at = 0;
     const ranges: Array<[number, number]> = [];
-    for (const s of active[ti] as Span[]) {
+    const kept: Array<[number, number]> = [];
+    for (const s of (keep.size ? spansByText[ti] : active[ti]) as Span[]) {
+      if (keep.has(s.kind)) {
+        kept.push([out.length + (s.start - at), out.length + (s.end - at)]);
+        continue;
+      }
       const f = fake.get(s);
       if (f === undefined) continue;
       counts[s.kind] = (counts[s.kind] ?? 0) + 1;
@@ -604,6 +612,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
     }
     out += t.slice(at);
     replaced.push(ranges);
+    keptRanges.push(kept);
     return out;
   });
 
@@ -626,7 +635,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
 
   const mapping: Mapping = { version: 1, seed, replaceWith: mode, factor, dayShift, dateOrder, refYear, pairs, ...(literals.length ? { literals } : {}), ...(keepList.length ? { keep: keepList } : {}) };
   const leaks = checkLeaks({
-    outputs: outTexts, replaced, originals, deny, amountKeys, dateKeys, dateOrder, unenforced,
+    outputs: outTexts, replaced, originals, deny, amountKeys, dateKeys, dateOrder, unenforced, addresses: !keep.has('place'), kept: keptRanges,
   });
   if (opts.paranoid) {
     // A caller's public platform signs its mail with its name, like the built-in ones.
