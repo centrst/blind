@@ -2,7 +2,7 @@
 
 Generated from `corpus/adversarial/*.json` by `pnpm known-misses`. Do not edit by hand.
 
-26 inputs slip through silently. 63 more in the same set are caught, either replaced or reported by the leak check. Each miss below has a test marked expected-to-fail, so the build notices the day one starts working and this list gets shorter.
+50 inputs slip through silently. 63 more in the same set are caught, either replaced or reported by the leak check. Each miss below has a test marked expected-to-fail, so the build notices the day one starts working and this list gets shorter.
 
 A miss is silent when the value stays in the blind text and the leak check has nothing recorded to look for. When the leak check can see the value it reports it and the CLI exits 2, which counts as caught.
 
@@ -20,6 +20,30 @@ A miss is silent when the value stays in the blind text and the leak check has n
 | F13 | formats | `"Patient Ana Ruiz was seen on Tuesday and sent home."` | A name in plain prose with no title, address or known list entry has nothing a pattern can hold on to. A NER detector (the optional @centrst/blind-ner package) or a known list finds it. |
 | F14 | formats | `"Reference 123 45 6789 is on the form."` | Three short digit groups separated by spaces look like many other numbers. Only the dashed form, or the spaced form after a label such as SSN, counts as an SSN. |
 | F17 | formats | `"A refund of EUR -100 was booked against the old order."` | The amount pattern reads a sign before the currency or the number, not between a currency code and the number, so EUR -100 is not an amount to blind. It goes out unscaled, and a computed EUR -74 in an answer comes back unchanged without being listed in invented. -100 €, -€100.00 and -$1,234.56 are scaled. |
+| G1 | gaps | `"Hello Jordan Pemberton,\n\nYou sent a payment of $47.88 USD to Example Indexer LLC on Mar 3, 2026.\n\nShipping address\nJordan Pemberton\n4417 Larkspur Hollow Rd Apt 2B\nBrookhaven, OR 97399\nUnited States\n\nTransaction ID: 7XK29384LM102938P"` | No built-in detector looks for postal addresses, and a place is found only from `known`. The name above the street is replaced because the greeting names it, which makes the block look redacted. Issue #52. |
+| G2 | gaps | `"Please send it to 4417 Larkspur Hollow Rd, Brookhaven, OR 97399 by Friday."` | No built-in detector looks for street addresses. The house number has too few digits to be an id and the ZIP code is a bare five-digit number. |
+| G3 | gaps | `"Deliver to Flat 3, 12 Quillon Road, Ashcombe Vale ZZ1 4QX."` | No built-in detector looks for street addresses or UK postcodes. |
+| G4 | gaps | `"Dirección: Calle de los Tilos Altos 14, 3º B, 52990 Torrebruna."` | No built-in detector looks for street addresses or postal codes, and `Dirección:` is not a label any detector reads. |
+| G5 | gaps | `"Postcode: ZZ1 4QX"` | No built-in detector looks for postal codes, and a UK postcode has too few digits to be an id. |
+| G6 | gaps | `"We met in Torrebruna last week and again in Ashcombe Vale."` | A place is found only from `known` or a detector the caller adds. Nothing in the core marks a capitalised word as a town. |
+| G7 | gaps | `"Ship to\nOdalys Brenwick\n\nThank you for your order."` | A name is found after a greeting, a closing, a title or a person label such as `Name:`. An address label is none of these, so a name the text writes nowhere else goes through. |
+| G8 | gaps | `"The pickup point is 41.0213, -31.4472 behind the shop."` | No built-in detector looks for coordinates. Each half is a decimal number without a currency, which is not an amount. |
+| G9 | gaps | `"Card ending 4242, CVV 381, expires 04/29."` | A three-digit code is too short to be an id, `CVV` is not an id label, and a month and two-digit year is not a date to blind. |
+| G10 | gaps | `"The van was ZZ71 QXJ, parked outside."` | No built-in detector looks for plates. With two digits it is too weak to be an id. |
+| G11 | gaps | `"Username: jpemberton42"` | No built-in detector looks for usernames or logins, `Username:` is not a label any detector reads, and with two digits the value is too weak to be an id. |
+| G12 | gaps | `"Log in as jpemberton with the usual password."` | A lower-case login with no digits reads as an ordinary word to every pattern. |
+| G13 | gaps | `"Device 02:5E:A1:3C:77:B9 joined the network."` | IPv4 and IPv6 addresses are typed ids, MAC addresses are not, and the colon-separated pairs are too short for the generic id pattern. |
+| G14 | gaps | `"The patient, aged 47, lives alone above the bakery."` | Ages, job titles and other details that identify someone only in combination are not a kind blind replaces. |
+| G15 | gaps | `"name,city\nOdalys Brenwick,Torrebruna"` | Column and field names such as `name` or `city` are not used to find values, and a CSV row has no greeting, signature or label to start from. |
+| G16 | gaps | `"BIC: QXKRESMMXXX for the transfer."` | No built-in detector looks for SWIFT or BIC codes. Eleven letters without a digit are not an id. |
+| G17 | gaps | `"Call 020 7946 0958 after noon."` | The phone patterns read a UK number with `+44` or `0044`, and a mobile with `07`, but not a landline written nationally. |
+| G18 | gaps | `"Llámame al (55) 1234-5678 por la tarde."` | A two-digit area code in brackets followed by four and four digits matches none of the phone layouts. |
+| G19 | gaps | `"Appelez le 01 99 00 41 27 demain."` | Five pairs of digits match none of the phone layouts. Locales other than English and Spanish are not found. |
+| G20 | gaps | `"Termin am 7. April 2026 in der Praxis."` | The date patterns read English and Spanish forms. A day with a full stop before the month is not one of them. |
+| G21 | gaps | `"Ring 08-465 004 27 före lunch."` | An area code with a dash and groups of three digits matches none of the phone layouts. Locales other than English and Spanish are not found. |
+| G22 | gaps | `"Rufen Sie (030) 123 45 67 an."` | A bracketed area code with a leading 0 and groups of three, two and two digits matches none of the phone layouts. |
+| G23 | gaps | `"Rendez-vous le 7 avril 2026 au cabinet."` | The date patterns read English and Spanish month names, not French ones. |
+| G24 | gaps | `"Sehr geehrte Frau Brenwick, anbei die Rechnung."` | The titles that mark a name are English and Spanish. `Frau`, `Herr`, `M.` and `Mme` are not among them. |
 | O1 | obfuscated | `"Write to ana at gestoria dot example before Friday."` | Spelled-out "at" and "dot" are prose, not an address. The known domain never appears in its dotted form, so neither the detectors nor the leak check see it. |
 | O3 | obfuscated | `"Write to ana@gestoria .example before Friday."` | A space inside the domain breaks the address pattern and the known domain pattern. The local part is caught through the known name only. |
 | O4 | obfuscated | `"Contact: ana [at] gestoria [dot] example"` | Bracketed "at" and "dot" words are not an address, and the known domain is not written out. |

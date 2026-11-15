@@ -162,7 +162,10 @@ describe('paranoid mode', () => {
         if ((res.leaks.suspects ?? []).some((s) => at.some(([a, b]) => s.start < b && a < s.end))) caught.push(c.id);
       }
     }
-    expect(caught.sort()).toEqual(['E3', 'E4', 'F13', 'F14', 'O1', 'O3', 'O4', 'S2', 'S5', 'S6', 'X7', 'X8', 'X15', 'X17'].sort());
+    expect(caught.sort()).toEqual([
+      'E3', 'E4', 'F13', 'F14', 'O1', 'O3', 'O4', 'S2', 'S5', 'S6', 'X7', 'X8', 'X15', 'X17',
+      'G1', 'G2', 'G3', 'G4', 'G6', 'G7', 'G8', 'G10', 'G15', 'G16', 'G17', 'G18', 'G19', 'G21', 'G22', 'G24',
+    ].sort());
   });
 });
 

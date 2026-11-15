@@ -7,7 +7,7 @@ import { ADV_DIR, loadAdversarial, runCase } from './support/adversarial.js';
 const files = loadAdversarial();
 const all = files.flatMap((f) => f.cases.map((c) => ({ ...c, category: f.category })));
 
-const CATEGORIES = ['obfuscated', 'unicode', 'splits', 'encodings', 'words', 'context', 'case', 'formats'];
+const CATEGORIES = ['obfuscated', 'unicode', 'splits', 'encodings', 'words', 'context', 'case', 'formats', 'gaps'];
 
 describe('adversarial set shape', () => {
   it('has every category from TESTING.md section 3', () => {
@@ -30,8 +30,11 @@ describe('adversarial cases', () => {
     const title = `${claim}: ${c.id} ${c.title}`;
     if (c.expect === 'silent') {
       // A known miss. The test states what we want and is expected to fail, so a fix shows up as a failure here.
+      // Each secret is checked on its own: a fix that catches one of them (the street of an address, not its
+      // town) fails this test too, so the case has to be split or changed with it.
       it.fails(title, () => {
-        expect(runCase(c).outcome).not.toBe('silent');
+        const outcomes = c.check === 'roundtrip' ? [runCase(c).outcome] : c.secrets.map((s) => runCase({ ...c, secrets: [s] }).outcome);
+        expect(outcomes.some((o) => o !== 'silent')).toBe(true);
       });
     } else {
       it(title, () => {
