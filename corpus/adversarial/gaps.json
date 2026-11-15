@@ -1,0 +1,278 @@
+[
+  {
+    "id": "G1",
+    "title": "shipping address block on a payment receipt",
+    "text": "Hello Jordan Pemberton,\n\nYou sent a payment of $47.88 USD to Example Indexer LLC on Mar 3, 2026.\n\nShipping address\nJordan Pemberton\n4417 Larkspur Hollow Rd Apt 2B\nBrookhaven, OR 97399\nUnited States\n\nTransaction ID: 7XK29384LM102938P",
+    "secrets": [
+      "4417 Larkspur Hollow Rd",
+      "Brookhaven",
+      "97399"
+    ],
+    "expect": "silent",
+    "why": "No built-in detector looks for postal addresses, and a place is found only from `known`. The name above the street is replaced because the greeting names it, which makes the block look redacted. Issue #52.",
+    "seed": "adv"
+  },
+  {
+    "id": "G2",
+    "title": "US street address in a sentence",
+    "text": "Please send it to 4417 Larkspur Hollow Rd, Brookhaven, OR 97399 by Friday.",
+    "secrets": [
+      "Larkspur Hollow",
+      "Brookhaven",
+      "97399"
+    ],
+    "expect": "silent",
+    "why": "No built-in detector looks for street addresses. The house number has too few digits to be an id and the ZIP code is a bare five-digit number.",
+    "seed": "adv"
+  },
+  {
+    "id": "G3",
+    "title": "UK address with a flat number and a postcode",
+    "text": "Deliver to Flat 3, 12 Quillon Road, Ashcombe Vale ZZ1 4QX.",
+    "secrets": [
+      "Quillon Road",
+      "Ashcombe Vale",
+      "ZZ1 4QX"
+    ],
+    "expect": "silent",
+    "why": "No built-in detector looks for street addresses or UK postcodes.",
+    "seed": "adv"
+  },
+  {
+    "id": "G4",
+    "title": "Spanish address with floor, door and postal code",
+    "text": "Dirección: Calle de los Tilos Altos 14, 3º B, 52990 Torrebruna.",
+    "secrets": [
+      "Tilos Altos",
+      "52990",
+      "Torrebruna"
+    ],
+    "expect": "silent",
+    "why": "No built-in detector looks for street addresses or postal codes, and `Dirección:` is not a label any detector reads.",
+    "seed": "adv"
+  },
+  {
+    "id": "G5",
+    "title": "postcode alone after a label",
+    "text": "Postcode: ZZ1 4QX",
+    "secrets": [
+      "ZZ1 4QX"
+    ],
+    "expect": "silent",
+    "why": "No built-in detector looks for postal codes, and a UK postcode has too few digits to be an id.",
+    "seed": "adv"
+  },
+  {
+    "id": "G6",
+    "title": "place names in a sentence",
+    "text": "We met in Torrebruna last week and again in Ashcombe Vale.",
+    "secrets": [
+      "Torrebruna",
+      "Ashcombe Vale"
+    ],
+    "expect": "silent",
+    "why": "A place is found only from `known` or a detector the caller adds. Nothing in the core marks a capitalised word as a town.",
+    "seed": "adv"
+  },
+  {
+    "id": "G7",
+    "title": "recipient name under a ship-to label",
+    "text": "Ship to\nOdalys Brenwick\n\nThank you for your order.",
+    "secrets": [
+      "Odalys Brenwick"
+    ],
+    "expect": "silent",
+    "why": "A name is found after a greeting, a closing, a title or a person label such as `Name:`. An address label is none of these, so a name the text writes nowhere else goes through.",
+    "seed": "adv"
+  },
+  {
+    "id": "G8",
+    "title": "GPS coordinates",
+    "text": "The pickup point is 41.0213, -31.4472 behind the shop.",
+    "secrets": [
+      "41.0213",
+      "31.4472"
+    ],
+    "expect": "silent",
+    "why": "No built-in detector looks for coordinates. Each half is a decimal number without a currency, which is not an amount.",
+    "seed": "adv"
+  },
+  {
+    "id": "G9",
+    "title": "card security code and expiry",
+    "text": "Card ending 4242, CVV 381, expires 04/29.",
+    "secrets": [
+      "381",
+      "04/29"
+    ],
+    "expect": "silent",
+    "why": "A three-digit code is too short to be an id, `CVV` is not an id label, and a month and two-digit year is not a date to blind.",
+    "seed": "adv"
+  },
+  {
+    "id": "G10",
+    "title": "vehicle registration plate",
+    "text": "The van was ZZ71 QXJ, parked outside.",
+    "secrets": [
+      "ZZ71 QXJ"
+    ],
+    "expect": "silent",
+    "why": "No built-in detector looks for plates. With two digits it is too weak to be an id.",
+    "seed": "adv"
+  },
+  {
+    "id": "G11",
+    "title": "username after a label",
+    "text": "Username: jpemberton42",
+    "secrets": [
+      "jpemberton42"
+    ],
+    "expect": "silent",
+    "why": "No built-in detector looks for usernames or logins, `Username:` is not a label any detector reads, and with two digits the value is too weak to be an id.",
+    "seed": "adv"
+  },
+  {
+    "id": "G12",
+    "title": "username in a sentence",
+    "text": "Log in as jpemberton with the usual password.",
+    "secrets": [
+      "jpemberton"
+    ],
+    "expect": "silent",
+    "why": "A lower-case login with no digits reads as an ordinary word to every pattern.",
+    "seed": "adv"
+  },
+  {
+    "id": "G13",
+    "title": "MAC address of a device",
+    "text": "Device 02:5E:A1:3C:77:B9 joined the network.",
+    "secrets": [
+      "02:5E:A1:3C:77:B9"
+    ],
+    "expect": "silent",
+    "why": "IPv4 and IPv6 addresses are typed ids, MAC addresses are not, and the colon-separated pairs are too short for the generic id pattern.",
+    "seed": "adv"
+  },
+  {
+    "id": "G14",
+    "title": "age of a patient",
+    "text": "The patient, aged 47, lives alone above the bakery.",
+    "secrets": [
+      "47"
+    ],
+    "expect": "silent",
+    "why": "Ages, job titles and other details that identify someone only in combination are not a kind blind replaces.",
+    "seed": "adv"
+  },
+  {
+    "id": "G15",
+    "title": "name and town in a CSV row",
+    "text": "name,city\nOdalys Brenwick,Torrebruna",
+    "secrets": [
+      "Odalys Brenwick",
+      "Torrebruna"
+    ],
+    "expect": "silent",
+    "why": "Column and field names such as `name` or `city` are not used to find values, and a CSV row has no greeting, signature or label to start from.",
+    "seed": "adv"
+  },
+  {
+    "id": "G16",
+    "title": "SWIFT or BIC code",
+    "text": "BIC: QXKRESMMXXX for the transfer.",
+    "secrets": [
+      "QXKRESMMXXX"
+    ],
+    "expect": "silent",
+    "why": "No built-in detector looks for SWIFT or BIC codes. Eleven letters without a digit are not an id.",
+    "seed": "adv"
+  },
+  {
+    "id": "G17",
+    "title": "UK landline written with its leading 0",
+    "text": "Call 020 7946 0958 after noon.",
+    "secrets": [
+      "020 7946 0958"
+    ],
+    "expect": "silent",
+    "why": "The phone patterns read a UK number with `+44` or `0044`, and a mobile with `07`, but not a landline written nationally.",
+    "seed": "adv"
+  },
+  {
+    "id": "G18",
+    "title": "Mexican phone layout",
+    "text": "Llámame al (55) 1234-5678 por la tarde.",
+    "secrets": [
+      "(55) 1234-5678"
+    ],
+    "expect": "silent",
+    "why": "A two-digit area code in brackets followed by four and four digits matches none of the phone layouts.",
+    "seed": "adv"
+  },
+  {
+    "id": "G19",
+    "title": "French phone layout",
+    "text": "Appelez le 01 99 00 41 27 demain.",
+    "secrets": [
+      "01 99 00 41 27"
+    ],
+    "expect": "silent",
+    "why": "Five pairs of digits match none of the phone layouts. Locales other than English and Spanish are not found.",
+    "seed": "adv"
+  },
+  {
+    "id": "G20",
+    "title": "German date",
+    "text": "Termin am 7. April 2026 in der Praxis.",
+    "secrets": [
+      "7. April 2026"
+    ],
+    "expect": "silent",
+    "why": "The date patterns read English and Spanish forms. A day with a full stop before the month is not one of them.",
+    "seed": "adv"
+  },
+  {
+    "id": "G21",
+    "title": "Swedish phone layout",
+    "text": "Ring 08-465 004 27 före lunch.",
+    "secrets": [
+      "08-465 004 27"
+    ],
+    "expect": "silent",
+    "why": "An area code with a dash and groups of three digits matches none of the phone layouts. Locales other than English and Spanish are not found.",
+    "seed": "adv"
+  },
+  {
+    "id": "G22",
+    "title": "German phone layout",
+    "text": "Rufen Sie (030) 123 45 67 an.",
+    "secrets": [
+      "(030) 123 45 67"
+    ],
+    "expect": "silent",
+    "why": "A bracketed area code with a leading 0 and groups of three, two and two digits matches none of the phone layouts.",
+    "seed": "adv"
+  },
+  {
+    "id": "G23",
+    "title": "French date",
+    "text": "Rendez-vous le 7 avril 2026 au cabinet.",
+    "secrets": [
+      "7 avril 2026"
+    ],
+    "expect": "silent",
+    "why": "The date patterns read English and Spanish month names, not French ones.",
+    "seed": "adv"
+  },
+  {
+    "id": "G24",
+    "title": "name after a German title",
+    "text": "Sehr geehrte Frau Brenwick, anbei die Rechnung.",
+    "secrets": [
+      "Brenwick"
+    ],
+    "expect": "silent",
+    "why": "The titles that mark a name are English and Spanish. `Frau`, `Herr`, `M.` and `Mme` are not among them.",
+    "seed": "adv"
+  }
+]

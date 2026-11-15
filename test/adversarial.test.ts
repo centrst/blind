@@ -7,7 +7,7 @@ import { ADV_DIR, loadAdversarial, runCase } from './support/adversarial.js';
 const files = loadAdversarial();
 const all = files.flatMap((f) => f.cases.map((c) => ({ ...c, category: f.category })));
 
-const CATEGORIES = ['obfuscated', 'unicode', 'splits', 'encodings', 'words', 'context', 'case', 'formats'];
+const CATEGORIES = ['obfuscated', 'unicode', 'splits', 'encodings', 'words', 'context', 'case', 'formats', 'gaps'];
 
 describe('adversarial set shape', () => {
   it('has every category from TESTING.md section 3', () => {
