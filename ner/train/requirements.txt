@@ -43,7 +43,7 @@ propcache==0.5.4
 protobuf==7.36.2
 pyarrow==26.0.1
 Pygments==2.21.0
-python-dateutil==3.0.0
+python-dateutil==4.0.0
 PyYAML==6.0.3
 regex==2026.9.29
 requests==2.34.2
