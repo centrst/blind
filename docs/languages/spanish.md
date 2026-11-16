@@ -12,7 +12,7 @@ Blind carries names and companies found in headers, greetings, signatures, label
 
 ## Spanish recall
 
-The corpus has 164 Spanish files. Presidio uses its fair configuration with organizations on and `.example` domains rewritten. LLM Guard uses `all_tld`. Gretel has 444 synthetic Spanish finance documents. It uses Presidio `with_org` and LLM Guard `all`. Every GLiNER number on this page comes from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The corpus has 164 Spanish files. Presidio uses its fair configuration with organizations on and `.example` domains rewritten. LLM Guard uses `all_tld`. Gretel has 444 synthetic Spanish finance documents. It uses Presidio `with_org` and LLM Guard `all`. Every GLiNER number on this page comes from `@centrst/blind-ner`, built from this repository for these measurements.
 
 | Dataset | Tool | Person | Organization | Place |
 | --- | --- | ---: | ---: | ---: |
@@ -44,7 +44,7 @@ Gretel has no amount labels. Its date labels include durations, frequencies, yea
 | Gretel | Presidio | 32.1% | 40.9% | not labeled | 77.5% | 100% |
 | Gretel | LLM Guard | 68.7% | 62.7% | not labeled | 94.4% | 100% |
 
-The `Blind + GLiNER` rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `Blind + GLiNER` rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 The Blind corpus is home ground. Gretel is synthetic and its labels are incomplete. Replaced but unlabelled values count against precision, so its precision is a floor. On Gretel, measured on 11 November 2026, Blind with GLiNER has 48.2% Spanish person precision, against 48.4% in October. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's. Spanish person labels are noisy too.
 

@@ -1,6 +1,6 @@
 # A token-classification NER model trained for blind
 
-Measured on 2026-10-25 on `feat/ner-deberta`, based on `f5f8dd8` (`fix/round-trip`). The question was whether a DeBERTa token classifier, trained only on data whose licence allows commercial use, gives blind a better person, org and place detector than `gliner_multi-v2.1`. The idea is the one behind LLM Guard's `Isotonic/deberta-v3-base_finetuned_ai4privacy_v2`, which Centrst cannot use because its weights and data are CC BY-NC. The GLiNER runner and the DeBERTa runner both live in `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+Measured on 2026-10-25 on `feat/ner-deberta`, based on `f5f8dd8` (`fix/round-trip`). The question was whether a DeBERTa token classifier, trained only on data whose licence allows commercial use, gives blind a better person, org and place detector than `gliner_multi-v2.1`. The idea is the one behind LLM Guard's `Isotonic/deberta-v3-base_finetuned_ai4privacy_v2`, which Centrst cannot use because its weights and data are CC BY-NC. The GLiNER runner and the DeBERTa runner both live in `@centrst/blind-ner`, built from this repository for these measurements.
 
 **Better precision, worse recall, so not a drop-in replacement.** On text like its training data the model is far more precise than GLiNER and almost never tags a role word. GLiNER tags 1,291 role words such as `Borrower`, `Company` and `Empresa` as persons or orgs on the Gretel sample, and the model tags 16. But on the one dataset that neither it nor GLiNER was trained on, it removes 22 points fewer orgs and 14 points fewer places than GLiNER, and gains no person precision. For a privacy tool a missed org is a leak, so GLiNER stays the default. The model is wired in as an opt-in backend, and the losses below point at what to fix.
 
@@ -109,7 +109,7 @@ R is strict recall and P is precision, in percent. Round trip is `unblind(blind(
 | blind + DeBERTa 0.5 | 99.9 | 97.1 | 100.0 | 98.8 | 99.4 | 100.0 | 379/379 |
 | blind + DeBERTa no-Gretel | 99.9 | 97.1 | 100.0 | 98.6 | 100.0 | 99.4 | 379/379 |
 
-The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 In known mode both variants also round trip 379 of 379, with org recall 100 against 99.7 for GLiNER. On the 43 handwritten files, DeBERTa equals GLiNER on person (98.4 R, 75.0 P) and org recall (100), is slightly better on org precision (65.5 against 63.0), and loses one place: 95.0 R against 100, at 100 P against 78.3. No other kind moved. On the adversarial set two cases go from silent to replaced (F13 and S6) and none gets worse.
 
@@ -127,7 +127,7 @@ In known mode both variants also round trip 379 of 379, with org recall 100 agai
 | blind + DeBERTa 0.5 (in-domain) | 75.4 | 84.6 | 84.3 | 75.4 | 91.7 | 91.3 | 888/888 |
 | blind + DeBERTa no-Gretel (out-of-domain) | 70.5 | 90.2 | 54.2 | 72.8 | 92.9 | 62.4 | 888/888 |
 
-The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm. The blind bare and GLiNER rows on Gretel were measured again on 11 November 2026 with core 0.2.0; the other rows are from the October runs. GLiNER person precision was 40.1 at 0.3 and 44.9 at 0.5 in October. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's.
+The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, built from this repository for these measurements. The blind bare and GLiNER rows on Gretel were measured again on 11 November 2026 with core 0.2.0; the other rows are from the October runs. GLiNER person precision was 40.1 at 0.3 and 44.9 at 0.5 in October. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's.
 
 By language, English then Spanish: DeBERTa person 90.2 R and 89.5 P, then 69.2 R and 66.8 P. GLiNER, measured again on 11 November 2026, 94.1 R and 34.0 P, then 69.0 R and 48.2 P (34.4 and 48.4 P in October). No-Gretel 88.1 R and 88.8 P, then 57.5 R and 91.8 P. LLM Guard `all` 48.2 R and 94.0 P, then 35.5 R and 73.1 P. Gretel's Spanish person labels are noisy (RESULTS-llmguard-gretel.md found 18 of 40 sampled ones were not names), which caps every tool's Spanish row.
 
@@ -145,7 +145,7 @@ By language, English then Spanish: DeBERTa person 90.2 R and 89.5 P, then 69.2 R
 | blind + DeBERTa 0.5 | 66.2 | 60.9 | 67.7 | 74.7 | 80.6 | 51.5 | 1000/1000 |
 | blind + DeBERTa no-Gretel | 64.8 | 61.3 | 71.6 | 81.7 | 96.1 | 38.9 | 1000/1000 |
 
-The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 On the Spanish half, GLiNER scores person 77.6 R and 65.0 P, org 97.7 R and 53.1 P, place 99.3 R and 48.9 P. DeBERTa person 73.7 R and 62.8 P, org 79.9 R and 73.0 P, place 84.5 R and 47.5 P.
 
@@ -162,7 +162,7 @@ On the Spanish half, GLiNER scores person 77.6 R and 65.0 P, org 97.7 R and 53.1
 | Nemotron test (in-distribution) | blind + DeBERTa fp32 | 97.3 | 98.4 | 98.8 | 91.1 | 96.7 | 94.8 |
 | Nemotron test (in-distribution) | blind + DeBERTa no-Gretel | 97.3 | 99.5 | 99.5 | 96.3 | 98.1 | 89.2 |
 
-The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 Privy has only 50 org labels. Every blind and LLM Guard column round trips 1,000 of 1,000 on both.
 
@@ -193,7 +193,7 @@ Apple M4 Max, Node 26.11.1, onnxruntime-node 1.30.0, CPU provider, default threa
 | DeBERTa fp32 | 1,114 MB | 44 / 62 | 80 / 139 | 2.0 to 3.1 GB |
 | DeBERTa int8 (weight-only) | 348 MB | 52 / 64 | 89 / 153 | 1.1 GB |
 
-The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 Add the 16 MB `tokenizer.json` to each DeBERTa file. The fp32 model is 14% to 29% faster than GLiNER, because it runs one pass per window with no label prompt and no span enumeration. int8 is a third of the size and needs half the memory, at about GLiNER's speed on the CPU. It scores within 0.6 points of fp32 everywhere above, except org precision on privy's 50 orgs, where it is 1.4 points lower. 192M of the model's 278M weights are the 250k-token multilingual embedding table, so pruning the vocabulary to the tokens Spanish and English text uses would shrink both files much further. That was not tried.
 
@@ -351,7 +351,7 @@ Same corpus, same Gretel 888 sample (in-domain for both `full` and `full2`, whic
 | DeBERTa round two int8 | 66.0 | 60.9 | 76.5 | 68.3 | 91.9 | 46.9 | 1000/1000 |
 | DeBERTa round two 0.5 | 65.9 | 60.9 | 70.4 | 69.3 | 88.7 | 48.1 | 1000/1000 |
 
-The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 By language, round one then round two: Spanish org recall 79.9 then 83.1, Spanish place recall 84.5 then 94.8; English org recall 71.2 then 69.4, English place recall 84.3 then 88.9. Person moved less than a point either way in both languages.
 
@@ -367,7 +367,7 @@ By language, round one then round two: Spanish org recall 79.9 then 83.1, Spanis
 | DeBERTa round two int8 | 78.2 | 76.9 | 88.5 | 70.4 | 93.2 | 87.0 | 888/888 |
 | DeBERTa round two 0.5 | 76.0 | 83.8 | 84.7 | 76.1 | 92.9 | 89.8 | 888/888 |
 
-The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm. The blind bare and GLiNER rows on Gretel were measured again on 11 November 2026 with core 0.2.0; the other rows are from the October runs. GLiNER person precision was 40.1 at 0.3 and 44.9 at 0.5 in October. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's.
+The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, built from this repository for these measurements. The blind bare and GLiNER rows on Gretel were measured again on 11 November 2026 with core 0.2.0; the other rows are from the October runs. GLiNER person precision was 40.1 at 0.3 and 44.9 at 0.5 in October. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's.
 
 **Corpus, 379 files (home ground).**
 
@@ -380,7 +380,7 @@ The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built fr
 | **DeBERTa round two** | **99.9** | **97.1** | **100.0** | **98.5** | **100.0** | **99.4** | 379/379 |
 | DeBERTa round two int8 | 99.9 | 97.1 | 100.0 | 98.5 | 100.0 | 99.4 | 379/379 |
 
-The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 On the 43 handwritten files round two finds the place round one missed (place 100 R, 95.0 P, against 95.0 and 100) and one more person (99.2 R against 98.4). Org is unchanged at 100 R and 65.5 P. Known mode round trips 379 of 379 too.
 
@@ -397,7 +397,7 @@ On the 43 handwritten files round two finds the place round one missed (place 10
 | **DeBERTa round two** | **16** (`empresa` 11) | 2,803 |
 | DeBERTa round two int8 | 15 | 2,802 |
 
-The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 **Size and speed**, measured in one session after training, same machine and method as round one (Node, onnxruntime-node CPU, one text per call, uncached, model time only):
 
@@ -409,7 +409,7 @@ The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built fr
 | DeBERTa round two fp32 | 1,114 MB | 43 / 61 | 79 / 139 | 2.0 to 3.1 GB |
 | DeBERTa round two int8 | 348 MB | 52 / 64 | 88 / 151 | 1.1 GB |
 
-The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The GLiNER and DeBERTa rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 Same architecture, so the same size and speed. Plus the 16 MB `tokenizer.json`.
 

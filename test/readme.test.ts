@@ -44,9 +44,9 @@ describe('what the docs say the leak check covers', () => {
   });
 });
 
-describe('what the docs say about the NER package status', () => {
-  // The repository's own wording, in the forms README.md and ner/README.md use it.
-  const STATUS = /prototype[^.]*?built from this repository,?(?: and is)? not on npm/i;
+describe('what the docs say about NER measurement provenance', () => {
+  // Keep the source of historical measurements visible after publication.
+  const PROVENANCE = /@centrst\/blind-ner[^.]*?built from this repository/i;
   const NAMES_NER = /gliner|@centrst\/blind-ner/i;
   // Files that report numbers measured with @centrst/blind-ner.
   const REPORTS = [
@@ -63,9 +63,9 @@ describe('what the docs say about the NER package status', () => {
   const NAMES_ONLY = [
     'AGENTS.md', // commands and layout
     'CHANGELOG.md', // the Detector interface entry
-    'CLAIMS.md', // generated from TESTING.md claim rows, which carry the status
+    'CLAIMS.md', // generated from TESTING.md claim rows, which name the package
     'CONTRIBUTING.md', // the ner:download command
-    'RELEASING.md', // states the prototype status in its own words
+    'RELEASING.md', // release procedure
     'THIRD-PARTY-NOTICES.md', // model licence
     'corpus/adversarial/known-misses.md', // generated from adversarial case reasons
     'ner/CHANGELOG.md', // what the package holds
@@ -82,11 +82,11 @@ describe('what the docs say about the NER package status', () => {
     expect(REPORTS.filter((path) => !naming.includes(path))).toEqual([]);
   });
 
-  it('B3: every Markdown file reporting NER numbers says the package is a prototype built from this repository, not on npm', () => {
-    expect(REPORTS.filter((path) => !STATUS.test(read(path)))).toEqual([]);
+  it('B3: every Markdown file reporting NER numbers identifies the package built from this repository', () => {
+    expect(REPORTS.filter((path) => !PROVENANCE.test(read(path)))).toEqual([]);
   });
 
-  it('B3: every table with a GLiNER row or column and a number in it has the status note in the paragraph just before or after it', () => {
+  it('B3: every table with a GLiNER row or column and a number in it has the provenance note in the paragraph just before or after it', () => {
     const NUMBER = /^\s*\d[\d.,]*\s*(?:%|ms|MB|GB|MiB)?\s*(?:\([^)]*\))?\s*$|^\s*\d+ \/ \d+\s*$/;
     const missing: string[] = [];
     for (const path of REPORTS) {
@@ -108,7 +108,7 @@ describe('what the docs say about the NER package status', () => {
         while (isRow(end + 1)) end++;
         const rows = lines.slice(start, end + 1);
         const numeric = rows.some((row) => row.split('|').some((cell) => cell.trim() !== '' && NUMBER.test(cell)));
-        if (numeric && NAMES_NER.test(rows.join('\n')) && !STATUS.test(paragraph(start - 1, -1)) && !STATUS.test(paragraph(end + 1, 1))) {
+        if (numeric && NAMES_NER.test(rows.join('\n')) && !PROVENANCE.test(paragraph(start - 1, -1)) && !PROVENANCE.test(paragraph(end + 1, 1))) {
           missing.push(`${path}:${start + 1}`);
         }
         start = end;

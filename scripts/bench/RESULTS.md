@@ -6,7 +6,7 @@ LLM Guard's columns on this corpus, and a second run of all three tools on a sam
 
 ## Rerun of the blind columns on 2026-11-11
 
-The blind columns were rerun on 2026-11-11 at commit `5369e57`, which carries core `0.2.0`: greetings, signatures, labels, legal suffixes and private addresses now anchor names, and long known lists match without a pattern per entry. The corpus is now 381 files. The two added handwritten cases, one in Hebrew and one in Arabic, add 4 person, 3 org, 4 email, 2 amount and 2 date annotations, so the counts differ from the October tables by those numbers. The command was `scripts/bench/score.ts` as `pnpm bench:presidio` runs it, without Presidio's raw output, so it scored only the blind columns. Presidio was not rerun: every Presidio number, and every table and paragraph below this section, is from the 2026-10-24 run on 379 files. The + GLiNER columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The blind columns were rerun on 2026-11-11 at commit `5369e57`, which carries core `0.2.0`: greetings, signatures, labels, legal suffixes and private addresses now anchor names, and long known lists match without a pattern per entry. The corpus is now 381 files. The two added handwritten cases, one in Hebrew and one in Arabic, add 4 person, 3 org, 4 email, 2 amount and 2 date annotations, so the counts differ from the October tables by those numbers. The command was `scripts/bench/score.ts` as `pnpm bench:presidio` runs it, without Presidio's raw output, so it scored only the blind columns. Presidio was not rerun: every Presidio number, and every table and paragraph below this section, is from the 2026-10-24 run on 379 files. The + GLiNER columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 Strict recall, all 381 files:
 
@@ -23,7 +23,7 @@ Strict recall, all 381 files:
 | amount | 739 | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
 | date | 909 | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 Person, org and place recall by language, bare mode, core alone then with GLiNER at 0.3: English (116 files) 87.9% to 99.8%, 99.5% to 100.0% and 0.0% to 100.0%. Spanish (164 files) 82.6% to 99.8%, 98.2% to 98.9% and 0.0% to 98.7%. Mixed (99 files) 86.9% to 100.0%, 98.3% to 98.9% and 0.0% to 100.0%.
 
@@ -36,7 +36,7 @@ Precision, all 381 files, correct of replaced:
 | place | n/a (0/0) | 100.0% (1/1) | 90.2% (157/174) | 92.7% (152/164) | 90.8% (157/173) |
 | any kind | 98.6% (6054/6139) | 98.6% (6038/6123) | 97.9% (6143/6276) | 98.0% (6135/6259) | 97.9% (6153/6286) |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 The other kinds have the same precision as before in every blind column: email 96.6%, url, phone, iban, id and date 100.0%, amount 99.9%. Every blind run round trips 381 of 381 files. With core 0.2.0 the core alone now beats every Presidio configuration of the October run on persons and orgs, so the "Where Presidio wins" section below describes the October core. GLiNER now adds mostly places and the last people, at a cost of 6.1 points of org precision in bare mode.
 
@@ -50,7 +50,7 @@ PR #13 claims that recall, precision and amount usability did not move. On this 
 
 - Presidio: `presidio-analyzer` 2.2.364 and `presidio-anonymizer` 2.2.364.
 - spaCy 3.8.16 with `en_core_web_lg` 3.8.0 and `es_core_news_lg` 3.8.0. Both are the large models, about 425 MB and 600 MB installed, so download size did not force a smaller one.
-- GLiNER: `onnx-community/gliner_multi-v2.1`, fp32 ONNX export, 1.1 GB, fetched by `pnpm ner:download` with its SHA-256 checked. It runs through `@centrst/blind-ner` at its default threshold of 0.3, and once more at 0.5 for one extra column. `@centrst/blind-ner` is a prototype built from this repository, not on npm, so every GLiNER number in this file comes from that prototype.
+- GLiNER: `onnx-community/gliner_multi-v2.1`, fp32 ONNX export, 1.1 GB, fetched by `pnpm ner:download` with its SHA-256 checked. It runs through `@centrst/blind-ner` at its default threshold of 0.3, and once more at 0.5 for one extra column. `@centrst/blind-ner` was built from this repository for these measurements.
 - Python 3.12.15, Node v26.11.1, macOS 27.0.1 on arm64.
 - Every Python package is pinned in `scripts/bench/requirements.txt`, which is a `pip freeze` of the venv.
 
@@ -97,7 +97,7 @@ blind runs in five ways. In `bare` mode nothing is passed. In `known` mode the `
 | amount | 737 | 3.3% | 3.3% | 7.7% | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
 | date | 907 | 57.9% | 57.9% | 58.2% | 99.9% | 99.9% | 99.9% | 99.9% | 99.9% |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 ## Precision, all files
 
@@ -117,7 +117,7 @@ Each cell shows correct spans over replaced spans. n/a means the tool replaced n
 | date | 73.9% (500/677) | 73.9% (500/677) | 73.6% (493/670) | 100.0% (907/907) | 100.0% (907/907) | 100.0% (907/907) | 100.0% (907/907) | 100.0% (907/907) |
 | any kind | 85.0% (3253/3829) | 86.5% (3799/4390) | 83.2% (4240/5095) | 98.4% (5346/5431) | 98.6% (5889/5974) | 97.9% (6105/6237) | 98.1% (6086/6206) | 97.9% (6136/6268) |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 ## Amounts and dates for use with a model
 
@@ -139,7 +139,7 @@ This part runs offline and makes no model calls. For each annotated amount and d
 | blind bare + GLiNER 0.5 | 100.0% | 100.0% | 100.0% | 99.9% | 100.0% | 99.9% | 379/379 |
 | blind known + GLiNER | 100.0% | 100.0% | 100.0% | 99.9% | 100.0% | 99.9% | 379/379 |
 
-The `+ GLiNER` rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 The 3.3% of amounts Presidio replaces are accidents. Other recognizers swallow them: DATE_TIME, PHONE_NUMBER, LOCATION, and ORGANIZATION once orgs are on. Those amounts are lost, not protected. The one blind date that counts as not replaced is the known case from TESTING.md, where two dates sit two weeks apart and the shift lands one on the other's real string. It was still shifted correctly, so it counts as usable. GLiNER changes nothing here, because NER spans never override amount or date spans.
 
@@ -151,7 +151,7 @@ On places, and on orgs, against blind's core without the NER package. blind's co
 
 On persons the two are now close, and Presidio still wins in English and mixed mail. Over all files, blind bare removes 67.3% of person values against 66.5% for Presidio `default_tld` and 70.3% for `with_org_tld`. On the 116 English files Presidio `default_tld` removes 76.0% and blind bare 73.2%. On the 99 mixed files Presidio removes 87.4% and blind bare 69.8%. blind bare wins on the 164 Spanish files, at 61.7% against 47.2%. blind's person precision is far higher, 95.5% against 78.5%, so a blind replacement is much less likely to hit a word that is not a name. Once the owner's names are passed as `known`, blind's core removes 98.7% of person values, which Presidio has no direct way to match without a deny list.
 
-With GLiNER plugged in, Presidio no longer wins on any measured kind. blind bare + GLiNER removes 98.7% of person values, 97.7% of orgs and 99.4% of places. Its precision on those kinds is 96.6%, 92.7% and 88.6%, against Presidio's 78.5% person, 43.8% org with orgs on, and 23.6% place. These GLiNER numbers come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+With GLiNER plugged in, Presidio no longer wins on any measured kind. blind bare + GLiNER removes 98.7% of person values, 97.7% of orgs and 99.4% of places. Its precision on those kinds is 96.6%, 92.7% and 88.6%, against Presidio's 78.5% person, 43.8% org with orgs on, and 23.6% place. These GLiNER numbers come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 Presidio still wins on cost. Its spaCy models are about 1 GB for both languages and processed the corpus in about 7.4 seconds, roughly 20 ms per file. GLiNER is a 1.1 GB fp32 model that took 49 ms per file on the same machine, about two and a half times slower. Presidio also covers more languages and identity formats out of the box than this corpus tests. Adding GLiNER lowers blind's org precision from 97.8% to 92.7% and its any-kind precision from 98.4% to 97.9% in bare mode, because the model tags some words that are not annotated.
 
@@ -178,7 +178,7 @@ On amounts and dates there is a real trade-off, not a winner by default. Presidi
 | Gretel | org | 98.7% | 98.3% | 29.4% | 34.5% |
 | Gretel | place | 98.6% | 94.9% | 47.3% | 51.9% |
 
-Every number in this table comes from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+Every number in this table comes from `@centrst/blind-ner`, built from this repository for these measurements.
 
 On the corpus 0.5 gains little, because there is little left to gain. Wrong person, org and place spans drop from 119 to 104. It loses 7 correct person spans, 4 org and 5 place, and the place recall loss is 6 values, all in Spanish files, where place recall falls from 98.7% to 90.8%. Every other kind is unchanged, and so is the round trip at 379/379.
 
