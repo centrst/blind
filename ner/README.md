@@ -2,14 +2,12 @@
 
 An optional multilingual NER detector for `@centrst/blind`. It finds people, organizations and places that the pattern detectors cannot, using GLiNER (`gliner_multi-v2.1`) on ONNX Runtime, in process. Inference is fully local. The only network use is the one-time model download, which is a separate command.
 
-The core `@centrst/blind` is [available on npm](https://www.npmjs.com/package/@centrst/blind). This package is a prototype, built from this repository, not on npm. It is packaged for npm and waits for its first release, which [RELEASING.md](https://github.com/centrst/blind/blob/main/RELEASING.md#the-ner-package) describes. The core library stays at zero runtime dependencies.
+Version `0.1.0` works with core `@centrst/blind` `0.4.x`. The core library stays at zero runtime dependencies. Maintainers publish this package separately, as [RELEASING.md](https://github.com/centrst/blind/blob/main/RELEASING.md#the-ner-package) describes.
 
 ## Install
 
-After the first release:
-
 ```sh
-npm install @centrst/blind @centrst/blind-ner
+npm install @centrst/blind@^0.4.0 @centrst/blind-ner@0.1.0
 npx blind-ner-download ./models/gliner_multi-v2.1   # 1.1 GB, pinned revision, SHA-256 checked, once
 ```
 
@@ -17,7 +15,7 @@ The core is a peer dependency, so the detector uses the copy of `@centrst/blind`
 
 `onnxruntime-node` has an install script. On Linux x64 it downloads the CUDA and TensorRT providers, which this package never loads, since it runs the model on the CPU. Set `ONNXRUNTIME_NODE_INSTALL=skip` in the environment of `npm install` to skip that download. The CPU runtime ships inside the npm package on every supported platform.
 
-Until the first release, build it in this repository: `pnpm install`, `pnpm ner:download` (the same command, writing to `ner/models/gliner_multi-v2.1`), then `pnpm build && pnpm build:ner`.
+To build from source in this repository: `pnpm install`, `pnpm ner:download` (the same command, writing to `ner/models/gliner_multi-v2.1`), then `pnpm build && pnpm build:ner`.
 
 ## Use
 
@@ -42,7 +40,7 @@ The model runs on onnxruntime-node 1.31.1, whose npm package ships native binari
 
 ## Numbers
 
-Prototype numbers: this package is built from this repository and is not on npm.
+`@centrst/blind-ner` was built from this repository for these measurements.
 
 Measured on 11 November 2026 against core `0.2.0`, at commit `5369e57`. Synthetic corpus, 381 files, strict recall (the annotated value is gone from the output) and same-kind precision, threshold 0.3, `gliner_multi-v2.1` fp32. Before is `@centrst/blind` 0.2.0 alone. Method and caveats are in [TESTING.md](https://github.com/centrst/blind/blob/main/TESTING.md) section 9. Reproduce with `pnpm ner:eval`.
 

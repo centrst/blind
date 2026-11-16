@@ -1,6 +1,6 @@
 # PII-tuned NER models as blind's detector
 
-Measured on 2026-10-24. The question was whether a PII-tuned GLiNER model with a commercial licence would make a better detector than `gliner_multi-v2.1`, mainly on precision, which was 29% to 47% on Gretel's finance documents. Every model here ran through the runner in `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+Measured on 2026-10-24. The question was whether a PII-tuned GLiNER model with a commercial licence would make a better detector than `gliner_multi-v2.1`, mainly on precision, which was 29% to 47% on Gretel's finance documents. Every model here ran through the runner in `@centrst/blind-ner`, built from this repository for these measurements.
 
 **No, not as a drop-in change.** Neither multilingual PII model is better. With the detector's labels they lose most street addresses on Gretel and some org and place recall on the corpus, and they gain only a few points of person and org precision. They still tag the same role words (`Borrower`, `Lender`, `Company`). The English-only `knowledgator/gliner-pii-base-v1.0` is the one interesting result. It has much better person precision on Gretel, it is 29% to 44% faster and 57% of the size, and it holds up on the corpus, Spanish included. But it finds fewer street addresses and orgs, its card says English only, and its training data is not published, so I cannot rule out that Gretel's data was in it. The default stays as it is. The owner decides.
 
@@ -50,7 +50,7 @@ The rule picked 0.8 or 0.9 for two models, because Gretel precision is a floor. 
 | gliner-pii-base-v1.0 | 0.5 | 64.3 | 81.0 | 80.9 | 46.5 | 31.2 | 42.3 | 55.6 | 59 |
 | gliner-pii-base-v1.0 | 0.6 | 55.5 | 90.4 | 70.8 | 63.8 | 12.6 | 34.6 | 51.5 | 59 |
 
-Every row ran through `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+Every row ran through `@centrst/blind-ner`, built from this repository for these measurements.
 
 ### Blind's corpus, 379 files
 
@@ -75,7 +75,7 @@ Every row ran through `@centrst/blind-ner`, a prototype built from this reposito
 | gliner-pii-base-v1.0 | 0.5 | 96.8 | 96.3 | 76.2 | 96.1 | 86.2 | 96.6 | 90.9 | 35 |
 | gliner-pii-base-v1.0 | 0.6 | 92.8 | 95.9 | 61.1 | 97.2 | 64.4 | 98.2 | 82.4 | 35 |
 
-Every row ran through `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+Every row ran through `@centrst/blind-ner`, built from this repository for these measurements.
 
 Thresholds 0.2, 0.7, 0.8 and 0.9 were run for every model too. They are in `reports/candidates/` and `ner/scripts/candidates.ts` prints them, along with the tuning half, all 888 files and the split by language.
 
@@ -92,7 +92,7 @@ Apple M4 Max, 16 cores, 64 GB, Node 26.11.1, onnxruntime-node 1.30.0, CPU provid
 | gliner-multi-pii-domains-v1 | 49 | 102 | 1157 MB | 1174 MB |
 | gliner-pii-base-v1.0 | 35 | 59 | 665 MB | 673 MB |
 
-Every row ran through `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+Every row ran through `@centrst/blind-ner`, built from this repository for these measurements.
 
 The two exported PII models run at the baseline's speed, as expected from the same architecture. Each model ran once, so the 4 ms gap on Gretel says nothing either way.
 
@@ -119,7 +119,7 @@ To check whether the place collapse was the model or the label, every model also
 | gliner-multi-pii-domains-v1 | 0.3 | 96.4 | 75.3 | 48.5 | 33.6 | 74.7 | 100.0 |
 | gliner-pii-base-v1.0 | 0.3 | 94.0 | 79.8 | 62.5 | 31.0 | 65.5 | 100.0 |
 
-Every row ran through `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+Every row ran through `@centrst/blind-ner`, built from this repository for these measurements.
 
 With `address` the PII models find Gretel's street addresses again, at much higher precision than the baseline with `location`. On the corpus they then miss 25% to 38% of the places, because a town is not an address. Blind's `place` kind covers both, and the detector sends one label per kind. So the PII models would need both labels mapped to `place`, which `createNerDetector` cannot do today. That is the next experiment if the PII models are worth another look. It is not run here.
 

@@ -6,7 +6,7 @@ Run on 2026-10-24 at commit `4f5183f` on `fix/round-trip`, with `src` matching t
 
 ## Rerun of the blind columns on 2026-11-11
 
-The blind columns were rerun on 2026-11-11 at commit `5369e57`, which carries core `0.2.0`. On blind's corpus the rerun is in [RESULTS.md](RESULTS.md). On Gretel the sample is the same 888 files, drawn by `gretel_sample.py` from the same pinned parquet file, and `score-gretel.ts` scored only the blind columns, since no Presidio or LLM Guard raw output was present. Presidio and LLM Guard were not rerun: their numbers, and every table and paragraph below this section, are from the 2026-10-24 run. The + GLiNER columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The blind columns were rerun on 2026-11-11 at commit `5369e57`, which carries core `0.2.0`. On blind's corpus the rerun is in [RESULTS.md](RESULTS.md). On Gretel the sample is the same 888 files, drawn by `gretel_sample.py` from the same pinned parquet file, and `score-gretel.ts` scored only the blind columns, since no Presidio or LLM Guard raw output was present. Presidio and LLM Guard were not rerun: their numbers, and every table and paragraph below this section, are from the 2026-10-24 run. The + GLiNER columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 Strict recall on Gretel, 888 files, then the 444 English and the 444 Spanish files:
 
@@ -21,13 +21,13 @@ Strict recall on Gretel, 888 files, then the 444 English and the 444 Spanish fil
 | id | 82.3% | 83.8% | 83.8% | 86.5% | 88.7% | 77.9% | 78.6% |
 | date | 49.8% | 50.1% | 50.0% | 43.5% | 43.8% | 60.8% | 61.2% |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 At 0.5 English person recall is 92.7% and Spanish 68.0%. Spanish names stay the weak spot with the detector, and part of that is Gretel's labelling: many Spanish `name` labels are greetings, table headings or placeholders such as `[Nombre del Empleado]`.
 
 The core alone now reads greetings, signatures and labels, and on Gretel its person precision is 88.3% (551 of 624) and its org precision 88.3% (250 of 283), against 76.3% (87 of 114) and none replaced in October. Its precision on the other kinds is unchanged: email 97.3%, phone 57.2%, iban 56.4%, id 11.2%, date 75.9%. Any kind is 36.6% and any labelled kind 52.7%. Calendar date recall is 97.5%. Every blind column round trips 888 of 888.
 
-Precision with the detector, 11 November 2026, at 0.3 and then at 0.5: person 39.8% (1342/3374) and 44.4% (1334/3006), against 40.1% and 44.9% in October; org 29.4% (854/2906) and 34.5% (845/2452); place 47.4% (1265/2669) and 51.9% (1193/2297); any kind 35.7% (5095/14279) and 38.1% (4989/13085); any labelled kind 41.1% (5085/12356) and 44.6% (4979/11162). Person precision at 0.3 is 34.0% (679/1998) on the English files and 48.2% (663/1376) on the Spanish ones. Fully covered with the detector, at 0.3 and 0.5: person 80.8% and 79.8%, org 94.8% and 93.8% against 97.8% and 96.8% in October, place 92.0% and 82.7%. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's. The tables below keep the October values. The + GLiNER figures come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+Precision with the detector, 11 November 2026, at 0.3 and then at 0.5: person 39.8% (1342/3374) and 44.4% (1334/3006), against 40.1% and 44.9% in October; org 29.4% (854/2906) and 34.5% (845/2452); place 47.4% (1265/2669) and 51.9% (1193/2297); any kind 35.7% (5095/14279) and 38.1% (4989/13085); any labelled kind 41.1% (5085/12356) and 44.6% (4979/11162). Person precision at 0.3 is 34.0% (679/1998) on the English files and 48.2% (663/1376) on the Spanish ones. Fully covered with the detector, at 0.3 and 0.5: person 80.8% and 79.8%, org 94.8% and 93.8% against 97.8% and 96.8% in October, place 92.0% and 82.7%. The change against the October run comes from core 0.2.0's own name detection, whose spans merge with the model's. The tables below keep the October values. The + GLiNER figures come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 ## What changed since the previous run
 
@@ -44,7 +44,7 @@ Two other tools moved by a few spans, with no change in their code, their venvs 
 - LLM Guard's recognizer: `Isotonic/deberta-v3-base_finetuned_ai4privacy_v2` at revision `9ea9927`, about 700 MB, which llm-guard pins and fetches from Hugging Face on first use. This is the default in 0.3.16's code (`DEBERTA_AI4PRIVACY_v2_CONF`). LLM Guard's docs still name `dslim/bert-base-NER` as the "top pick", and older releases used it by default. That model was not measured.
 - LLM Guard's threshold: 0.5, the code default. The docs say the default is 0.
 - Presidio for the Gretel run: 2.2.364 with `en_core_web_lg` and `es_core_news_lg`, the same venv as RESULTS.md.
-- GLiNER: `gliner_multi-v2.1` fp32 ONNX at threshold 0.3, as in RESULTS.md, and at 0.5 for one extra column on Gretel. Both ran uncached. It runs through `@centrst/blind-ner`, a prototype built from this repository, not on npm, so every GLiNER number in this file comes from that prototype.
+- GLiNER: `gliner_multi-v2.1` fp32 ONNX at threshold 0.3, as in RESULTS.md, and at 0.5 for one extra column on Gretel. Both ran uncached. It runs through `@centrst/blind-ner`, built from this repository for these measurements.
 - Gretel: `gretelai/synthetic_pii_finance_multilingual`, Apache 2.0, test split, revision `7b844d1`, file SHA-256 `014e1057...3c8c72`. `gretel_sample.py` refuses any other file. pyarrow 26.0.0 reads it.
 - Python 3.12.15, Node v26.11.1, macOS 27.0.1 on arm64. LLM Guard picks its own torch device and chose Apple's MPS GPU. Presidio, GLiNER and blind ran on the CPU.
 - The original LLM Guard environment was frozen in the initial import. The maintained Gretel data environment is pinned in `scripts/bench/requirements-gretel.txt`.
@@ -99,7 +99,7 @@ The 379 files and the scorer are the ones in RESULTS.md. The Presidio `default` 
 | amount | 737 | 7.7% | 0.0% | 0.0% | 13.0% | 13.0% | 100.0% | 100.0% | 100.0% | 100.0% |
 | date | 907 | 58.2% | 0.0% | 0.0% | 100.0% | 100.0% | 99.9% | 99.9% | 99.9% | 99.9% |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 ### Precision, all files
 
@@ -119,7 +119,7 @@ Correct spans over replaced spans. n/a means the tool replaced nothing of that k
 | date | 73.6% (493/670) | n/a (0/0) | n/a (0/0) | 79.9% (917/1148) | 78.4% (917/1169) | 100.0% (907/907) | 100.0% (907/907) | 100.0% (907/907) | 100.0% (907/907) |
 | any kind | 83.2% (4240/5095) | 96.3% (4697/4877) | 96.4% (4502/4672) | 92.9% (6717/7232) | 92.3% (6366/6900) | 98.4% (5346/5431) | 98.6% (5889/5974) | 97.9% (6105/6237) | 97.9% (6136/6268) |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 ### Fully covered, a diagnostic
 
@@ -138,7 +138,7 @@ Strict recall counts a value as gone once it no longer shows as a whole word. A 
 | amount | 5.7% | 0.0% | 13.0% | 13.0% | 100.0% | 100.0% |
 | date | 51.8% | 0.0% | 100.0% | 100.0% | 100.0% | 100.0% |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 Person coverage can be higher than person recall. Coverage is per occurrence, while recall needs every token of the name gone from the whole file.
 
@@ -156,7 +156,7 @@ Person coverage can be higher than person recall. Coverage is per occurrence, wh
 | blind bare + GLiNER | 100.0% | 100.0% | 100.0% | 99.9% | 100.0% | 99.9% | 379/379 |
 | blind known + GLiNER | 100.0% | 100.0% | 100.0% | 99.9% | 100.0% | 99.9% | 379/379 |
 
-The `+ GLiNER` rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 The round trip column is no longer "not possible" for LLM Guard, because it keeps a vault. `Deanonymize(vault).scan(text, sanitized)` gave back the scanned text exactly in all 379 files, in every configuration. In the `_tld` configurations that is the rewritten text, since that is what LLM Guard saw. No placeholder stood for two different values in any file. LLM Guard numbers each distinct string, so `[REDACTED_PERSON_1]` and `[REDACTED_PERSON_2]` stay apart, which Presidio's `replace` operator cannot do. What a model reads is still `[REDACTED_DATE_TIME_1]`, so a hidden amount or date has no value left to compute with. That is why "hidden and usable" is 0.0% for LLM Guard, as for Presidio. In `all`, LLM Guard also wrote 31 placeholders that stand for an empty string. They round trip, but they add noise to the text.
 
@@ -209,7 +209,7 @@ Tools: Presidio `default` and `with_org` (orgs on, text as written), LLM Guard `
 | id | 272 | 45.2% | 48.9% | 42.3% | 68.0% | 82.3% | 83.8% | 83.8% |
 | date | 1476 | 72.4% | 72.4% | 10.4% | 53.7% | 49.5% | 49.9% | 49.7% |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 By language, person recall is 70.1% for Presidio `with_org`, 48.2% for LLM Guard `all`, 4.5% for blind bare and 94.1% for blind with GLiNER on the 444 English files, and 92.7% at 0.5. On the 444 Spanish files it is 42.9%, 35.5%, 3.0% and 68.6%, and 67.6% at 0.5. The other per-language tables are in `reports/gretel-bench.json`.
 
@@ -228,7 +228,7 @@ By language, person recall is 70.1% for Presidio `with_org`, 48.2% for LLM Guard
 | any kind | 53.4% (3788/7096) | 45.1% (4486/9953) | 57.4% (2503/4363) | 55.2% (5559/10065) | 28.6% (1558/5440) | 35.7% (5090/14245) | 38.2% (4984/13043) |
 | any labelled kind | 55.7% (3767/6766) | 46.4% (4466/9626) | 57.4% (2503/4363) | 63.6% (5467/8595) | 43.9% (1548/3523) | 41.2% (5080/12328) | 44.7% (4974/11126) |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 "Any labelled kind" leaves out replaced spans of kinds Gretel never labels: amounts, URLs, blind's domains and entities with no blind kind. Gretel's labels are incomplete, so every precision number here is a floor. The id row is the clearest case. All four tools find account numbers, reference numbers and invoice numbers that Gretel leaves unlabelled, and score 5% to 14% for it.
 
@@ -241,7 +241,7 @@ Gretel's date label covers durations, frequencies, bare years and phrases as wel
 | calendar | 736 | 84.9% | 84.9% | 18.5% | 97.7% | 97.0% | 97.0% | 97.0% |
 | other | 740 | 59.9% | 60.0% | 2.4% | 9.9% | 2.3% | 3.0% | 2.7% |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 ### Fully covered, a diagnostic
 
@@ -256,7 +256,7 @@ The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from th
 | id | 38.6% | 42.6% | 39.3% | 49.3% | 81.6% | 83.1% | 83.1% |
 | date | 66.9% | 67.2% | 11.4% | 47.9% | 44.2% | 44.5% | 44.4% |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 Street addresses are where strict recall flatters most. Removing one word of `100 Jimenez Lakes, Apt. 270` makes the whole string count as gone. Presidio `with_org` removes 83.8% of addresses by that rule, but replaces every character of only 46.1%. LLM Guard `all` drops from 91.0% to 48.5%. blind with GLiNER drops from 98.6% to 92.0%.
 
@@ -272,7 +272,7 @@ Street addresses are where strict recall flatters most. Removing one word of `10
 | user_name | 10 | 20.0% | 20.0% | 30.0% | 50.0% | 20.0% | 90.0% | 90.0% |
 | local_latlng | 16 | 68.8% | 68.8% | 12.5% | 62.5% | 100.0% | 100.0% | 100.0% |
 
-The `+ GLiNER` columns come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` columns come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 Apart from `time`, these counts are small. None of the tools is built to find passwords or card security codes, and none does. blind leaves clock times alone on purpose. LLM Guard's TIME_RE pattern finds most of them.
 
@@ -287,7 +287,7 @@ Apart from `time`, these counts are small. None of the tools is built to find pa
 | blind bare + GLiNER | 888/888 |
 | blind bare + GLiNER 0.5 | 888/888 |
 
-The `+ GLiNER` rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The `+ GLiNER` rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 `unblind(blind(x))` gives back `x` in every Gretel file, bare and with GLiNER at either threshold. C1 says the round trip holds for any input the detectors handle, and C15 says all corpus files round trip with GLiNER. Both now hold on text blind's authors did not write as well as on the corpus. The benchmark runs blind in its default `fake` mode. PR #13 reports 888/888 in `placeholder` and `random` mode too, and this run did not measure those. LLM Guard's round trip held in all 888 files, as before. Its placeholders cannot collide with real text, which makes exact restoring easier than for blind's realistic fakes.
 
@@ -297,7 +297,7 @@ The `+ GLiNER` rows come from `@centrst/blind-ner`, a prototype built from this 
 
 blind bare loses badly on persons and orgs. It removes 3.6% of person values and 0.5% of orgs. Its core finds names from headers, titles, sender lines and the known list, and finance documents in CSV, EDI, FIX, XBRL and MT940 rarely have those anchors. TESTING.md and RESULTS.md predicted this in general terms. The number is worse than "lower than 67.3%". Without GLiNER, blind's core should not be described as a name detector for documents like these.
 
-blind with GLiNER removes the most persons, orgs and places of any tool: 79.5%, 98.7% and 98.6%. It pays in precision. 40.1% of its person spans and 29.4% of its org spans land on a Gretel label of that kind. Many of the rest are role words such as `Borrower`, `Customer`, `Lender`, `Company` and `Empresa`, which a privacy tool can defend replacing but which make the copy harder to read. Others are real places Gretel does not label, such as `España`, `Madrid` and `London`, since Gretel labels only street addresses. LLM Guard's person precision is the best at 82.3%, at half the recall. These GLiNER numbers come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+blind with GLiNER removes the most persons, orgs and places of any tool: 79.5%, 98.7% and 98.6%. It pays in precision. 40.1% of its person spans and 29.4% of its org spans land on a Gretel label of that kind. Many of the rest are role words such as `Borrower`, `Customer`, `Lender`, `Company` and `Empresa`, which a privacy tool can defend replacing but which make the copy harder to read. Others are real places Gretel does not label, such as `España`, `Madrid` and `London`, since Gretel labels only street addresses. LLM Guard's person precision is the best at 82.3%, at half the recall. These GLiNER numbers come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 Presidio `with_org` is the best untuned person detector on the English files, at 70.1%, and the best date detector over all labels, at 72.4%. Its date lead comes from the non-calendar labels: `monthly`, `30 years`, `the past year`. On calendar dates LLM Guard `all` removes 97.7%, blind 97.0% and Presidio 84.9%.
 
@@ -319,7 +319,7 @@ On structured values the picture is mixed, not a blind sweep as on the corpus:
 | GLiNER at 0.3, on the CPU | 49 | 107 |
 | GLiNER at 0.5, on the CPU | 50 | 107 |
 
-The GLiNER rows come from `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The GLiNER rows come from `@centrst/blind-ner`, built from this repository for these measurements.
 
 The CPU row was not rerun. It is a separate, timed run of `llm_guard.py --device cpu` on `all_tld` and `all` from the previous write-up. It gave a different sanitized text in 2 of 379 corpus files and 6 of 888 Gretel files, from floating-point differences between the two devices. GLiNER's time is model time per file in an uncached run. blind with GLiNER costs the GLiNER time plus the core. blind's core took 0.3 ms per corpus file, against 0.2 ms before the fix. At this resolution that may be noise, and I did not measure it more closely. Gretel's documents average 1,310 characters against 611 for the corpus, which is why every model is slower there.
 

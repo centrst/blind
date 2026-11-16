@@ -2,7 +2,7 @@
 
 The core package is published as [`@centrst/blind`](https://www.npmjs.com/package/@centrst/blind). Its first usable npm build was `0.1.0-next.20261109.1`, published on 9 November 2026 from commit `ad1bdbe583ad65245d1077a3f8cd5dd940267564`. The earlier `0.0.0-stage` version was a registry bootstrap, not a supported build.
 
-The source version in `package.json` is the next stable version once a release PR has raised it, and the last published stable version until then. A prerelease adds `-next.YYYYMMDD.N` to that base without committing the temporary version. Publishing source, merging a release PR and publishing to npm are separate actions. This page describes the core package. The NER package, `@centrst/blind-ner`, is ready to publish through the same workflow and has not been released; [its section](#the-ner-package) lists what differs.
+The source version in `package.json` is the next stable version once a release PR has raised it, and the last published stable version until then. A prerelease adds `-next.YYYYMMDD.N` to that base without committing the temporary version. Publishing source, merging a release PR and publishing to npm are separate actions. This page describes the core package. The NER package, `@centrst/blind-ner`, uses the same workflow; [its section](#the-ner-package) lists what differs.
 
 ## Channels
 
@@ -112,7 +112,7 @@ The README bundled in an npm version is part of that immutable tarball. Document
 
 ## The NER package
 
-`@centrst/blind-ner` in `ner/` is packaged for npm and has not been released: until its first release it is a prototype built from this repository, not on npm. It uses the same workflow, `release` environment, staging and 2FA approval as the core. Select it with the workflow's `package` input. These are the differences.
+`@centrst/blind-ner` in `ner/` uses the same workflow, `release` environment, staging and 2FA approval as the core. Select it with the workflow's `package` input. These are the differences.
 
 ### Versioning and notes
 
@@ -120,7 +120,7 @@ Changesets ignores this package, so `pnpm changeset` notes are for the core only
 
 ### The core range
 
-`ner/package.json` names the core as a peer dependency with `workspace:^`. pnpm links the workspace copy and, when it packs, writes a caret range on the core's version in this tree: `^0.3.0` while the core is `0.3.0`. So each NER version names the core it was built and tested with, and nobody edits the range. The tarball is made with `pnpm pack`, never `npm pack`, which would ship the `workspace:` text. The publish job refuses a tarball whose peer range is not a plain version range.
+`ner/package.json` names the core as a peer dependency with `workspace:^`. pnpm links the workspace copy and, when it packs, writes a caret range on the core's version in this tree: `^0.4.0` while the core is `0.4.0`. So each NER version names the core it was built and tested with, and nobody edits the range. The tarball is made with `pnpm pack`, never `npm pack`, which would ship the `workspace:` text. The publish job refuses a tarball whose peer range is not a plain version range.
 
 That makes the order fixed: the core first. The workflow refuses an NER release, on either channel, while changesets are pending or while npm does not have the core version in `package.json`. Otherwise the NER tarball would name a core nobody can install, or would have been tested against core source that npm does not have.
 
@@ -147,7 +147,7 @@ Run `pnpm verify --full` on the commit, with the model present (`pnpm ner:downlo
 
    The placeholder has no code and no dependencies. npm 11 refuses to publish a prerelease version such as `0.0.0-stage` without `--tag`, so the command names `latest`.
 2. In that package's npm settings, add a GitHub Actions trusted publisher with organization `centrst`, repository `blind`, workflow filename `release.yml` and environment `release`, with **Allow `npm publish`** and **Allow `npm dist-tag`** unchecked, as for the core. After the first workflow publish, select **Require two-factor authentication and disallow tokens**.
-3. In the first release PR, rename `## Unreleased` in `ner/CHANGELOG.md` to the version. Also change the status wording, which stops being true once the version is approved: `ner/README.md` ships in the tarball and says the package is not on npm, and the B3 test in `test/readme.test.ts` requires that sentence in every file that reports NER numbers. Change the test and those files together.
+3. Prepare the release PR as above, with a version heading in `ner/CHANGELOG.md` and the compatible core range in `ner/README.md`. Benchmark notes identify the repository build used for each measurement; keep their historical versions and dates when preparing a release.
 
 ### Publish and check
 

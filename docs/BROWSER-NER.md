@@ -1,6 +1,6 @@
 # NER in the browser: measured, not packaged yet
 
-blind's core runs in browsers. Its name, org and place detection at full strength needs the GLiNER model in `@centrst/blind-ner`, which today runs on Node through the native ONNX Runtime addon. This page records whether the same model can run in a browser, and what a web entry would need. The short answer: yes, on a desktop in Chromium, with a re-quantized model. Nobody has packaged it yet. `@centrst/blind-ner` is a prototype built from this repository, not on npm.
+blind's core runs in browsers. Its name, org and place detection at full strength needs the GLiNER model in `@centrst/blind-ner`, which today runs on Node through the native ONNX Runtime addon. This page records whether the same model can run in a browser, and what a web entry would need. The short answer: yes, on a desktop in Chromium, with a re-quantized model. Nobody has packaged it yet. `@centrst/blind-ner` is built from this repository for these measurements.
 
 ## Results
 
@@ -18,7 +18,7 @@ Measured on 2026-10-24 on one machine (Apple M4 Max, 64 GB, macOS 27.0.1), onnxr
 | published int8 | 333 MiB | Chromium, WASM | 1.6 s | 181 | 2.9 GB | 7.81 / 78.69 | 3.52 / 100 | 0 / 100 |
 | gliner-x-small, quantized | 165 MiB | Chromium, WASM, 8 threads | 0.96 s | 101 | 2.0 GB | 99.72 / 87.48 | 99.24 / 74.11 | 100 / 82.27 |
 
-The detector and scorer behind every row are those of `@centrst/blind-ner`, a prototype built from this repository, not on npm.
+The detector and scorer behind every row are those of `@centrst/blind-ner`, built from this repository for these measurements.
 
 Every ms per email above is from this Apple M4 Max with ONNX Runtime 1.30.0, in the runtime its row names. The README's speed paragraph lists these beside the GLiNER timings from other machines, each with its setup.
 
