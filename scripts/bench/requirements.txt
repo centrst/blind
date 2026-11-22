@@ -1,6 +1,6 @@
 # Pinned for scripts/bench/presidio.py. Python 3.12; Presidio and cryptography updated after the historical run.
 # Install with: pnpm bench:presidio:setup
-annotated-doc==0.0.6
+annotated-doc==0.0.7
 annotated-types==0.8.0
 anyio==4.15.1
 blis==1.3.3
