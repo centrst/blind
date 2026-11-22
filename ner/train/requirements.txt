@@ -38,7 +38,7 @@ onnx-ir==1.1.0
 onnxruntime==1.31.0
 onnxscript==0.7.2
 packaging==26.3
-pandas==3.1.0
+pandas==3.1.1
 propcache==0.5.4
 protobuf==7.36.2
 pyarrow==26.0.1
