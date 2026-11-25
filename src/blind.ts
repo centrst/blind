@@ -1,6 +1,6 @@
 import { AmountPlan, amountKey, detectPercents, freeAmountFake, parseNumber, type AmountOcc } from './amounts.js';
 import { dateKey, freeDateFake, shiftOcc, type DateOcc } from './dates.js';
-import { afterSurnameTitle, builtinDetectors, callerDetector, checkKnown, emailHost, findSpans, knownDetector, knownPart, lowerCasePart, oneLetterPart, personTokens, stopWordValue, urlHost } from './detect.js';
+import { afterSurnameTitle, builtinDetectors, callerDetector, CARRIED_NAME, carriedDetector, checkKnown, emailHost, findSpans, knownDetector, knownPart, lowerCasePart, oneLetterPart, personTokens, stopWordValue, urlHost } from './detect.js';
 import { foldLookalikes, skeleton, stripInvisible } from './fold.js';
 import type { IdMeta } from './ids.js';
 import { TextLanguage, type Lang } from './language.js';
@@ -63,7 +63,7 @@ function joinNames(spans: Span[], text: string): Span[] {
     const gap = last ? text.slice(last.end, s.start) : '';
     const joinable = last?.kind === 'person' && s.kind === 'person' && /^[ \t]+(?:\p{L}+[ \t]+)*$/u.test(gap) &&
       gap.trim().split(/[ \t]+/).every((w) => w === '' || (PARTICLES.has(w.toLowerCase()) && !CONJUNCTIONS.has(w.toLowerCase())));
-    if (last && joinable) out[out.length - 1] = { ...last, end: s.end };
+    if (last && joinable) out[out.length - 1] = { ...last, end: s.end, meta: last.meta === s.meta ? last.meta : undefined };
     else out.push(s);
   }
   return out;
@@ -198,22 +198,25 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
     const h = host.toLowerCase();
     return allow.some((d) => h === d || h.endsWith(`.${d}`));
   };
-  // Values from earlier turns are found again wherever they appear, even bare.
+  // Values from earlier turns are found again wherever they appear, even bare: a name or a company where it
+  // is written with a capital, anything else in any letter case (see `carriedDetector`).
   // The caller's entries come first, so `checkKnown` throws with the same index here as it would in `knownDetector`.
   const unenforced = checkKnown(opts.known ?? []);
-  const known: KnownValue[] = [...(opts.known ?? [])];
+  const given: KnownValue[] = [...(opts.known ?? [])];
+  const carried: KnownValue[] = [];
   for (const p of prev?.pairs ?? []) {
     const kind = CARRIED[p.kind];
     // A kept kind's value from an earlier pair (a host of a replaced address) stays as written, so it is not looked for.
-    if (kind && !keep.has(p.kind) && !(kind === 'domain' && isAllowedHost(p.real))) known.push({ kind, value: p.real });
+    if (kind && !keep.has(p.kind) && !(kind === 'domain' && isAllowedHost(p.real))) carried.push({ kind, value: p.real });
   }
+  const known: KnownValue[] = [...given, ...carried];
   const ctx: DetectContext = { dateOrder, isAllowedHost, known };
 
-  const detectors = [...builtinDetectors, knownDetector(known), ...(opts.detectors ?? []).map(callerDetector)];
+  const detectors = [...builtinDetectors, knownDetector(given), carriedDetector(carried), ...(opts.detectors ?? []).map(callerDetector)];
   // Detection reads a same-length fold of each text, so look-alike letters and
   // full-width forms are seen as the plain characters they imitate.
   const folded = texts.map(foldLookalikes);
-  const found = guard('blind', 'detecting values', () => findSpans(folded, ctx, detectors));
+  const found = guard('blind', 'detecting values', () => findSpans(folded, ctx, detectors, given));
   const spansByText = mode === 'placeholder' ? found.map((spans, ti) => joinNames(spans, folded[ti] as string)) : found;
   // The spans blind writes over. A kept span took part in resolution, so no other kind claims its
   // text, and it still masks the paranoid sweep and language detection, but it is written as it stands.
@@ -282,11 +285,23 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   active.forEach((spans, ti) => spans.forEach((span) => entries.push({ ti, span })));
   const orderOf = (k: Kind): number => GEN_ORDER.indexOf(k);
   const originals: Original[] = [];
-  const addOriginal = (kind: Kind, value: string, known?: true): void => {
-    originals.push(known ? { kind, value, known } : { kind, value });
+  // A span the carried detector found is one more copy written with a capital, and counts as that detector found it.
+  const addOriginal = (kind: Kind, value: string, cased = false): void => {
+    originals.push(cased ? { kind, value, cased } : { kind, value });
   };
   const knownOriginals: Original[] = [];
-  for (const k of known) {
+  for (const k of carried) {
+    if (k.kind === 'person') {
+      // Word by word, as a span of this call is: every surviving copy of a full name holds its words.
+      for (const tok of personTokens(k.value)) if (!PARTICLES.has(tok.toLowerCase())) knownOriginals.push({ kind: 'person', value: tok, cased: true });
+    } else if (k.kind === 'org') {
+      knownOriginals.push({ kind: 'org', value: k.value.trim(), cased: true });
+      knownOriginals.push({ kind: 'org', value: k.value.replace(ORG_SUFFIX, '').trim(), cased: true });
+    } else {
+      knownOriginals.push({ kind: k.kind, value: k.value.trim(), known: true });
+    }
+  }
+  for (const k of given) {
     // Each known value is checked as given. A person of several words is checked by
     // its words, which every surviving copy of the full name contains, so one leak is one hit.
     // A stop word or particle among them counts as written or in capitals, and only when the name writes it capitalised, and so does a one-letter part.
@@ -296,11 +311,11 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
       for (const tok of toks) {
         // A one-letter part ("J." of "J. Orvane") is checked as its letter, as written or in capitals.
         const one = oneLetterPart(tok);
-        knownOriginals.push({ kind: 'person', value: one ? tok.replace(/[^\p{L}]/gu, '') : tok, ...(one || stopWordValue(tok) ? { known: true } : {}), ...(lowerCasePart(tok) ? { lowerCase: true } : {}) });
+        knownOriginals.push({ kind: 'person', value: one ? tok.replace(/[^\p{L}]/gu, '') : tok, listed: true, ...(one || stopWordValue(tok) ? { known: true } : {}), ...(lowerCasePart(tok) ? { lowerCase: true } : {}) });
       }
     } else {
-      knownOriginals.push({ kind: k.kind, value: k.value.trim(), known: true });
-      if (k.kind === 'org') knownOriginals.push({ kind: 'org', value: k.value.replace(ORG_SUFFIX, '').trim() });
+      knownOriginals.push({ kind: k.kind, value: k.value.trim(), known: true, listed: true });
+      if (k.kind === 'org') knownOriginals.push({ kind: 'org', value: k.value.replace(ORG_SUFFIX, '').trim(), listed: true });
     }
   }
 
@@ -334,12 +349,12 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
       switch (span.kind) {
         case 'person':
           out = make(() => sur.person(real, orig, around));
-          for (const tok of personTokens(real)) if (!PARTICLES.has(tok.toLowerCase())) addOriginal('person', tok);
+          for (const tok of personTokens(real)) if (!PARTICLES.has(tok.toLowerCase())) addOriginal('person', tok, span.meta === CARRIED_NAME);
           break;
         case 'org':
           out = make(() => sur.org(real, orig, around));
-          addOriginal('org', real);
-          addOriginal('org', real.replace(ORG_SUFFIX, '').trim());
+          addOriginal('org', real, span.meta === CARRIED_NAME);
+          addOriginal('org', real.replace(ORG_SUFFIX, '').trim(), span.meta === CARRIED_NAME);
           break;
         case 'place':
           // In random mode an address becomes a town with no shape kept, as every random value does.
@@ -589,6 +604,8 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
 
   // Assemble.
   const replaced: Array<Array<[number, number]>> = [];
+  // What each of those ranges was written over, for the leak check.
+  const written: string[][] = [];
   // Where each span of a kept kind sits in the output, written as it stands, so the address sweep does not report it.
   const keptRanges: Array<Array<[number, number]>> = [];
   const counts: Partial<Record<Kind, number>> = {};
@@ -596,6 +613,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
     let out = '';
     let at = 0;
     const ranges: Array<[number, number]> = [];
+    const over: string[] = [];
     const kept: Array<[number, number]> = [];
     for (const s of (keep.size ? spansByText[ti] : active[ti]) as Span[]) {
       if (keep.has(s.kind)) {
@@ -607,11 +625,13 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
       counts[s.kind] = (counts[s.kind] ?? 0) + 1;
       out += t.slice(at, s.start);
       ranges.push([out.length, out.length + f.length]);
+      over.push(t.slice(s.start, s.end));
       out += f;
       at = s.end;
     }
     out += t.slice(at);
     replaced.push(ranges);
+    written.push(over);
     keptRanges.push(kept);
     return out;
   });
@@ -635,7 +655,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
 
   const mapping: Mapping = { version: 1, seed, replaceWith: mode, factor, dayShift, dateOrder, refYear, pairs, ...(literals.length ? { literals } : {}), ...(keepList.length ? { keep: keepList } : {}) };
   const leaks = checkLeaks({
-    outputs: outTexts, replaced, originals, deny, amountKeys, dateKeys, dateOrder, unenforced, addresses: !keep.has('place'), kept: keptRanges,
+    outputs: outTexts, replaced, written, originals, deny, amountKeys, dateKeys, dateOrder, unenforced, addresses: !keep.has('place'), kept: keptRanges,
   });
   if (opts.paranoid) {
     // A caller's public platform signs its mail with its name, like the built-in ones.
