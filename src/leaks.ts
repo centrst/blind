@@ -206,9 +206,9 @@ function prepare(all: Original[], deny: string[]): Prepared {
     rules.set(rule, w);
     out.values.push(w);
   }
-  // A value found in this call, or given in `known`, counts in any letter case. The same value carried
-  // from an earlier turn adds nothing to that, and would report its capitalised copies twice.
-  const anyCase = new Set(out.values.flatMap((w) => (w.rule === 'word' && !w.cased && !w.capitalised && w.exact === undefined ? [`${w.kind}|${w.n}`] : [])));
+  // A value found in this call, or given in `known`, counts in every letter case its rule allows. The same
+  // value carried from an earlier turn adds nothing to that, and would report its capitalised copies twice.
+  const anyCase = new Set(out.values.flatMap((w) => (w.rule === 'word' && !w.cased && w.exact === undefined ? [`${w.kind}|${w.n}`] : [])));
   out.values = out.values.filter((w) => !(w.rule === 'word' && w.cased && anyCase.has(`${w.kind}|${w.n}`)));
   for (const entry of deny) {
     const e = entry.trim();

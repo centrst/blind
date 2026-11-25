@@ -216,7 +216,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   // Detection reads a same-length fold of each text, so look-alike letters and
   // full-width forms are seen as the plain characters they imitate.
   const folded = texts.map(foldLookalikes);
-  const found = guard('blind', 'detecting values', () => findSpans(folded, ctx, detectors));
+  const found = guard('blind', 'detecting values', () => findSpans(folded, ctx, detectors, given));
   const spansByText = mode === 'placeholder' ? found.map((spans, ti) => joinNames(spans, folded[ti] as string)) : found;
   // The spans blind writes over. A kept span took part in resolution, so no other kind claims its
   // text, and it still masks the paranoid sweep and language detection, but it is written as it stands.
@@ -291,9 +291,12 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   };
   const knownOriginals: Original[] = [];
   for (const k of carried) {
-    if (k.kind === 'person' || k.kind === 'org') {
-      knownOriginals.push({ kind: k.kind, value: k.value.trim(), cased: true });
-      if (k.kind === 'org') knownOriginals.push({ kind: 'org', value: k.value.replace(ORG_SUFFIX, '').trim(), cased: true });
+    if (k.kind === 'person') {
+      // Word by word, as a span of this call is: every surviving copy of a full name holds its words.
+      for (const tok of personTokens(k.value)) if (!PARTICLES.has(tok.toLowerCase())) knownOriginals.push({ kind: 'person', value: tok, cased: true });
+    } else if (k.kind === 'org') {
+      knownOriginals.push({ kind: 'org', value: k.value.trim(), cased: true });
+      knownOriginals.push({ kind: 'org', value: k.value.replace(ORG_SUFFIX, '').trim(), cased: true });
     } else {
       knownOriginals.push({ kind: k.kind, value: k.value.trim(), known: true });
     }

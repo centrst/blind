@@ -76,6 +76,58 @@ describe('a name from an earlier turn, written later in lower case', () => {
   });
 });
 
+describe('a name from an earlier turn that an address of the later turn gives away', () => {
+  const first = blind(['"Priya Raman" <priya@lakeshore.example>', '"Finchley Dental" <office@finchley-mail.example>'], { seed: 'given-away', now: NOW });
+
+  it('C21: the name written with a capital is this turn\'s own find, so its lower-case copy is reported as in a call with no mapping', () => {
+    const src = ['priya@newhost.example', 'Priya called.', 'thanks, priya'];
+    const fresh = blind(src, { seed: 'given-away', now: NOW });
+    const next = later(src, first.mapping);
+    expect(next.texts[1]).not.toContain('Priya');
+    expect(fresh.leaks).toEqual({ ok: false, hits: [{ kind: 'person', textIndex: 2, offset: 8 }], unenforced: [] });
+    expect(next.leaks).toEqual(fresh.leaks);
+  });
+
+  it('C21: without a copy with a capital the address alone reports nothing, with or without the mapping', () => {
+    const src = ['priya@newhost.example', 'thanks, priya'];
+    expect(blind(src, { seed: 'given-away', now: NOW }).leaks.ok).toBe(true);
+    expect(later(src, first.mapping).leaks.ok).toBe(true);
+  });
+
+  it('C21: a company its host gives away counts in lower case too, as in a call with no mapping', () => {
+    const src = ['Write to office@finchley-dental.example', 'Finchley Dental called.', 'the finchley dental people'];
+    const fresh = blind(src, { seed: 'given-away', now: NOW });
+    const next = later(src, first.mapping);
+    expect(next.texts[1]).not.toContain('Finchley');
+    expect(fresh.leaks).toEqual({ ok: false, hits: [{ kind: 'org', textIndex: 2, offset: 4 }], unenforced: [] });
+    expect(next.leaks).toEqual(fresh.leaks);
+  });
+});
+
+describe('a full name from an earlier turn in placeholder mode', () => {
+  it('C21: its two-letter parts are found again with a capital, and in lower case only when the name is in known', () => {
+    const first = blind(['"Li Na" <lina@harbor-mail.example>'], { seed: 'parts', now: NOW, replaceWith: 'placeholder' });
+    expect(first.mapping.pairs.filter((p) => p.kind === 'person').map((p) => p.real)).toEqual(['Li Na']);
+    const src = ['li and na went. Li and Na went.'];
+    const next = later(src, first.mapping);
+    expect(next.texts[0]).toMatch(/^li and na went\. \[REDACTED_PERSON_\d\] and \[REDACTED_PERSON_\d\] went\.$/);
+    expect(next.leaks.ok).toBe(true);
+    expect(restored(next.texts, next.mapping)).toEqual(src);
+
+    const listed = later(src, first.mapping, [{ kind: 'person', value: 'Li Na' }]);
+    expect(listed.texts[0]).not.toMatch(/\b(li|na)\b/i);
+    expect(restored(listed.texts, listed.mapping)).toEqual(src);
+  });
+
+  it('C21: it is leak-checked word by word, so one word of it with a capital in a link kept as written is reported', () => {
+    const first = blind(['"Priya Raman" <priya@lakeshore.example>'], { seed: 'words', now: NOW, replaceWith: 'placeholder', keep: ['url'] });
+    expect(first.mapping.pairs.filter((p) => p.kind === 'person').map((p) => p.real)).toEqual(['Priya Raman']);
+    const next = later(['see https://lakeshore.example/Raman and raman'], first.mapping);
+    expect(next.texts[0]).toBe('see https://lakeshore.example/Raman and raman');
+    expect(next.leaks).toEqual({ ok: false, hits: [{ kind: 'person', textIndex: 0, offset: 30 }], unenforced: [] });
+  });
+});
+
 describe('a company from an earlier turn, written later in lower case', () => {
   const first = blind(['"Northwind Ltd" <billing@northwind-mail.example>'], { seed: 'ordinary-company', now: NOW });
 
@@ -209,6 +261,12 @@ describe('the leak check, on a name carried from an earlier turn', () => {
     const both: Original[] = [...carried, { kind: 'person', value: 'Will' }];
     expect(checkLeaks(input('Will and will met.', both)).hits).toEqual([{ kind: 'person', textIndex: 0, offset: 0 }, { kind: 'person', textIndex: 0, offset: 9 }]);
     expect(checkLeaks(input('Will and will met.', [...both].reverse())).hits).toEqual([{ kind: 'person', textIndex: 0, offset: 0 }, { kind: 'person', textIndex: 0, offset: 9 }]);
+  });
+
+  it('C21: a two-letter name carried and found in the call is one hit with a capital and none in lower case', () => {
+    const mo: Original[] = [{ kind: 'person', value: 'Mo', cased: true }, { kind: 'person', value: 'Mo' }];
+    expect(checkLeaks(input('Mo and mo', mo)).hits).toEqual([{ kind: 'person', textIndex: 0, offset: 0 }]);
+    expect(checkLeaks(input('Mo and mo', [...mo].reverse())).hits).toEqual([{ kind: 'person', textIndex: 0, offset: 0 }]);
   });
 
   it('C21: a name in a script without letter case is a hit as written', () => {

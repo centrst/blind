@@ -1378,8 +1378,11 @@ function foundHere(spans: Span[], length: number): Span[] {
  * The spans `blind` replaces in each text of one call: every detector, overlaps
  * resolved, then bare hosts, the names private addresses give away (see
  * `addressNames`), and mentions of any person found anywhere in the call.
+ * `listed` are the known values the caller gave, where `ctx.known` also holds
+ * the ones carried from earlier turns: only a listed full name has its
+ * two-letter parts found in lower case.
  */
-export function findSpans(texts: string[], ctx: DetectContext, detectors: Detector[]): Span[][] {
+export function findSpans(texts: string[], ctx: DetectContext, detectors: Detector[], listed: KnownValue[] = ctx.known ?? []): Span[][] {
   const detected = privateHosts(texts, texts.map((t) => {
     const raw = detectors.flatMap((d) => d.detect(t, ctx)).filter((s) => {
       if ((s.kind === 'amount' || s.kind === 'date') && !s.meta) return false;
@@ -1388,7 +1391,15 @@ export function findSpans(texts: string[], ctx: DetectContext, detectors: Detect
     return resolveSpans(foundHere(raw, t.length));
   }), ctx);
   const addressed = addressNames(texts, detected, ctx);
-  const firstPass = detected.map((spans, ti) => (addressed.orgs[ti]?.length ? resolveSpans([...spans, ...(addressed.orgs[ti] as Span[])]) : spans));
+  const firstPass = detected.map((spans, ti) => {
+    const orgs = addressed.orgs[ti] ?? [];
+    // A name or company an address of this call gives away is one this call found, also where a carried
+    // one holds the place and the mention below would not be made (see `foundHere`).
+    const text = texts[ti] as string;
+    const given = spans.some((s) => s.meta === CARRIED) ? [...orgs, ...bareMentions(text, addressed.people, spans.filter((s) => s.meta !== CARRIED), PRIORITY.mention)] : [];
+    const own = given.length ? foundHere([...spans, ...given], text.length).slice(0, spans.length) : spans;
+    return orgs.length ? resolveSpans([...own, ...orgs]) : own;
+  });
   // "Pilar Gómez <pilar@...>" in one text covers a later "Hola Pilar" in any text of the call,
   // and so does "margaret.holloway@finchley-dental.example" a later "Margaret".
   const tokens = [
@@ -1409,7 +1420,7 @@ export function findSpans(texts: string[], ctx: DetectContext, detectors: Detect
   });
   // A two-letter part in lower case ("li" of "Li Na") is the name too, unless the
   // language of the text there writes it as a word ("al" in "Fue al banco").
-  const lower = parts.filter(lowerCasePart);
+  const lower = knownParts(listed).filter(lowerCasePart);
   if (lower.length === 0) return found;
   const lang = new TextLanguage(texts, found);
   return found.map((spans, ti) => {
