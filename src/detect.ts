@@ -959,8 +959,8 @@ export function knownDetector(known: KnownValue[]): Detector {
   return knownMatcher(known, true);
 }
 
-/** What a span of `carriedDetector` carries, so the leak check takes its value as that detector found it. */
-export const CARRIED = Object.freeze({ carried: true });
+/** The `meta` of a name or company only `carriedDetector` found, so the leak check counts it as that detector does. */
+export const CARRIED_NAME = Object.freeze({ carried: true });
 
 /** All in lower case, in a script that has letter case. */
 export const lowerCased = (text: string): boolean => text === text.toLowerCase() && text !== text.toUpperCase();
@@ -972,7 +972,7 @@ export const lowerCased = (text: string): boolean => text === text.toLowerCase()
  * named, and counts in any letter case. A value blind found by itself is a
  * word in some text, and the same word in lower case later on is as likely an
  * ordinary word: `work`, `home` and `will`, once a sender was called `Work
- * From Home` or `Will Young`. Addresses, hosts and ids are found in any case.
+ * From Home` or `Will Harrow`. Addresses, hosts and ids are found in any case.
  */
 export function carriedDetector(carried: KnownValue[]): Detector {
   return knownMatcher(carried, true, true);
@@ -1091,7 +1091,7 @@ function knownEntry(k: KnownValue, carried: boolean): KnownEntry {
 function knownMatcher(known: KnownValue[], filtered: boolean, carried = false): Detector {
   checkKnown(known);
   const entries = known.map((k) => knownEntry(k, carried));
-  const span = (c: KnownEntry, start: number, end: number): Span => ({ start, end, kind: c.kind, priority: PRIORITY.known, ...(c.cased ? { meta: CARRIED } : {}) });
+  const span = (c: KnownEntry, start: number, end: number): Span => ({ start, end, kind: c.kind, priority: PRIORITY.known, ...(c.cased ? { meta: CARRIED_NAME } : {}) });
   /** Per key space, each distinct key's entries and a finder over the distinct keys. */
   let index: Map<KeySpace, { owners: number[][]; find: (text: string) => Set<number> }> | undefined;
   const always = entries.flatMap((e, i) => (e.keys ? [] : [i]));
@@ -1122,7 +1122,7 @@ function knownMatcher(known: KnownValue[], filtered: boolean, carried = false): 
     return [...hit].sort((a, b) => a - b);
   };
   return {
-    name: carried ? 'carried' : 'known',
+    name: 'known',
     detect(text) {
       const out: Span[] = [];
       const sk = entries.some((c) => c.skel) ? skeleton(text) : null;
@@ -1367,11 +1367,11 @@ export function callerDetector(d: Detector): Detector {
  * capital alone.
  */
 function foundHere(spans: Span[], length: number): Span[] {
-  if (!spans.some((s) => s.meta === CARRIED)) return spans;
-  const read = (kind: Span['kind']): Uint8Array => coverage(spans.filter((s) => s.kind === kind && s.meta !== CARRIED), length);
+  if (!spans.some((s) => s.meta === CARRIED_NAME)) return spans;
+  const read = (kind: Span['kind']): Uint8Array => coverage(spans.filter((s) => s.kind === kind && s.meta !== CARRIED_NAME), length);
   const people = read('person');
   const orgs = read('org');
-  return spans.map((s) => (s.meta === CARRIED && covered(s.kind === 'person' ? people : orgs, s.start, s.end) ? { start: s.start, end: s.end, kind: s.kind, priority: s.priority } : s));
+  return spans.map((s) => (s.meta === CARRIED_NAME && covered(s.kind === 'person' ? people : orgs, s.start, s.end) ? { start: s.start, end: s.end, kind: s.kind, priority: s.priority } : s));
 }
 
 /**
@@ -1392,13 +1392,12 @@ export function findSpans(texts: string[], ctx: DetectContext, detectors: Detect
   }), ctx);
   const addressed = addressNames(texts, detected, ctx);
   const firstPass = detected.map((spans, ti) => {
-    const orgs = addressed.orgs[ti] ?? [];
-    // A name or company an address of this call gives away is one this call found, also where a carried
-    // one holds the place and the mention below would not be made (see `foundHere`).
     const text = texts[ti] as string;
-    const given = spans.some((s) => s.meta === CARRIED) ? [...orgs, ...bareMentions(text, addressed.people, spans.filter((s) => s.meta !== CARRIED), PRIORITY.mention)] : [];
-    const own = given.length ? foundHere([...spans, ...given], text.length).slice(0, spans.length) : spans;
-    return orgs.length ? resolveSpans([...own, ...orgs]) : own;
+    // A name or company an address of this call gives away is one this call found, also where a carried
+    // one holds the place: the mention is read under it, so `foundHere` sees both.
+    const own = spans.filter((s) => s.meta !== CARRIED_NAME);
+    const given = [...(addressed.orgs[ti] ?? []), ...(own.length < spans.length ? bareMentions(text, addressed.people, own, PRIORITY.mention) : [])];
+    return given.length ? resolveSpans(foundHere([...spans, ...given], text.length)) : spans;
   });
   // "Pilar Gómez <pilar@...>" in one text covers a later "Hola Pilar" in any text of the call,
   // and so does "margaret.holloway@finchley-dental.example" a later "Margaret".

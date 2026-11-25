@@ -119,8 +119,8 @@ interface WordValue {
   exact?: string;
   /** Also counts written all in lower case where that is not a stop word in the text's language: see `Original.lowerCase`. */
   lowerCase?: boolean;
-  /** Counts only where it is written with a capital: see `Original.cased`. */
-  cased?: boolean;
+  /** Counts only where it is written with a capital: every original under the rule is `cased`. */
+  cased: boolean;
   /** Counts inside a value the engine wrote too: see `Original.listed`. */
   listed?: boolean;
 }
@@ -148,6 +148,13 @@ interface FlexValue {
   match: Matcher;
 }
 
+/** `o` is one more original under the rule `w`: the rule takes the widest of what its originals ask for. */
+function widen(w: WordValue, o: Original): void {
+  if (o.lowerCase) w.lowerCase = true;
+  if (o.listed) w.listed = true;
+  if (!o.cased) w.cased = false;
+}
+
 function prepare(all: Original[], deny: string[]): Prepared {
   const out: Prepared = { values: [], deny: [] };
   const seen = new Map<string, WordValue | null>();
@@ -160,12 +167,11 @@ function prepare(all: Original[], deny: string[]): Prepared {
     // A capitalised two-letter name part ("Mo") and the same letters found in lower case ("mo") are checked under different rules.
     const namePart = o.kind === 'person' && shortNamePart(o.value.trim());
     const folded = norm(o.value);
-    const k = `${o.kind}|${o.known ? 'known|' : ''}${o.cased ? 'cased|' : ''}${namePart ? 'part|' : ''}${exact ?? folded}`;
+    const k = `${o.kind}|${o.known ? 'known|' : ''}${namePart ? 'part|' : ''}${exact ?? folded}`;
     if (seen.has(k)) {
       // The same part found in the text and given in `known` is one value, under the wider rule.
       const had = seen.get(k);
-      if (had && o.lowerCase) had.lowerCase = true;
-      if (had && o.listed) had.listed = true;
+      if (had) widen(had, o);
       continue;
     }
     seen.set(k, null);
@@ -191,25 +197,19 @@ function prepare(all: Original[], deny: string[]): Prepared {
     // A known value of two characters or more is checked as given, in any case.
     const known = o.known === true && ([...n].length >= 2 || exact !== undefined);
     if (short && !known && !namePart && !(n.length > 0 && [...n].every(unspaced))) continue;
-    const w: WordValue = { rule: 'word', kind: o.kind, n, wholeWord: o.kind === 'person' || n.length < 5, capitalised: namePart && short && !known, exact, ...(o.cased ? { cased: true } : {}) };
-    const rule = `${w.kind}|${w.wholeWord ? 'word' : ''}|${w.capitalised ? 'cap' : ''}|${w.cased ? 'cased' : ''}|${w.exact ?? ''}|${n}`;
+    const w: WordValue = { rule: 'word', kind: o.kind, n, wholeWord: o.kind === 'person' || n.length < 5, capitalised: namePart && short && !known, exact, cased: o.cased === true };
+    const rule = `${w.kind}|${w.wholeWord ? 'word' : ''}|${w.capitalised ? 'cap' : ''}|${w.exact ?? ''}|${n}`;
     const same = rules.get(rule);
     if (same?.rule === 'word') {
-      if (o.lowerCase) same.lowerCase = true;
-      if (o.listed) same.listed = true;
+      widen(same, o);
       seen.set(k, same);
       continue;
     }
-    if (o.lowerCase) w.lowerCase = true;
-    if (o.listed) w.listed = true;
+    widen(w, o);
     seen.set(k, w);
     rules.set(rule, w);
     out.values.push(w);
   }
-  // A value found in this call, or given in `known`, counts in every letter case its rule allows. The same
-  // value carried from an earlier turn adds nothing to that, and would report its capitalised copies twice.
-  const anyCase = new Set(out.values.flatMap((w) => (w.rule === 'word' && !w.cased && w.exact === undefined ? [`${w.kind}|${w.n}`] : [])));
-  out.values = out.values.filter((w) => !(w.rule === 'word' && w.cased && anyCase.has(`${w.kind}|${w.n}`)));
   for (const entry of deny) {
     const e = entry.trim();
     if (e.length < 2) continue;
@@ -243,25 +243,14 @@ function scan(input: LeakInput, prep: Prepared): LeakReport {
     };
     const at = (i: number): number => sk.from[i] ?? i;
     const ranges = input.replaced[textIndex] ?? [];
-    const written = input.written?.[textIndex];
-    const over: Array<string | undefined> = [];
     /**
      * Whether the copy at `[start, end)` is the engine's own writing and not
      * the value: it lies inside one range the engine wrote, over a value that
-     * does not hold `n`. The ranges are in text order and do not overlap.
+     * does not hold `n`.
      */
     const ownWriting = (start: number, end: number, n: string): boolean => {
-      if (!written) return false;
-      let lo = 0;
-      let hi = ranges.length - 1;
-      while (lo < hi) {
-        const mid = (lo + hi + 1) >> 1;
-        if ((ranges[mid] as [number, number])[0] <= start) lo = mid;
-        else hi = mid - 1;
-      }
-      const range = ranges[lo];
-      if (!range || range[0] > start || end > range[1] || written[lo] === undefined) return false;
-      return !(over[lo] ??= norm(written[lo] as string)).includes(n);
+      const over = input.written?.[textIndex]?.[ranges.findIndex(([a, b]) => a <= start && end <= b)];
+      return over !== undefined && !norm(over).includes(n);
     };
 
     const matches = findWords(hay);

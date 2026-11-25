@@ -1,6 +1,6 @@
 import { AmountPlan, amountKey, detectPercents, freeAmountFake, parseNumber, type AmountOcc } from './amounts.js';
 import { dateKey, freeDateFake, shiftOcc, type DateOcc } from './dates.js';
-import { afterSurnameTitle, builtinDetectors, callerDetector, CARRIED as CARRIED_SPAN, carriedDetector, checkKnown, emailHost, findSpans, knownDetector, knownPart, lowerCasePart, oneLetterPart, personTokens, stopWordValue, urlHost } from './detect.js';
+import { afterSurnameTitle, builtinDetectors, callerDetector, CARRIED_NAME, carriedDetector, checkKnown, emailHost, findSpans, knownDetector, knownPart, lowerCasePart, oneLetterPart, personTokens, stopWordValue, urlHost } from './detect.js';
 import { foldLookalikes, skeleton, stripInvisible } from './fold.js';
 import type { IdMeta } from './ids.js';
 import { TextLanguage, type Lang } from './language.js';
@@ -349,12 +349,12 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
       switch (span.kind) {
         case 'person':
           out = make(() => sur.person(real, orig, around));
-          for (const tok of personTokens(real)) if (!PARTICLES.has(tok.toLowerCase())) addOriginal('person', tok, span.meta === CARRIED_SPAN);
+          for (const tok of personTokens(real)) if (!PARTICLES.has(tok.toLowerCase())) addOriginal('person', tok, span.meta === CARRIED_NAME);
           break;
         case 'org':
           out = make(() => sur.org(real, orig, around));
-          addOriginal('org', real, span.meta === CARRIED_SPAN);
-          addOriginal('org', real.replace(ORG_SUFFIX, '').trim(), span.meta === CARRIED_SPAN);
+          addOriginal('org', real, span.meta === CARRIED_NAME);
+          addOriginal('org', real.replace(ORG_SUFFIX, '').trim(), span.meta === CARRIED_NAME);
           break;
         case 'place':
           // In random mode an address becomes a town with no shape kept, as every random value does.

@@ -119,6 +119,13 @@ describe('a full name from an earlier turn in placeholder mode', () => {
     expect(restored(listed.texts, listed.mapping)).toEqual(src);
   });
 
+  it('C21: joined to a name an address of the later turn gives away, the joined name is this turn\'s own find', () => {
+    const first = blind(['"Priya Raman" <priya@lakeshore.example>'], { seed: 'join', now: NOW, replaceWith: 'placeholder' });
+    const next = later(['okafor@newhost.example', 'Priya Okafor called.', 'thanks, okafor'], first.mapping);
+    expect(next.texts[1]).toMatch(/^\[REDACTED_PERSON_\d\] called\.$/);
+    expect(next.leaks).toEqual({ ok: false, hits: [{ kind: 'person', textIndex: 2, offset: 8 }], unenforced: [] });
+  });
+
   it('C21: it is leak-checked word by word, so one word of it with a capital in a link kept as written is reported', () => {
     const first = blind(['"Priya Raman" <priya@lakeshore.example>'], { seed: 'words', now: NOW, replaceWith: 'placeholder', keep: ['url'] });
     expect(first.mapping.pairs.filter((p) => p.kind === 'person').map((p) => p.real)).toEqual(['Priya Raman']);
