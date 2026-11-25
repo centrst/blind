@@ -959,6 +959,25 @@ export function knownDetector(known: KnownValue[]): Detector {
   return knownMatcher(known, true);
 }
 
+/** What a span of `carriedDetector` carries, so the leak check takes its value as that detector found it. */
+export const CARRIED = Object.freeze({ carried: true });
+
+/** All in lower case, in a script that has letter case. */
+export const lowerCased = (text: string): boolean => text === text.toLowerCase() && text !== text.toUpperCase();
+
+/**
+ * Matches the values an earlier turn found, the way `knownDetector` matches
+ * the owner's, with one difference: a name or a company is found again only
+ * where it is written with a capital. A value in `known` is one the owner
+ * named, and counts in any letter case. A value blind found by itself is a
+ * word in some text, and the same word in lower case later on is as likely an
+ * ordinary word: `work`, `home` and `will`, once a sender was called `Work
+ * From Home` or `Will Young`. Addresses, hosts and ids are found in any case.
+ */
+export function carriedDetector(carried: KnownValue[]): Detector {
+  return knownMatcher(carried, true, true);
+}
+
 /**
  * `knownDetector` that compiles and runs every entry's pattern on every text,
  * as it did before the prefilter. Kept so a test can show the two find the
@@ -980,6 +999,8 @@ interface KnownEntry {
   kind: KnownKind;
   skel: boolean;
   exact: string | undefined;
+  /** A carried name or company: a match all in lower case is skipped, and a span says where it came from. */
+  cased: boolean;
   /** The entry's matcher, compiled on first use. */
   find: () => (text: string) => Array<[number, number]>;
   space: KeySpace;
@@ -1017,8 +1038,9 @@ const longest = (pieces: string[]): string | null => pieces.reduce<string | null
  * are the longest ASCII run of each form, in lower case. A form with no key leaves
  * the entry without keys, so it is tried on every text.
  */
-function knownEntry(k: KnownValue): KnownEntry {
+function knownEntry(k: KnownValue, carried: boolean): KnownEntry {
   const textual = k.kind === 'person' || k.kind === 'org' || k.kind === 'place';
+  const cased = carried && (k.kind === 'person' || k.kind === 'org');
   const lazy = (make: () => (text: string) => Array<[number, number]>): (() => (text: string) => Array<[number, number]>) => {
     let m: ((text: string) => Array<[number, number]>) | undefined;
     return () => (m ??= make());
@@ -1040,7 +1062,7 @@ function knownEntry(k: KnownValue): KnownEntry {
       return alternativesMatcher([...withLead(`${lead}[ ]`), ...withLead(lead), ...alts], String.raw`(?<![\d])`, String.raw`(?![\d])`, 'iu');
     });
     // Every match writes the digits of one alternative with only separators between them.
-    return { kind: k.kind, skel: false, exact: undefined, find, space: 'digits', keys };
+    return { kind: k.kind, skel: false, exact: undefined, cased, find, space: 'digits', keys };
   }
   // The text is read folded (see `foldLookalikes`), so the value is folded the same way.
   const values = knownForms(k)
@@ -1055,10 +1077,10 @@ function knownEntry(k: KnownValue): KnownEntry {
   for (const v of values.filter(Boolean)) {
     const runs = v.split(/\s+/);
     const key = textual ? longest(runs) : longest(runs.flatMap((r) => r.split(/[^\0-\x7f]+/)).map((r) => r.toLowerCase()));
-    if (key === null) return { kind: k.kind, skel: textual, exact, find, space: textual ? 'skel' : 'ascii', keys: null };
+    if (key === null) return { kind: k.kind, skel: textual, exact, cased, find, space: textual ? 'skel' : 'ascii', keys: null };
     keys.push(key);
   }
-  return { kind: k.kind, skel: textual, exact, find, space: textual ? 'skel' : 'ascii', keys };
+  return { kind: k.kind, skel: textual, exact, cased, find, space: textual ? 'skel' : 'ascii', keys };
 }
 
 /**
@@ -1066,9 +1088,10 @@ function knownEntry(k: KnownValue): KnownEntry {
  * text that holds one of its keys; without it, every entry runs on every text.
  * Both push the spans in the order of `known`.
  */
-function knownMatcher(known: KnownValue[], filtered: boolean): Detector {
+function knownMatcher(known: KnownValue[], filtered: boolean, carried = false): Detector {
   checkKnown(known);
-  const entries = known.map(knownEntry);
+  const entries = known.map((k) => knownEntry(k, carried));
+  const span = (c: KnownEntry, start: number, end: number): Span => ({ start, end, kind: c.kind, priority: PRIORITY.known, ...(c.cased ? { meta: CARRIED } : {}) });
   /** Per key space, each distinct key's entries and a finder over the distinct keys. */
   let index: Map<KeySpace, { owners: number[][]; find: (text: string) => Set<number> }> | undefined;
   const always = entries.flatMap((e, i) => (e.keys ? [] : [i]));
@@ -1099,7 +1122,7 @@ function knownMatcher(known: KnownValue[], filtered: boolean): Detector {
     return [...hit].sort((a, b) => a - b);
   };
   return {
-    name: 'known',
+    name: carried ? 'carried' : 'known',
     detect(text) {
       const out: Span[] = [];
       const sk = entries.some((c) => c.skel) ? skeleton(text) : null;
@@ -1110,12 +1133,13 @@ function knownMatcher(known: KnownValue[], filtered: boolean): Detector {
             const start = sk.from[s] as number;
             const end = pastMarks(text, (sk.from[e - 1] as number) + 1);
             if (c.exact !== undefined && !writtenAs(text.slice(start, end), c.exact)) continue;
-            out.push({ start, end, kind: c.kind, priority: PRIORITY.known });
+            if (c.cased && lowerCased(text.slice(start, end))) continue;
+            out.push(span(c, start, end));
           }
         } else {
           for (const [start, end] of c.find()(text)) {
             if (c.exact !== undefined && !writtenAs(text.slice(start, end), c.exact)) continue;
-            out.push({ start, end, kind: c.kind, priority: PRIORITY.known });
+            out.push(span(c, start, end));
           }
         }
       }
@@ -1335,6 +1359,22 @@ export function callerDetector(d: Detector): Detector {
 }
 
 /**
+ * `spans` with the carried names and companies that another detector reads at
+ * the same place taken as that detector's. A name this call writes with its
+ * own header, title or greeting, or that the owner listed, is a name of this
+ * call: its copies in lower case are reported as they are for any name the
+ * call finds. Only a name found by nothing but the mapping counts with a
+ * capital alone.
+ */
+function foundHere(spans: Span[], length: number): Span[] {
+  if (!spans.some((s) => s.meta === CARRIED)) return spans;
+  const read = (kind: Span['kind']): Uint8Array => coverage(spans.filter((s) => s.kind === kind && s.meta !== CARRIED), length);
+  const people = read('person');
+  const orgs = read('org');
+  return spans.map((s) => (s.meta === CARRIED && covered(s.kind === 'person' ? people : orgs, s.start, s.end) ? { start: s.start, end: s.end, kind: s.kind, priority: s.priority } : s));
+}
+
+/**
  * The spans `blind` replaces in each text of one call: every detector, overlaps
  * resolved, then bare hosts, the names private addresses give away (see
  * `addressNames`), and mentions of any person found anywhere in the call.
@@ -1345,7 +1385,7 @@ export function findSpans(texts: string[], ctx: DetectContext, detectors: Detect
       if ((s.kind === 'amount' || s.kind === 'date') && !s.meta) return false;
       return s.start >= 0 && s.end <= t.length;
     });
-    return resolveSpans(raw);
+    return resolveSpans(foundHere(raw, t.length));
   }), ctx);
   const addressed = addressNames(texts, detected, ctx);
   const firstPass = detected.map((spans, ti) => (addressed.orgs[ti]?.length ? resolveSpans([...spans, ...(addressed.orgs[ti] as Span[])]) : spans));

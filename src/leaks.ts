@@ -1,7 +1,7 @@
 import { detectAddresses } from './address.js';
 import { detectAmounts } from './amounts.js';
 import { dateKey, detectDates } from './dates.js';
-import { oneLetterPart, shortNamePart, stopWordValue, twoLetterStop, writtenAs } from './detect.js';
+import { lowerCased, oneLetterPart, shortNamePart, stopWordValue, twoLetterStop, writtenAs } from './detect.js';
 import { foldLookalikes, skeleton } from './fold.js';
 import { TextLanguage } from './language.js';
 import { literalIndex } from './literal-index.js';
@@ -17,12 +17,29 @@ export interface Original {
   known?: boolean;
   /** A two-letter part of a known full name ("Li" of "Li Na"): a copy in lower case counts too, unless the language of the text there writes it as a word. */
   lowerCase?: boolean;
+  /**
+   * A name or company carried from an earlier turn and not in `known`: a copy
+   * counts where it is written with a capital, as detection finds it again. A
+   * copy all in lower case is an ordinary word there (`work`, once a sender was
+   * called `Work From Home`).
+   */
+  cased?: boolean;
+  /** Given in `known`: a copy counts wherever it stands, also inside a value the engine wrote. */
+  listed?: boolean;
 }
 
 export interface LeakInput {
   outputs: string[];
   /** Per output text, the ranges the engine wrote. Amounts and dates are checked outside them. */
   replaced: Array<Array<[number, number]>>;
+  /**
+   * Per output text and range of `replaced`, the value the engine wrote over.
+   * A name or company the engine found, read inside such a range, counts only
+   * when that value holds it: a fake is drawn from a list of names and can
+   * spell an original met in a later turn, which says nothing about the text.
+   * A `known` value counts there too. Without it every copy counts.
+   */
+  written?: string[][];
   originals: Original[];
   deny: string[];
   amountKeys: Set<string>;
@@ -102,6 +119,10 @@ interface WordValue {
   exact?: string;
   /** Also counts written all in lower case where that is not a stop word in the text's language: see `Original.lowerCase`. */
   lowerCase?: boolean;
+  /** Counts only where it is written with a capital: see `Original.cased`. */
+  cased?: boolean;
+  /** Counts inside a value the engine wrote too: see `Original.listed`. */
+  listed?: boolean;
 }
 
 /**
@@ -139,11 +160,12 @@ function prepare(all: Original[], deny: string[]): Prepared {
     // A capitalised two-letter name part ("Mo") and the same letters found in lower case ("mo") are checked under different rules.
     const namePart = o.kind === 'person' && shortNamePart(o.value.trim());
     const folded = norm(o.value);
-    const k = `${o.kind}|${o.known ? 'known|' : ''}${namePart ? 'part|' : ''}${exact ?? folded}`;
+    const k = `${o.kind}|${o.known ? 'known|' : ''}${o.cased ? 'cased|' : ''}${namePart ? 'part|' : ''}${exact ?? folded}`;
     if (seen.has(k)) {
       // The same part found in the text and given in `known` is one value, under the wider rule.
       const had = seen.get(k);
       if (had && o.lowerCase) had.lowerCase = true;
+      if (had && o.listed) had.listed = true;
       continue;
     }
     seen.set(k, null);
@@ -169,19 +191,25 @@ function prepare(all: Original[], deny: string[]): Prepared {
     // A known value of two characters or more is checked as given, in any case.
     const known = o.known === true && ([...n].length >= 2 || exact !== undefined);
     if (short && !known && !namePart && !(n.length > 0 && [...n].every(unspaced))) continue;
-    const w: WordValue = { rule: 'word', kind: o.kind, n, wholeWord: o.kind === 'person' || n.length < 5, capitalised: namePart && short && !known, exact };
-    const rule = `${w.kind}|${w.wholeWord ? 'word' : ''}|${w.capitalised ? 'cap' : ''}|${w.exact ?? ''}|${n}`;
+    const w: WordValue = { rule: 'word', kind: o.kind, n, wholeWord: o.kind === 'person' || n.length < 5, capitalised: namePart && short && !known, exact, ...(o.cased ? { cased: true } : {}) };
+    const rule = `${w.kind}|${w.wholeWord ? 'word' : ''}|${w.capitalised ? 'cap' : ''}|${w.cased ? 'cased' : ''}|${w.exact ?? ''}|${n}`;
     const same = rules.get(rule);
     if (same?.rule === 'word') {
       if (o.lowerCase) same.lowerCase = true;
+      if (o.listed) same.listed = true;
       seen.set(k, same);
       continue;
     }
     if (o.lowerCase) w.lowerCase = true;
+    if (o.listed) w.listed = true;
     seen.set(k, w);
     rules.set(rule, w);
     out.values.push(w);
   }
+  // A value found in this call, or given in `known`, counts in any letter case. The same value carried
+  // from an earlier turn adds nothing to that, and would report its capitalised copies twice.
+  const anyCase = new Set(out.values.flatMap((w) => (w.rule === 'word' && !w.cased && !w.capitalised && w.exact === undefined ? [`${w.kind}|${w.n}`] : [])));
+  out.values = out.values.filter((w) => !(w.rule === 'word' && w.cased && anyCase.has(`${w.kind}|${w.n}`)));
   for (const entry of deny) {
     const e = entry.trim();
     if (e.length < 2) continue;
@@ -214,6 +242,27 @@ function scan(input: LeakInput, prep: Prepared): LeakReport {
       hits.push({ kind, textIndex, offset });
     };
     const at = (i: number): number => sk.from[i] ?? i;
+    const ranges = input.replaced[textIndex] ?? [];
+    const written = input.written?.[textIndex];
+    const over: Array<string | undefined> = [];
+    /**
+     * Whether the copy at `[start, end)` is the engine's own writing and not
+     * the value: it lies inside one range the engine wrote, over a value that
+     * does not hold `n`. The ranges are in text order and do not overlap.
+     */
+    const ownWriting = (start: number, end: number, n: string): boolean => {
+      if (!written) return false;
+      let lo = 0;
+      let hi = ranges.length - 1;
+      while (lo < hi) {
+        const mid = (lo + hi + 1) >> 1;
+        if ((ranges[mid] as [number, number])[0] <= start) lo = mid;
+        else hi = mid - 1;
+      }
+      const range = ranges[lo];
+      if (!range || range[0] > start || end > range[1] || written[lo] === undefined) return false;
+      return !(over[lo] ??= norm(written[lo] as string)).includes(n);
+    };
 
     const matches = findWords(hay);
     for (const { index, match } of flexible) {
@@ -229,7 +278,10 @@ function scan(input: LeakInput, prep: Prepared): LeakReport {
       }
       for (const i of offsets) {
         if (!hasEdges(hay, w.n, i, w.wholeWord)) continue;
-        const slice = w.lowerCase || w.exact !== undefined ? out.slice(at(i), at(i + w.n.length - 1) + 1) : '';
+        const end = at(i + w.n.length - 1) + 1;
+        const slice = w.lowerCase || w.cased || w.exact !== undefined ? out.slice(at(i), end) : '';
+        if (w.cased && lowerCased(slice)) continue;
+        if ((w.kind === 'person' || w.kind === 'org') && !w.listed && ownWriting(at(i), end, w.n)) continue;
         if (w.lowerCase && !/\p{Lu}/u.test(slice)) {
           if (twoLetterStop(w.n, language().at(textIndex, at(i)))) continue;
         } else {
@@ -240,7 +292,6 @@ function scan(input: LeakInput, prep: Prepared): LeakReport {
       }
     }
 
-    const ranges = input.replaced[textIndex] ?? [];
     for (const a of detectAmounts(out)) {
       const key = `${a.decimals}:${a.minor}`;
       if (input.amountKeys.has(key) && !overlaps(a.start, a.end, ranges)) push('amount', a.start);

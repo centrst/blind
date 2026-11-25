@@ -31,7 +31,7 @@ Apple M4 Max, Node v26.13.0, against the base commit `567ca5b`. Known people are
 
 ## What is left
 
-About 15 microseconds per entry the text does not contain, spread over work done once per entry and call: `checkKnown` (which `blind` runs on the caller's list and `knownDetector` runs again with the earlier turns' values), building each entry's forms and keys, the leak check preparing every known value, `knownParts`, and fakes drawn up front for every known person. The fakes have to be drawn for every known person, in order, because later draws depend on them, and skipping them would change the output. A form of the known list prepared once and reused across calls, as `prepareUnblinder` does for unblind, would remove most of the rest. At these numbers it is not needed.
+About 15 microseconds per entry the text does not contain, spread over work done once per entry and call: `checkKnown` (which `blind` runs on the caller's list, and the detectors run again on it and on the earlier turns' values), building each entry's forms and keys, the leak check preparing every known value, `knownParts`, and fakes drawn up front for every known person. The fakes have to be drawn for every known person, in order, because later draws depend on them, and skipping them would change the output. A form of the known list prepared once and reused across calls, as `prepareUnblinder` does for unblind, would remove most of the rest. At these numbers it is not needed.
 
 ## Reproduce
 
