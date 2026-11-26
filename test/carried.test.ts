@@ -280,3 +280,48 @@ describe('the leak check, on a name carried from an earlier turn', () => {
     expect(checkLeaks(input('שלום דוד', [{ kind: 'person', value: 'דוד', cased: true }])).hits).toEqual([{ kind: 'person', textIndex: 0, offset: 5 }]);
   });
 });
+
+describe('a word that joins a name', () => {
+  const HEADER = '"Anna from Harborview" <anna@harborview-mail.example>';
+  const BODY = 'A note from the office: it came from Leeds.';
+
+  it.each(['fake', 'placeholder', 'random'] as const)('C2: the lower-case word between two capitalised words of a name is no hit where another text of the call writes it (%s mode)', (replaceWith) => {
+    const out = blind([HEADER, BODY], { seed: 'joining', now: NOW, replaceWith });
+    expect(out.texts[0]).not.toMatch(/Anna|Harborview/);
+    expect(out.texts[1]).toBe(BODY);
+    expect(out.leaks).toEqual({ ok: true, hits: [], unenforced: [] });
+    expect(restored(out.texts, out.mapping)).toEqual([HEADER, BODY]);
+  });
+
+  it('C2: nor is it one for a name given in known, or for a name from an earlier turn', () => {
+    const listed = blind([`Anna from Harborview wrote. ${BODY}`], { seed: 'joining', now: NOW, known: [{ kind: 'person', value: 'Anna from Harborview' }] });
+    expect(listed.texts[0]).toContain(BODY);
+    expect(listed.leaks.ok).toBe(true);
+    const first = blind([HEADER], { seed: 'joining', now: NOW, replaceWith: 'placeholder' });
+    const next = later([`From Anna: ${BODY}`], first.mapping);
+    expect(next.texts[0]).toContain(BODY);
+    expect(next.texts[0]).not.toContain('Anna');
+    expect(next.leaks.ok).toBe(true);
+  });
+
+  it('C2: the other words of that name are still hits where a text leaves them in lower case', () => {
+    const body = 'thanks anna, greetings from harborview';
+    const out = blind([HEADER, body], { seed: 'joining', now: NOW });
+    expect(out.texts[1]).toBe(body);
+    expect(out.leaks.hits).toEqual([
+      { kind: 'person', textIndex: 1, offset: body.indexOf('anna') },
+      { kind: 'person', textIndex: 1, offset: body.indexOf('harborview') },
+    ]);
+  });
+
+  it.each([
+    ['all in lower case', '"dana mercer" <dm@harbor-mail.example>', 'thanks dana, said mercer.', 2],
+    ['with a lower-case last word', '"Dana mercer" <dm@harbor-mail.example>', 'so said mercer.', 1],
+    ['with a lower-case first word', '"dana Mercer" <dm@harbor-mail.example>', 'thanks dana.', 1],
+    ['with a capitalised middle word', '"Dana Quill Mercer" <dm@harbor-mail.example>', 'so said quill.', 1],
+  ] as const)('C2: a name written %s keeps its words: a lower-case copy in another text is a hit', (_how, header, body, hits) => {
+    const out = blind([header, body], { seed: 'joining', now: NOW });
+    expect(out.leaks.ok).toBe(false);
+    expect(out.leaks.hits.filter((h) => h.textIndex === 1)).toHaveLength(hits);
+  });
+});

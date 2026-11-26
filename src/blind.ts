@@ -1,6 +1,6 @@
 import { AmountPlan, amountKey, detectPercents, freeAmountFake, parseNumber, type AmountOcc } from './amounts.js';
 import { dateKey, freeDateFake, shiftOcc, type DateOcc } from './dates.js';
-import { afterSurnameTitle, builtinDetectors, callerDetector, CARRIED_NAME, carriedDetector, checkKnown, emailHost, findSpans, knownDetector, knownPart, lowerCasePart, oneLetterPart, personTokens, stopWordValue, urlHost } from './detect.js';
+import { afterSurnameTitle, builtinDetectors, callerDetector, CARRIED_NAME, carriedDetector, checkKnown, emailHost, findSpans, knownDetector, knownPart, lowerCasePart, nameWords, oneLetterPart, personTokens, stopWordValue, urlHost } from './detect.js';
 import { foldLookalikes, skeleton, stripInvisible } from './fold.js';
 import type { IdMeta } from './ids.js';
 import { TextLanguage, type Lang } from './language.js';
@@ -293,7 +293,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   for (const k of carried) {
     if (k.kind === 'person') {
       // Word by word, as a span of this call is: every surviving copy of a full name holds its words.
-      for (const tok of personTokens(k.value)) if (!PARTICLES.has(tok.toLowerCase())) knownOriginals.push({ kind: 'person', value: tok, cased: true });
+      for (const tok of nameWords(k.value)) knownOriginals.push({ kind: 'person', value: tok, cased: true });
     } else if (k.kind === 'org') {
       knownOriginals.push({ kind: 'org', value: k.value.trim(), cased: true });
       knownOriginals.push({ kind: 'org', value: k.value.replace(ORG_SUFFIX, '').trim(), cased: true });
@@ -349,7 +349,7 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
       switch (span.kind) {
         case 'person':
           out = make(() => sur.person(real, orig, around));
-          for (const tok of personTokens(real)) if (!PARTICLES.has(tok.toLowerCase())) addOriginal('person', tok, span.meta === CARRIED_NAME);
+          for (const tok of nameWords(real)) addOriginal('person', tok, span.meta === CARRIED_NAME);
           break;
         case 'org':
           out = make(() => sur.org(real, orig, around));

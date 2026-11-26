@@ -813,6 +813,20 @@ export function personTokens(value: string): string[] {
   return value.split(/[\s,]+/).filter(Boolean);
 }
 
+/**
+ * The words of a person's name that the leak check looks for alone. A particle
+ * is not one, and neither is a word the name writes in lower case between two
+ * capitalised ones: the `from` of `Anna from Notion` joins the name as `de`
+ * joins `Ana de la Cruz`, and every text writes it. A lower-case word that
+ * starts or ends the name (`Dana mercer`, `dana mercer`) stays one.
+ */
+export function nameWords(value: string): string[] {
+  const toks = personTokens(value);
+  const capital = toks.map((t) => /^\p{Lu}/u.test(t));
+  const joins = (i: number): boolean => lowerCased(toks[i] as string) && capital.indexOf(true) < i && i < capital.lastIndexOf(true);
+  return toks.filter((t, i) => !PARTICLES.has(t.toLowerCase()) && !joins(i));
+}
+
 export function personForms(value: string): string[] {
   const toks = personTokens(value).slice(0, 6);
   // The value as given is always a form: a known "Al" or "De" is a name, whatever the stop lists say.
