@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { blind, unblind, type KnownValue, type Mapping } from '../src/index.js';
+import { blind, unblind, type Detector, type KnownValue, type Mapping } from '../src/index.js';
 import { checkLeaks, type LeakInput, type Original } from '../src/leaks.js';
 
 const NOW = new Date('2026-06-01T00:00:00Z');
@@ -278,5 +278,51 @@ describe('the leak check, on a name carried from an earlier turn', () => {
 
   it('C21: a name in a script without letter case is a hit as written', () => {
     expect(checkLeaks(input('שלום דוד', [{ kind: 'person', value: 'דוד', cased: true }])).hits).toEqual([{ kind: 'person', textIndex: 0, offset: 5 }]);
+  });
+});
+
+describe('a pair blind wrote and cannot look for again', () => {
+  const NAME: KnownValue[] = [{ kind: 'person', value: 'Dana J. Mercer' }];
+  const SRC = 'Dana J. Mercer signed the lease.';
+  /** A caller's detector that marks `value` wherever it stands. */
+  const marks = (value: string, kind: 'person' | 'id'): Detector => ({ name: 'marks', detect: (text) => {
+    const at = text.indexOf(value);
+    return at < 0 ? [] : [{ start: at, end: at + value.length, kind }];
+  } });
+
+  it.each(['fake', 'random'] as const)('C21: a name given with an initial leaves a one-letter pair in %s mode, and the next turn takes the mapping', (replaceWith) => {
+    const first = blind([SRC], { seed: 'initial', now: NOW, replaceWith, known: NAME });
+    expect(first.mapping.pairs.map((p) => p.real)).toContain('J');
+    const next = later(['The lease starts in June. Dana Mercer has the keys.'], first.mapping);
+    expect(next.leaks.ok).toBe(true);
+    expect(next.texts[0]).not.toMatch(/Dana|Mercer/);
+    expect(next.texts[0]).toContain('The lease starts in June.');
+    expect(next.mapping.pairs).toEqual(first.mapping.pairs);
+    expect(restored(next.texts, next.mapping)).toEqual(['The lease starts in June. Dana Mercer has the keys.']);
+  });
+
+  it('C21: the initial is not looked for alone in a later turn, and is replaced again with the name in known', () => {
+    const first = blind([SRC], { seed: 'initial', now: NOW, known: NAME });
+    const alone = later(['Plan J is ready.'], first.mapping);
+    expect(alone.texts).toEqual(['Plan J is ready.']);
+    expect(alone.leaks.ok).toBe(true);
+    const again = later([SRC], first.mapping, NAME);
+    expect(again.texts).toEqual(first.texts);
+    expect(again.mapping.pairs).toEqual(first.mapping.pairs);
+    expect(restored(again.texts, again.mapping)).toEqual([SRC]);
+  });
+
+  it.each([
+    ['one letter', 'Q', 'person', 'placeholder'],
+    ['an id with no ASCII letter or digit', '※※※', 'id', 'placeholder'],
+    ['an id with no ASCII letter or digit', '※※※', 'id', 'random'],
+  ] as const)("C21: %s a caller's detector marked is kept in the mapping and the next turn takes it (%s as %s, %s mode)", (_what, value, kind, replaceWith) => {
+    const src = `Ref ${value} is ready.`;
+    const first = blind([src], { seed: 'marked', now: NOW, replaceWith, detectors: [marks(value, kind)] });
+    expect(first.mapping.pairs.map((p) => p.real)).toEqual([value]);
+    const next = later(['Another text.'], first.mapping);
+    expect(next.texts).toEqual(['Another text.']);
+    expect(next.mapping.pairs).toEqual(first.mapping.pairs);
+    expect(restored(first.texts, next.mapping)).toEqual([src]);
   });
 });
