@@ -1,6 +1,6 @@
 import { AmountPlan, amountKey, detectPercents, freeAmountFake, parseNumber, type AmountOcc } from './amounts.js';
 import { dateKey, freeDateFake, shiftOcc, type DateOcc } from './dates.js';
-import { afterSurnameTitle, builtinDetectors, callerDetector, CARRIED_NAME, carriedDetector, checkKnown, emailHost, findSpans, knownDetector, knownPart, lowerCasePart, nameWords, oneLetterPart, personTokens, stopWordValue, urlHost } from './detect.js';
+import { afterSurnameTitle, builtinDetectors, callerDetector, CARRIED_NAME, carriedDetector, checkKnown, emailHost, findSpans, knownDetector, knownFault, knownPart, lowerCasePart, nameWords, oneLetterPart, personTokens, stopWordValue, urlHost } from './detect.js';
 import { foldLookalikes, skeleton, stripInvisible } from './fold.js';
 import type { IdMeta } from './ids.js';
 import { TextLanguage, type Lang } from './language.js';
@@ -207,7 +207,9 @@ function blindTexts(texts: string[], opts: BlindOptions): BlindResult {
   for (const p of prev?.pairs ?? []) {
     const kind = CARRIED[p.kind];
     // A kept kind's value from an earlier pair (a host of a replaced address) stays as written, so it is not looked for.
-    if (kind && !keep.has(p.kind) && !(kind === 'domain' && isAllowedHost(p.real))) carried.push({ kind, value: p.real });
+    // Nor is a value blind could write a pair for and cannot look for: the one letter of a name given with an
+    // initial, what a caller's detector marked. Refused like a caller's entry, it would end the conversation.
+    if (kind && !keep.has(p.kind) && !(kind === 'domain' && isAllowedHost(p.real)) && !knownFault({ kind, value: p.real })) carried.push({ kind, value: p.real });
   }
   const known: KnownValue[] = [...given, ...carried];
   const ctx: DetectContext = { dateOrder, isAllowedHost, known };

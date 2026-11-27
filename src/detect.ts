@@ -888,6 +888,30 @@ const ONE_LETTER_KINDS: ReadonlySet<string> = new Set<KnownKind>(['person', 'org
 const KNOWN_KINDS: ReadonlySet<string> = new Set<KnownKind>(['person', 'org', 'email', 'domain', 'phone', 'place', 'id']);
 
 /**
+ * Why `k` cannot be a known value, as the words that follow `known entry N`
+ * in the error, or undefined when it can. A pair from an earlier turn that
+ * has a fault is not looked for again: see `blindTexts`.
+ */
+export function knownFault(k: KnownValue): string | undefined {
+  const raw: unknown = (k as { kind?: unknown } | null)?.kind;
+  if (typeof raw !== 'string' || !KNOWN_KINDS.has(raw)) return `has a kind blind does not know; use one of ${[...KNOWN_KINDS].join(', ')}`;
+  const kind = raw;
+  if (typeof k.value !== 'string') return `(${kind}) has a value that is not a string`;
+  // What the matcher sees: no accents, marks or zero-width characters.
+  const v = skeleton(foldLookalikes(k.value)).text.trim();
+  if (v === '') return `(${kind}) is empty or only spaces; give the value to find`;
+  const chars = [...v];
+  const short = chars.length === 1 && !unspaced(chars[0] as string);
+  const noDigits = kind === 'phone' && v.replace(/\D/g, '').length < 2;
+  if (short || noDigits) return `(${kind}) is too short to find or check; give at least two characters`;
+  if (chars.length === 1 && !ONE_LETTER_KINDS.has(kind)) return `(${kind}) is one character, which has no ${kind} fake; give at least two characters`;
+  // The id fake rewrites the ASCII letters and digits of the value as written; the email fake rewrites both sides of its @.
+  if (kind === 'id' && !/[A-Za-z0-9]/.test(k.value)) return '(id) has no ASCII letter or digit, which an id fake needs; give it as another kind';
+  if (kind === 'email' && !/[^@\s]@[^@\s]/.test(k.value)) return '(email) has no @ with text on both sides, which an email fake needs; give the whole address';
+  return undefined;
+}
+
+/**
  * Throws when a known entry is one the matcher cannot find and the leak check
  * cannot enforce, or one no fake can stand for: a kind outside `KnownKind`, a
  * value that is not a string, an empty or whitespace-only value, a single
@@ -910,37 +934,12 @@ const KNOWN_KINDS: ReadonlySet<string> = new Set<KnownKind>(['person', 'org', 'e
 export function checkKnown(known: KnownValue[]): UnenforcedKnown[] {
   const unenforced: UnenforcedKnown[] = [];
   known.forEach((k, i) => {
-    const raw: unknown = (k as { kind?: unknown } | null)?.kind;
-    if (typeof raw !== 'string' || !KNOWN_KINDS.has(raw)) {
-      throw new BlindError('invalid-known', `blind: known entry ${i} has a kind blind does not know; use one of ${[...KNOWN_KINDS].join(', ')}`);
-    }
-    const kind = raw;
-    if (typeof k.value !== 'string') {
-      throw new BlindError('invalid-known', `blind: known entry ${i} (${kind}) has a value that is not a string`);
-    }
-    // What the matcher sees: no accents, marks or zero-width characters.
-    const v = skeleton(foldLookalikes(k.value)).text.trim();
-    if (v === '') throw new BlindError('invalid-known', `blind: known entry ${i} (${kind}) is empty or only spaces; give the value to find`);
-    const chars = [...v];
-    const short = chars.length === 1 && !unspaced(chars[0] as string);
-    const noDigits = kind === 'phone' && v.replace(/\D/g, '').length < 2;
-    if (short || noDigits) {
-      throw new BlindError('invalid-known', `blind: known entry ${i} (${kind}) is too short to find or check; give at least two characters`);
-    }
-    if (chars.length === 1 && !ONE_LETTER_KINDS.has(kind)) {
-      throw new BlindError('invalid-known', `blind: known entry ${i} (${kind}) is one character, which has no ${kind} fake; give at least two characters`);
-    }
-    // The id fake rewrites the ASCII letters and digits of the value as written; the email fake rewrites both sides of its @.
-    if (kind === 'id' && !/[A-Za-z0-9]/.test(k.value)) {
-      throw new BlindError('invalid-known', `blind: known entry ${i} (id) has no ASCII letter or digit, which an id fake needs; give it as another kind`);
-    }
-    if (kind === 'email' && !/[^@\s]@[^@\s]/.test(k.value)) {
-      throw new BlindError('invalid-known', `blind: known entry ${i} (email) has no @ with text on both sides, which an email fake needs; give the whole address`);
-    }
+    const fault = knownFault(k);
+    if (fault) throw new BlindError('invalid-known', `blind: known entry ${i} ${fault}`);
     const toks = personTokens(k.value);
     if (stopWordValue(k.value)) unenforced.push({ kind: k.kind, index: i, reason: 'stop-word' });
-    else if (kind === 'person' && toks.length > 1 && toks.some(oneLetterPart)) unenforced.push({ kind: k.kind, index: i, reason: 'one-letter-part' });
-    else if (kind === 'person' && toks.length > 1 && toks.some((t) => knownPart(t) && stopWordValue(t))) unenforced.push({ kind: k.kind, index: i, reason: 'stop-word-part' });
+    else if (k.kind === 'person' && toks.length > 1 && toks.some(oneLetterPart)) unenforced.push({ kind: k.kind, index: i, reason: 'one-letter-part' });
+    else if (k.kind === 'person' && toks.length > 1 && toks.some((t) => knownPart(t) && stopWordValue(t))) unenforced.push({ kind: k.kind, index: i, reason: 'stop-word-part' });
     // Only a value with a Hangul letter can have a form whose skeleton starts in Hangul.
     else if (HANGUL_ANY.test(k.value) && knownForms(k).forms.some((f) => hangulAtWordStartOnly(skeleton(foldLookalikes(f)).text.trim()))) unenforced.push({ kind: k.kind, index: i, reason: 'hangul-inside-word' });
   });
