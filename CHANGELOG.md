@@ -2,6 +2,21 @@
 
 All notable changes to this project are written down here. Changesets writes each version's entry from the notes in `.changeset`, grouped as major, minor and patch changes. The project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.5.0
+
+### Minor Changes
+
+- f8f1960: A name from an earlier turn no longer turns ordinary words into names. With a mapping passed in, blind used to look for every word of every person and company it had met, in any letter case. After a sender called `Work From Home` or `Will Harrow`, the words `work`, `from`, `home` and `will` were replaced by fake names in every later text. A person or company from an earlier turn is now found again, and leak-checked, where it is written with a capital. All in lower case it is left as written and not reported. A value in `known` is matched in any letter case as before, and so are addresses, hosts, phones, ids and places from earlier turns, names in scripts without letter case and names inside a link. A name the same call finds itself, in a sender line or a greeting, is still reported in lower case in that call.
+
+  The leak check no longer reports a fake as a leak. A fake from an earlier turn can spell a name the conversation meets later, and that copy used to make `leaks.ok` false although the text held nothing private there. A name or company read inside a fake blind wrote over another value is now no hit. It stays a hit when the value written over holds the name, when the copy stands outside what blind wrote, and when the name is in `known`.
+
+  Upgrading: a name blind learned in an earlier turn and a later turn writes all in lower case (`thanks, priya`) now goes out as written unless that turn finds the name itself. List the people and companies you know in `known` on every turn to keep them matched in any letter case. The mapping format is unchanged. This is a minor release because the blind text changes for the same input and mapping.
+
+### Patch Changes
+
+- c778315: A mapping blind wrote is always taken on the next turn. Blind could write a pair it then refused: the one letter of a name given in `known` with an initial (`J` of `Dana J. Mercer`, in `fake` and `random` mode), and one character or an id with no ASCII letter or digit that a caller's detector marked. Passing that mapping back made every later call throw `invalid-known`, which ended the conversation. Such a pair now stays in the mapping and restores as before, and blind does not look for its value bare in later turns. Give the whole name in `known` again to have the initial replaced with it. The mapping format is unchanged.
+- c72be3c: The leak check no longer reports the joining word of a name. A sender called `Anna from Harborview` made every `from` in the other texts of the call a `person` hit, so `leaks.ok` was false on text that held nothing of the name. A word a person's name writes in lower case between two capitalised ones now joins the name as `de la` does and is not looked for alone. The other words of the name are checked as before, and so is every word of a name written all in lower case or with a lower-case first or last word. The blind text and the mapping are unchanged.
+
 ## 0.4.0
 
 0.3.1 was prepared but never published, so 0.4.0 is the first version on npm after 0.3.0 and carries the 0.3.1 fix as well, listed under Patch Changes.
