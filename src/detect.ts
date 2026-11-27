@@ -823,8 +823,9 @@ export function personTokens(value: string): string[] {
 export function nameWords(value: string): string[] {
   const toks = personTokens(value);
   const capital = toks.map((t) => /^\p{Lu}/u.test(t));
-  const joins = (i: number): boolean => lowerCased(toks[i] as string) && capital.indexOf(true) < i && i < capital.lastIndexOf(true);
-  return toks.filter((t, i) => !PARTICLES.has(t.toLowerCase()) && !joins(i));
+  const firstCapital = capital.indexOf(true);
+  const lastCapital = capital.lastIndexOf(true);
+  return toks.filter((t, i) => !PARTICLES.has(t.toLowerCase()) && !(firstCapital < i && i < lastCapital && lowerCased(t)));
 }
 
 export function personForms(value: string): string[] {
